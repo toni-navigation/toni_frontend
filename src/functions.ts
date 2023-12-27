@@ -9,7 +9,7 @@ const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
 export async function getCurrentLocation(): Promise<GeolocationCoordinates> {
   return new Promise((resolve) => {
     if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           resolve(position.coords);
         },
