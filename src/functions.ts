@@ -6,24 +6,6 @@ import { ValhallaProps } from '../types/Valhalla-Types';
 
 const NominatimUrl = 'https://nominatim.openstreetmap.org/';
 const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
-export async function getCurrentLocation(): Promise<GeolocationCoordinates> {
-  return new Promise((resolve) => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.watchPosition(
-        (position) => {
-          resolve(position.coords);
-        },
-        (error) => {
-          throw new Error(`Error getting location: ${error.message}`);
-          // reject(`Error getting location: ${error.message}`);
-        }
-      );
-    } else {
-      throw new Error('Geolocation is not supported by your browser');
-      // reject('Geolocation is not supported by your browser');
-    }
-  });
-}
 
 export async function fetchReverseDataHandler(
   latlon: LocationType

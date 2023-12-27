@@ -4,7 +4,6 @@ import {
   fetchSearchDataHandler,
   fetchDirectionsHandler,
   fetchReverseDataHandler,
-  getCurrentLocation,
 } from './functions';
 import { LocationType } from '../types/Types';
 import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
@@ -51,27 +50,31 @@ function App() {
   };
   const currentLocationClickHandler = async () => {
     try {
-      const coordinates = await getCurrentLocation();
-      const latlng: LocationType = {
-        lat: coordinates.latitude,
-        lon: coordinates.longitude,
-      };
-
-      const coordData = await fetchReverseDataHandler(latlng);
-      if (coordData === undefined || coordData?.features?.length === 0) {
-        console.error('No data found for the given location');
-        return;
-      }
-      const newPoints = [...points];
-      newPoints[0].query =
-        coordData.features[0].properties.geocoding.label ?? '';
-      newPoints[0].location = latlng;
-
-      if (!newPoints.map((point) => point.location).includes(null)) {
-        await callDirections(newPoints.map((point) => point.location));
-      }
-      setPoints(newPoints);
-      setCurrentPosition(coordinates);
+      navigator.geolocation.watchPosition(
+        async (position) => {
+          const latlng: LocationType = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          };
+          const coordData = await fetchReverseDataHandler(latlng);
+          if (coordData === undefined || coordData?.features?.length === 0) {
+            console.error('No data found for the given location');
+            return;
+          }
+          const newPoints = [...points];
+          newPoints[0].query =
+            coordData.features[0].properties.geocoding.label ?? '';
+          newPoints[0].location = latlng;
+          if (!newPoints.map((point) => point.location).includes(null)) {
+            await callDirections(newPoints.map((point) => point.location));
+          }
+          setPoints(newPoints);
+          setCurrentPosition(position.coords);
+        },
+        (error) => {
+          console.error("Couldn't get current location", error.message);
+        }
+      );
     } catch (error) {
       console.error(error);
     }
