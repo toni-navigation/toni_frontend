@@ -1,12 +1,14 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
 import {
-  getCurrentLocation,
   fetchSearchDataHandler,
-  fetchDirections,
+  fetchDirectionsHandler,
   fetchReverseDataHandler,
+  getCurrentLocation,
 } from './functions';
-import { FeatureProps, LocationType, SearchProps } from './Types';
+import { LocationType } from '../types/Types';
+import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
+import { ValhallaProps } from '../types/Valhalla-Types';
 
 const INITIAL_POINTS: SearchProps[] = [
   {
@@ -23,7 +25,9 @@ const INITIAL_POINTS: SearchProps[] = [
   },
 ];
 function App() {
-  const [directions, setDirections] = useState<any>([]);
+  const [currentPosition, setCurrentPosition] =
+    useState<GeolocationCoordinates>();
+  const [directions, setDirections] = useState<ValhallaProps>();
   const [points, setPoints] = useState<SearchProps[]>(INITIAL_POINTS);
 
   const fetchSuggestions = async (query: string, index: number) => {
@@ -38,24 +42,22 @@ function App() {
     setPoints(newPoints);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(fetchSuggestions, 500), []);
 
   const callDirections = async (directionPoints: LocationType[]) => {
-    const newDirections = await fetchDirections(directionPoints);
+    const newDirections = await fetchDirectionsHandler(directionPoints);
     setDirections(newDirections);
   };
-
   const currentLocationClickHandler = async () => {
     try {
-      const { coords } = await getCurrentLocation();
-
+      const coordinates = await getCurrentLocation();
       const latlng: LocationType = {
-        lat: coords.latitude,
-        lon: coords.longitude,
+        lat: coordinates.latitude,
+        lon: coordinates.longitude,
       };
 
       const coordData = await fetchReverseDataHandler(latlng);
-
       if (coordData === undefined || coordData?.features?.length === 0) {
         console.error('No data found for the given location');
         return;
@@ -69,8 +71,9 @@ function App() {
         await callDirections(newPoints.map((point) => point.location));
       }
       setPoints(newPoints);
-    } catch (e) {
-      console.error(e);
+      setCurrentPosition(coordinates);
+    } catch (error) {
+      console.error(error);
     }
   };
   const inputChangeHandler = (
@@ -111,6 +114,19 @@ function App() {
             Current Location
           </button>
         )}
+        {currentPosition && (
+          <div>
+            <div>
+              Längen-/Breitengrad: {currentPosition.latitude},{' '}
+              {currentPosition.longitude}
+            </div>
+            <div>speed:{currentPosition.speed}</div>
+            <div>altitude:{currentPosition.accuracy}</div>
+            <div>altitudeAccuracy: {currentPosition.altitudeAccuracy}</div>
+            <div>heading:{currentPosition.heading}</div>
+            <div>speed:{currentPosition.speed}</div>
+          </div>
+        )}
         {points.map((point, index) => (
           <div key={point.id}>
             <input
@@ -148,7 +164,7 @@ function App() {
         directions.trip &&
         directions.trip.legs &&
         directions.trip.legs[0].maneuvers.map((maneuver) => (
-          <div key={maneuver.id}>
+          <div key={maneuver.begin_shape_index + maneuver.end_shape_index}>
             {maneuver.instruction},{maneuver.length * 1000}
           </div>
         ))}

@@ -1,14 +1,28 @@
 import axios from 'axios';
-import { LocationType, NominatimGeoCodeJsonProps } from './Types';
-import VALHALLA_CONFIG from './Valhalla';
+import { LocationType } from '../types/Types';
+import VALHALLA_CONFIG from '../valhalla.config.json';
+import { NominatimGeoCodeJsonProps } from '../types/Nominatim-Types';
+import { ValhallaProps } from '../types/Valhalla-Types';
 
 const NominatimUrl = 'https://nominatim.openstreetmap.org/';
 const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
-
-export function getCurrentLocation(): Promise<GeolocationPosition> {
-  return new Promise((resolve, reject) =>
-    navigator.geolocation.getCurrentPosition(resolve, reject)
-  );
+export async function getCurrentLocation(): Promise<GeolocationCoordinates> {
+  return new Promise((resolve) => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve(position.coords);
+        },
+        (error) => {
+          throw new Error(`Error getting location: ${error.message}`);
+          // reject(`Error getting location: ${error.message}`);
+        }
+      );
+    } else {
+      throw new Error('Geolocation is not supported by your browser');
+      // reject('Geolocation is not supported by your browser');
+    }
+  });
 }
 
 export async function fetchReverseDataHandler(
@@ -30,7 +44,7 @@ export async function fetchSearchDataHandler(
 ): Promise<NominatimGeoCodeJsonProps | undefined> {
   try {
     const geocodeResponse = await axios.get(
-      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=AT`
+      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=DE`
     );
 
     return geocodeResponse.data;
@@ -40,7 +54,9 @@ export async function fetchSearchDataHandler(
   }
 }
 
-export const fetchDirections = async (points: LocationType[]): any => {
+export const fetchDirectionsHandler = async (
+  points: LocationType[]
+): Promise<ValhallaProps | undefined> => {
   try {
     const searchJson = {
       ...VALHALLA_CONFIG,
@@ -53,20 +69,7 @@ export const fetchDirections = async (points: LocationType[]): any => {
 
     return newDirections.data;
   } catch (e) {
+    return undefined;
     console.error(e);
   }
 };
-/* export async function getCurrentLocation(): Promise<CurrentLocationType> {
-    if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition((position: GeolocationPosition)   => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                return { latitude, longitude }
-            }, (error)=> {
-                console.error('Error getting geolocation:', error.message);
-                return null;
-            }
-        );
-    }
-    return null;
-} */
