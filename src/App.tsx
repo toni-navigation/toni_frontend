@@ -120,8 +120,8 @@ function App() {
               Längen-/Breitengrad: {currentPosition.latitude},{' '}
               {currentPosition.longitude}
             </div>
-            <div>speed:{currentPosition.speed}</div>
-            <div>altitude:{currentPosition.accuracy}</div>
+            <div>accuary:{currentPosition.accuracy}</div>
+            <div>altitude:{currentPosition.altitude}</div>
             <div>altitudeAccuracy: {currentPosition.altitudeAccuracy}</div>
             <div>heading:{currentPosition.heading}</div>
             <div>speed:{currentPosition.speed}</div>
@@ -165,7 +165,7 @@ function App() {
         directions.trip.legs &&
         directions.trip.legs[0].maneuvers.map((maneuver) => (
           <div key={maneuver.begin_shape_index + maneuver.end_shape_index}>
-            {maneuver.instruction},{maneuver.length * 1000}
+            {JSON.stringify(maneuver)}
           </div>
         ))}
     </div>
