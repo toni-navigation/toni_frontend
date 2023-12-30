@@ -60,6 +60,9 @@ export interface NominatimGeoCodeJsonProps {
 export interface SearchProps {
   id: number;
   query: string;
-  location: LocationType;
-  suggestions: FeatureProps[] | null;
+  location: LocationType | null;
+  accuracy?: number;
+  suggestions: SuggestionsProps | null;
 }
+
+export type SuggestionsProps = FeatureProps[];

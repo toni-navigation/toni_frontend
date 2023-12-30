@@ -1,57 +1,54 @@
-import axios from 'axios';
 import { LocationType } from '../types/Types';
-import VALHALLA_CONFIG from '../valhalla.config.json';
-import { NominatimGeoCodeJsonProps } from '../types/Nominatim-Types';
-import { ValhallaProps } from '../types/Valhalla-Types';
+import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
+import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
 
-const NominatimUrl = 'https://nominatim.openstreetmap.org/';
-const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
-
-export async function fetchReverseDataHandler(
-  latlon: LocationType
-): Promise<NominatimGeoCodeJsonProps | undefined> {
-  try {
-    if (!latlon) return undefined;
-    const geocodeResponse = await axios.get(
-      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=DE&addressdetails=1&format=geocodejson`
-    );
-    return geocodeResponse.data;
-  } catch (e) {
-    console.error(e);
-    return undefined;
-  }
-}
-export async function fetchSearchDataHandler(
-  query: string
-): Promise<NominatimGeoCodeJsonProps | undefined> {
-  try {
-    const geocodeResponse = await axios.get(
-      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=DE`
-    );
-
-    return geocodeResponse.data;
-  } catch (e) {
-    console.error(e);
-    return undefined;
-  }
+export function suggestionHelper(
+  locationSuggestion: FeatureProps,
+  index: number,
+  points: SearchProps[]
+) {
+  const latlng: LocationType = {
+    lat: locationSuggestion.geometry.coordinates[1],
+    lon: locationSuggestion.geometry.coordinates[0],
+  };
+  const newPoints = [...points];
+  newPoints[index].query = locationSuggestion.properties.geocoding.label ?? '';
+  newPoints[index].location = latlng;
+  newPoints[index].suggestions = null;
+  return newPoints;
 }
 
-export const fetchDirectionsHandler = async (
-  points: LocationType[]
-): Promise<ValhallaProps | undefined> => {
-  try {
-    const searchJson = {
-      ...VALHALLA_CONFIG,
-      locations: points.map((point) => ({ ...point, type: 'break' })),
-    };
-
-    const newDirections = await axios.get(
-      `${ValhallaUrl}route?json=${JSON.stringify(searchJson)}&language=de-DE`
-    );
-
-    return newDirections.data;
-  } catch (e) {
+export async function currentPositionHelper(
+  position: GeolocationPosition,
+  points: SearchProps[]
+): Promise<SearchProps[] | undefined> {
+  const latlng: LocationType = {
+    lat: position.coords.latitude,
+    lon: position.coords.longitude,
+  };
+  const coordData = await fetchReverseDataHandler(latlng);
+  if (coordData === undefined || coordData?.features?.length === 0) {
+    console.error('No data found for the given location');
     return undefined;
-    console.error(e);
   }
-};
+  const newPoints = [...points];
+  newPoints[0].query = coordData.features[0].properties.geocoding.label ?? '';
+  newPoints[0].location = latlng;
+  return newPoints;
+}
+
+export async function suggestionsHelper(
+  query: string,
+  index: number,
+  points: SearchProps[]
+) {
+  const searchLocationData = await fetchSearchDataHandler(query);
+
+  const newPoints = points;
+  if (searchLocationData && searchLocationData?.features?.length > 0) {
+    newPoints[index].suggestions = searchLocationData.features;
+  } else {
+    newPoints[index].suggestions = null;
+  }
+  return newPoints;
+}

@@ -1,13 +1,18 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
-import {
-  fetchSearchDataHandler,
-  fetchDirectionsHandler,
-  fetchReverseDataHandler,
-} from './functions';
+import { fetchTripHandler } from './fetch';
 import { LocationType } from '../types/Types';
 import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
+import {
+  currentPositionHelper,
+  suggestionHelper,
+  suggestionsHelper,
+} from './functions';
+import Map from './Map';
+import CurrentLocation from './CurrentLocation';
+import Point from './Point';
+import Trip from './Trip';
 
 const INITIAL_POINTS: SearchProps[] = [
   {
@@ -24,61 +29,56 @@ const INITIAL_POINTS: SearchProps[] = [
   },
 ];
 function App() {
-  const [currentPosition, setCurrentPosition] =
+  const [currentLocation, setCurrentLocation] =
     useState<GeolocationCoordinates>();
-  const [directions, setDirections] = useState<ValhallaProps>();
+  const [trip, setTrip] = useState<ValhallaProps>();
   const [points, setPoints] = useState<SearchProps[]>(INITIAL_POINTS);
 
-  const fetchSuggestions = async (query: string, index: number) => {
-    const searchLocationData = await fetchSearchDataHandler(query);
-
-    const newPoints = points;
-    if (searchLocationData && searchLocationData?.features?.length > 0) {
-      newPoints[index].suggestions = searchLocationData.features;
-    } else {
-      newPoints[index].suggestions = null;
-    }
+  const suggestionsHandler = async (query: string, index: number) => {
+    const newPoints = await suggestionsHelper(query, index, points);
     setPoints(newPoints);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceFn = useCallback(debounce(fetchSuggestions, 500), []);
+  const debounceFn = useCallback(debounce(suggestionsHandler, 500), []);
 
-  const callDirections = async (directionPoints: LocationType[]) => {
-    const newDirections = await fetchDirectionsHandler(directionPoints);
-    setDirections(newDirections);
+  const callTrip = async (tripPoints: LocationType[]) => {
+    const newTrip = await fetchTripHandler(tripPoints);
+    setTrip(newTrip);
+  };
+  const watchPositionHandler = async () => {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        setCurrentLocation(position.coords);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
   const currentLocationClickHandler = async () => {
     try {
-      navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const latlng: LocationType = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          };
-          const coordData = await fetchReverseDataHandler(latlng);
-          if (coordData === undefined || coordData?.features?.length === 0) {
-            console.error('No data found for the given location');
+          const newPoints = await currentPositionHelper(position, points);
+          if (newPoints === undefined) {
             return;
           }
-          const newPoints = [...points];
-          newPoints[0].query =
-            coordData.features[0].properties.geocoding.label ?? '';
-          newPoints[0].location = latlng;
           if (!newPoints.map((point) => point.location).includes(null)) {
-            await callDirections(newPoints.map((point) => point.location));
+            await callTrip(newPoints.map((point) => point.location));
           }
           setPoints(newPoints);
-          setCurrentPosition(position.coords);
+          watchPositionHandler();
         },
         (error) => {
-          console.error("Couldn't get current location", error.message);
+          console.log("Couldn't get current location", error.message);
         }
       );
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
+
   const inputChangeHandler = (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -93,84 +93,53 @@ function App() {
     locationSuggestion: FeatureProps,
     index: number
   ) => {
-    const latlng: LocationType = {
-      lat: locationSuggestion.geometry.coordinates[1],
-      lon: locationSuggestion.geometry.coordinates[0],
-    };
-    const newPoints = [...points];
-    newPoints[index].query =
-      locationSuggestion.properties.geocoding.label ?? '';
-    newPoints[index].location = latlng;
-    newPoints[index].suggestions = null;
-
+    const newPoints = suggestionHelper(locationSuggestion, index, points);
     if (!newPoints.map((point) => point.location).includes(null)) {
-      await callDirections(points.map((point) => point.location));
+      await callTrip(points.map((point) => point.location));
     }
     setPoints(newPoints);
   };
   return (
     <div>
       <h1>BlndFnd</h1>
+
       <div>
         {'geolocation' in navigator && (
           <button type="button" onClick={currentLocationClickHandler}>
             Current Location
           </button>
         )}
-        {currentPosition && (
-          <div>
-            <div>
-              Längen-/Breitengrad: {currentPosition.latitude},{' '}
-              {currentPosition.longitude}
-            </div>
-            <div>accuary:{currentPosition.accuracy}</div>
-            <div>altitude:{currentPosition.altitude}</div>
-            <div>altitudeAccuracy: {currentPosition.altitudeAccuracy}</div>
-            <div>heading:{currentPosition.heading}</div>
-            <div>speed:{currentPosition.speed}</div>
-          </div>
+        {currentLocation && (
+          <CurrentLocation currentLocation={currentLocation} />
         )}
         {points.map((point, index) => (
-          <div key={point.id}>
-            <input
-              value={point.query}
-              onChange={(e) => inputChangeHandler(e, index)}
-            />
-            {point.suggestions && point.suggestions.length > 0 && (
-              <ul>
-                {point.suggestions.map((locationSuggestion) => (
-                  <li
-                    key={
-                      locationSuggestion.properties.geocoding.osm_type +
-                      locationSuggestion.properties.geocoding.osm_id
-                    }
-                  >
-                    <button
-                      type="button"
-                      onClick={(): Promise<void> =>
-                        locationSuggestionClickHandler(
-                          locationSuggestion,
-                          index
-                        )
-                      }
-                    >
-                      {locationSuggestion.properties.geocoding.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <Point
+            key={point.id}
+            point={point}
+            onInputChange={inputChangeHandler}
+            index={index}
+            onLocationSuggestionClick={locationSuggestionClickHandler}
+          />
         ))}
       </div>
-      {directions &&
-        directions.trip &&
-        directions.trip.legs &&
-        directions.trip.legs[0].maneuvers.map((maneuver) => (
-          <div key={maneuver.begin_shape_index + maneuver.end_shape_index}>
-            {JSON.stringify(maneuver)}
-          </div>
+      {trip &&
+        trip.trip &&
+        trip.trip.legs &&
+        trip.trip.legs[0].maneuvers.map((maneuver) => (
+          <Trip
+            key={maneuver.begin_shape_index + maneuver.end_shape_index}
+            maneuver={maneuver}
+          />
         ))}
+      <Map
+        currentLocation={currentLocation}
+        points={points.map((point) => {
+          return {
+            id: point.id,
+            location: point.location,
+          };
+        })}
+      />
     </div>
   );
 }

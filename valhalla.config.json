@@ -3,7 +3,7 @@
   "costing_options": {
     "pedestrian": {
       "exclude_polygons": [],
-      "use_ferry": 1,
+      "use_ferry": 0,
       "use_living_streets": 0.5,
       "use_tracks": 0,
       "service_penalty": 15,
