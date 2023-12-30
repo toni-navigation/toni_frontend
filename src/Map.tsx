@@ -21,11 +21,16 @@ function Map(props: MapProps): React.ReactElement {
       scrollWheelZoom={false}
     >
       {currentLocation && (
-        <Circle
-          center={[currentLocation.latitude, currentLocation.longitude]}
-          pathOptions={{ fillColor: 'blue' }}
-          radius={currentLocation.accuracy}
-        />
+        <>
+          <Circle
+            center={[currentLocation.latitude, currentLocation.longitude]}
+            pathOptions={{ fillColor: 'blue' }}
+            radius={currentLocation.accuracy}
+          />
+          <Marker
+            position={[currentLocation.latitude, currentLocation.longitude]}
+          />
+        </>
       )}
       {points !== null &&
         points.length > 0 &&
