@@ -1,6 +1,9 @@
 import React from 'react';
 import { Circle, MapContainer, Marker, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { LocationType } from '../types/Types';
 
 interface MapProps {
@@ -12,6 +15,12 @@ interface MapProps {
 }
 function Map(props: MapProps): React.ReactElement {
   const { currentLocation, points } = props;
+  const DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [24, 36],
+    iconAnchor: [12, 36],
+  });
   return (
     <MapContainer
       center={[48.19041, 8.35176]}
@@ -29,6 +38,7 @@ function Map(props: MapProps): React.ReactElement {
           />
           <Marker
             position={[currentLocation.latitude, currentLocation.longitude]}
+            icon={DefaultIcon}
           />
         </>
       )}
@@ -47,6 +57,7 @@ function Map(props: MapProps): React.ReactElement {
             <Marker
               key={point.id}
               position={[point.location.lat, point.location.lon]}
+              icon={DefaultIcon}
             />
           );
         })}
