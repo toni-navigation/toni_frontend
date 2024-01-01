@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { LocationType } from '../types/Types';
-import VALHALLA_CONFIG from '../valhalla.config.json';
-import { NominatimGeoCodeJsonProps } from '../types/Nominatim-Types';
-import { ValhallaProps } from '../types/Valhalla-Types';
+import { LocationType } from '../../types/Types';
+import VALHALLA_CONFIG from '../../valhalla.config.json';
+import { NominatimGeoCodeJsonProps } from '../../types/Nominatim-Types';
+import { ValhallaProps } from '../../types/Valhalla-Types';
 
 const NominatimUrl = 'https://nominatim.openstreetmap.org/';
 const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';

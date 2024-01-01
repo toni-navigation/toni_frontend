@@ -1,5 +1,5 @@
-import { LocationType } from '../types/Types';
-import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
+import { LocationType } from '../../types/Types';
+import { FeatureProps, SearchProps } from '../../types/Nominatim-Types';
 import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
 
 export function suggestionHelper(

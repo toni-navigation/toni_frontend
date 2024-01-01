@@ -6,7 +6,6 @@ interface TripProps {
 }
 function Trip(props: TripProps) {
   const { maneuver } = props;
-
   return <div>{JSON.stringify(maneuver)}</div>;
 }
 

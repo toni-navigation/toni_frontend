@@ -1,10 +1,17 @@
 import React from 'react';
-import { Circle, MapContainer, Marker, TileLayer } from 'react-leaflet';
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  Polyline,
+  TileLayer,
+} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { LocationType } from '../types/Types';
+import decodePolyline from './functions/decodePolyline';
 
 interface MapProps {
   currentLocation: GeolocationCoordinates | undefined;
@@ -12,9 +19,12 @@ interface MapProps {
     id: number;
     location: LocationType | null;
   }[];
+  shape: string | undefined;
 }
+
 function Map(props: MapProps): React.ReactElement {
-  const { currentLocation, points } = props;
+  const { currentLocation, shape, points } = props;
+  const route = shape ? decodePolyline(shape) : [];
   const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -61,6 +71,7 @@ function Map(props: MapProps): React.ReactElement {
             />
           );
         })}
+      {route.length > 0 && <Polyline positions={route} color="blue" />}
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

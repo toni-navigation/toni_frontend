@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
-import { fetchTripHandler } from './fetch';
+import { fetchTripHandler } from './functions/fetch';
 import { LocationType } from '../types/Types';
 import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
@@ -8,7 +8,7 @@ import {
   currentPositionHelper,
   suggestionHelper,
   suggestionsHelper,
-} from './functions';
+} from './functions/functions';
 import Map from './Map';
 import CurrentLocation from './CurrentLocation';
 import Point from './Point';
@@ -99,6 +99,7 @@ function App() {
     }
     setPoints(newPoints);
   };
+  console.log(trip);
   return (
     <div>
       <h1>BlndFnd</h1>
@@ -139,6 +140,7 @@ function App() {
             location: point.location,
           };
         })}
+        shape={trip?.trip?.legs[0].shape}
       />
     </div>
   );
