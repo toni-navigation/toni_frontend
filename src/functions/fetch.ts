@@ -13,7 +13,7 @@ export async function fetchReverseDataHandler(
   try {
     if (!latlon) return undefined;
     const geocodeResponse = await axios.get(
-      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=DE&addressdetails=1&format=geocodejson`
+      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=de,at&addressdetails=1&format=geocodejson`
     );
     return geocodeResponse.data;
   } catch (e) {
@@ -26,7 +26,7 @@ export async function fetchSearchDataHandler(
 ): Promise<NominatimGeoCodeJsonProps | undefined> {
   try {
     const geocodeResponse = await axios.get(
-      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=DE`
+      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=de,at`
     );
 
     return geocodeResponse.data;

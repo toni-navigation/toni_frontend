@@ -53,7 +53,8 @@ function App() {
       },
       (error) => {
         console.log(error);
-      }
+      },
+      { enableHighAccuracy: true }
     );
   };
   const currentLocationClickHandler = async () => {
@@ -72,7 +73,8 @@ function App() {
         },
         (error) => {
           console.log("Couldn't get current location", error.message);
-        }
+        },
+        { enableHighAccuracy: true }
       );
     } catch (error) {
       console.log(error);
