@@ -5,8 +5,9 @@ import { CalibrationProps, LocationType } from '../types/Types';
 import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import {
+  calibrationHelper,
   currentPositionHelper,
-  distanceOfLatLon,
+  getCurrentPosition,
   suggestionHelper,
   suggestionsHelper,
 } from './functions/functions';
@@ -70,31 +71,17 @@ function App() {
     );
   };
   const currentLocationClickHandler = async () => {
-    try {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const newPoints = await currentPositionHelper(position, points);
-          if (newPoints === undefined) {
-            return;
-          }
-          if (!newPoints.map((point) => point.location).includes(null)) {
-            await callTrip(newPoints.map((point) => point.location));
-          }
-          setPoints(newPoints);
-          watchPositionHandler();
-        },
-        (error) => {
-          console.log("Couldn't get current location", error.message);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    getCurrentPosition(async function (position) {
+      const newPoints = await currentPositionHelper(position, points);
+      if (newPoints === undefined) {
+        return;
+      }
+      if (!newPoints.map((point) => point.location).includes(null)) {
+        await callTrip(newPoints.map((point) => point.location));
+      }
+      setPoints(newPoints);
+      watchPositionHandler();
+    });
   };
 
   const inputChangeHandler = (
@@ -107,57 +94,15 @@ function App() {
     debounceFn(e.target.value, index);
   };
   const calibrateHandler = async () => {
-    try {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          if (calibration.start === null) {
-            const start = {
-              lat: position.coords.latitude,
-              lon: position.coords.longitude,
-              accuary: position.coords.accuracy,
-            };
-            setCalibration((prevState) => {
-              return {
-                ...prevState,
-                start,
-              };
-            });
-          } else {
-            const end = {
-              lat: position.coords.latitude,
-              lon: position.coords.longitude,
-              accuary: position.coords.accuracy,
-            };
-            setCalibration((prevState) => {
-              const distanceInMeter =
-                distanceOfLatLon(
-                  prevState.start?.lat ?? 0,
-                  prevState.start?.lon ?? 0,
-                  end.lat,
-                  end.lon,
-                  'K'
-                ) * 1000;
-              return {
-                ...prevState,
-                end,
-                meters: distanceInMeter,
-                factor: distanceInMeter / 30,
-              };
-            });
-          }
-        },
-        (error) => {
-          console.log("Couldn't get current location", error.message);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    getCurrentPosition(async function (position) {
+      const newCalibration = calibrationHelper(position, calibration);
+      setCalibration((prevState) => {
+        return {
+          ...prevState,
+          ...newCalibration,
+        };
+      });
+    });
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps,
@@ -236,13 +181,11 @@ function App() {
             </li>
             {calibration.factor && (
               <li>
-                Anzahl an Schritte für die Route:{' '}
+                er Anzahl an Schritte für die Route:{' '}
                 {(trip.trip.legs[0].summary.length * 1000) / calibration.factor}
               </li>
             )}
-            <li>
-              <li>Minuten: {(trip.trip.legs[0].summary.time / 60) * 1.3}</li>
-            </li>
+            <li>Minuten: {(trip.trip.legs[0].summary.time / 60) * 1.3}</li>
           </ul>
         </div>
       )}

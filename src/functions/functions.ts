@@ -1,4 +1,4 @@
-import { LocationType } from '../../types/Types';
+import { CalibrationProps, LocationType } from '../../types/Types';
 import { FeatureProps, SearchProps } from '../../types/Nominatim-Types';
 import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
 
@@ -75,4 +75,57 @@ export async function suggestionsHelper(
     newPoints[index].suggestions = null;
   }
   return newPoints;
+}
+
+export const calibrationHelper = (
+  position: GeolocationPosition,
+  calibration: CalibrationProps
+): CalibrationProps => {
+  const newCalibration = { ...calibration };
+  if (calibration.start === null) {
+    newCalibration.start = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
+      accuary: position.coords.accuracy,
+    };
+  } else if (newCalibration.start !== null && newCalibration.end === null) {
+    const distanceInMeter =
+      distanceOfLatLon(
+        newCalibration.start.lat,
+        newCalibration.start.lon,
+        position.coords.latitude,
+        position.coords.longitude,
+        'K'
+      ) * 1000;
+    newCalibration.end = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
+      accuary: position.coords.accuracy,
+    };
+    newCalibration.meters = distanceInMeter;
+    newCalibration.factor = distanceInMeter / 30;
+  }
+  return newCalibration;
+};
+
+export async function getCurrentPosition(
+  callback: (userPosition: GeolocationPosition) => void
+) {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+  const onSuccess = (position: GeolocationPosition) => {
+    callback(position);
+  };
+  const onError = (error: GeolocationPositionError) => {
+    console.error(error);
+  };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+  } else {
+    alert('Geolocation is not supported by this browser.');
+  }
 }
