@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
 import { fetchTripHandler } from './functions/fetch';
 import { CalibrationProps, LocationType } from '../types/Types';
@@ -209,6 +209,27 @@ function App() {
           />
         ))}
       </div>
+      {trip && trip.trip && trip.trip.legs && trip.trip.legs[0] && (
+        <div>
+          <h2>Überblick der Route</h2>
+          <ul>
+            <li>Anzahl an Maneuver: {trip.trip.legs[0].maneuvers.length}</li>
+            <li>
+              Anzahl an Meter der Route:{' '}
+              {trip.trip.legs[0].summary.length * 1000}
+            </li>
+            {calibration.factor && (
+              <li>
+                Anzahl an Schritte für die Route:{' '}
+                {(trip.trip.legs[0].summary.length * 1000) / calibration.factor}
+              </li>
+            )}
+            <li>
+              <li>Minuten: {(trip.trip.legs[0].summary.time / 60) * 1.3}</li>
+            </li>
+          </ul>
+        </div>
+      )}
       {trip &&
         trip.trip &&
         trip.trip.legs &&
