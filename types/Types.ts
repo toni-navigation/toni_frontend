@@ -3,4 +3,5 @@ export interface CalibrationProps {
   start: LocationType;
   end: LocationType;
   meters: number | null;
+  factor: number | null;
 }

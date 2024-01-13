@@ -38,6 +38,7 @@ function App() {
     start: null,
     end: null,
     meters: null,
+    factor: null,
   });
 
   const suggestionsHandler = async (query: string, index: number) => {
@@ -97,7 +98,6 @@ function App() {
     setPoints(newPoints);
     debounceFn(e.target.value, index);
   };
-
   const calibrateHandler = async () => {
     try {
       navigator.geolocation.getCurrentPosition(
@@ -119,16 +119,19 @@ function App() {
               lon: position.coords.longitude,
             };
             setCalibration((prevState) => {
-              return {
-                ...prevState,
-                end,
-                meters: distanceOfLatLon(
+              const distanceInMeter =
+                distanceOfLatLon(
                   prevState.start?.lat ?? 0,
                   prevState.start?.lon ?? 0,
                   end.lat,
                   end.lon,
                   'K'
-                ),
+                ) * 1000;
+              return {
+                ...prevState,
+                end,
+                meters: distanceInMeter,
+                factor: distanceInMeter / 30,
               };
             });
           }
@@ -157,6 +160,7 @@ function App() {
       <h1>BlndFnd</h1>
       <div>
         <h2>Kalibrierung</h2>
+        <p>Gehe 30 Schritte</p>
         <button onClick={calibrateHandler} type="button">
           {calibration.start ? 'Ende' : 'Start'}
         </button>
@@ -176,7 +180,15 @@ function App() {
             </div>
           )}
         </div>
-        {calibration.meters && <div>{calibration.meters}m</div>}
+        {calibration.meters && !Number.isNaN(calibration.meters) && (
+          <div>
+            <p>30 Schritte waren {calibration.meters} Meter</p>
+            <p>
+              1 Schritt sind umgerechnnet {calibration.meters / 30} Meter. Die
+              Meteranzahlen werden anhand diesen Wertes umgerechnet
+            </p>
+          </div>
+        )}
       </div>
       <div>
         {'geolocation' in navigator && (
@@ -204,6 +216,7 @@ function App() {
           <Trip
             key={maneuver.begin_shape_index + maneuver.end_shape_index}
             maneuver={maneuver}
+            factor={calibration.factor}
           />
         ))}
       <Map
