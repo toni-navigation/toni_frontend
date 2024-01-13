@@ -142,7 +142,6 @@ function App() {
       console.log(error);
     }
   };
-  console.log(calibration);
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps,
     index: number
