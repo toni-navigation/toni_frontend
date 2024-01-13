@@ -1,11 +1,12 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
 import { fetchTripHandler } from './functions/fetch';
-import { LocationType } from '../types/Types';
+import { CalibrationProps, LocationType } from '../types/Types';
 import { FeatureProps, SearchProps } from '../types/Nominatim-Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import {
   currentPositionHelper,
+  distanceOfLatLon,
   suggestionHelper,
   suggestionsHelper,
 } from './functions/functions';
@@ -33,6 +34,11 @@ function App() {
     useState<GeolocationCoordinates>();
   const [trip, setTrip] = useState<ValhallaProps>();
   const [points, setPoints] = useState<SearchProps[]>(INITIAL_POINTS);
+  const [calibration, setCalibration] = useState<CalibrationProps>({
+    start: null,
+    end: null,
+    meters: null,
+  });
 
   const suggestionsHandler = async (query: string, index: number) => {
     const newPoints = await suggestionsHelper(query, index, points);
@@ -46,6 +52,7 @@ function App() {
     const newTrip = await fetchTripHandler(tripPoints);
     setTrip(newTrip);
   };
+
   const watchPositionHandler = async () => {
     navigator.geolocation.watchPosition(
       (position) => {
@@ -91,6 +98,51 @@ function App() {
     debounceFn(e.target.value, index);
   };
 
+  const calibrateHandler = async () => {
+    try {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          if (calibration.start === null) {
+            const start = {
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            };
+            setCalibration((prevState) => {
+              return {
+                ...prevState,
+                start,
+              };
+            });
+          } else {
+            const end = {
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            };
+            setCalibration((prevState) => {
+              return {
+                ...prevState,
+                end,
+                meters: distanceOfLatLon(
+                  prevState.start?.lat ?? 0,
+                  prevState.start?.lon ?? 0,
+                  end.lat,
+                  end.lon,
+                  'K'
+                ),
+              };
+            });
+          }
+        },
+        (error) => {
+          console.log("Couldn't get current location", error.message);
+        },
+        { enableHighAccuracy: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(calibration);
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps,
     index: number
@@ -101,11 +153,32 @@ function App() {
     }
     setPoints(newPoints);
   };
-  console.log(trip);
   return (
     <div>
       <h1>BlndFnd</h1>
-
+      <div>
+        <h2>Kalibrierung</h2>
+        <button onClick={calibrateHandler} type="button">
+          {calibration.start ? 'Ende' : 'Start'}
+        </button>
+        <div>
+          {calibration.start && (
+            <div>
+              <div>
+                Start: Lat: {calibration.start.lat}, Lon:{calibration.start.lon}
+              </div>
+            </div>
+          )}
+          {calibration.end && (
+            <div>
+              <div>
+                End: Lat: {calibration.end.lat} Lon:{calibration.end.lon}
+              </div>
+            </div>
+          )}
+        </div>
+        {calibration.meters && <div>{calibration.meters}m</div>}
+      </div>
       <div>
         {'geolocation' in navigator && (
           <button type="button" onClick={currentLocationClickHandler}>
