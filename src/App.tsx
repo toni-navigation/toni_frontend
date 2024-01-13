@@ -62,7 +62,11 @@ function App() {
       (error) => {
         console.log(error);
       },
-      { enableHighAccuracy: true }
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
     );
   };
   const currentLocationClickHandler = async () => {
@@ -82,7 +86,11 @@ function App() {
         (error) => {
           console.log("Couldn't get current location", error.message);
         },
-        { enableHighAccuracy: true }
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
       );
     } catch (error) {
       console.log(error);
@@ -106,6 +114,7 @@ function App() {
             const start = {
               lat: position.coords.latitude,
               lon: position.coords.longitude,
+              accuary: position.coords.accuracy,
             };
             setCalibration((prevState) => {
               return {
@@ -117,6 +126,7 @@ function App() {
             const end = {
               lat: position.coords.latitude,
               lon: position.coords.longitude,
+              accuary: position.coords.accuracy,
             };
             setCalibration((prevState) => {
               const distanceInMeter =
@@ -139,7 +149,11 @@ function App() {
         (error) => {
           console.log("Couldn't get current location", error.message);
         },
-        { enableHighAccuracy: true }
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
       );
     } catch (error) {
       console.log(error);
@@ -169,13 +183,15 @@ function App() {
             <div>
               <div>
                 Start: Lat: {calibration.start.lat}, Lon:{calibration.start.lon}
+                , Accuary:{calibration.start.accuary}
               </div>
             </div>
           )}
           {calibration.end && (
             <div>
               <div>
-                End: Lat: {calibration.end.lat} Lon:{calibration.end.lon}
+                End: Lat: {calibration.end.lat} Lon:{calibration.end.lon},
+                Accuary:{calibration.end.accuary}
               </div>
             </div>
           )}

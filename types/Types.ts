@@ -1,4 +1,8 @@
-export type LocationType = { lat: number; lon: number } | null;
+export type LocationType = {
+  lat: number;
+  lon: number;
+  accuary?: number;
+} | null;
 export interface CalibrationProps {
   start: LocationType;
   end: LocationType;
