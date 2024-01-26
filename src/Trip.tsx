@@ -7,6 +7,7 @@ interface TripProps {
 }
 function Trip(props: TripProps) {
   const { maneuver, factor } = props;
+
   return (
     <div>
       <div>
