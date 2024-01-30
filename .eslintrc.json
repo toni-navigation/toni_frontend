@@ -12,24 +12,26 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
+    "ecmaVersion": "latest",
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
   "rules": {
+    "react/react-in-jsx-scope": 0,
     "import/no-unresolved": 0,
     "react/jsx-filename-extension": [1, {
       "extensions": [
         ".ts",
-        ".tsx"
+        ".tsx",
+        ".config.json"
       ]
     }],
     "prettier/prettier": [
       "error",
       {
         "singleQuote": true,
-        "trailingComma": "all",
-        "arrowParens": "avoid",
+//        "trailingComma": "all",
+//        "arrowParens": "avoid",
         "endOfLine": "auto"
       }
     ],
