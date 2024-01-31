@@ -9,21 +9,21 @@ const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
 
 export async function fetchReverseDataHandler(
   latlon: LocationType
-): Promise<NominatimGeoCodeJsonProps | undefined> {
+): Promise<NominatimGeoCodeJsonProps | null> {
   try {
-    if (!latlon) return undefined;
+    if (!latlon) return null;
     const geocodeResponse = await axios.get(
       `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=de,at&addressdetails=1&format=geocodejson`
     );
     return geocodeResponse.data;
   } catch (e) {
     console.error(e);
-    return undefined;
+    return null;
   }
 }
 export async function fetchSearchDataHandler(
   query: string
-): Promise<NominatimGeoCodeJsonProps | undefined> {
+): Promise<NominatimGeoCodeJsonProps | null> {
   try {
     const geocodeResponse = await axios.get(
       `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=de,at`
@@ -32,13 +32,13 @@ export async function fetchSearchDataHandler(
     return geocodeResponse.data;
   } catch (e) {
     console.error(e);
-    return undefined;
+    return null;
   }
 }
 
 export const fetchTripHandler = async (
   points: LocationType[]
-): Promise<ValhallaProps | undefined> => {
+): Promise<ValhallaProps | null> => {
   try {
     const searchJson = {
       ...VALHALLA_CONFIG,
@@ -52,6 +52,6 @@ export const fetchTripHandler = async (
     return newTrip.data;
   } catch (e) {
     console.error(e);
-    return undefined;
+    return null;
   }
 };

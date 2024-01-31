@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeatureProps, SuggestionsProps } from '../types/Nominatim-Types';
+import { FeatureProps, SuggestionsProps } from '../../types/Nominatim-Types';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 
 interface SuggestionProps {

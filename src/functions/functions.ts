@@ -1,27 +1,57 @@
 import * as Location from 'expo-location';
-import { LocationType } from '../../types/Types';
+import {
+  CalibrateProps,
+  CurrentLocationProps,
+  destinationType,
+  LocationType,
+  PointsProps,
+  startType,
+} from '../../types/Types';
 import {
   FeatureProps,
-  PointsProps,
-  SearchProps,
+  NominatimGeoCodeJsonProps,
 } from '../../types/Nominatim-Types';
-import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
 
-export function suggestionHelper(
-  locationSuggestion: FeatureProps,
-  points: PointsProps
-) {
+const destinationHelper = (
+  locationSuggestion: FeatureProps
+): destinationType => {
   const latlng: LocationType = {
     lat: locationSuggestion.geometry.coordinates[1],
     lon: locationSuggestion.geometry.coordinates[0],
   };
+  return {
+    query: locationSuggestion.properties.geocoding.label ?? '',
+    location: latlng,
+    suggestions: null,
+  };
+};
+
+const startHelper = (
+  currentLocation: CurrentLocationProps,
+  reverseData: NominatimGeoCodeJsonProps
+): startType => {
+  const latlng: LocationType = {
+    lat: currentLocation.coords.latitude,
+    lon: currentLocation.coords.longitude,
+  };
+  return {
+    query: reverseData.features[0].properties.geocoding.label ?? '',
+    location: latlng,
+  };
+};
+
+export function suggestionHelper(
+  locationSuggestion: FeatureProps,
+  points: PointsProps,
+  currentLocation: CurrentLocationProps,
+  reverseData: NominatimGeoCodeJsonProps
+) {
   const newPoints = { ...points };
-  newPoints.destination.query =
-    locationSuggestion.properties.geocoding.label ?? '';
-  newPoints.destination.location = latlng;
-  newPoints.destination.suggestions = null;
+  newPoints.start = startHelper(currentLocation, reverseData);
+  newPoints.destination = destinationHelper(locationSuggestion);
   return newPoints;
 }
+
 export function distanceOfLatLon(
   lat1: number,
   lon1: number,
@@ -47,41 +77,56 @@ export function distanceOfLatLon(
   }
   return dist;
 }
-export async function currentPositionHelper(
-  position: GeolocationPosition,
-  points: SearchProps[]
-): Promise<SearchProps[] | undefined> {
-  const latlng: LocationType = {
-    lat: position.coords.latitude,
-    lon: position.coords.longitude,
-  };
-  const coordData = await fetchReverseDataHandler(latlng);
-  if (coordData === undefined || coordData?.features?.length === 0) {
-    console.error('No data found for the given location');
-    return undefined;
-  }
-  const newPoints = [...points];
-  newPoints[0].query = coordData.features[0].properties.geocoding.label ?? '';
-  newPoints[0].location = latlng;
-  return newPoints;
-}
+// export async function currentPositionHelper(
+//   position: GeolocationPosition,
+//   points: SearchProps[]
+// ): Promise<SearchProps[] | undefined> {
+//   const latlng: LocationType = {
+//     lat: position.coords.latitude,
+//     lon: position.coords.longitude,
+//   };
+//   const coordData = await fetchReverseDataHandler(latlng);
+//   if (coordData === undefined || coordData?.features?.length === 0) {
+//     console.error('No data found for the given location');
+//     return undefined;
+//   }
+//   const newPoints = [...points];
+//   newPoints[0].query = coordData.features[0].properties.geocoding.label ?? '';
+//   newPoints[0].location = latlng;
+//   return newPoints;
+// }
 
-export async function suggestionsHelper(query: string, points: PointsProps) {
-  const searchLocationData = await fetchSearchDataHandler(query);
-
+export function suggestionsHelper(
+  points: PointsProps,
+  searchLocationData: NominatimGeoCodeJsonProps
+) {
   const newPoints = points;
-  if (searchLocationData && searchLocationData?.features?.length > 0) {
+  if (searchLocationData.features?.length > 0) {
     newPoints.destination.suggestions = searchLocationData.features;
   } else {
     newPoints.destination.suggestions = null;
   }
   return newPoints;
 }
+//
+// export function suggestionsClickHelper(
+//   query: string,
+//   points: PointsProps,
+//   searchLocationData: NominatimGeoCodeJsonProps | undefined
+// ) {
+//   const newPoints = points;
+//   if (searchLocationData && searchLocationData?.features?.length > 0) {
+//     newPoints.destination.suggestions = searchLocationData.features;
+//   } else {
+//     newPoints.destination.suggestions = null;
+//   }
+//   return newPoints;
+// }
 
 export const calibrationHelper = (
-  position: GeolocationPosition,
-  calibration: CalibrationProps
-): CalibrationProps => {
+  position: CurrentLocationProps,
+  calibration: CalibrateProps
+): CalibrateProps => {
   const newCalibration = { ...calibration };
   if (calibration.start === null) {
     newCalibration.start = {
@@ -109,32 +154,25 @@ export const calibrationHelper = (
   return newCalibration;
 };
 
-export async function getCurrentPosition() {
-  // callback: (userPosition: GeolocationPosition) => void
-  // const options = {
-  //   enableHighAccuracy: true,
-  //   timeout: 5000,
-  //   maximumAge: 0,
-  // };
-  // const onSuccess = (position: GeolocationPosition) => {
-  //   callback(position);
-  // };
-  // const onError = (error: GeolocationPositionError) => {
-  //   console.error(error);
-  // };
+export async function getCurrentPosition(): Promise<CurrentLocationProps | null> {
   const { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
-    // setErrorMsg('Permission to access location was denied');
     return null;
   }
 
   const location = await Location.getCurrentPositionAsync({
     accuracy: Location.Accuracy.High,
   });
-  return location;
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-  // } else {
-  //   alert('Geolocation is not supported by this browser.');
-  // }
+  return {
+    coords: {
+      speed: location.coords.speed,
+      heading: location.coords.heading,
+      accuracy: location.coords.accuracy,
+      altitudeAccuracy: location.coords.altitudeAccuracy,
+      altitude: location.coords.altitude,
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
+    },
+    timestamp: location.timestamp,
+  };
 }

@@ -57,24 +57,5 @@ export interface NominatimGeoCodeJsonProps {
   geocoding: GeocodingProps;
   type: string;
 }
-export interface SearchProps {
-  id: number;
-  query: string;
-  location: LocationType | null;
-  accuracy?: number;
-  suggestions: SuggestionsProps | null;
-}
-
-export interface PointsProps {
-  start: {
-    query: string;
-    location: LocationType | null;
-  };
-  destination: {
-    query: string;
-    location: LocationType | null;
-    suggestions: SuggestionsProps | null;
-  };
-}
 
 export type SuggestionsProps = FeatureProps[];

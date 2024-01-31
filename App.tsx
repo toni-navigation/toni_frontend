@@ -1,49 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { debounce } from 'lodash';
 import { ValhallaProps } from './types/Valhalla-Types';
-import { FeatureProps, PointsProps } from './types/Nominatim-Types';
-import { CalibrateProps, LocationType } from './types/Types';
+import { FeatureProps } from './types/Nominatim-Types';
 import {
+  CalibrateProps,
+  CurrentLocationProps,
+  LocationType,
+  PointsProps,
+} from './types/Types';
+import {
+  calibrationHelper,
   getCurrentPosition,
   suggestionHelper,
   suggestionsHelper,
 } from './src/functions/functions';
 import {
   fetchReverseDataHandler,
+  fetchSearchDataHandler,
   fetchTripHandler,
 } from './src/functions/fetch';
-import Calibration from './src/pages/Calibration';
-import Destination from './src/pages/Destination';
+import Pages from './src/Pages';
 
-import Suggestions from './src/Suggestions';
-import Trip from './src/pages/Trip';
-
-// const styles = StyleSheet.create({
-//   container: {
-//     // flex: 1,
-//     backgroundColor: '#fff',
-//     color: '#000',
-//     paddingLeft: 20,
-//     paddingRight: 20,
-//     // alignItems: 'center',
-//     // justifyContent: 'center',
-//   },
-//   headline: {
-//     fontSize: 40,
-//     fontWeight: 'bold',
-//   },
-//   subheadline: {
-//     fontSize: 34,
-//   },
-// });
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
@@ -56,8 +34,9 @@ const INITIAL_POINTS: PointsProps = {
   },
 };
 export default function App() {
-  const [currentLocation, setCurrentLocation] = useState<any>();
-  const [trip, setTrip] = useState<ValhallaProps>();
+  const [currentLocation, setCurrentLocation] =
+    useState<CurrentLocationProps | null>();
+  const [trip, setTrip] = useState<ValhallaProps | null>();
   const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
   const [calibration, setCalibration] = useState<CalibrateProps>({
     start: null,
@@ -66,12 +45,13 @@ export default function App() {
     factor: null,
   });
   const [currentPage, setCurrentPage] = useState<number>(0);
-  // const [location, setLocation] = useState<any>(null);
-  // const [errorMsg, setErrorMsg] = useState<any>(null);
 
   const suggestionsHandler = async (query: string) => {
-    const newPoints = await suggestionsHelper(query, points);
-    setPoints(newPoints);
+    const searchLocationData = await fetchSearchDataHandler(query);
+    if (searchLocationData) {
+      const newPoints = suggestionsHelper(points, searchLocationData);
+      setPoints(newPoints);
+    }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +62,6 @@ export default function App() {
       newPoints.start.location,
       newPoints.destination.location,
     ];
-
     const newTrip = await fetchTripHandler(startAndDestination);
     setTrip(newTrip);
   };
@@ -96,26 +75,42 @@ export default function App() {
   const nextPageHandler = () => {
     setCurrentPage((prevState) => prevState + 1);
   };
+  const previousPageHandler = () => {
+    setCurrentPage((prevState) => (prevState > 0 ? prevState - 1 : prevState));
+  };
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps
   ) => {
     nextPageHandler();
-    const newPoints = suggestionHelper(locationSuggestion, points);
-    const start = {
-      lat: currentLocation.coords.latitude,
-      lon: currentLocation.coords.longitude,
-    };
-    const reverseData = await fetchReverseDataHandler(start);
-    if (reverseData?.features[0].properties.geocoding.label) {
-      newPoints.start.query =
-        reverseData.features[0].properties.geocoding.label;
+    if (currentLocation) {
+      const start = {
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+      };
+      const reverseData = await fetchReverseDataHandler(start);
+      if (reverseData) {
+        const newPoints = suggestionHelper(
+          locationSuggestion,
+          points,
+          currentLocation,
+          reverseData
+        );
+        await callTrip(newPoints);
+        setPoints(newPoints);
+      }
     }
-    newPoints.start.location = start;
+  };
 
-    if (points.destination.location !== null) {
-      await callTrip(newPoints);
+  const calibrationHandler = () => {
+    if (currentLocation) {
+      const newCalibration = calibrationHelper(currentLocation, calibration);
+      setCalibration((prevState) => {
+        return {
+          ...prevState,
+          ...newCalibration,
+        };
+      });
     }
-    setPoints(newPoints);
   };
 
   useEffect(() => {
@@ -125,76 +120,21 @@ export default function App() {
     })();
   }, []);
 
-  const calibrationHandler = async () => {};
-
-  const showTripHandler = () => {
-    if (currentLocation === null) {
-      return <Text>Error bei der Standortermittlung</Text>;
-    }
-    if (trip === undefined) {
-      return <Text>Loading</Text>;
-    }
-    if (currentLocation === undefined) {
-      return <Text>Loading</Text>;
-    }
-    return (
-      <View>
-        {trip.trip.legs[0].maneuvers.map((maneuver) => (
-          <Trip
-            key={maneuver.begin_shape_index + maneuver.end_shape_index}
-            maneuver={maneuver}
-            factor={calibration.factor}
-          />
-        ))}
-      </View>
-    );
-  };
-
   return (
-    <SafeAreaView className="">
+    <SafeAreaView>
       <View className="p-5 h-screen pb-20 relative">
-        {currentLocation && (
-          <Text>
-            {currentLocation.coords.longitude},{' '}
-            {currentLocation.coords.latitude}
-          </Text>
-        )}
-        <View className="flex-1 flex-col justify-between">
-          <View className="mb-4">
-            {currentPage === 0 && (
-              <Calibration
-                onCalibrate={calibrationHandler}
-                calibration={calibration}
-              />
-            )}
-            {currentPage === 1 && (
-              <View>
-                <Destination
-                  query={points.destination.query}
-                  onDestinationChange={inputChangeHandler}
-                />
-                {points.destination.suggestions && (
-                  <Suggestions
-                    suggestions={points.destination.suggestions}
-                    onLocationSuggestionClick={locationSuggestionClickHandler}
-                  />
-                )}
-              </View>
-            )}
-            {currentPage === 2 && showTripHandler()}
-          </View>
-
-          {currentPage === 0 && (
-            <View>
-              <TouchableOpacity
-                className="bg-green-800 hover:bg-green-950 h-20 flex justify-center font-bold py-2 px-4 rounded"
-                onPress={nextPageHandler}
-              >
-                <Text className="text-white text-center text-lg">Weiter</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+        <Pages
+          currentPage={currentPage}
+          onCalibrate={calibrationHandler}
+          calibration={calibration}
+          onClickNext={nextPageHandler}
+          points={points}
+          onDestinationChange={inputChangeHandler}
+          onLocationSuggestionClick={locationSuggestionClickHandler}
+          currentLocation={currentLocation}
+          trip={trip}
+          onClickPrevious={previousPageHandler}
+        />
       </View>
     </SafeAreaView>
   );
