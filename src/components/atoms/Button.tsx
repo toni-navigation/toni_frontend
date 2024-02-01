@@ -9,7 +9,7 @@ interface PrimaryButtonProps {
 function Button({ children, onPress, disabled }: PrimaryButtonProps) {
   return (
     <TouchableOpacity
-      className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${!disabled ? 'bg-green-800 hover:bg-green-950' : 'bg-amber-400 hover:bg-green-950'}}`}
+      className="bg-green-800 hover:bg-green-950 h-20 flex justify-center font-bold py-2 px-4 rounded"
       onPress={onPress}
       disabled={disabled}
     >
