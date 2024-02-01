@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { CalibrateProps, CurrentLocationProps } from '../../types/Types';
+import PrimaryButton from '../components/PrimaryButton';
 
 interface CalibrationProps {
   onCalibrate: () => void;
@@ -93,13 +94,9 @@ function Calibration({
         <Text>{JSON.stringify(calibration)}</Text>
       </View>
       <View>
-        <TouchableOpacity
-          className="bg-green-800 hover:bg-green-950 h-20 flex justify-center font-bold py-2 px-4 rounded"
-          onPress={onClickNext}
-          disabled={!currentLocation}
-        >
-          <Text className="text-white text-center text-lg">Weiter</Text>
-        </TouchableOpacity>
+        <PrimaryButton onPress={onClickNext} disabled={!!currentLocation}>
+          Weiter
+        </PrimaryButton>
       </View>
     </View>
   );
