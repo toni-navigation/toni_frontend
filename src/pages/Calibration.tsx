@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { CalibrateProps, CurrentLocationProps } from '../../types/Types';
