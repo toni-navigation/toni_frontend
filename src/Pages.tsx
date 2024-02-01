@@ -10,7 +10,7 @@ import {
 } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import Trip from './pages/Trip';
-import { FeatureProps } from '../types/Nominatim-Types';
+import { FeatureProps } from '../types/Photon-Types';
 
 interface PagesProps {
   currentPage: number;

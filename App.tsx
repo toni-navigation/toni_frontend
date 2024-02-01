@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { debounce } from 'lodash';
 import { ValhallaProps } from './types/Valhalla-Types';
-import { FeatureProps } from './types/Nominatim-Types';
 import {
   CalibrateProps,
   CurrentLocationProps,
@@ -21,6 +20,7 @@ import {
   fetchTripHandler,
 } from './src/functions/fetch';
 import Pages from './src/Pages';
+import { FeatureProps } from './types/Photon-Types';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
@@ -47,7 +47,17 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   const suggestionsHandler = async (query: string) => {
-    const searchLocationData = await fetchSearchDataHandler(query);
+    const prioPosition =
+      currentLocation?.coords.latitude && currentLocation?.coords.longitude
+        ? {
+            lat: currentLocation?.coords.latitude,
+            lon: currentLocation?.coords.longitude,
+          }
+        : null;
+    const searchLocationData = await fetchSearchDataHandler(
+      query,
+      prioPosition
+    );
     if (searchLocationData) {
       const newPoints = suggestionsHelper(points, searchLocationData);
       setPoints(newPoints);
