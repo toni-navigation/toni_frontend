@@ -1,8 +1,5 @@
 /* eslint-disable */
-const decodePolyline = (
-  str: string,
-  precision: number = 6
-): [number, number][] => {
+const decodePolyline = (str: string, precision: number = 6): any => {
   let index = 0;
   let lat = 0;
   let lng = 0;
@@ -43,7 +40,16 @@ const decodePolyline = (
     coordinates.push([lat / factor, lng / factor]);
   }
 
-  return coordinates;
+  return {
+    coordinates,
+    index,
+    lat,
+    lng,
+    shift,
+    result,
+    byte,
+    factor,
+  };
 };
 
 export default decodePolyline;

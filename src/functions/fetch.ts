@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { LocationType } from '../../types/Types';
 import VALHALLA_CONFIG from '../../valhallaConfig';
-import { PhotonProps } from '../../types/Photon-Types';
 import { ValhallaProps } from '../../types/Valhalla-Types';
+import { PhotonFeatureCollection } from '../../types/api-photon';
 
 const PhotonUrl = 'https://photon.komoot.io';
 const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
 
 export async function fetchReverseDataHandler(
   latlon: LocationType
-): Promise<PhotonProps | null> {
+): Promise<PhotonFeatureCollection | null> {
   try {
     if (!latlon) return null;
     const geocodeResponse = await axios.get(
@@ -27,7 +27,7 @@ export async function fetchReverseDataHandler(
 export async function fetchSearchDataHandler(
   query: string,
   geoPositionPriority?: LocationType | null
-): Promise<PhotonProps | null> {
+): Promise<PhotonFeatureCollection | null> {
   let url = `${PhotonUrl}/api/?q=${query}&limit=5&lang=de`;
   if (geoPositionPriority) {
     url = `${url}&lon=${geoPositionPriority.lon}&lat=${geoPositionPriority.lat}`;
@@ -52,7 +52,6 @@ export const fetchTripHandler = async (
       ...VALHALLA_CONFIG,
       locations: points.map((point) => ({ ...point, type: 'break' })),
     };
-
     const newTrip = await axios.get(
       `${ValhallaUrl}route?json=${JSON.stringify(searchJson)}&language=de-DE`,
       {

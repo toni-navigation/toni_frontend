@@ -7,10 +7,10 @@ import {
   PointsProps,
   startType,
 } from '../../types/Types';
-import { FeatureProps, PhotonProps } from '../../types/Photon-Types';
+import { PhotonFeature, PhotonFeatureCollection } from '../../types/api-photon';
 
 const destinationHelper = (
-  locationSuggestion: FeatureProps
+  locationSuggestion: PhotonFeature
 ): destinationType => {
   const latlng: LocationType = {
     lat: locationSuggestion.geometry.coordinates[1],
@@ -25,7 +25,7 @@ const destinationHelper = (
 
 const startHelper = (
   currentLocation: CurrentLocationProps,
-  reverseData: PhotonProps
+  reverseData: PhotonFeatureCollection
 ): startType => {
   const latlng: LocationType = {
     lat: currentLocation.coords.latitude,
@@ -38,10 +38,10 @@ const startHelper = (
 };
 
 export function suggestionHelper(
-  locationSuggestion: FeatureProps,
+  locationSuggestion: PhotonFeature,
   points: PointsProps,
   currentLocation: CurrentLocationProps,
-  reverseData: PhotonProps
+  reverseData: PhotonFeatureCollection
 ) {
   const newPoints = { ...points };
   newPoints.start = startHelper(currentLocation, reverseData);
@@ -77,7 +77,7 @@ export function distanceOfLatLon(
 
 export function suggestionsHelper(
   points: PointsProps,
-  searchLocationData: PhotonProps
+  searchLocationData: PhotonFeatureCollection
 ) {
   const newPoints = points;
   if (searchLocationData.features?.length > 0) {

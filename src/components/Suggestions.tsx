@@ -1,23 +1,26 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { FeatureProps } from '../../types/Photon-Types';
+import { PhotonFeature } from '../../types/api-photon';
 
 interface SuggestionProps {
-  suggestions: FeatureProps[];
+  suggestions: PhotonFeature[];
   onLocationSuggestionClick: (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => Promise<void>;
 }
 function Suggestions(props: SuggestionProps) {
   const { suggestions, onLocationSuggestionClick } = props;
+  const createKey = (suggestion: PhotonFeature) => {
+    if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
+      return suggestion.properties.osm_type + suggestion.properties.osm_id;
+    }
+    return suggestion.properties.name;
+  };
   return (
     <View className="bg-gray-200 border-1">
       {suggestions.map((locationSuggestion) => (
         <View
-          key={
-            locationSuggestion.properties.osm_type +
-            locationSuggestion.properties.osm_id
-          }
+          key={createKey(locationSuggestion)}
           className="flex justify-center font-bold border-b-1 border-b-gray-100"
         >
           <TouchableOpacity
@@ -29,7 +32,7 @@ function Suggestions(props: SuggestionProps) {
             <Text>
               {locationSuggestion.properties.city},{' '}
               {locationSuggestion.properties.country},{' '}
-              {locationSuggestion.properties.countrycode}{' '}
+              {locationSuggestion.properties.postcode}{' '}
               {locationSuggestion.properties.name}
             </Text>
           </TouchableOpacity>

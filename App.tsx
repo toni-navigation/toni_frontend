@@ -20,7 +20,8 @@ import {
   fetchTripHandler,
 } from './src/functions/fetch';
 import Pages from './src/Pages';
-import { FeatureProps } from './types/Photon-Types';
+import decodePolyline from './src/functions/decodePolyline';
+import { PhotonFeature } from './types/api-photon';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
@@ -73,6 +74,10 @@ export default function App() {
       newPoints.destination.location,
     ];
     const newTrip = await fetchTripHandler(startAndDestination);
+    if (newTrip) {
+      const decoded = decodePolyline(newTrip.trip.legs[0].shape);
+      console.log(decoded);
+    }
     setTrip(newTrip);
   };
 
@@ -89,7 +94,7 @@ export default function App() {
     setCurrentPage((prevState) => (prevState > 0 ? prevState - 1 : prevState));
   };
   const locationSuggestionClickHandler = async (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => {
     nextPageHandler();
     if (currentLocation) {
