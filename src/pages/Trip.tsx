@@ -6,8 +6,7 @@ interface TripProps {
   maneuver: ValhallaManeuverProps;
   factor: number | null;
 }
-function Trip(props: TripProps) {
-  const { maneuver, factor } = props;
+function Trip({ factor, maneuver }: TripProps) {
   return (
     <View className="border-b-2">
       <Text>

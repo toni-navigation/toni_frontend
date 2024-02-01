@@ -53,16 +53,17 @@ function Pages({
       );
     }
     return (
-      <View>
-        {trip &&
-          trip.trip.legs[0].maneuvers.map((maneuver) => (
+      trip && (
+        <View>
+          {trip.trip.legs[0].maneuvers.map((maneuver) => (
             <Trip
               key={maneuver.begin_shape_index + maneuver.end_shape_index}
               maneuver={maneuver}
               factor={calibration.factor}
             />
           ))}
-      </View>
+        </View>
+      )
     );
   };
   return (

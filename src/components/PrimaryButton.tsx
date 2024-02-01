@@ -4,14 +4,14 @@ import { Text, TouchableOpacity } from 'react-native';
 interface PrimaryButtonProps {
   children: React.ReactNode;
   onPress: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 function PrimaryButton({ children, onPress, disabled }: PrimaryButtonProps) {
   return (
     <TouchableOpacity
-      className="bg-green-800 hover:bg-green-950 h-20 flex justify-center font-bold py-2 px-4 rounded"
+      className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${!disabled ? 'bg-green-800 hover:bg-green-950' : 'bg-amber-400 hover:bg-green-950'}}`}
       onPress={onPress}
-      disabled={!disabled}
+      disabled={disabled}
     >
       <Text className="text-white text-center text-lg">{children}</Text>
     </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import {
   NativeSyntheticEvent,
   TextInput,
@@ -11,8 +11,7 @@ interface DestinationProps {
   query: string;
 }
 
-function Destination(props: DestinationProps) {
-  const { onDestinationChange, query } = props;
+function Destination({ onDestinationChange, query }: DestinationProps) {
   const inputChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {

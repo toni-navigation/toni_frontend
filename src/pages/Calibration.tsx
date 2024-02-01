@@ -17,21 +17,6 @@ function Calibration({
   onClickNext,
   currentLocation,
 }: CalibrationProps) {
-  // const mapRef = React.createRef<any>();
-  //
-  // useEffect(() => {
-  //   const goToMyLocation = async () => {
-  //     mapRef.current.animateCamera({
-  //       center: {
-  //         latitude: currentLocation?.coords.latitude,
-  //         longitude: currentLocation?.coords.longitude,
-  //       },
-  //     });
-  //   };
-  //   if (currentLocation) {
-  //     goToMyLocation();
-  //   }
-  // }, [mapRef, currentLocation]);
   let location: LatLng | undefined;
   if (
     currentLocation &&
@@ -94,7 +79,10 @@ function Calibration({
         <Text>{JSON.stringify(calibration)}</Text>
       </View>
       <View>
-        <PrimaryButton onPress={onClickNext} disabled={!!currentLocation}>
+        <PrimaryButton
+          onPress={onClickNext}
+          disabled={currentLocation === null || currentLocation === undefined}
+        >
           Weiter
         </PrimaryButton>
       </View>
