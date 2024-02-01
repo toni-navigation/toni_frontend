@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Calibration from './pages/Calibration';
 import Destination from './pages/Destination';
-import Suggestions from './components/Suggestions';
+import Suggestions from './components/organisms/Suggestions';
 import {
   CalibrateProps,
   CurrentLocationProps,

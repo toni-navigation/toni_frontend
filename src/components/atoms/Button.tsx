@@ -6,7 +6,7 @@ interface PrimaryButtonProps {
   onPress: () => void;
   disabled?: boolean;
 }
-function PrimaryButton({ children, onPress, disabled }: PrimaryButtonProps) {
+function Button({ children, onPress, disabled }: PrimaryButtonProps) {
   return (
     <TouchableOpacity
       className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${!disabled ? 'bg-green-800 hover:bg-green-950' : 'bg-amber-400 hover:bg-green-950'}}`}
@@ -18,4 +18,4 @@ function PrimaryButton({ children, onPress, disabled }: PrimaryButtonProps) {
   );
 }
 
-export default PrimaryButton;
+export default Button;
