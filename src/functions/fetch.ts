@@ -13,7 +13,10 @@ export async function fetchReverseDataHandler(
   try {
     if (!latlon) return null;
     const geocodeResponse = await axios.get(
-      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=de,at&addressdetails=1&format=geocodejson`
+      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=de,at&addressdetails=1&format=geocodejson`,
+      {
+        timeout: 5000,
+      }
     );
     return geocodeResponse.data;
   } catch (e) {

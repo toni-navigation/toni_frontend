@@ -25,14 +25,6 @@ export interface CurrentLocationProps {
   timestamp: number;
 }
 
-export interface SearchProps {
-  id: number;
-  query: string;
-  location: LocationType | null;
-  accuracy?: number;
-  suggestions: SuggestionsProps | null;
-}
-
 export type destinationType = {
   query: string;
   location: LocationType | null;
