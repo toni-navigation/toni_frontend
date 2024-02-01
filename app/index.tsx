@@ -1,26 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { debounce } from 'lodash';
-import { ValhallaProps } from './types/Valhalla-Types';
-import { FeatureProps } from './types/Nominatim-Types';
+import { ValhallaProps } from '../types/Valhalla-Types';
+import { FeatureProps } from '../types/Nominatim-Types';
 import {
   CalibrateProps,
   CurrentLocationProps,
   LocationType,
   PointsProps,
-} from './types/Types';
+} from '../types/Types';
 import {
   calibrationHelper,
   getCurrentPosition,
   suggestionHelper,
   suggestionsHelper,
-} from './src/functions/functions';
+} from '../src/functions/functions';
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
   fetchTripHandler,
-} from './src/functions/fetch';
-import Pages from './src/Pages';
+} from '../src/functions/fetch';
+import Pages from '../src/Pages';
+import HomeLayout from './_layout';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
@@ -121,21 +122,19 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaView>
-      <View className="p-5 h-screen pb-20 relative">
-        <Pages
-          currentPage={currentPage}
-          onCalibrate={calibrationHandler}
-          calibration={calibration}
-          onClickNext={nextPageHandler}
-          points={points}
-          onDestinationChange={inputChangeHandler}
-          onLocationSuggestionClick={locationSuggestionClickHandler}
-          currentLocation={currentLocation}
-          trip={trip}
-          onClickPrevious={previousPageHandler}
-        />
-      </View>
-    </SafeAreaView>
+    <View className="p-5 h-screen pb-20 relative">
+      <Pages
+        currentPage={currentPage}
+        onCalibrate={calibrationHandler}
+        calibration={calibration}
+        onClickNext={nextPageHandler}
+        points={points}
+        onDestinationChange={inputChangeHandler}
+        onLocationSuggestionClick={locationSuggestionClickHandler}
+        currentLocation={currentLocation}
+        trip={trip}
+        onClickPrevious={previousPageHandler}
+      />
+    </View>
   );
 }
