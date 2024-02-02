@@ -23,6 +23,7 @@ import { FeatureProps } from '../../types/Nominatim-Types';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import Button from '../../src/components/atoms/Button';
+import Calibration from '../../src/pages/Calibration';
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
@@ -117,6 +118,17 @@ const Home = () => {
       setCurrentLocation(position);
     })();
   }, []);
+
+  if (currentPage === 0) {
+    return (
+      <Calibration
+        onCalibrate={calibrationHandler}
+        calibration={calibration}
+        onClickNext={nextPageHandler}
+        currentLocation={currentLocation}
+      />
+    );
+  }
 
   return (
     <View>
