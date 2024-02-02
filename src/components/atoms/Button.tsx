@@ -11,7 +11,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
   let buttonLook;
   switch (buttonType) {
     case 'primary':
-      buttonLook = 'bg-green-800 hover:bg-green-950';
+      buttonLook = 'bg-primary-color hover:bg-primary-color-950';
       break;
     case 'secondary':
       buttonLook = 'bg-yellow-800 hover:bg-yellow-950';

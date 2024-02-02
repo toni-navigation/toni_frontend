@@ -22,6 +22,7 @@ import { debounce } from 'lodash';
 import { FeatureProps } from '../../types/Nominatim-Types';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
+import Button from '../../src/components/atoms/Button';
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
@@ -129,6 +130,15 @@ const Home = () => {
           onLocationSuggestionClick={locationSuggestionClickHandler}
         />
       )}
+      <View>
+        <Button
+          onPress={() => {}}
+          // disabled={currentLocation === null || currentLocation === undefined}
+          buttonType={'primary'}
+        >
+          Weiter
+        </Button>
+      </View>
     </View>
   );
 };
