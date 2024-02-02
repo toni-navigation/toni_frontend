@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import { debounce } from 'lodash';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import { FeatureProps } from '../types/Nominatim-Types';
@@ -22,6 +22,8 @@ import {
 } from '../src/functions/fetch';
 import Pages from '../src/Pages';
 import HomeLayout from './_layout';
+import Destination from '../src/pages/Destination';
+import Suggestions from '../src/components/organisms/Suggestions';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
@@ -76,9 +78,6 @@ export default function App() {
   const nextPageHandler = () => {
     setCurrentPage((prevState) => prevState + 1);
   };
-  const previousPageHandler = () => {
-    setCurrentPage((prevState) => (prevState > 0 ? prevState - 1 : prevState));
-  };
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps
   ) => {
@@ -102,39 +101,52 @@ export default function App() {
     }
   };
 
-  const calibrationHandler = () => {
-    if (currentLocation) {
-      const newCalibration = calibrationHelper(currentLocation, calibration);
-      setCalibration((prevState) => {
-        return {
-          ...prevState,
-          ...newCalibration,
-        };
-      });
-    }
-  };
+  // const calibrationHandler = () => {
+  //   if (currentLocation) {
+  //     const newCalibration = calibrationHelper(currentLocation, calibration);
+  //     setCalibration((prevState) => {
+  //       return {
+  //         ...prevState,
+  //         ...newCalibration,
+  //       };
+  //     });
+  //   }
+  // };
 
-  useEffect(() => {
-    (async () => {
-      const position = await getCurrentPosition();
-      setCurrentLocation(position);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const position = await getCurrentPosition();
+  //     setCurrentLocation(position);
+  //   })();
+  // }, []);
 
   return (
-    <View className="p-5 h-screen pb-20 relative">
-      <Pages
-        currentPage={currentPage}
-        onCalibrate={calibrationHandler}
-        calibration={calibration}
-        onClickNext={nextPageHandler}
-        points={points}
+    // <View className="p-5 h-screen pb-20 relative">
+    //   <Pages
+    //     currentPage={currentPage}
+    //     onCalibrate={calibrationHandler}
+    //     calibration={calibration}
+    //     onClickNext={nextPageHandler}
+    //     points={points}
+    //     onDestinationChange={inputChangeHandler}
+    //     onLocationSuggestionClick={locationSuggestionClickHandler}
+    //     currentLocation={currentLocation}
+    //     trip={trip}
+    //     onClickPrevious={previousPageHandler}
+    //   />
+    // </View>
+
+    <View>
+      <Destination
+        query={points.destination.query}
         onDestinationChange={inputChangeHandler}
-        onLocationSuggestionClick={locationSuggestionClickHandler}
-        currentLocation={currentLocation}
-        trip={trip}
-        onClickPrevious={previousPageHandler}
       />
+      {points.destination.suggestions && (
+        <Suggestions
+          suggestions={points.destination.suggestions}
+          onLocationSuggestionClick={locationSuggestionClickHandler}
+        />
+      )}
     </View>
   );
 }

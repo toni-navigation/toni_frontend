@@ -86,26 +86,26 @@ function Pages({
           currentLocation={currentLocation}
         />
       )}
-      {currentPage === 1 && (
-        <View>
-          <Destination
-            query={points.destination.query}
-            onDestinationChange={onDestinationChange}
-          />
-          {points.destination.suggestions && (
-            <Suggestions
-              suggestions={points.destination.suggestions}
-              onLocationSuggestionClick={onLocationSuggestionClick}
-            />
-          )}
-          <TouchableOpacity
-            onPress={onClickPrevious}
-            className="bg-white h-20 flex justify-center font-bold py-2 px-4 border-green-100 rounded"
-          >
-            <Text>Zurück</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/*{currentPage === 1 && (*/}
+      {/*  <View>*/}
+      {/*    <Destination*/}
+      {/*      query={points.destination.query}*/}
+      {/*      onDestinationChange={onDestinationChange}*/}
+      {/*    />*/}
+      {/*    {points.destination.suggestions && (*/}
+      {/*      <Suggestions*/}
+      {/*        suggestions={points.destination.suggestions}*/}
+      {/*        onLocationSuggestionClick={onLocationSuggestionClick}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*    <TouchableOpacity*/}
+      {/*      onPress={onClickPrevious}*/}
+      {/*      className="bg-white h-20 flex justify-center font-bold py-2 px-4 border-green-100 rounded"*/}
+      {/*    >*/}
+      {/*      <Text>Zurück</Text>*/}
+      {/*    </TouchableOpacity>*/}
+      {/*  </View>*/}
+      {/*)}*/}
       {currentPage === 2 && showTripHandler()}
     </View>
   );
