@@ -1,20 +1,12 @@
 import React, { useEffect } from 'react';
-import { router } from 'expo-router';
-import Calibration from '../src/pages/Calibration';
-import useCurrentLocationStore from '../store/locationStore';
-import useCalibrationStore from '../store/calibrationStore';
 import { View, Text } from 'react-native';
 import Trip from '../src/pages/Trip';
-import useTripStore from '../store/tripStore';
-import usePointsStore from '../store/pointsStore';
 import { LocationType } from '../types/Types';
 import { fetchTripHandler } from '../src/functions/fetch';
-import { getCurrentPosition } from '../src/functions/functions';
+import useUserStore from '../store/useUserStore';
 
 export default function CalibrationPage() {
-  const { trip, setTrip } = useTripStore();
-  const { calibration } = useCalibrationStore();
-  const { points } = usePointsStore();
+  const { trip, calibration, points, actions } = useUserStore();
 
   useEffect(() => {
     (async () => {
@@ -24,10 +16,10 @@ export default function CalibrationPage() {
       ];
       const newTrip = await fetchTripHandler(startAndDestination);
       if (newTrip) {
-        setTrip(newTrip);
+        actions.setTrip(newTrip);
       }
     })();
-  }, [setTrip, points]);
+  }, [actions, actions.setTrip, points]);
   return trip ? (
     <View>
       {trip.trip.legs[0].maneuvers.map((maneuver) => (

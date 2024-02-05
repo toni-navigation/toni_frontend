@@ -8,8 +8,10 @@ interface SuggestionProps {
     locationSuggestion: PhotonFeature
   ) => Promise<void>;
 }
-function Suggestions(props: SuggestionProps) {
-  const { suggestions, onLocationSuggestionClick } = props;
+function Suggestions({
+  suggestions,
+  onLocationSuggestionClick,
+}: SuggestionProps) {
   const createKey = (suggestion: PhotonFeature) => {
     if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
       return suggestion.properties.osm_type + suggestion.properties.osm_id;

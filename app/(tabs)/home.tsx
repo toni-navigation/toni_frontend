@@ -10,18 +10,15 @@ import {
 import { suggestionHelper } from '../../src/functions/functions';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
-import useCurrentLocationStore from '../../store/locationStore';
-import usePointsStore from '../../store/pointsStore';
 import { PhotonFeature } from '../../types/api-photon';
+import useUserStore from '../../store/useUserStore';
 
 export default function Home() {
-  const { currentLocation } = useCurrentLocationStore();
-  const { points, setDestinationQuery, setSuggestions, setTripData } =
-    usePointsStore();
+  const { points, actions, currentLocation } = useUserStore();
   const suggestionsHandler = async (query: string) => {
     const searchLocationData = await fetchSearchDataHandler(query);
     if (searchLocationData) {
-      setSuggestions(searchLocationData);
+      actions.setSuggestions(searchLocationData);
     }
   };
 
@@ -38,7 +35,7 @@ export default function Home() {
   };*/
 
   const inputChangeHandler = (value: string) => {
-    setDestinationQuery(value);
+    actions.setDestinationQuery(value);
     debounceFn(value);
   };
   const locationSuggestionClickHandler = async (
@@ -57,7 +54,7 @@ export default function Home() {
           currentLocation,
           reverseData
         );
-        setTripData(newPoints);
+        actions.setTripData(newPoints);
       }
     }
   };

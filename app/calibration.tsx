@@ -1,16 +1,14 @@
 import React from 'react';
-import { router } from 'expo-router';
-import Calibration from '../src/pages/Calibration';
-import useCurrentLocationStore from '../store/locationStore';
-import useCalibrationStore from '../store/calibrationStore';
 import { View, Text } from 'react-native';
+import { router } from 'expo-router';
+import useUserStore from '../store/useUserStore';
+import Calibration from '../src/pages/Calibration';
 
 export default function CalibrationPage() {
-  const { currentLocation } = useCurrentLocationStore();
-  const { calibration, setCalibration } = useCalibrationStore();
+  const { currentLocation, calibration, actions } = useUserStore();
   const calibrationHandler = () => {
     if (currentLocation) {
-      setCalibration(currentLocation, calibration);
+      actions.setCalibration(currentLocation, calibration);
     }
   };
 

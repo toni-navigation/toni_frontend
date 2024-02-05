@@ -10,6 +10,7 @@ export default function StackLayout() {
           headerShown: false,
         }}
       />
+      {/*<Stack.Screen name={'trip'} options={{ presentation: 'modal' }} />*/}
     </Stack>
   );
 }
