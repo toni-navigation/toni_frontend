@@ -8,11 +8,11 @@ import {
   fetchSearchDataHandler,
 } from '../../src/functions/fetch';
 import { suggestionHelper } from '../../src/functions/functions';
-import { FeatureProps } from '../../types/Nominatim-Types';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import useCurrentLocationStore from '../../store/locationStore';
 import usePointsStore from '../../store/pointsStore';
+import { PhotonFeature } from '../../types/api-photon';
 
 export default function Home() {
   const { currentLocation } = useCurrentLocationStore();
@@ -42,7 +42,7 @@ export default function Home() {
     debounceFn(value);
   };
   const locationSuggestionClickHandler = async (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => {
     if (currentLocation) {
       const start = {
@@ -78,7 +78,7 @@ export default function Home() {
         <Button
           onPress={() => router.push('/trip')}
           disabled={!points.destination.location || !points.start.location}
-          buttonType={'primary'}
+          buttonType="primary"
         >
           <Text>Route starten</Text>
         </Button>
