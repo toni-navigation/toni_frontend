@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { PhotonFeature } from '../../types/api-photon';
+import { PhotonFeature } from '../../../types/api-photon';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];

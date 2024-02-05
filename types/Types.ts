@@ -1,4 +1,4 @@
-import { FeatureProps } from './Photon-Types';
+import { PhotonFeature } from './api-photon';
 
 export type LocationType = {
   lat: number;
@@ -28,7 +28,7 @@ export interface CurrentLocationProps {
 export type destinationType = {
   query: string;
   location: LocationType | null;
-  suggestions: FeatureProps[] | null;
+  suggestions: PhotonFeature[] | null;
 };
 
 export type startType = {

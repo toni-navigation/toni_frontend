@@ -1,27 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { debounce } from 'lodash';
-import { ValhallaProps } from './types/Valhalla-Types';
+import { ValhallaProps } from '../../types/Valhalla-Types';
 import {
   CalibrateProps,
   CurrentLocationProps,
   LocationType,
   PointsProps,
-} from './types/Types';
+} from '../../types/Types';
 import {
   calibrationHelper,
   getCurrentPosition,
   suggestionHelper,
   suggestionsHelper,
-} from './src/functions/functions';
+} from '../../src/functions/functions';
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
   fetchTripHandler,
-} from './src/functions/fetch';
-import Pages from './src/Pages';
-import decodePolyline from './src/functions/decodePolyline';
-import { PhotonFeature } from './types/api-photon';
+} from '../../src/functions/fetch';
+import Pages from '../../src/Pages';
+import decodePolyline from '../../src/functions/decodePolyline';
+import { PhotonFeature } from '../../types/api-photon';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
