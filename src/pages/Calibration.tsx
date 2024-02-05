@@ -85,8 +85,10 @@ function Calibration({
           disabled={
             currentLocation === null ||
             currentLocation === undefined ||
-            !calibration.start ||
-            !calibration.end
+            calibration.start === null ||
+            calibration.start === undefined ||
+            calibration.end === null ||
+            calibration.end === undefined
           }
         >
           Weiter

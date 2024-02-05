@@ -1,86 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
+import { router } from 'expo-router';
 import { Text, View } from 'react-native';
-import {
-  CalibrateProps,
-  CurrentLocationProps,
-  LocationType,
-  PointsProps,
-} from '../../types/Types';
-import { ValhallaProps } from '../../types/Valhalla-Types';
+import { debounce } from 'lodash';
+import Button from '../../src/components/atoms/Button';
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
-  fetchTripHandler,
 } from '../../src/functions/fetch';
-import {
-  calibrationHelper,
-  getCurrentPosition,
-  suggestionHelper,
-  suggestionsHelper,
-} from '../../src/functions/functions';
-import { debounce } from 'lodash';
+import { suggestionHelper } from '../../src/functions/functions';
 import { FeatureProps } from '../../types/Nominatim-Types';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
-import Button from '../../src/components/atoms/Button';
-import Calibration from '../../src/pages/Calibration';
-const INITIAL_POINTS: PointsProps = {
-  start: {
-    query: '',
-    location: null,
-  },
-  destination: {
-    query: '',
-    location: null,
-    suggestions: null,
-  },
-};
-const Home = () => {
-  const [currentLocation, setCurrentLocation] =
-    useState<CurrentLocationProps | null>();
-  const [trip, setTrip] = useState<ValhallaProps | null>();
-  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
-  const [calibration, setCalibration] = useState<CalibrateProps>({
-    start: null,
-    end: null,
-    meters: null,
-    factor: null,
-  });
-  const [currentPage, setCurrentPage] = useState<number>(0);
+import useCurrentLocationStore from '../../store/locationStore';
+import usePointsStore from '../../store/pointsStore';
 
+export default function Home() {
+  const { currentLocation } = useCurrentLocationStore();
+  const { points, setDestinationQuery, setSuggestions, setTripData } =
+    usePointsStore();
   const suggestionsHandler = async (query: string) => {
     const searchLocationData = await fetchSearchDataHandler(query);
     if (searchLocationData) {
-      const newPoints = suggestionsHelper(points, searchLocationData);
-      setPoints(newPoints);
+      setSuggestions(searchLocationData);
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(suggestionsHandler, 500), []);
 
-  const callTrip = async (newPoints: PointsProps) => {
+  /* const callTrip = async (newPoints: PointsProps) => {
     const startAndDestination: LocationType[] = [
       newPoints.start.location,
       newPoints.destination.location,
     ];
     const newTrip = await fetchTripHandler(startAndDestination);
     setTrip(newTrip);
-  };
+  };*/
 
   const inputChangeHandler = (value: string) => {
-    const newPoints = { ...points };
-    newPoints.destination.query = value;
-    setPoints(newPoints);
+    setDestinationQuery(value);
     debounceFn(value);
-  };
-  const nextPageHandler = () => {
-    setCurrentPage((prevState) => prevState + 1);
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: FeatureProps
   ) => {
-    nextPageHandler();
     if (currentLocation) {
       const start = {
         lat: currentLocation.coords.latitude,
@@ -94,65 +57,32 @@ const Home = () => {
           currentLocation,
           reverseData
         );
-        await callTrip(newPoints);
-        setPoints(newPoints);
+        setTripData(newPoints);
       }
     }
   };
 
-  const calibrationHandler = () => {
-    if (currentLocation) {
-      const newCalibration = calibrationHelper(currentLocation, calibration);
-      setCalibration((prevState) => {
-        return {
-          ...prevState,
-          ...newCalibration,
-        };
-      });
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      const position = await getCurrentPosition();
-      setCurrentLocation(position);
-    })();
-  }, []);
-
-  if (currentPage === 0) {
-    return (
-      <Calibration
-        onCalibrate={calibrationHandler}
-        calibration={calibration}
-        onClickNext={nextPageHandler}
-        currentLocation={currentLocation}
-      />
-    );
-  }
-
   return (
-    <View>
-      <Destination
-        query={points.destination.query}
-        onDestinationChange={inputChangeHandler}
-      />
-      {points.destination.suggestions && (
-        <Suggestions
-          suggestions={points.destination.suggestions}
-          onLocationSuggestionClick={locationSuggestionClickHandler}
-        />
-      )}
+    <View className="mb-4">
       <View>
+        <Destination
+          query={points.destination.query}
+          onDestinationChange={inputChangeHandler}
+        />
+        {points.destination.suggestions && (
+          <Suggestions
+            suggestions={points.destination.suggestions}
+            onLocationSuggestionClick={locationSuggestionClickHandler}
+          />
+        )}
         <Button
-          onPress={() => {}}
-          // disabled={currentLocation === null || currentLocation === undefined}
+          onPress={() => router.push('/trip')}
+          disabled={!points.destination.location || !points.start.location}
           buttonType={'primary'}
         >
-          Weiter
+          <Text>Route starten</Text>
         </Button>
       </View>
     </View>
   );
-};
-
-export default Home;
+}
