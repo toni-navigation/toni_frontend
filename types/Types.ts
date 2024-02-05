@@ -1,4 +1,4 @@
-import { SuggestionsProps } from './Nominatim-Types';
+import { FeatureProps } from './Photon-Types';
 
 export type LocationType = {
   lat: number;
@@ -28,7 +28,7 @@ export interface CurrentLocationProps {
 export type destinationType = {
   query: string;
   location: LocationType | null;
-  suggestions: SuggestionsProps | null;
+  suggestions: FeatureProps[] | null;
 };
 
 export type startType = {

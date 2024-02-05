@@ -1,19 +1,19 @@
 import axios from 'axios';
 import { LocationType } from '../../types/Types';
 import VALHALLA_CONFIG from '../../valhallaConfig';
-import { NominatimGeoCodeJsonProps } from '../../types/Nominatim-Types';
 import { ValhallaProps } from '../../types/Valhalla-Types';
+import { PhotonFeatureCollection } from '../../types/api-photon';
 
-const NominatimUrl = 'https://nominatim.openstreetmap.org/';
+const PhotonUrl = 'https://photon.komoot.io';
 const ValhallaUrl = 'https://valhalla1.openstreetmap.de/';
 
 export async function fetchReverseDataHandler(
   latlon: LocationType
-): Promise<NominatimGeoCodeJsonProps | null> {
+): Promise<PhotonFeatureCollection | null> {
   try {
     if (!latlon) return null;
     const geocodeResponse = await axios.get(
-      `${NominatimUrl}reverse?lon=${latlon.lon}&lat=${latlon.lat}&countrycodes=de,at&addressdetails=1&format=geocodejson`,
+      `${PhotonUrl}/reverse?lon=${latlon.lon}&lat=${latlon.lat}`,
       {
         timeout: 5000,
       }
@@ -25,12 +25,17 @@ export async function fetchReverseDataHandler(
   }
 }
 export async function fetchSearchDataHandler(
-  query: string
-): Promise<NominatimGeoCodeJsonProps | null> {
+  query: string,
+  geoPositionPriority?: LocationType | null
+): Promise<PhotonFeatureCollection | null> {
+  let url = `${PhotonUrl}/api/?q=${query}&limit=5&lang=de`;
+  if (geoPositionPriority) {
+    url = `${url}&lon=${geoPositionPriority.lon}&lat=${geoPositionPriority.lat}`;
+  }
   try {
-    const geocodeResponse = await axios.get(
-      `${NominatimUrl}search?q=${query}&limit=5&addressdetails=1&extratags=1&namedetails=1&format=geocodejson&countrycodes=de,at`
-    );
+    const geocodeResponse = await axios.get(url, {
+      timeout: 5000,
+    });
 
     return geocodeResponse.data;
   } catch (e) {
@@ -47,9 +52,11 @@ export const fetchTripHandler = async (
       ...VALHALLA_CONFIG,
       locations: points.map((point) => ({ ...point, type: 'break' })),
     };
-
     const newTrip = await axios.get(
-      `${ValhallaUrl}route?json=${JSON.stringify(searchJson)}&language=de-DE`
+      `${ValhallaUrl}route?json=${JSON.stringify(searchJson)}&language=de-DE`,
+      {
+        timeout: 5000,
+      }
     );
 
     return newTrip.data;

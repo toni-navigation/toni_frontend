@@ -7,20 +7,17 @@ import {
   PointsProps,
   startType,
 } from '../../types/Types';
-import {
-  FeatureProps,
-  NominatimGeoCodeJsonProps,
-} from '../../types/Nominatim-Types';
+import { PhotonFeature, PhotonFeatureCollection } from '../../types/api-photon';
 
 const destinationHelper = (
-  locationSuggestion: FeatureProps
+  locationSuggestion: PhotonFeature
 ): destinationType => {
   const latlng: LocationType = {
     lat: locationSuggestion.geometry.coordinates[1],
     lon: locationSuggestion.geometry.coordinates[0],
   };
   return {
-    query: locationSuggestion.properties.geocoding.label ?? '',
+    query: locationSuggestion.properties.name ?? '',
     location: latlng,
     suggestions: null,
   };
@@ -28,23 +25,23 @@ const destinationHelper = (
 
 const startHelper = (
   currentLocation: CurrentLocationProps,
-  reverseData: NominatimGeoCodeJsonProps
+  reverseData: PhotonFeatureCollection
 ): startType => {
   const latlng: LocationType = {
     lat: currentLocation.coords.latitude,
     lon: currentLocation.coords.longitude,
   };
   return {
-    query: reverseData.features[0].properties.geocoding.label ?? '',
+    query: reverseData.features[0].properties.name ?? '',
     location: latlng,
   };
 };
 
 export function suggestionHelper(
-  locationSuggestion: FeatureProps,
+  locationSuggestion: PhotonFeature,
   points: PointsProps,
   currentLocation: CurrentLocationProps,
-  reverseData: NominatimGeoCodeJsonProps
+  reverseData: PhotonFeatureCollection
 ) {
   const newPoints = { ...points };
   newPoints.start = startHelper(currentLocation, reverseData);
@@ -77,28 +74,10 @@ export function distanceOfLatLon(
   }
   return dist;
 }
-// export async function currentPositionHelper(
-//   position: GeolocationPosition,
-//   points: SearchProps[]
-// ): Promise<SearchProps[] | undefined> {
-//   const latlng: LocationType = {
-//     lat: position.coords.latitude,
-//     lon: position.coords.longitude,
-//   };
-//   const coordData = await fetchReverseDataHandler(latlng);
-//   if (coordData === undefined || coordData?.features?.length === 0) {
-//     console.error('No data found for the given location');
-//     return undefined;
-//   }
-//   const newPoints = [...points];
-//   newPoints[0].query = coordData.features[0].properties.geocoding.label ?? '';
-//   newPoints[0].location = latlng;
-//   return newPoints;
-// }
 
 export function suggestionsHelper(
   points: PointsProps,
-  searchLocationData: NominatimGeoCodeJsonProps
+  searchLocationData: PhotonFeatureCollection
 ) {
   const newPoints = points;
   if (searchLocationData.features?.length > 0) {
@@ -108,21 +87,6 @@ export function suggestionsHelper(
   }
   return newPoints;
 }
-//
-// export function suggestionsClickHelper(
-//   query: string,
-//   points: PointsProps,
-//   searchLocationData: NominatimGeoCodeJsonProps | undefined
-// ) {
-//   const newPoints = points;
-//   if (searchLocationData && searchLocationData?.features?.length > 0) {
-//     newPoints.destination.suggestions = searchLocationData.features;
-//   } else {
-//     newPoints.destination.suggestions = null;
-//   }
-//   return newPoints;
-// }
-
 export const calibrationHelper = (
   position: CurrentLocationProps,
   calibration: CalibrateProps

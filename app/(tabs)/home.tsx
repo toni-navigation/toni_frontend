@@ -1,28 +1,28 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
+import { debounce } from 'lodash';
+import { ValhallaProps } from './types/Valhalla-Types';
 import {
   CalibrateProps,
   CurrentLocationProps,
   LocationType,
   PointsProps,
-} from '../../types/Types';
-import { ValhallaProps } from '../../types/Valhalla-Types';
-import {
-  fetchReverseDataHandler,
-  fetchSearchDataHandler,
-  fetchTripHandler,
-} from '../../src/functions/fetch';
+} from './types/Types';
 import {
   calibrationHelper,
   getCurrentPosition,
   suggestionHelper,
   suggestionsHelper,
-} from '../../src/functions/functions';
-import { debounce } from 'lodash';
-import { FeatureProps } from '../../types/Nominatim-Types';
-import Destination from '../../src/pages/Destination';
-import Suggestions from '../../src/components/organisms/Suggestions';
-import Button from '../../src/components/atoms/Button';
+} from './src/functions/functions';
+import {
+  fetchReverseDataHandler,
+  fetchSearchDataHandler,
+  fetchTripHandler,
+} from './src/functions/fetch';
+import Pages from './src/Pages';
+import decodePolyline from './src/functions/decodePolyline';
+import { PhotonFeature } from './types/api-photon';
+
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
@@ -34,7 +34,7 @@ const INITIAL_POINTS: PointsProps = {
     suggestions: null,
   },
 };
-const Home = () => {
+export default function App() {
   const [currentLocation, setCurrentLocation] =
     useState<CurrentLocationProps | null>();
   const [trip, setTrip] = useState<ValhallaProps | null>();
@@ -48,7 +48,17 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   const suggestionsHandler = async (query: string) => {
-    const searchLocationData = await fetchSearchDataHandler(query);
+    const prioPosition =
+      currentLocation?.coords.latitude && currentLocation?.coords.longitude
+        ? {
+            lat: currentLocation?.coords.latitude,
+            lon: currentLocation?.coords.longitude,
+          }
+        : null;
+    const searchLocationData = await fetchSearchDataHandler(
+      query,
+      prioPosition
+    );
     if (searchLocationData) {
       const newPoints = suggestionsHelper(points, searchLocationData);
       setPoints(newPoints);
@@ -64,6 +74,10 @@ const Home = () => {
       newPoints.destination.location,
     ];
     const newTrip = await fetchTripHandler(startAndDestination);
+    if (newTrip) {
+      const decoded = decodePolyline(newTrip.trip.legs[0].shape);
+      console.log(decoded);
+    }
     setTrip(newTrip);
   };
 
@@ -76,8 +90,11 @@ const Home = () => {
   const nextPageHandler = () => {
     setCurrentPage((prevState) => prevState + 1);
   };
+  const previousPageHandler = () => {
+    setCurrentPage((prevState) => (prevState > 0 ? prevState - 1 : prevState));
+  };
   const locationSuggestionClickHandler = async (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => {
     nextPageHandler();
     if (currentLocation) {
@@ -119,28 +136,21 @@ const Home = () => {
   }, []);
 
   return (
-    <View>
-      <Destination
-        query={points.destination.query}
-        onDestinationChange={inputChangeHandler}
-      />
-      {points.destination.suggestions && (
-        <Suggestions
-          suggestions={points.destination.suggestions}
+    <SafeAreaView>
+      <View className="p-5 h-screen pb-20 relative">
+        <Pages
+          currentPage={currentPage}
+          onCalibrate={calibrationHandler}
+          calibration={calibration}
+          onClickNext={nextPageHandler}
+          points={points}
+          onDestinationChange={inputChangeHandler}
           onLocationSuggestionClick={locationSuggestionClickHandler}
+          currentLocation={currentLocation}
+          trip={trip}
+          onClickPrevious={previousPageHandler}
         />
-      )}
-      <View>
-        <Button
-          onPress={() => {}}
-          // disabled={currentLocation === null || currentLocation === undefined}
-          buttonType={'primary'}
-        >
-          Weiter
-        </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
-};
-
-export default Home;
+}

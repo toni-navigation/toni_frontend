@@ -1,23 +1,26 @@
 import React from 'react';
-import { FeatureProps, SuggestionsProps } from '../../../types/Nominatim-Types';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { PhotonFeature } from '../../types/api-photon';
 
 interface SuggestionProps {
-  suggestions: SuggestionsProps;
+  suggestions: PhotonFeature[];
   onLocationSuggestionClick: (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => Promise<void>;
 }
 function Suggestions(props: SuggestionProps) {
   const { suggestions, onLocationSuggestionClick } = props;
+  const createKey = (suggestion: PhotonFeature) => {
+    if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
+      return suggestion.properties.osm_type + suggestion.properties.osm_id;
+    }
+    return suggestion.properties.name;
+  };
   return (
     <View className="bg-gray-200 border-1">
       {suggestions.map((locationSuggestion) => (
         <View
-          key={
-            locationSuggestion.properties.geocoding.osm_type +
-            locationSuggestion.properties.geocoding.osm_id
-          }
+          key={createKey(locationSuggestion)}
           className="flex justify-center font-bold border-b-1 border-b-gray-100"
         >
           <TouchableOpacity
@@ -26,7 +29,12 @@ function Suggestions(props: SuggestionProps) {
             }
             className="flex justify-center font-bold py-2 px-4"
           >
-            <Text>{locationSuggestion.properties.geocoding.label}</Text>
+            <Text>
+              {locationSuggestion.properties.city},{' '}
+              {locationSuggestion.properties.country},{' '}
+              {locationSuggestion.properties.postcode}{' '}
+              {locationSuggestion.properties.name}
+            </Text>
           </TouchableOpacity>
         </View>
       ))}

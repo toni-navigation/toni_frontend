@@ -10,7 +10,7 @@ import {
 } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import Trip from './pages/Trip';
-import { FeatureProps } from '../types/Nominatim-Types';
+import { PhotonFeature } from '../types/api-photon';
 
 interface PagesProps {
   currentPage: number;
@@ -20,7 +20,7 @@ interface PagesProps {
   points: PointsProps;
   onDestinationChange: (destination: string) => void;
   onLocationSuggestionClick: (
-    locationSuggestion: FeatureProps
+    locationSuggestion: PhotonFeature
   ) => Promise<void>;
   currentLocation: CurrentLocationProps | null | undefined;
   trip: ValhallaProps | null | undefined;
