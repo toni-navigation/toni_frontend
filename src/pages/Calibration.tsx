@@ -80,8 +80,16 @@ function Calibration({
       </View>
       <View>
         <Button
+          buttonType="primary"
           onPress={onClickNext}
-          disabled={currentLocation === null || currentLocation === undefined}
+          disabled={
+            currentLocation === null ||
+            currentLocation === undefined ||
+            calibration.start === null ||
+            calibration.start === undefined ||
+            calibration.end === null ||
+            calibration.end === undefined
+          }
         >
           Weiter
         </Button>

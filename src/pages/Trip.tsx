@@ -7,17 +7,16 @@ interface TripProps {
   factor: number | null;
 }
 function Trip({ factor, maneuver }: TripProps) {
+  const tripText = `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
   return (
     <View className="border-b-2">
-      <Text>
-        {maneuver.instruction}, {maneuver.length * 1000} Meter
-      </Text>
-      {factor && (
+      <Text>{tripText}</Text>
+      {/*factor && (
         <Text>
           Umgerechnet in Schritte:{' '}
           {Math.ceil((maneuver.length * 1000) / factor)} Schritte
         </Text>
-      )}
+      )*/}
     </View>
   );
 }

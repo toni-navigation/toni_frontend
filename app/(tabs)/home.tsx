@@ -1,102 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import React, { useCallback } from 'react';
+import { router } from 'expo-router';
+import { Text, View } from 'react-native';
 import { debounce } from 'lodash';
-import { ValhallaProps } from '../../types/Valhalla-Types';
-import {
-  CalibrateProps,
-  CurrentLocationProps,
-  LocationType,
-  PointsProps,
-} from '../../types/Types';
-import {
-  calibrationHelper,
-  getCurrentPosition,
-  suggestionHelper,
-  suggestionsHelper,
-} from '../../src/functions/functions';
+import Button from '../../src/components/atoms/Button';
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
-  fetchTripHandler,
 } from '../../src/functions/fetch';
-import Pages from '../../src/Pages';
-import decodePolyline from '../../src/functions/decodePolyline';
-import { PhotonFeature } from '../../types/api-photon';
+import { suggestionHelper } from '../../src/functions/functions';
+import { FeatureProps } from '../../types/Nominatim-Types';
+import Destination from '../../src/pages/Destination';
+import Suggestions from '../../src/components/organisms/Suggestions';
+import useCurrentLocationStore from '../../store/locationStore';
+import usePointsStore from '../../store/pointsStore';
 
-const INITIAL_POINTS: PointsProps = {
-  start: {
-    query: '',
-    location: null,
-  },
-  destination: {
-    query: '',
-    location: null,
-    suggestions: null,
-  },
-};
-export default function App() {
-  const [currentLocation, setCurrentLocation] =
-    useState<CurrentLocationProps | null>();
-  const [trip, setTrip] = useState<ValhallaProps | null>();
-  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
-  const [calibration, setCalibration] = useState<CalibrateProps>({
-    start: null,
-    end: null,
-    meters: null,
-    factor: null,
-  });
-  const [currentPage, setCurrentPage] = useState<number>(0);
-
+export default function Home() {
+  const { currentLocation } = useCurrentLocationStore();
+  const { points, setDestinationQuery, setSuggestions, setTripData } =
+    usePointsStore();
   const suggestionsHandler = async (query: string) => {
-    const prioPosition =
-      currentLocation?.coords.latitude && currentLocation?.coords.longitude
-        ? {
-            lat: currentLocation?.coords.latitude,
-            lon: currentLocation?.coords.longitude,
-          }
-        : null;
-    const searchLocationData = await fetchSearchDataHandler(
-      query,
-      prioPosition
-    );
+    const searchLocationData = await fetchSearchDataHandler(query);
     if (searchLocationData) {
-      const newPoints = suggestionsHelper(points, searchLocationData);
-      setPoints(newPoints);
+      setSuggestions(searchLocationData);
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(suggestionsHandler, 500), []);
 
-  const callTrip = async (newPoints: PointsProps) => {
+  /* const callTrip = async (newPoints: PointsProps) => {
     const startAndDestination: LocationType[] = [
       newPoints.start.location,
       newPoints.destination.location,
     ];
     const newTrip = await fetchTripHandler(startAndDestination);
-    if (newTrip) {
-      const decoded = decodePolyline(newTrip.trip.legs[0].shape);
-      console.log(decoded);
-    }
     setTrip(newTrip);
-  };
+  };*/
 
   const inputChangeHandler = (value: string) => {
-    const newPoints = { ...points };
-    newPoints.destination.query = value;
-    setPoints(newPoints);
+    setDestinationQuery(value);
     debounceFn(value);
   };
-  const nextPageHandler = () => {
-    setCurrentPage((prevState) => prevState + 1);
-  };
-  const previousPageHandler = () => {
-    setCurrentPage((prevState) => (prevState > 0 ? prevState - 1 : prevState));
-  };
   const locationSuggestionClickHandler = async (
-    locationSuggestion: PhotonFeature
+    locationSuggestion: FeatureProps
   ) => {
-    nextPageHandler();
     if (currentLocation) {
       const start = {
         lat: currentLocation.coords.latitude,
@@ -110,47 +57,32 @@ export default function App() {
           currentLocation,
           reverseData
         );
-        await callTrip(newPoints);
-        setPoints(newPoints);
+        setTripData(newPoints);
       }
     }
   };
 
-  const calibrationHandler = () => {
-    if (currentLocation) {
-      const newCalibration = calibrationHelper(currentLocation, calibration);
-      setCalibration((prevState) => {
-        return {
-          ...prevState,
-          ...newCalibration,
-        };
-      });
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      const position = await getCurrentPosition();
-      setCurrentLocation(position);
-    })();
-  }, []);
-
   return (
-    <SafeAreaView>
-      <View className="p-5 h-screen pb-20 relative">
-        <Pages
-          currentPage={currentPage}
-          onCalibrate={calibrationHandler}
-          calibration={calibration}
-          onClickNext={nextPageHandler}
-          points={points}
+    <View className="mb-4">
+      <View>
+        <Destination
+          query={points.destination.query}
           onDestinationChange={inputChangeHandler}
-          onLocationSuggestionClick={locationSuggestionClickHandler}
-          currentLocation={currentLocation}
-          trip={trip}
-          onClickPrevious={previousPageHandler}
         />
+        {points.destination.suggestions && (
+          <Suggestions
+            suggestions={points.destination.suggestions}
+            onLocationSuggestionClick={locationSuggestionClickHandler}
+          />
+        )}
+        <Button
+          onPress={() => router.push('/trip')}
+          disabled={!points.destination.location || !points.start.location}
+          buttonType={'primary'}
+        >
+          <Text>Route starten</Text>
+        </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
