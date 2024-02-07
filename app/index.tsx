@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import { useEffect } from 'react';
 import { Text } from 'react-native';
 import { getCurrentPosition } from '../src/functions/functions';
-import useUserStore from '../store/useUserStore';
+import useUserStore, { invalidateStore } from '../store/useUserStore';
 
 export default function Index() {
   const { currentLocation, calibration, actions } = useUserStore();

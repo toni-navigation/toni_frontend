@@ -16,21 +16,13 @@ import { ValhallaProps } from '../types/Valhalla-Types';
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
-    location: null,
   },
   destination: {
     query: '',
-    location: null,
-    suggestions: null,
   },
 };
 
-const INITIAL_CALIBRATION: CalibrateProps = {
-  start: null,
-  end: null,
-  meters: null,
-  factor: null,
-};
+const INITIAL_CALIBRATION: CalibrateProps = {};
 
 type UserState = {
   calibration: CalibrateProps;
@@ -119,4 +111,5 @@ const useUserStore = create<UserState>()(
     }
   )
 );
+export const invalidateStore = () => useUserStore.persist.clearStorage();
 export default useUserStore;

@@ -4,7 +4,7 @@ import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
 
 interface TripProps {
   maneuver: ValhallaManeuverProps;
-  factor: number | null;
+  factor?: number | null;
 }
 function Trip({ factor, maneuver }: TripProps) {
   const tripText = `${maneuver.instruction} ${maneuver.length * 1000} Meter`;

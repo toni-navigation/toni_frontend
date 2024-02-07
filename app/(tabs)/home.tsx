@@ -3,36 +3,32 @@ import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 import { debounce } from 'lodash';
 import Button from '../../src/components/atoms/Button';
-import {
-  fetchReverseDataHandler,
-  fetchSearchDataHandler,
-} from '../../src/functions/fetch';
+import { fetchReverseDataHandler } from '../../src/functions/fetch';
 import { suggestionHelper } from '../../src/functions/functions';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
+import { useReverseData, useSearchData } from '../../src/functions/mutations';
 
 export default function Home() {
-  const { points, actions, currentLocation } = useUserStore();
+  const { points, actions } = useUserStore();
+
+  // const searchLocationData = useSearchData(points.destination.query);
+
+  const searchData = useSearchData();
+  const reverseData = useReverseData();
+
   const suggestionsHandler = async (query: string) => {
-    const searchLocationData = await fetchSearchDataHandler(query);
-    if (searchLocationData) {
-      actions.setSuggestions(searchLocationData);
+    searchData.mutate(query);
+    console.log(searchData);
+    if (searchData.data) {
+      actions.setSuggestions(searchData.data);
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(suggestionsHandler, 500), []);
-
-  /* const callTrip = async (newPoints: PointsProps) => {
-    const startAndDestination: LocationType[] = [
-      newPoints.start.location,
-      newPoints.destination.location,
-    ];
-    const newTrip = await fetchTripHandler(startAndDestination);
-    setTrip(newTrip);
-  };*/
 
   const inputChangeHandler = (value: string) => {
     actions.setDestinationQuery(value);
@@ -41,22 +37,8 @@ export default function Home() {
   const locationSuggestionClickHandler = async (
     locationSuggestion: PhotonFeature
   ) => {
-    if (currentLocation) {
-      const start = {
-        lat: currentLocation.coords.latitude,
-        lon: currentLocation.coords.longitude,
-      };
-      const reverseData = await fetchReverseDataHandler(start);
-      if (reverseData) {
-        const newPoints = suggestionHelper(
-          locationSuggestion,
-          points,
-          currentLocation,
-          reverseData
-        );
-        actions.setTripData(newPoints);
-      }
-    }
+    const newPoints = suggestionHelper(locationSuggestion, points);
+    actions.setTripData(newPoints);
   };
 
   return (
@@ -77,6 +59,8 @@ export default function Home() {
           disabled={!points.destination.location || !points.start.location}
           buttonType="primary"
         >
+          {searchData.error && <Text>Error loading SearchData</Text>}
+          {reverseData.error && <Text>Error loading SearchData</Text>}
           <Text>Route starten</Text>
         </Button>
       </View>

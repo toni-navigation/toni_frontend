@@ -19,7 +19,7 @@ const destinationHelper = (
   return {
     query: locationSuggestion.properties.name ?? '',
     location: latlng,
-    suggestions: null,
+    suggestions: undefined,
   };
 };
 
@@ -39,12 +39,9 @@ const startHelper = (
 
 export function suggestionHelper(
   locationSuggestion: PhotonFeature,
-  points: PointsProps,
-  currentLocation: CurrentLocationProps,
-  reverseData: PhotonFeatureCollection
+  points: PointsProps
 ) {
   const newPoints = { ...points };
-  newPoints.start = startHelper(currentLocation, reverseData);
   newPoints.destination = destinationHelper(locationSuggestion);
   return newPoints;
 }
@@ -82,8 +79,6 @@ export function suggestionsHelper(
   const newPoints = points;
   if (searchLocationData.features?.length > 0) {
     newPoints.destination.suggestions = searchLocationData.features;
-  } else {
-    newPoints.destination.suggestions = null;
   }
   return newPoints;
 }
@@ -92,13 +87,16 @@ export const calibrationHelper = (
   calibration: CalibrateProps
 ): CalibrateProps => {
   const newCalibration = { ...calibration };
-  if (calibration.start === null) {
+  if (calibration.start === undefined) {
     newCalibration.start = {
       lat: position.coords.latitude,
       lon: position.coords.longitude,
-      accuary: position.coords.accuracy,
+      accuary: position.coords.accuracy ?? undefined,
     };
-  } else if (newCalibration.start !== null && newCalibration.end === null) {
+  } else if (
+    newCalibration.start !== undefined &&
+    newCalibration.end === undefined
+  ) {
     const distanceInMeter =
       distanceOfLatLon(
         newCalibration.start.lat,
@@ -110,7 +108,7 @@ export const calibrationHelper = (
     newCalibration.end = {
       lat: position.coords.latitude,
       lon: position.coords.longitude,
-      accuary: position.coords.accuracy,
+      accuary: position.coords.accuracy ?? undefined,
     };
     newCalibration.meters = distanceInMeter;
     newCalibration.factor = distanceInMeter / 30;
