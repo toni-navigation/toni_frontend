@@ -3,13 +3,13 @@ import { PhotonFeature } from './api-photon';
 export type LocationType = {
   lat: number;
   lon: number;
-  accuary?: number | null;
-};
+  accuracy?: number | null;
+} | null;
 export interface CalibrateProps {
-  start?: LocationType;
-  end?: LocationType;
-  meters?: number | null;
-  factor?: number | null;
+  start: LocationType;
+  end: LocationType;
+  meters: number | null;
+  factor: number | null;
 }
 
 export interface CurrentLocationProps {
@@ -27,13 +27,13 @@ export interface CurrentLocationProps {
 
 export type destinationType = {
   query: string;
-  location?: LocationType;
-  suggestions?: PhotonFeature[];
+  location: LocationType | null;
+  suggestions: PhotonFeature[] | null;
 };
 
 export type startType = {
   query: string;
-  location?: LocationType;
+  location: LocationType | null;
 };
 export interface PointsProps {
   start: startType;

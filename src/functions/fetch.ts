@@ -9,10 +9,7 @@ const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';
 
 const axiosPhotonInstance = axios.create({ baseURL: PHOTON_URL });
 const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
-export async function fetchReverseDataHandler(latlon: {
-  lat: number | undefined;
-  lon: number | undefined;
-}) {
+export async function fetchReverseDataHandler(latlon: LocationType) {
   return (
     await axiosPhotonInstance.get<PhotonFeatureCollection>(
       `reverse?lon=${latlon?.lon}&lat=${latlon?.lat}`,
@@ -23,7 +20,6 @@ export async function fetchReverseDataHandler(latlon: {
 export async function fetchSearchDataHandler(
   query: string
 ): Promise<PhotonFeatureCollection | null> {
-  console.log('fetchSearchDataHandler', query);
   return (
     await axiosPhotonInstance.get<PhotonFeatureCollection>(
       `api/?q=${query}&limit=5&lang=de`,

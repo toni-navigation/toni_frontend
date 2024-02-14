@@ -19,7 +19,7 @@ const destinationHelper = (
   return {
     query: locationSuggestion.properties.name ?? '',
     location: latlng,
-    suggestions: undefined,
+    suggestions: null,
   };
 };
 
@@ -74,11 +74,11 @@ export function distanceOfLatLon(
 
 export function suggestionsHelper(
   points: PointsProps,
-  searchLocationData: PhotonFeatureCollection
+  searchLocationData: PhotonFeature[]
 ) {
   const newPoints = points;
-  if (searchLocationData.features?.length > 0) {
-    newPoints.destination.suggestions = searchLocationData.features;
+  if (searchLocationData.length > 0) {
+    newPoints.destination.suggestions = searchLocationData;
   }
   return newPoints;
 }
@@ -87,16 +87,13 @@ export const calibrationHelper = (
   calibration: CalibrateProps
 ): CalibrateProps => {
   const newCalibration = { ...calibration };
-  if (calibration.start === undefined) {
+  if (newCalibration.start === null) {
     newCalibration.start = {
       lat: position.coords.latitude,
       lon: position.coords.longitude,
-      accuary: position.coords.accuracy ?? undefined,
+      accuracy: position.coords.accuracy ?? undefined,
     };
-  } else if (
-    newCalibration.start !== undefined &&
-    newCalibration.end === undefined
-  ) {
+  } else if (newCalibration.end === undefined) {
     const distanceInMeter =
       distanceOfLatLon(
         newCalibration.start.lat,
@@ -108,7 +105,7 @@ export const calibrationHelper = (
     newCalibration.end = {
       lat: position.coords.latitude,
       lon: position.coords.longitude,
-      accuary: position.coords.accuracy ?? undefined,
+      accuracy: position.coords.accuracy ?? undefined,
     };
     newCalibration.meters = distanceInMeter;
     newCalibration.factor = distanceInMeter / 30;

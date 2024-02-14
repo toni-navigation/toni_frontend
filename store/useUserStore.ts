@@ -10,19 +10,27 @@ import {
   calibrationHelper,
   suggestionsHelper,
 } from '../src/functions/functions';
-import { PhotonFeatureCollection } from '../types/api-photon';
+import { PhotonFeature } from '../types/api-photon';
 import { ValhallaProps } from '../types/Valhalla-Types';
 
 const INITIAL_POINTS: PointsProps = {
   start: {
     query: '',
+    location: null,
   },
   destination: {
     query: '',
+    location: null,
+    suggestions: null,
   },
 };
 
-const INITIAL_CALIBRATION: CalibrateProps = {};
+const INITIAL_CALIBRATION: CalibrateProps = {
+  start: null,
+  end: null,
+  meters: null,
+  factor: null,
+};
 
 type UserState = {
   calibration: CalibrateProps;
@@ -33,7 +41,7 @@ type UserState = {
   actions: {
     setTrip: (trip: ValhallaProps) => void;
     setDestinationQuery: (value: string) => void;
-    setSuggestions: (searchLocationData: PhotonFeatureCollection) => void;
+    setSuggestions: (searchLocationData: PhotonFeature[]) => void;
     setTripData: (newPoints: PointsProps) => void;
     setCalibration: (
       currentLocation: CurrentLocationProps,
@@ -73,7 +81,7 @@ const useUserStore = create<UserState>()(
               points: newPoints,
             };
           }),
-        setSuggestions: (searchLocationData: PhotonFeatureCollection) =>
+        setSuggestions: (searchLocationData: PhotonFeature[]) =>
           set((state) => {
             const newPoints = suggestionsHelper(
               state.points,
