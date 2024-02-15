@@ -16,7 +16,7 @@ export default function Home() {
 
   const suggestionsHandler = async (query: string) => {
     const data = await searchData.mutateAsync(query);
-    actions.setSuggestions(data?.features ?? []);
+    actions.setSuggestions(data);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,18 +40,19 @@ export default function Home() {
           query={points.destination.query}
           onDestinationChange={inputChangeHandler}
         />
-        {points.destination.suggestions && (
-          <Suggestions
-            suggestions={points.destination.suggestions}
-            onLocationSuggestionClick={locationSuggestionClickHandler}
-          />
-        )}
+        {points.destination.suggestions &&
+          points.destination.suggestions.features.length > 0 && (
+            <Suggestions
+              suggestions={points.destination.suggestions.features}
+              onLocationSuggestionClick={locationSuggestionClickHandler}
+            />
+          )}
         {searchData.error && <Text>Error loading SearchData</Text>}
         {searchData.isPending && <Text>loading SearchData</Text>}
         {searchData.isIdle && <Text>SearchData isIdle</Text>}
         <Button
           onPress={() => router.push('/trip')}
-          disabled={!points.destination.location || !points.start.location}
+          disabled={!points.destination.location}
           buttonType="primary"
         >
           <Text>Route starten</Text>

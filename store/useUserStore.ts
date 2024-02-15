@@ -2,52 +2,39 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  CalibrateProps,
-  CurrentLocationProps,
+  CalibrationProps,
+  CurrentLocationType,
   PointsProps,
 } from '../types/Types';
-import {
-  calibrationHelper,
-  suggestionsHelper,
-} from '../src/functions/functions';
-import { PhotonFeature } from '../types/api-photon';
+import { PhotonFeatureCollection } from '../types/api-photon';
 import { ValhallaProps } from '../types/Valhalla-Types';
 
 const INITIAL_POINTS: PointsProps = {
-  start: {
-    query: '',
-    location: null,
-  },
+  start: {},
   destination: {
     query: '',
-    location: null,
-    suggestions: null,
   },
 };
 
-const INITIAL_CALIBRATION: CalibrateProps = {
-  start: null,
-  end: null,
-  meters: null,
-  factor: null,
+const INITIAL_CALIBRATION: CalibrationProps = {
+  isStart: true,
 };
 
 type UserState = {
-  calibration: CalibrateProps;
+  calibration: CalibrationProps;
   points: PointsProps;
   trip: ValhallaProps | null | undefined;
-  currentLocation: CurrentLocationProps | undefined | null;
+  currentLocation: CurrentLocationType;
 
   actions: {
     setTrip: (trip: ValhallaProps) => void;
     setDestinationQuery: (value: string) => void;
-    setSuggestions: (searchLocationData: PhotonFeature[]) => void;
-    setTripData: (newPoints: PointsProps) => void;
-    setCalibration: (
-      currentLocation: CurrentLocationProps,
-      calibration: CalibrateProps
+    setSuggestions: (
+      searchLocationData: PhotonFeatureCollection | null
     ) => void;
-    setCurrentLocation: (currentLocation: CurrentLocationProps | null) => void;
+    setTripData: (newPoints: PointsProps) => void;
+    setCalibration: (currentLocation: CurrentLocationType) => void;
+    setCurrentLocation: (currentLocation: CurrentLocationType) => void;
     resetStore: () => void;
   };
 };
@@ -63,7 +50,6 @@ const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       ...defaultUserState,
-
       actions: {
         setTrip: (trip: ValhallaProps) =>
           set((state) => {
@@ -81,12 +67,10 @@ const useUserStore = create<UserState>()(
               points: newPoints,
             };
           }),
-        setSuggestions: (searchLocationData: PhotonFeature[]) =>
+        setSuggestions: (searchLocationData: PhotonFeatureCollection | null) =>
           set((state) => {
-            const newPoints = suggestionsHelper(
-              state.points,
-              searchLocationData
-            );
+            const newPoints = { ...state.points };
+            newPoints.destination.suggestions = searchLocationData;
             return {
               ...state,
               points: newPoints,
@@ -94,12 +78,24 @@ const useUserStore = create<UserState>()(
           }),
         setTripData: (newPoints: PointsProps) =>
           set((state) => ({ ...state, points: newPoints })),
-        setCalibration: (currentLocation, calibration) =>
+        setCalibration: (currentLocation) =>
           set((state) => {
-            const newCalibration = calibrationHelper(
-              currentLocation,
-              calibration
-            );
+            const newCalibration = { ...state.calibration };
+            if (newCalibration.isStart) {
+              newCalibration.start = {
+                lat: currentLocation?.coords.latitude,
+                lon: currentLocation?.coords.longitude,
+                accuracy: currentLocation?.coords.accuracy,
+              };
+              newCalibration.isStart = false;
+            } else {
+              newCalibration.end = {
+                lat: currentLocation?.coords.latitude,
+                lon: currentLocation?.coords.longitude,
+                accuracy: currentLocation?.coords.accuracy ?? undefined,
+              };
+              newCalibration.isStart = true;
+            }
             return {
               ...state,
               calibration: newCalibration,

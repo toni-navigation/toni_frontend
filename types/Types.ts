@@ -1,17 +1,19 @@
-import { PhotonFeature } from './api-photon';
+import { PhotonFeatureCollection } from './api-photon';
 
-export type LocationType = {
-  lat: number;
-  lon: number;
+export interface LocationProps {
+  lat?: number;
+  lon?: number;
   accuracy?: number | null;
-} | null;
-export interface CalibrateProps {
-  start: LocationType;
-  end: LocationType;
-  meters: number | null;
-  factor: number | null;
+}
+export interface CalibrationProps {
+  start?: LocationProps;
+  end?: LocationProps;
+  meters?: number | null;
+  factor?: number | null;
+  isStart: boolean;
 }
 
+export type CurrentLocationType = CurrentLocationProps | null | undefined;
 export interface CurrentLocationProps {
   coords: {
     speed: number | null;
@@ -25,17 +27,17 @@ export interface CurrentLocationProps {
   timestamp: number;
 }
 
-export type destinationType = {
+export interface DestinationProps {
   query: string;
-  location: LocationType | null;
-  suggestions: PhotonFeature[] | null;
-};
+  location?: LocationProps | null;
+  suggestions?: PhotonFeatureCollection | null;
+}
 
-export type startType = {
-  query: string;
-  location: LocationType | null;
-};
+export interface StartProps {
+  query?: string;
+  location?: LocationProps | null;
+}
 export interface PointsProps {
-  start: startType;
-  destination: destinationType;
+  start: StartProps;
+  destination: DestinationProps;
 }

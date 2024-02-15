@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import Trip from '../src/pages/Trip';
-import { LocationType } from '../types/Types';
 import useUserStore from '../store/useUserStore';
 import useTrip from '../src/functions/queries';
 
-export default function CalibrationPage() {
-  const { calibration, points } = useUserStore();
-  const startAndDestination: (LocationType | undefined)[] = [
-    points.start.location,
-    points.destination.location,
-  ];
+export default function TripPage() {
+  const { calibration, points, currentLocation } = useUserStore();
+  const start = {
+    lat: currentLocation?.coords.latitude,
+    lon: currentLocation?.coords.longitude,
+  };
+  const startAndDestination = [start, points.destination.location];
   const { isPending, error, data } = useTrip(startAndDestination);
 
   if (isPending) {
@@ -20,6 +20,7 @@ export default function CalibrationPage() {
     return (
       <View>
         <Text>Error loading Trip</Text>
+        <Text>{error.message}</Text>
       </View>
     );
   }

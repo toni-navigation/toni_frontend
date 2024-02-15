@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
-import { LocationType } from '../../types/Types';
+import { LocationProps } from '../../types/Types';
 
 export function useSearchData() {
   return useMutation({
@@ -12,6 +12,6 @@ export function useSearchData() {
 export function useReverseData() {
   return useMutation({
     mutationKey: ['reverseData'],
-    mutationFn: (data: LocationType) => fetchReverseDataHandler(data),
+    mutationFn: (data: LocationProps) => fetchReverseDataHandler(data),
   });
 }

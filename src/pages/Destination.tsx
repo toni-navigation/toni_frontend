@@ -6,12 +6,12 @@ import {
   View,
 } from 'react-native';
 
-interface DestinationProps {
+interface Destination {
   onDestinationChange: (destination: string) => void;
   query: string;
 }
 
-function Destination({ onDestinationChange, query }: DestinationProps) {
+function Destination({ onDestinationChange, query }: Destination) {
   const inputChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {

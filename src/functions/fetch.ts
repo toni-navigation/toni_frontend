@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LocationType } from '../../types/Types';
+import { LocationProps } from '../../types/Types';
 import VALHALLA_CONFIG from '../../valhallaConfig';
 import { ValhallaProps } from '../../types/Valhalla-Types';
 import { PhotonFeatureCollection } from '../../types/api-photon';
@@ -9,7 +9,7 @@ const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';
 
 const axiosPhotonInstance = axios.create({ baseURL: PHOTON_URL });
 const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
-export async function fetchReverseDataHandler(latlon: LocationType) {
+export async function fetchReverseDataHandler(latlon: LocationProps) {
   return (
     await axiosPhotonInstance.get<PhotonFeatureCollection>(
       `reverse?lon=${latlon?.lon}&lat=${latlon?.lat}`,
@@ -29,7 +29,7 @@ export async function fetchSearchDataHandler(
 }
 
 export const fetchTripHandler = async (
-  points: (LocationType | undefined)[]
+  points: (LocationProps | undefined | null)[]
 ): Promise<ValhallaProps | null> => {
   const searchJson = {
     ...VALHALLA_CONFIG,

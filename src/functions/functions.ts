@@ -1,18 +1,16 @@
 import * as Location from 'expo-location';
 import {
-  CalibrateProps,
-  CurrentLocationProps,
-  destinationType,
-  LocationType,
+  CurrentLocationType,
+  DestinationProps,
+  LocationProps,
   PointsProps,
-  startType,
 } from '../../types/Types';
-import { PhotonFeature, PhotonFeatureCollection } from '../../types/api-photon';
+import { PhotonFeature } from '../../types/api-photon';
 
 const destinationHelper = (
   locationSuggestion: PhotonFeature
-): destinationType => {
-  const latlng: LocationType = {
+): DestinationProps => {
+  const latlng: LocationProps = {
     lat: locationSuggestion.geometry.coordinates[1],
     lon: locationSuggestion.geometry.coordinates[0],
   };
@@ -22,7 +20,7 @@ const destinationHelper = (
     suggestions: null,
   };
 };
-
+/*
 const startHelper = (
   currentLocation: CurrentLocationProps,
   reverseData: PhotonFeatureCollection
@@ -36,7 +34,7 @@ const startHelper = (
     location: latlng,
   };
 };
-
+*/
 export function suggestionHelper(
   locationSuggestion: PhotonFeature,
   points: PointsProps
@@ -71,7 +69,7 @@ export function distanceOfLatLon(
   }
   return dist;
 }
-
+/*
 export function suggestionsHelper(
   points: PointsProps,
   searchLocationData: PhotonFeature[]
@@ -82,11 +80,11 @@ export function suggestionsHelper(
   }
   return newPoints;
 }
+
 export const calibrationHelper = (
   position: CurrentLocationProps,
-  calibration: CalibrateProps
-): CalibrateProps => {
-  const newCalibration = { ...calibration };
+  calibration: CalibrationProps
+): CalibrationProps => {
   if (newCalibration.start === null) {
     newCalibration.start = {
       lat: position.coords.latitude,
@@ -112,8 +110,8 @@ export const calibrationHelper = (
   }
   return newCalibration;
 };
-
-export async function getCurrentPosition(): Promise<CurrentLocationProps | null> {
+*/
+export async function getCurrentPosition(): Promise<CurrentLocationType> {
   const { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     return null;
