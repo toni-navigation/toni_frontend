@@ -1,5 +1,5 @@
-import Calibrate from '../../src/pages/Calibrate';
+import Calibration from '../../src/pages/Calibration';
 
 export default function Page() {
-  return <Calibrate />;
+  return <Calibration />;
 }

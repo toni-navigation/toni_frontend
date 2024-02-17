@@ -1,25 +1,11 @@
 import * as Location from 'expo-location';
 import {
   CurrentLocationType,
-  DestinationProps,
   LocationProps,
   PointsProps,
 } from '../../types/Types';
 import { PhotonFeature } from '../../types/api-photon';
 
-const destinationHelper = (
-  locationSuggestion: PhotonFeature
-): DestinationProps => {
-  const latlng: LocationProps = {
-    lat: locationSuggestion.geometry.coordinates[1],
-    lon: locationSuggestion.geometry.coordinates[0],
-  };
-  return {
-    query: locationSuggestion.properties.name ?? '',
-    location: latlng,
-    suggestions: null,
-  };
-};
 /*
 const startHelper = (
   currentLocation: CurrentLocationProps,
@@ -40,7 +26,15 @@ export function suggestionHelper(
   points: PointsProps
 ) {
   const newPoints = { ...points };
-  newPoints.destination = destinationHelper(locationSuggestion);
+  const latlng: LocationProps = {
+    lat: locationSuggestion.geometry.coordinates[1],
+    lon: locationSuggestion.geometry.coordinates[0],
+  };
+  newPoints.destination = {
+    query: locationSuggestion.properties.name ?? '',
+    location: latlng,
+    suggestions: null,
+  };
   return newPoints;
 }
 

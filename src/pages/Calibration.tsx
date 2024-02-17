@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import useUserStore from '../../store/useUserStore';
 
-function Calibrate() {
+function Calibration() {
   const { currentLocation, calibration, actions } = useUserStore();
   const calibrationHandler = () => {
     actions.setCalibration(currentLocation);
@@ -46,4 +46,4 @@ function Calibrate() {
   );
 }
 
-export default Calibrate;
+export default Calibration;

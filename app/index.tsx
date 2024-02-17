@@ -12,9 +12,6 @@ export default function Index() {
       actions.setCurrentLocation(position);
     })();
   }, [actions, actions.setCurrentLocation]);
-  if (currentLocation === null || currentLocation === undefined) {
-    return <Text>Loading</Text>;
-  }
   /*if (calibration.start === null || calibration.end === null) {
     return <Redirect href="/home" />;
   }*/
