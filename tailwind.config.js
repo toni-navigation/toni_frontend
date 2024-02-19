@@ -1,10 +1,33 @@
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'media',
   theme: {
     colors: {
-      'primary-color': '#009747',
+      'primary-color-light': '#0d382d',
+      'primary-color-dark': '#a2e3c3',
+      'secondary-color-light': '#609d81',
+      'secondary-color-dark': '#53a887',
+      'disabled-color': '#bebaba',
+      'text-black': '#000',
+      'text-white': '#fff',
     },
-    extends: {},
+    screens: {
+      tablet: '640px',
+      laptop: '1024px',
+      desktop: '1280px',
+    },
+    fontFamily: {
+      verdana: ['Verdana', 'sans-serif'],
+    },
+    extends: {
+      spacing: {
+        '8xl': '96rem',
+        '9xl': '128rem',
+      },
+      borderRadius: {
+        '4xl': '2rem',
+      },
+    },
   },
   plugins: [],
 };
