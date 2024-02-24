@@ -52,7 +52,7 @@ export default function Home() {
         {searchData.isIdle && <Text>SearchData isIdle</Text>}
         <Button
           onPress={() => router.push('/trip')}
-          disabled={!points.destination.location || !points.start.location}
+          disabled={!points.destination.location}
           buttonType="primary"
         >
           <Text>Route starten</Text>
