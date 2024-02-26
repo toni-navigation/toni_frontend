@@ -16,9 +16,7 @@ const INITIAL_POINTS: PointsProps = {
   },
 };
 
-const INITIAL_CALIBRATION: CalibrationProps = {
-  isStart: true,
-};
+const INITIAL_CALIBRATION: CalibrationProps = {};
 
 type UserState = {
   calibration: CalibrationProps;
@@ -33,7 +31,8 @@ type UserState = {
       searchLocationData: PhotonFeatureCollection | null
     ) => void;
     setTripData: (newPoints: PointsProps) => void;
-    setCalibration: (currentLocation: CurrentLocationType) => void;
+    setCalibrationStart: (currentLocation: CurrentLocationType) => void;
+    setCalibrationStop: (currentLocation: CurrentLocationType) => void;
     setCurrentLocation: (currentLocation: CurrentLocationType) => void;
     resetStore: () => void;
   };
@@ -78,24 +77,31 @@ const useUserStore = create<UserState>()(
           }),
         setTripData: (newPoints: PointsProps) =>
           set((state) => ({ ...state, points: newPoints })),
-        setCalibration: (currentLocation) =>
+        setCalibrationStart: (currentLocation) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
-            if (newCalibration.isStart) {
-              newCalibration.start = {
-                lat: currentLocation?.coords.latitude,
-                lon: currentLocation?.coords.longitude,
-                accuracy: currentLocation?.coords.accuracy,
-              };
-              newCalibration.isStart = false;
-            } else {
-              newCalibration.end = {
-                lat: currentLocation?.coords.latitude,
-                lon: currentLocation?.coords.longitude,
-                accuracy: currentLocation?.coords.accuracy ?? undefined,
-              };
-              newCalibration.isStart = true;
-            }
+            newCalibration.start = {
+              lat: currentLocation?.coords.latitude,
+              lon: currentLocation?.coords.longitude,
+              accuracy: currentLocation?.coords.accuracy,
+            };
+            newCalibration.end = undefined;
+
+            return {
+              ...state,
+              calibration: newCalibration,
+            };
+          }),
+        setCalibrationStop: (currentLocation) =>
+          set((state) => {
+            const newCalibration = { ...state.calibration };
+
+            newCalibration.end = {
+              lat: currentLocation?.coords.latitude,
+              lon: currentLocation?.coords.longitude,
+              accuracy: currentLocation?.coords.accuracy ?? undefined,
+            };
+
             return {
               ...state,
               calibration: newCalibration,

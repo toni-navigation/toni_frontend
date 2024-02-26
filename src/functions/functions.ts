@@ -1,4 +1,3 @@
-import * as Location from 'expo-location';
 import { LocationProps, PointsProps } from '../../types/Types';
 import { PhotonFeature } from '../../types/api-photon';
 
@@ -17,6 +16,7 @@ const startHelper = (
   };
 };
 */
+
 export function suggestionHelper(
   locationSuggestion: PhotonFeature,
   points: PointsProps
