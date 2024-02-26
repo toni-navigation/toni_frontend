@@ -1,9 +1,5 @@
 import * as Location from 'expo-location';
-import {
-  CurrentLocationType,
-  LocationProps,
-  PointsProps,
-} from '../../types/Types';
+import { LocationProps, PointsProps } from '../../types/Types';
 import { PhotonFeature } from '../../types/api-photon';
 
 /*
@@ -105,25 +101,3 @@ export const calibrationHelper = (
   return newCalibration;
 };
 */
-export async function getCurrentPosition(): Promise<CurrentLocationType> {
-  const { status } = await Location.requestForegroundPermissionsAsync();
-  if (status !== 'granted') {
-    return null;
-  }
-
-  const location = await Location.getCurrentPositionAsync({
-    accuracy: Location.Accuracy.High,
-  });
-  return {
-    coords: {
-      speed: location.coords.speed,
-      heading: location.coords.heading,
-      accuracy: location.coords.accuracy,
-      altitudeAccuracy: location.coords.altitudeAccuracy,
-      altitude: location.coords.altitude,
-      longitude: location.coords.longitude,
-      latitude: location.coords.latitude,
-    },
-    timestamp: location.timestamp,
-  };
-}
