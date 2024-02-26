@@ -7,16 +7,22 @@ interface SuggestionProps {
   onLocationSuggestionClick: (
     locationSuggestion: PhotonFeature
   ) => Promise<void>;
+  startOrDestination: 'start' | 'destination';
 }
 function Suggestions({
   suggestions,
   onLocationSuggestionClick,
+  startOrDestination,
 }: SuggestionProps) {
   const createKey = (suggestion: PhotonFeature) => {
     if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
-      return suggestion.properties.osm_type + suggestion.properties.osm_id;
+      return (
+        suggestion.properties.osm_type +
+        suggestion.properties.osm_id +
+        startOrDestination
+      );
     }
-    return suggestion.properties.name;
+    return suggestion.properties.name + startOrDestination;
   };
   return (
     <View className="bg-gray-200 border-1">

@@ -23,18 +23,28 @@ const startHelper = (
 */
 export function suggestionHelper(
   locationSuggestion: PhotonFeature,
-  points: PointsProps
+  points: PointsProps,
+  startOrDestination: string
 ) {
   const newPoints = { ...points };
   const latlng: LocationProps = {
     lat: locationSuggestion.geometry.coordinates[1],
     lon: locationSuggestion.geometry.coordinates[0],
   };
-  newPoints.destination = {
-    query: locationSuggestion.properties.name ?? '',
-    location: latlng,
-    suggestions: null,
-  };
+  if (startOrDestination === 'start') {
+    newPoints.start = {
+      query: locationSuggestion.properties.name ?? '',
+      location: latlng,
+      suggestions: null,
+    };
+  }
+  if (startOrDestination === 'destination') {
+    newPoints.destination = {
+      query: locationSuggestion.properties.name ?? '',
+      location: latlng,
+      suggestions: null,
+    };
+  }
   return newPoints;
 }
 

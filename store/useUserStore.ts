@@ -10,7 +10,9 @@ import { PhotonFeatureCollection } from '../types/api-photon';
 import { ValhallaProps } from '../types/Valhalla-Types';
 
 const INITIAL_POINTS: PointsProps = {
-  start: {},
+  start: {
+    query: '',
+  },
   destination: {
     query: '',
   },
@@ -29,12 +31,19 @@ type UserState = {
   actions: {
     setTrip: (trip: ValhallaProps) => void;
     setDestinationQuery: (value: string) => void;
-    setSuggestions: (
+    setStartPositionQuery: (value: string) => void;
+    setSuggestionsDestination: (
+      searchLocationData: PhotonFeatureCollection | null
+    ) => void;
+    setSuggestionsStart: (
       searchLocationData: PhotonFeatureCollection | null
     ) => void;
     setTripData: (newPoints: PointsProps) => void;
     setCalibration: (currentLocation: CurrentLocationType) => void;
     setCurrentLocation: (currentLocation: CurrentLocationType) => void;
+    setStartPosition: (
+      reverseData: PhotonFeatureCollection | undefined
+    ) => void;
     resetStore: () => void;
   };
 };
@@ -67,10 +76,32 @@ const useUserStore = create<UserState>()(
               points: newPoints,
             };
           }),
-        setSuggestions: (searchLocationData: PhotonFeatureCollection | null) =>
+        setStartPositionQuery: (value: string) =>
+          set((state) => {
+            const newPoints = { ...state.points };
+            newPoints.start.query = value;
+            return {
+              ...state,
+              points: newPoints,
+            };
+          }),
+        setSuggestionsDestination: (
+          searchLocationData: PhotonFeatureCollection | null
+        ) =>
           set((state) => {
             const newPoints = { ...state.points };
             newPoints.destination.suggestions = searchLocationData;
+            return {
+              ...state,
+              points: newPoints,
+            };
+          }),
+        setSuggestionsStart: (
+          searchLocationData: PhotonFeatureCollection | null
+        ) =>
+          set((state) => {
+            const newPoints = { ...state.points };
+            newPoints.start.suggestions = searchLocationData;
             return {
               ...state,
               points: newPoints,
@@ -104,6 +135,20 @@ const useUserStore = create<UserState>()(
         setCurrentLocation: (currentLocation) =>
           set((state) => ({ ...state, currentLocation })),
 
+        setStartPosition: (reverseData) =>
+          set((state) => {
+            console.log(
+              `${reverseData?.features[0].properties.street} ${reverseData?.features[0].properties.housenumber}, ${reverseData?.features[0].properties.postcode} ${reverseData?.features[0].properties.city}, ${reverseData?.features[0].properties.country}`
+            );
+            const start = `${reverseData?.features[0].properties.street} ${reverseData?.features[0].properties.housenumber}, ${reverseData?.features[0].properties.postcode} ${reverseData?.features[0].properties.city}, ${reverseData?.features[0].properties.country}`;
+
+            const newPoints = { ...state.points };
+            newPoints.start.query = start;
+            return {
+              ...state,
+              points: newPoints,
+            };
+          }),
         resetStore: () => set(defaultUserState),
       },
     }),

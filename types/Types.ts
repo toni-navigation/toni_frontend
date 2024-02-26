@@ -36,6 +36,7 @@ export interface DestinationProps {
 export interface StartProps {
   query?: string;
   location?: LocationProps | null;
+  suggestions?: PhotonFeatureCollection | null;
 }
 export interface PointsProps {
   start: StartProps;
