@@ -1,6 +1,5 @@
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
-  darkMode: 'media',
   theme: {
     colors: {
       'primary-color-light': '#0d382d',
