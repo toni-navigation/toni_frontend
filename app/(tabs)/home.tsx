@@ -1,20 +1,19 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { router } from 'expo-router';
 import { ActivityIndicator, Text, View } from 'react-native';
-import React, { useCallback, useEffect } from 'react';
-import { router } from 'expo-router';
-import { Text, View } from 'react-native';
 import { debounce } from 'lodash';
-import { router } from 'expo-router';
 import Button from '../../src/components/atoms/Button';
 import { suggestionHelper } from '../../src/functions/functions';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
-import { useSearchData, useTrip } from '../../src/functions/mutations';
+import {
+  useReverseData,
+  useSearchData,
+  useTrip,
+} from '../../src/functions/mutations';
 import { LocationProps, PointsProps } from '../../types/Types';
-import { ValhallaProps } from '../../types/Valhalla-Types';
-import { useReverseData, useSearchData } from '../../src/functions/mutations';
 import StartPosition from '../../src/pages/StartPosition';
 
 const INITIAL_POINTS: PointsProps = {
@@ -24,28 +23,31 @@ const INITIAL_POINTS: PointsProps = {
   },
 };
 export default function Home() {
-  const { points, actions, currentLocation } = useUserStore();
-  const searchData = useSearchData();
+  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
+
+  const { actions, currentLocation } = useUserStore();
+
+  const searchData = useSearchData(currentLocation);
   const reverseData = useReverseData();
 
-  const suggestionsHandlerDestination = async (query: string) => {
-    const data = await searchData.mutateAsync(query);
-    actions.setSuggestionsDestination(data);
-  };
-  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
-  const { actions, currentLocation } = useUserStore();
-  const { destination } = points;
   const start = {
     lat: currentLocation?.coords.latitude,
     lon: currentLocation?.coords.longitude,
   };
   const tripPoints: (LocationProps | undefined | null)[] = [
     start,
-    destination.location,
+    points.destination.location,
   ];
-  const searchData = useSearchData(currentLocation);
   const tripData = useTrip();
 
+  const suggestionsHandlerDestination = async (query: string) => {
+    const data = await searchData.mutateAsync(query);
+    const newPoints = { ...points };
+    newPoints.destination.suggestions = data;
+    setPoints(newPoints);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFnDestination = useCallback(
     debounce(suggestionsHandlerDestination, 500),
     []
@@ -53,29 +55,29 @@ export default function Home() {
 
   const suggestionsHandlerStart = async (query: string) => {
     const data = await searchData.mutateAsync(query);
-    actions.setSuggestionsStart(data);
     const newPoints = { ...points };
-    newPoints.destination.suggestions = data;
+    newPoints.start.suggestions = data;
     setPoints(newPoints);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFnStart = useCallback(
     debounce(suggestionsHandlerStart, 500),
     []
   );
 
   const inputChangeHandler = (value: string) => {
-    actions.setDestinationQuery(value);
+    const newPoints = { ...points };
+    newPoints.destination.query = value;
+    setPoints(newPoints);
     debounceFnDestination(value);
   };
 
   const inputChangeStartPositionHandler = (value: string) => {
-    actions.setStartPositionQuery(value);
-    debounceFnStart(value);
     const newPoints = { ...points };
-    newPoints.destination.query = value;
+    newPoints.start.query = value;
     setPoints(newPoints);
-    debounceFn(value);
+    debounceFnStart(value);
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: PhotonFeature,
@@ -86,8 +88,6 @@ export default function Home() {
       points,
       startOrDestination
     );
-    actions.setTripData(newPoints);
-    const newPoints = suggestionHelper(locationSuggestion, points);
     setPoints(newPoints);
   };
 
@@ -97,14 +97,6 @@ export default function Home() {
     router.push('/trip');
   };
 
-  if (tripData.isPending) {
-    return <ActivityIndicator />;
-  }
-
-  if (tripData.error) {
-    return <Text>Error loading TripData, {tripData.error.message}</Text>;
-  }
-
   useEffect(() => {
     (async () => {
       const startPosition = {
@@ -112,14 +104,28 @@ export default function Home() {
         lon: currentLocation?.coords.longitude,
       };
       const data = await reverseData.mutateAsync(startPosition);
-      actions.setStartPosition(data);
+      const newPoints = { ...points };
+      newPoints.start.location = {
+        lat: data.features[0].geometry.coordinates[1],
+        lon: data.features[0].geometry.coordinates[0],
+      };
+      newPoints.start.query = `${reverseData.data?.features[0].properties.street} ${reverseData.data?.features[0].properties.housenumber}, ${reverseData.data?.features[0].properties.postcode} ${reverseData.data?.features[0].properties.city}, ${reverseData.data?.features[0].properties.country}`;
+      setPoints(newPoints);
     })();
   }, []);
+
+  if (tripData.isPending || reverseData.isPending) {
+    return <ActivityIndicator />;
+  }
+
+  if (tripData.error) {
+    return <Text>Error loading TripData, {tripData.error.message}</Text>;
+  }
 
   if (reverseData.error) {
     return (
       <View>
-        <Text>Error</Text>
+        <Text>reverseData Error, {reverseData.error.message}</Text>
       </View>
     );
   }
@@ -156,12 +162,8 @@ export default function Home() {
               startOrDestination="destination"
             />
           )}
-        {searchData.error && <Text>Error loading SearchData</Text>}
-        {searchData.isPending && <Text>loading SearchData</Text>}
-        {searchData.isIdle && <Text>SearchData isIdle</Text>}
 
         <Button
-          onPress={() => router.push('/trip')}
           disabled={
             points.start.location === undefined ||
             points.destination.location === undefined ||
@@ -171,7 +173,6 @@ export default function Home() {
             points.destination.query?.length < 2
           }
           onPress={startNavigationHandler}
-          disabled={!points.destination.location}
           buttonType="primary"
         >
           <Text>Route starten</Text>
