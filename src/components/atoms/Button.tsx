@@ -9,7 +9,6 @@ interface ButtonProps {
 }
 function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
   const colorscheme = useColorScheme();
-  console.log(colorscheme);
   let buttonLook;
   switch (buttonType) {
     case 'primary':
@@ -21,7 +20,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
     case 'secondary':
       buttonLook =
         colorscheme === 'light'
-          ? 'bg-secondary-color-light'
+          ? 'bg-secondary-color-light color-white'
           : 'bg-secondary-color-dark';
       break;
     case 'primaryOutline':
@@ -40,7 +39,8 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
       buttonLook = 'bg-primary-color-light';
       break;
   }
-
+  console.log(buttonType);
+  console.log(buttonLook);
   return (
     <TouchableOpacity
       className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${disabled ? 'bg-disabled-color' : buttonLook}`}
