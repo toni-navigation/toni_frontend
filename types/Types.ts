@@ -23,6 +23,7 @@ export interface CurrentLocationProps {
     longitude: number;
     latitude: number;
   };
+
   timestamp: number;
 }
 

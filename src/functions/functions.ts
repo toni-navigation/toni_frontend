@@ -69,6 +69,7 @@ export function distanceOfLatLon(
   }
   return dist;
 }
+
 /*
 export function suggestionsHelper(
   points: PointsProps,

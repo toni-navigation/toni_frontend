@@ -10,6 +10,7 @@ interface ButtonProps {
 function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
   const colorscheme = useColorScheme();
   // console.log(colorscheme);
+
   let buttonLook;
   switch (buttonType) {
     case 'primary':
