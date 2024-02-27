@@ -1,5 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import { fetchReverseDataHandler, fetchSearchDataHandler } from './fetch';
+import {
+  fetchReverseDataHandler,
+  fetchSearchDataHandler,
+  fetchTripHandler,
+} from './fetch';
 import { CurrentLocationType, LocationProps } from '../../types/Types';
 
 export function useSearchData(currentLocation: CurrentLocationType) {
@@ -13,5 +17,13 @@ export function useReverseData() {
   return useMutation({
     mutationKey: ['reverseData'],
     mutationFn: (data: LocationProps) => fetchReverseDataHandler(data),
+  });
+}
+
+export function useTrip() {
+  return useMutation({
+    mutationKey: ['trip'],
+    mutationFn: (points: (LocationProps | undefined | null)[]) =>
+      fetchTripHandler(points),
   });
 }
