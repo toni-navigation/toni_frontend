@@ -10,7 +10,6 @@ export interface CalibrationProps {
   end?: LocationProps;
   meters?: number | null;
   factor?: number | null;
-  isStart: boolean;
 }
 
 export type CurrentLocationType = CurrentLocationProps | null | undefined;

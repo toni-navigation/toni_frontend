@@ -21,7 +21,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
     case 'secondary':
       buttonLook =
         colorscheme === 'light'
-          ? 'bg-secondary-color-light'
+          ? 'bg-secondary-color-light color-white'
           : 'bg-secondary-color-dark';
       break;
     case 'primaryOutline':

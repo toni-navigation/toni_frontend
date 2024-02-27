@@ -13,11 +13,7 @@ export default function CalibrationPage() {
     <View>
       <Intro currentLocation={currentLocation} />
       <Calibration />
-      <Button
-        buttonType="primary"
-        onPress={() => router.push('/home')}
-        disabled={!calibration.isStart}
-      >
+      <Button buttonType="primary" onPress={() => router.push('/home')}>
         Speichern
       </Button>
     </View>

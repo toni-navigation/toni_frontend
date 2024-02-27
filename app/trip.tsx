@@ -28,6 +28,7 @@ export default function TripPage() {
     data &&
     data.trip && (
       <View>
+        <Text>{JSON.stringify(currentLocation)}</Text>
         {data.trip.legs[0].maneuvers.map((maneuver) => (
           <Trip
             key={maneuver.begin_shape_index + maneuver.end_shape_index}
