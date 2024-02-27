@@ -39,8 +39,6 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
       buttonLook = 'bg-primary-color-light';
       break;
   }
-  console.log(buttonType);
-  console.log(buttonLook);
   return (
     <TouchableOpacity
       className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${disabled ? 'bg-disabled-color' : buttonLook}`}
@@ -91,7 +89,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
       buttonLook = 'bg-primary-color-light';
       break;
   }
-
+  console.log(buttonLook);
   return (
     <TouchableOpacity
       className={`h-20 flex justify-center font-bold py-2 px-4 rounded ${disabled ? 'bg-disabled-color' : buttonLook}`}

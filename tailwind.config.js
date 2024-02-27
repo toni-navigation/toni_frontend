@@ -5,7 +5,7 @@ module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
-    color: styling.colors,
+    colors: styling.colors,
     screens: {
       tablet: '640px',
       laptop: '1024px',
