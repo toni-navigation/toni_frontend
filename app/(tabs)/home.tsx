@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { debounce } from 'lodash';
 import { router } from 'expo-router';
@@ -9,10 +9,18 @@ import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
 import { useSearchData, useTrip } from '../../src/functions/mutations';
-import { LocationProps } from '../../types/Types';
+import { LocationProps, PointsProps } from '../../types/Types';
+import { ValhallaProps } from '../../types/Valhalla-Types';
 
+const INITIAL_POINTS: PointsProps = {
+  start: {},
+  destination: {
+    query: '',
+  },
+};
 export default function Home() {
-  const { points, actions, currentLocation } = useUserStore();
+  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
+  const { actions, currentLocation } = useUserStore();
   const { destination } = points;
   const start = {
     lat: currentLocation?.coords.latitude,
@@ -27,21 +35,25 @@ export default function Home() {
 
   const suggestionsHandler = async (query: string) => {
     const data = await searchData.mutateAsync(query);
-    actions.setSuggestions(data);
+    const newPoints = { ...points };
+    newPoints.destination.suggestions = data;
+    setPoints(newPoints);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(suggestionsHandler, 500), []);
 
   const inputChangeHandler = (value: string) => {
-    actions.setDestinationQuery(value);
+    const newPoints = { ...points };
+    newPoints.destination.query = value;
+    setPoints(newPoints);
     debounceFn(value);
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: PhotonFeature
   ) => {
     const newPoints = suggestionHelper(locationSuggestion, points);
-    actions.setTripData(newPoints);
+    setPoints(newPoints);
   };
 
   const startNavigationHandler = async () => {

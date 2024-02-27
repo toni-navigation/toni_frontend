@@ -7,7 +7,7 @@ import Button from '../src/components/atoms/Button';
 import Intro from '../src/components/organisms/Intro';
 
 export default function CalibrationPage() {
-  const { currentLocation, calibration } = useUserStore();
+  const { currentLocation } = useUserStore();
 
   return (
     <View>
