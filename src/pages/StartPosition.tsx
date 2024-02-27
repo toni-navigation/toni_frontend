@@ -17,6 +17,7 @@ function StartPosition({ onStartPositionChange, prefill }: StartPosition) {
   ) => {
     onStartPositionChange(event.nativeEvent.text);
   };
+
   return (
     <View>
       <TextInput

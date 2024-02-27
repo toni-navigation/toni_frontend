@@ -24,6 +24,7 @@ function Suggestions({
     }
     return suggestion.properties.name + startOrDestination;
   };
+
   return (
     <View className="bg-gray-200 border-1">
       {suggestions.map((locationSuggestion) => (

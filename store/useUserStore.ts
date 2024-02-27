@@ -160,5 +160,6 @@ const useUserStore = create<UserState>()(
     }
   )
 );
+
 export const invalidateStore = () => useUserStore.persist.clearStorage();
 export default useUserStore;

@@ -15,6 +15,7 @@ export default function Home() {
   const { points, actions, currentLocation } = useUserStore();
   const searchData = useSearchData();
   const reverseData = useReverseData();
+
   const suggestionsHandlerDestination = async (query: string) => {
     const data = await searchData.mutateAsync(query);
     actions.setSuggestionsDestination(data);
