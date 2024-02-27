@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { debounce } from 'lodash';
 import { router } from 'expo-router';
 import Button from '../../src/components/atoms/Button';
@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   if (tripData.isPending) {
-    return <Text>Loading</Text>;
+    return <ActivityIndicator />;
   }
 
   if (tripData.error) {
