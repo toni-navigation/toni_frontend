@@ -11,8 +11,8 @@ import useUserStore from '../../store/useUserStore';
 import { useSearchData } from '../../src/functions/mutations';
 
 export default function Home() {
-  const { points, actions } = useUserStore();
-  const searchData = useSearchData();
+  const { points, actions, currentLocation } = useUserStore();
+  const searchData = useSearchData(currentLocation);
 
   const suggestionsHandler = async (query: string) => {
     const data = await searchData.mutateAsync(query);

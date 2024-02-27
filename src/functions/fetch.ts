@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LocationProps } from '../../types/Types';
+import { CurrentLocationType, LocationProps } from '../../types/Types';
 import VALHALLA_CONFIG from '../../valhallaConfig';
 import { ValhallaProps } from '../../types/Valhalla-Types';
 import { PhotonFeatureCollection } from '../../types/api-photon';
@@ -18,13 +18,17 @@ export async function fetchReverseDataHandler(latlon: LocationProps) {
   ).data;
 }
 export async function fetchSearchDataHandler(
-  query: string
+  query: string,
+  currentLocation: CurrentLocationType
 ): Promise<PhotonFeatureCollection | null> {
+  let url = `api/?q=${query}&limit=5&lang=de`;
+  if (currentLocation) {
+    url = `api/?q=${query}&lat=${currentLocation.coords.latitude}&lon=${currentLocation.coords.longitude}&limit=5&lang=de`;
+  }
   return (
-    await axiosPhotonInstance.get<PhotonFeatureCollection>(
-      `api/?q=${query}&limit=5&lang=de`,
-      { timeout: 5000 }
-    )
+    await axiosPhotonInstance.get<PhotonFeatureCollection>(url, {
+      timeout: 5000,
+    })
   ).data;
 }
 
