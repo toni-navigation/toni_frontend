@@ -109,7 +109,7 @@ export default function Home() {
         lat: data.features[0].geometry.coordinates[1],
         lon: data.features[0].geometry.coordinates[0],
       };
-      newPoints.start.query = `${reverseData.data?.features[0].properties.street} ${reverseData.data?.features[0].properties.housenumber}, ${reverseData.data?.features[0].properties.postcode} ${reverseData.data?.features[0].properties.city}, ${reverseData.data?.features[0].properties.country}`;
+      newPoints.start.query = `${data.features[0].properties.street} ${data.features[0].properties.housenumber}, ${data.features[0].properties.postcode} ${data.features[0].properties.city}, ${data.features[0].properties.country}`;
       setPoints(newPoints);
     })();
   }, []);
