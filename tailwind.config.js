@@ -1,16 +1,11 @@
+// eslint-disable-next-line import/no-import-module-exports,@typescript-eslint/no-var-requires
+const styling = require('./stylings');
+
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
-    colors: {
-      'primary-color-light': '#0d382d',
-      'primary-color-dark': '#a2e3c3',
-      'secondary-color-light': '#609d81',
-      'secondary-color-dark': '#53a887',
-      'disabled-color': '#bebaba',
-      'text-black': '#000',
-      'text-white': '#fff',
-    },
+    color: styling.colors,
     screens: {
       tablet: '640px',
       laptop: '1024px',
