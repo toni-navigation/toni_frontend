@@ -1,16 +1,28 @@
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Text, View } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 import { debounce } from 'lodash';
+import { router } from 'expo-router';
 import Button from '../../src/components/atoms/Button';
 import { suggestionHelper } from '../../src/functions/functions';
 import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
+import { useSearchData, useTrip } from '../../src/functions/mutations';
+import { LocationProps, PointsProps } from '../../types/Types';
+import { ValhallaProps } from '../../types/Valhalla-Types';
 import { useReverseData, useSearchData } from '../../src/functions/mutations';
 import StartPosition from '../../src/pages/StartPosition';
 
+const INITIAL_POINTS: PointsProps = {
+  start: {},
+  destination: {
+    query: '',
+  },
+};
 export default function Home() {
   const { points, actions, currentLocation } = useUserStore();
   const searchData = useSearchData();
@@ -20,6 +32,19 @@ export default function Home() {
     const data = await searchData.mutateAsync(query);
     actions.setSuggestionsDestination(data);
   };
+  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
+  const { actions, currentLocation } = useUserStore();
+  const { destination } = points;
+  const start = {
+    lat: currentLocation?.coords.latitude,
+    lon: currentLocation?.coords.longitude,
+  };
+  const tripPoints: (LocationProps | undefined | null)[] = [
+    start,
+    destination.location,
+  ];
+  const searchData = useSearchData(currentLocation);
+  const tripData = useTrip();
 
   const debounceFnDestination = useCallback(
     debounce(suggestionsHandlerDestination, 500),
@@ -29,6 +54,9 @@ export default function Home() {
   const suggestionsHandlerStart = async (query: string) => {
     const data = await searchData.mutateAsync(query);
     actions.setSuggestionsStart(data);
+    const newPoints = { ...points };
+    newPoints.destination.suggestions = data;
+    setPoints(newPoints);
   };
 
   const debounceFnStart = useCallback(
@@ -44,6 +72,10 @@ export default function Home() {
   const inputChangeStartPositionHandler = (value: string) => {
     actions.setStartPositionQuery(value);
     debounceFnStart(value);
+    const newPoints = { ...points };
+    newPoints.destination.query = value;
+    setPoints(newPoints);
+    debounceFn(value);
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: PhotonFeature,
@@ -55,7 +87,23 @@ export default function Home() {
       startOrDestination
     );
     actions.setTripData(newPoints);
+    const newPoints = suggestionHelper(locationSuggestion, points);
+    setPoints(newPoints);
   };
+
+  const startNavigationHandler = async () => {
+    const data = await tripData.mutateAsync(tripPoints);
+    actions.setTrip(data);
+    router.push('/trip');
+  };
+
+  if (tripData.isPending) {
+    return <ActivityIndicator />;
+  }
+
+  if (tripData.error) {
+    return <Text>Error loading TripData, {tripData.error.message}</Text>;
+  }
 
   useEffect(() => {
     (async () => {
@@ -122,6 +170,8 @@ export default function Home() {
             points.start.query?.length < 2 ||
             points.destination.query?.length < 2
           }
+          onPress={startNavigationHandler}
+          disabled={!points.destination.location}
           buttonType="primary"
         >
           <Text>Route starten</Text>

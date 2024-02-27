@@ -27,7 +27,7 @@ type UserState = {
   currentLocation: CurrentLocationType;
 
   actions: {
-    setTrip: (trip: ValhallaProps) => void;
+    setTrip: (trip: ValhallaProps | null) => void;
     setDestinationQuery: (value: string) => void;
     setStartPositionQuery: (value: string) => void;
     setSuggestionsDestination: (
@@ -59,7 +59,7 @@ const useUserStore = create<UserState>()(
     (set) => ({
       ...defaultUserState,
       actions: {
-        setTrip: (trip: ValhallaProps) =>
+        setTrip: (trip: ValhallaProps | null) =>
           set((state) => {
             return {
               ...state,
