@@ -9,15 +9,16 @@ interface Trip {
 }
 function Trip({ factor, maneuver }: Trip) {
   const tripText = `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
+  console.log(factor);
   return (
     <View className="border-b-2">
       <Text>{tripText}</Text>
-      {/*factor && (
+      {factor && (
         <Text>
           Umgerechnet in Schritte:{' '}
           {Math.ceil((maneuver.length * 1000) / factor)} Schritte
         </Text>
-      )*/}
+      )}
     </View>
   );
 }

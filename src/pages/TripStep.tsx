@@ -42,13 +42,12 @@ function TripStep({
   return (
     <View className="border-b-2">
       <Text>{tripText}</Text>
-      <Text>{}</Text>
-      {/*factor && (
+      {factor && (
         <Text>
           Umgerechnet in Schritte:{' '}
           {Math.ceil((maneuver.length * 1000) / factor)} Schritte
         </Text>
-      )*/}
+      )}
     </View>
   );
 }

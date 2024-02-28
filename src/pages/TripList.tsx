@@ -20,6 +20,12 @@ function TripList({ factor, maneuver }: TripList) {
   return (
     <View className="border-b-2">
       <Text>{tripText}</Text>
+      {factor && (
+        <Text>
+          Umgerechnet in Schritte:{' '}
+          {Math.ceil((maneuver.length * 1000) / factor)} Schritte
+        </Text>
+      )}
     </View>
   );
 }

@@ -1,16 +1,7 @@
 import React from 'react';
-import { Button, Text, useWindowDimensions, View } from 'react-native';
-import TripList from '../src/pages/TripList';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import Trip from '../src/pages/Trip';
-import useUserStore from '../store/useUserStore';
+import { useColorScheme, useWindowDimensions } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
+import useUserStore from '../store/useUserStore';
 import TripStep from '../src/pages/TripStep';
 import decodePolyline from '../src/functions/decodePolyline';
 import { distanceOfLatLon } from '../src/functions/functions';
@@ -118,7 +109,6 @@ export default function TripPage() {
     { key: 'first', title: 'First' },
     { key: 'second', title: 'Second' },
   ]);
-  const { currentLocation } = useUserStore();
 
   return (
     <TabView
@@ -126,30 +116,6 @@ export default function TripPage() {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
-      //style={}
     />
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
-      <ScrollView className="mx-5 my-5">
-        {currentLocation && (
-          <View>
-            <Text>
-              {currentLocation?.coords.latitude},{' '}
-              {currentLocation?.coords.longitude}
-            </Text>
-          </View>
-        )}
-        {trip &&
-          trip.trip &&
-          trip.trip.legs[0].maneuvers.map((maneuver) => (
-            <Trip
-              key={maneuver.begin_shape_index + maneuver.end_shape_index}
-              maneuver={maneuver}
-              factor={calibration.factor}
-            />
-          ))}
-      </ScrollView>
-    </SafeAreaView>
   );
 }
