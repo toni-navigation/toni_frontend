@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 import { debounce } from 'lodash';
 import Button from '../../src/components/atoms/Button';
 import { suggestionHelper } from '../../src/functions/functions';
@@ -26,6 +26,7 @@ export default function Home() {
   const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
 
   const { actions, currentLocation } = useUserStore();
+  const colorscheme = useColorScheme();
 
   const searchData = useSearchData(currentLocation);
   const reverseData = useReverseData();
@@ -131,8 +132,10 @@ export default function Home() {
   }
 
   return (
-    <View className="mb-4">
-      <View>
+    <SafeAreaView
+      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+    >
+      <ScrollView className="mx-5">
         <StartPosition
           prefill={points.start.query}
           onStartPositionChange={inputChangeStartPositionHandler}
@@ -147,7 +150,6 @@ export default function Home() {
               startOrDestination="start"
             />
           )}
-
         <Destination
           query={points.destination.query}
           onDestinationChange={inputChangeHandler}
@@ -177,7 +179,7 @@ export default function Home() {
         >
           <Text>Route starten</Text>
         </Button>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

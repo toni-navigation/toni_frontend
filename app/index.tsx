@@ -43,5 +43,6 @@ export default function Index() {
   /*if (calibration.start === null || calibration.end === null) {
     return <Redirect href="/home" />;
   }*/
-  return <Redirect href="/calibration" />;
+  // return <Redirect href="/calibration" />;
+  return <Redirect href="/home" />;
 }

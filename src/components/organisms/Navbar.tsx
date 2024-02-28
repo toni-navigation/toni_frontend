@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
+import { ViewStyle } from 'react-native';
 import { Tabs } from 'expo-router';
 import styling from '../../../stylings';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Orientation } from 'expo-screen-orientation';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { OrientationChangeEvent } from 'expo-screen-orientation/src/ScreenOrientation.types';
 
 interface NavbarProps {
   icons: {
@@ -15,11 +19,25 @@ interface NavbarProps {
 function Navbar({ icons }: NavbarProps) {
   const colorscheme = useColorScheme();
   const insets = useSafeAreaInsets();
+  const [orientation, setOrientation] = useState<Orientation>();
+
+  const checkOrientation = async () => {
+    const currentOrientation = await ScreenOrientation.getOrientationAsync();
+    setOrientation(currentOrientation);
+  };
+  const handleOrientationChange = (o: OrientationChangeEvent) => {
+    setOrientation(o.orientationInfo.orientation);
+  };
+
+  useEffect(() => {
+    checkOrientation();
+    ScreenOrientation.addOrientationChangeListener(handleOrientationChange);
+  }, []);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { height: 100 },
+        tabBarStyle: { height: 110 },
       }}
     >
       <Tabs.Screen
@@ -31,7 +49,10 @@ function Navbar({ icons }: NavbarProps) {
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
               : styling.colors['primary-color-dark'],
-          tabBarActiveTintColor: 'white',
+          tabBarActiveTintColor:
+            colorscheme === 'light'
+              ? styling.colors['background-light']
+              : styling.colors['background-dark'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
@@ -39,6 +60,7 @@ function Navbar({ icons }: NavbarProps) {
           tabBarAccessibilityLabel: 'Navigation',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {
+            justifyContent: 'center',
             height: 110 - insets.bottom,
             alignContent: 'center',
             paddingBottom: 15,
@@ -54,7 +76,10 @@ function Navbar({ icons }: NavbarProps) {
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
               : styling.colors['primary-color-dark'],
-          tabBarActiveTintColor: 'white',
+          tabBarActiveTintColor:
+            colorscheme === 'light'
+              ? styling.colors['background-light']
+              : styling.colors['background-dark'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
@@ -62,6 +87,7 @@ function Navbar({ icons }: NavbarProps) {
           tabBarAccessibilityLabel: 'Favoriten',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {
+            justifyContent: 'center',
             height: 110 - insets.bottom,
             alignContent: 'center',
             paddingBottom: 15,
@@ -77,7 +103,10 @@ function Navbar({ icons }: NavbarProps) {
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
               : styling.colors['primary-color-dark'],
-          tabBarActiveTintColor: 'white',
+          tabBarActiveTintColor:
+            colorscheme === 'light'
+              ? styling.colors['background-light']
+              : styling.colors['background-dark'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
               ? styling.colors['primary-color-light']
@@ -85,6 +114,7 @@ function Navbar({ icons }: NavbarProps) {
           tabBarAccessibilityLabel: 'Profil',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {
+            justifyContent: 'center',
             height: 110 - insets.bottom,
             alignContent: 'center',
             paddingBottom: 15,
