@@ -7,7 +7,22 @@ export default function StackLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerShown: true,
+          // eslint-disable-next-line react/jsx-no-undef
+          headerBackVisible: true, // TODO: set to false when back button is implemented
+        }}
+      >
+        <Stack.Screen
+          name="trip"
+          options={{
+            headerTitle: 'Derzeitige Navigation',
+          }}
+        />
         <Stack.Screen
           name="(tabs)"
           options={{

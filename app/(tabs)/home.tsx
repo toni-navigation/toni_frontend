@@ -142,7 +142,7 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5">
+      <ScrollView className="mx-5 my-5">
         <StartPosition
           prefill={points.start.query}
           onStartPositionChange={inputChangeStartPositionHandler}

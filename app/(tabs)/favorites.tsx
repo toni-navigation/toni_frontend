@@ -8,7 +8,7 @@ export default function Page() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       {/* eslint-disable-next-line react/jsx-no-undef */}
-      <ScrollView className="mx-5">
+      <ScrollView className="mx-5 my-5">
         <Text>Favoriten Liste</Text>
       </ScrollView>
     </SafeAreaView>
