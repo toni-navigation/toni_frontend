@@ -1,5 +1,5 @@
 /* eslint-disable */
-const decodePolyline = (str: string, precision: number = 6): any => {
+const decodePolyline = (str: string, precision: number = 6) => {
   let index = 0;
   let lat = 0;
   let lng = 0;
