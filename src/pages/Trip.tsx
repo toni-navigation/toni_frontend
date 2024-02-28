@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
+import MapView, { Polyline } from 'react-native-maps';
 
 interface Trip {
   maneuver: ValhallaManeuverProps;

@@ -1,101 +1,126 @@
 import React, { useState } from 'react';
 import { Pedometer } from 'expo-sensors';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import useUserStore from '../../store/useUserStore';
-import { distanceOfLatLon } from '../functions/functions';
 import { CurrentLocationType } from '../../types/Types';
+import { useCurrentLocation } from '../functions/mutations';
+import Button from '../components/atoms/Button';
 
 function Calibration() {
-  const { currentLocation, calibration, actions } = useUserStore();
+  const { calibration, actions } = useUserStore();
   const [steps, setSteps] = useState(0);
+
+  const currentLocationMutation = useCurrentLocation();
   let subscription: Pedometer.Subscription | null = null;
-  const stopPedometer = (start: CurrentLocationType) => {
+
+  const stopCalibrationIndex = 10;
+  const stopPedometer = async (
+    start: CurrentLocationType,
+    pedometerSteps: number
+  ) => {
     if (subscription) {
-      console.log(
-        'Pedometer stopped',
-        currentLocation?.coords.latitude,
-        currentLocation?.coords.longitude
-      );
-      actions.setCalibrationStop(currentLocation);
-      if (start && currentLocation) {
-        const distance = distanceOfLatLon(
-          start.coords.latitude,
-          start.coords.longitude,
-          currentLocation.coords.latitude,
-          currentLocation.coords.longitude,
-          'K'
-        );
-        console.log('Distance:', distance);
-      } else {
-        console.log('Something went wrong');
-      }
+      // console.log(
+      //   'Pedometer stopped',
+      //   currentLocation?.coords.latitude,
+      //   currentLocation?.coords.longitude
+      // );
+      //const position = await getCurrentPosition();
+      const currentPositionData = await currentLocationMutation.mutateAsync();
+      actions.setCalibration(start, currentPositionData, pedometerSteps);
+      // if (start && currentLocation) {
+      //   const distance = distanceOfLatLon(
+      //     start.coords.latitude,
+      //     start.coords.longitude,
+      //     currentLocation.coords.latitude,
+      //     currentLocation.coords.longitude,
+      //     'K'
+      //   );
+      //   console.log('Distance:', distance);
+      // } else {
+      //   console.log('Something went wrong');
+      // }
       subscription.remove();
     }
   };
-  const handlePedometerUpdate = (
-    result: Pedometer.PedometerResult,
-    start: CurrentLocationType
+  const handlePedometerUpdate = async (
+    start: CurrentLocationType,
+    result: Pedometer.PedometerResult
   ) => {
     setSteps(result.steps);
-    if (result.steps >= 30) {
-      console.log(
-        '15 Schritte erreicht',
-        currentLocation?.coords.latitude,
-        currentLocation?.coords.longitude
-      );
-      stopPedometer(start);
+    if (result.steps >= stopCalibrationIndex) {
+      // console.log(
+      //   '15 Schritte erreicht',
+      //   currentLocation?.coords.latitude,
+      //   currentLocation?.coords.longitude
+      // );
+      await stopPedometer(start, result.steps);
     }
   };
   const startPedometer = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     if (isAvailable) {
-      console.log(
-        'Pedometer is available:',
-        currentLocation?.coords.latitude,
-        currentLocation?.coords.longitude
-      );
-      actions.setCalibrationStart(currentLocation);
+      actions.setResetCalibration();
+      // console.log(
+      //   'Pedometer is available:',
+      //   currentLocation?.coords.latitude,
+      //   currentLocation?.coords.longitude
+      // );
+      //actions.setCalibrationStart(currentLocation);
+      const currentPositionData = await currentLocationMutation.mutateAsync();
+
+      //const position = await getCurrentPosition();
+
       subscription = Pedometer.watchStepCount((result) =>
-        handlePedometerUpdate(result, currentLocation)
+        handlePedometerUpdate(currentPositionData, result)
       );
     }
   };
 
   return (
     <View>
-      <Text className="text-3xl">Kalibrierung</Text>
-      <Text className="text-lg">Gehe 30 Schritte</Text>
-      <TouchableOpacity
-        onPress={startPedometer}
-        className="bg-green-800 hover:bg-green-950 h-16 flex justify-center font-bold py-2 px-4 rounded"
-      >
+      <Button buttonType={'secondaryOutline'} onPress={startPedometer}>
         <Text className="text-white text-center text-lg">
           Kalibrierung starten
         </Text>
-      </TouchableOpacity>
+      </Button>
+      {currentLocationMutation.isPending && <ActivityIndicator />}
+
+      <MapView
+        className="h-36 w-full"
+        region={{
+          latitude: 47.811195,
+          longitude: 13.033229,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        {calibration.start &&
+          calibration.start.lat &&
+          calibration.start.lon && (
+            <Marker
+              coordinate={{
+                latitude: calibration.start.lat,
+                longitude: calibration.start.lon,
+              }}
+            />
+          )}
+        {calibration.end && calibration.end.lat && calibration.end.lon && (
+          <Marker
+            coordinate={{
+              latitude: calibration.end.lat,
+              longitude: calibration.end.lon,
+            }}
+          />
+        )}
+      </MapView>
       <Text className="text-lg">Schritte: {steps}</Text>
-      {calibration.start && (
-        <Text>
-          Start: {calibration.start.lat}, {calibration.start.lon}
-        </Text>
+      {calibration.meters !== undefined && calibration.meters !== null && (
+        <Text>{calibration.meters} Meter</Text>
       )}
-      {calibration.end && (
-        <Text>
-          Ende: {calibration.end.lat}, {calibration.end.lon}
-        </Text>
+      {calibration.factor && (
+        <Text>Umrechnungsfaktor: {calibration.factor}</Text>
       )}
-      {/*{calibration.meters && calibration.meters !== 0 && (*/}
-      {/*  <View>*/}
-      {/*    <Text>30 Schritte waren {calibration.meters} Meter</Text>*/}
-      {/*    <Text>*/}
-      {/*      1 Schritt sind umgerechnnet {calibration.meters / 30} Meter. Die*/}
-      {/*      Meteranzahlen werden anhand diesen Wertes umgerechnet*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
-      {/*)}*/}
-      <View>
-        <Text>{JSON.stringify(calibration)}</Text>
-      </View>
     </View>
   );
 }
