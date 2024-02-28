@@ -5,7 +5,7 @@ module.exports = {
     'secondary-color-light': '#609d81',
     'secondary-color-dark': '#53a887',
     'disabled-color': '#bebaba',
-    'text-black': '#000',
-    'text-white': '#fff',
+    'background-light': '#fff',
+    'background-dark': '#2a2a2a',
   },
 };
