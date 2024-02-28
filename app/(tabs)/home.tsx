@@ -8,11 +8,7 @@ import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
-import styling from '../../stylings';
 import { useSearchData } from '../../src/functions/mutations';
-import { styled } from 'nativewind';
-
-const StyledScrollView = styled(ScrollView);
 
 export default function Home() {
   const { points, actions } = useUserStore();
@@ -42,7 +38,7 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <StyledScrollView className="mx-5">
+      <ScrollView className="mx-5">
         <Destination
           query={points.destination.query}
           onDestinationChange={inputChangeHandler}
@@ -64,7 +60,7 @@ export default function Home() {
         >
           <Text>Route starten</Text>
         </Button>
-      </StyledScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 }

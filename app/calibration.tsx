@@ -14,7 +14,7 @@ export default function CalibrationPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView>
+      <ScrollView className="mx-5">
         <Intro currentLocation={currentLocation} />
         <Calibration />
         <Button buttonType="primary" onPress={() => router.push('/home')}>
