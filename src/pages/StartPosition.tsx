@@ -5,6 +5,7 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 interface StartPosition {
   onStartPositionChange: (startPosition: string) => void;

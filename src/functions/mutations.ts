@@ -5,6 +5,7 @@ import {
   fetchTripHandler,
 } from './fetch';
 import { CurrentLocationType, LocationProps } from '../../types/Types';
+import { getCurrentPosition } from './functions';
 
 export function useSearchData(currentLocation: CurrentLocationType) {
   return useMutation({
@@ -25,5 +26,11 @@ export function useTrip() {
     mutationKey: ['trip'],
     mutationFn: (points: (LocationProps | undefined | null)[]) =>
       fetchTripHandler(points),
+  });
+}
+export function useCurrentLocation() {
+  return useMutation({
+    mutationKey: ['currentLocation'],
+    mutationFn: getCurrentPosition,
   });
 }

@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CalibrationProps, CurrentLocationType } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
+import { distanceOfLatLon } from '../src/functions/functions';
 
 const INITIAL_CALIBRATION: CalibrationProps = {};
 
@@ -13,9 +14,14 @@ type UserState = {
 
   actions: {
     setTrip: (trip: ValhallaProps | null) => void;
-    setCalibrationStart: (currentLocation: CurrentLocationType) => void;
-    setCalibrationStop: (currentLocation: CurrentLocationType) => void;
+    //setCalibrationStart: (currentLocation: CurrentLocationType) => void;
+    setCalibration: (
+      start: CurrentLocationType,
+      end: CurrentLocationType,
+      steps: number
+    ) => void;
     setCurrentLocation: (currentLocation: CurrentLocationType) => void;
+    setResetCalibration: () => void;
     resetStore: () => void;
   };
 };
@@ -38,7 +44,7 @@ const useUserStore = create<UserState>()(
               trip,
             };
           }),
-        setCalibrationStart: (currentLocation) =>
+        /* setCalibrationStart: (currentLocation) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
             newCalibration.start = {
@@ -47,22 +53,48 @@ const useUserStore = create<UserState>()(
               accuracy: currentLocation?.coords.accuracy,
             };
             newCalibration.end = undefined;
+            newCalibration.meters = undefined;
+            newCalibration.factor = undefined;
 
             return {
               ...state,
               calibration: newCalibration,
             };
-          }),
-        setCalibrationStop: (currentLocation) =>
+          }),*/
+        setResetCalibration: () =>
+          set((state) => ({ ...state, calibration: INITIAL_CALIBRATION })),
+        setCalibration: (start, end, steps) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
-
-            newCalibration.end = {
-              lat: currentLocation?.coords.latitude,
-              lon: currentLocation?.coords.longitude,
-              accuracy: currentLocation?.coords.accuracy ?? undefined,
+            newCalibration.start = {
+              lat: start?.coords.latitude,
+              lon: start?.coords.longitude,
+              accuracy: start?.coords.accuracy ?? undefined,
             };
+            newCalibration.end = {
+              lat: end?.coords.latitude,
+              lon: end?.coords.longitude,
+              accuracy: end?.coords.accuracy ?? undefined,
+            };
+            if (start && end) {
+              const distance = distanceOfLatLon(
+                start.coords.latitude,
+                start.coords.longitude,
+                end.coords.latitude,
+                end.coords.longitude,
+                'K'
+              );
+              const distanceInMeter = distance * 1000;
 
+              newCalibration.meters = distanceInMeter;
+              newCalibration.factor = distanceInMeter / steps;
+              console.log(
+                'Distance: ' + distance,
+                'Distance in Meter: ' + distanceInMeter,
+                'Steps: ' + steps,
+                'Factor: ' + distanceInMeter / steps
+              );
+            }
             return {
               ...state,
               calibration: newCalibration,
