@@ -60,7 +60,7 @@ export default function Home() {
         <Button
           onPress={() => router.push('/trip')}
           disabled={!points.destination.location}
-          buttonType="primaryOutline"
+          buttonType="primary"
         >
           <Text>Route starten</Text>
         </Button>

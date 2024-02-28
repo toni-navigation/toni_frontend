@@ -45,9 +45,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
       onPress={onPress}
       disabled={disabled}
     >
-      <Text
-        className={`text-verdana text-center text-lg ${colorscheme === 'light' ? 'text-white' : 'text-black'}`}
-      >
+      <Text className="text-center text-lg text-buttonfontcolor-light">
         {children}
       </Text>
     </TouchableOpacity>
