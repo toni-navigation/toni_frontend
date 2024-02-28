@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import { debounce } from 'lodash';
 import Button from '../../src/components/atoms/Button';
 import { suggestionHelper } from '../../src/functions/functions';

@@ -43,6 +43,7 @@ function Navbar({ icons }: NavbarProps) {
       <Tabs.Screen
         name="home"
         options={{
+          headerTitle: 'Navigation',
           tabBarLabel: 'Navigation',
           tabBarIcon: ({ color }) => icons.navigation({ color }),
           tabBarActiveBackgroundColor:
@@ -70,6 +71,7 @@ function Navbar({ icons }: NavbarProps) {
       <Tabs.Screen
         name="favorites"
         options={{
+          headerTitle: 'Meine Favoriten',
           tabBarLabel: 'Favoriten',
           tabBarIcon: ({ color }) => icons.favoriteList({ color }),
           tabBarActiveBackgroundColor:
@@ -97,6 +99,7 @@ function Navbar({ icons }: NavbarProps) {
       <Tabs.Screen
         name="profile"
         options={{
+          headerTitle: 'Meine Profil',
           tabBarLabel: 'Profil',
           tabBarIcon: ({ color }) => icons.profile({ color }),
           tabBarActiveBackgroundColor:

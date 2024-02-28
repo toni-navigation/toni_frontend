@@ -1,5 +1,5 @@
 import Calibration from '../../src/pages/Calibration';
-import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
+import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 export default function Page() {
   const colorscheme = useColorScheme();
