@@ -60,7 +60,8 @@ function Calibration() {
   const startPedometer = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     if (isAvailable) {
-      //actions.setResetCalibration();
+      actions.setResetCalibration();
+      setSteps(0);
       // console.log(
       //   'Pedometer is available:',
       //   currentLocation?.coords.latitude,
