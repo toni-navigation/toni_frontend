@@ -6,7 +6,7 @@ import useUserStore from '../../store/useUserStore';
 import { CurrentLocationType } from '../../types/Types';
 import { useCurrentLocation } from '../functions/mutations';
 import Button from '../components/atoms/Button';
-import { calculateMedian } from '../functions/functions';
+import { calculateMedian, getCalibrationValue } from '../functions/functions';
 
 function Calibration() {
   const { calibration, actions } = useUserStore();
@@ -79,33 +79,6 @@ function Calibration() {
     }
   };
 
-  const outputFactor = () => {
-    if (calibration.factors.length === 0) {
-      return <Text>Umrechnungsfaktor: 0</Text>;
-    }
-    if (calibration.factors.length > 5) {
-      return (
-        <Text>Umrechnungsfaktor: {calculateMedian(calibration.factors)}</Text>
-      );
-    }
-    return (
-      <Text>
-        Umrechnungsfaktor: {calibration.factors[calibration.factors.length - 1]}
-      </Text>
-    );
-  };
-  const outputMeters = () => {
-    if (calibration.meters.length === 0) {
-      return <Text>Meter: 0</Text>;
-    }
-    if (calibration.meters.length > 5) {
-      return <Text>Meter: {calculateMedian(calibration.meters)}</Text>;
-    }
-    return (
-      <Text>Meter: {calibration.meters[calibration.meters.length - 1]}</Text>
-    );
-  };
-
   return (
     <View>
       <Button buttonType={'secondary'} onPress={startPedometer}>
@@ -145,8 +118,8 @@ function Calibration() {
       </MapView>
 
       <Text className="text-lg">Schritte: {steps}</Text>
-      {outputMeters()}
-      {outputFactor()}
+      <Text>Meter: {getCalibrationValue(calibration.meters)}</Text>
+      <Text>Umrechnungsfaktor: {getCalibrationValue(calibration.factors)}</Text>
     </View>
   );
 }

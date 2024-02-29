@@ -5,6 +5,8 @@ import {
 } from '../../types/Types';
 import { PhotonFeature } from '../../types/api-photon';
 import * as Location from 'expo-location';
+import { Text } from 'react-native';
+import React from 'react';
 
 /*
 const startHelper = (
@@ -89,7 +91,15 @@ export function calculateMedian(values: number[]): number {
     ? sortedValues[half]
     : (sortedValues[half - 1] + sortedValues[half]) / 2;
 }
-
+export function getCalibrationValue(values: number[]) {
+  if (values === undefined || values === null || values.length === 0) {
+    return 0;
+  }
+  if (values.length > 5) {
+    return calculateMedian(values);
+  }
+  return values[values.length - 1];
+}
 export async function getCurrentPosition() {
   const { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
