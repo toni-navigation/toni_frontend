@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  NativeSyntheticEvent,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface ListItemProps {
   value: string;
@@ -16,8 +8,6 @@ interface ListItemProps {
 }
 
 function ListItem({ value, onPress, touchable }: ListItemProps) {
-  const colorscheme = useColorScheme();
-
   if (touchable) {
     return (
       <TouchableOpacity

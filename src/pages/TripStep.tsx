@@ -1,24 +1,85 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
+import useUserStore from '../../store/useUserStore';
+import decodePolyline from '../functions/decodePolyline';
+import {
+  distanceOfLatLon,
+  getCalibrationValue,
+  valueOutput,
+} from '../functions/functions';
+import Button from '../components/atoms/Button';
+import ListItem from '../components/atoms/ListItem';
+import { router } from 'expo-router';
 
-interface TripStep {
-  maneuver: ValhallaManeuverProps;
-  factor?: number | null;
-}
-function TripStep({ factor, maneuver }: TripStep) {
-  const tripText = `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
+function TripStep() {
+  const { trip, calibration, currentLocation } = useUserStore();
+
+  const [currentManeuver, setCurrentManeuver] = React.useState(0);
+  const factor = getCalibrationValue(calibration.factors);
+
+  let decodedShape: {
+    result: number;
+    lng: number;
+    byte: null | number;
+    shift: number;
+    coordinates: [number, number][];
+    index: number;
+    factor: number;
+    lat: number;
+  };
+  if (trip && currentLocation) {
+    decodedShape = decodePolyline(trip?.trip.legs[0].shape);
+    // console.log(decodedShape);
+    const startLat =
+      decodedShape.coordinates[
+        trip.trip.legs[0].maneuvers[currentManeuver + 1].begin_shape_index
+      ][0];
+    const startLon =
+      decodedShape.coordinates[
+        trip.trip.legs[0].maneuvers[currentManeuver + 1].begin_shape_index
+      ][1];
+
+    const currentLat = currentLocation.coords.latitude;
+    const currentLon = currentLocation.coords.longitude;
+
+    const distanceChange =
+      distanceOfLatLon(startLat, startLon, currentLat, currentLon, 'K') * 1000;
+
+    if (distanceChange < 5) {
+      setCurrentManeuver((prevState) => prevState + 1);
+    }
+  }
+
+  let maneuverValue = '';
+
+  if (trip) {
+    const maneuver = trip.trip.legs[0].maneuvers[currentManeuver];
+    maneuverValue = valueOutput(maneuver, factor);
+  }
 
   return (
-    <View className="border-b-2">
-      <Text>{tripText}</Text>
-      {factor && (
-        <Text>
-          Umgerechnet in Schritte:{' '}
-          {Math.ceil((maneuver.length * 1000) / factor)} Schritte
-        </Text>
-      )}
-    </View>
+    <SafeAreaView className="flex-1">
+      <ScrollView className="mx-5 my-5">
+        {maneuverValue.length > 0 && trip && currentLocation && trip.trip && (
+          <ListItem
+            touchable={false}
+            key={
+              trip.trip.legs[0].maneuvers[currentManeuver].begin_shape_index +
+              trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
+            }
+            value={maneuverValue}
+          />
+        )}
+        <Button
+          disabled={false}
+          onPress={() => router.back()}
+          buttonType="secondary"
+        >
+          <Text>Beenden</Text>
+        </Button>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

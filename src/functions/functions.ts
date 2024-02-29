@@ -1,12 +1,13 @@
+import * as Location from 'expo-location';
+import { Text } from 'react-native';
+import React from 'react';
+import { PhotonFeature } from '../../types/api-photon';
 import {
   CurrentLocationType,
   LocationProps,
   PointsProps,
 } from '../../types/Types';
-import { PhotonFeature } from '../../types/api-photon';
-import * as Location from 'expo-location';
-import { Text } from 'react-native';
-import React from 'react';
+import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
 
 /*
 const startHelper = (
@@ -122,6 +123,17 @@ export async function getCurrentPosition() {
     timestamp: location.timestamp,
   };
 }
+
+export const valueOutput = (
+  maneuver: ValhallaManeuverProps,
+  factor: number
+) => {
+  if (factor) {
+    return `${maneuver.instruction} ${maneuver.length * 1000} Meter, Schritte: ${Math.ceil((maneuver.length * 1000) / factor)}`;
+  }
+  return `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
+};
+
 /*
 export function suggestionsHelper(
   points: PointsProps,
