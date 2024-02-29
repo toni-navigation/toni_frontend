@@ -37,11 +37,6 @@ function Calibration() {
   ) => {
     setSteps(result.steps);
     if (result.steps >= stopCalibrationIndex) {
-      // console.log(
-      //   '15 Schritte erreicht',
-      //   currentLocation?.coords.latitude,
-      //   currentLocation?.coords.longitude
-      // );
       await stopPedometer(start, result.steps, sound);
     }
   };
