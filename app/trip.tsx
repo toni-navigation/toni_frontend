@@ -1,13 +1,10 @@
 import React from 'react';
-import { useColorScheme, useWindowDimensions } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import useUserStore from '../store/useUserStore';
 import TripStep from '../src/pages/TripStep';
 import decodePolyline from '../src/functions/decodePolyline';
-import {
-  distanceOfLatLon,
-  getCalibrationValue,
-} from '../src/functions/functions';
+import { distanceOfLatLon } from '../src/functions/functions';
+import TabBar from '../src/components/organisms/TabBar';
 
 const FirstRoute = () => {
   const { trip, calibration, currentLocation } = useUserStore();
@@ -23,9 +20,8 @@ const FirstRoute = () => {
   };
   if (trip) {
     decodedShape = decodePolyline(trip?.trip.legs[0].shape);
-    //console.log(decodedShape);
+    // console.log(decodedShape);
   }
-  const colorscheme = useColorScheme();
 
   return (
     trip &&
@@ -35,15 +31,15 @@ const FirstRoute = () => {
       <TripStep
         key={maneuver.begin_shape_index + maneuver.end_shape_index}
         maneuver={maneuver}
-        factor={getCalibrationValue(calibration.factors)}
-        decodedShape={decodedShape}
-        currentLocation={currentLocation}
+        //factor={calibration.factor}
+        //decodedShape={decodedShape}
+        //currentLocation={currentLocation}
       />
     ))
   );
 };
 
-const SecondRoute = () => {
+function SecondRoute() {
   const { trip, calibration, currentLocation } = useUserStore();
 
   const [currentManeuver, setCurrentManeuver] = React.useState(0);
@@ -60,7 +56,7 @@ const SecondRoute = () => {
   };
   if (trip && currentLocation) {
     decodedShape = decodePolyline(trip?.trip.legs[0].shape);
-    //console.log(decodedShape);
+    // console.log(decodedShape);
     const startLat =
       decodedShape.coordinates[
         trip.trip.legs[0].maneuvers[currentManeuver + 1].begin_shape_index
@@ -75,7 +71,6 @@ const SecondRoute = () => {
 
     const distanceChange =
       distanceOfLatLon(startLat, startLon, currentLat, currentLon, 'K') * 1000;
-    console.log(distanceChange);
 
     if (distanceChange < 5) {
       setCurrentManeuver((prevState) => prevState + 1);
@@ -92,25 +87,24 @@ const SecondRoute = () => {
           trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
         }
         maneuver={trip.trip.legs[0].maneuvers[currentManeuver]}
-        factor={getCalibrationValue(calibration.factors)}
-        decodedShape={decodedShape!}
-        currentLocation={currentLocation}
+        //factor={calibration.factor}
+        //decodedShape={decodedShape!}
+        //currentLocation={currentLocation}
       />
     )
   );
-};
+}
 
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,
 });
-export default function TripPage() {
-  const layout = useWindowDimensions();
 
+export default function TripPage() {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
+    { key: 'first', title: 'Überblick' },
+    { key: 'second', title: 'Aktuelles Maneuver' },
   ]);
 
   return (
@@ -118,7 +112,10 @@ export default function TripPage() {
       navigationState={{ index, routes }}
       renderScene={renderScene}
       onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
+      style={{ backgroundColor: 'white' }}
+      renderTabBar={(props) => (
+        <TabBar jumpTo={props.jumpTo} navigationState={props.navigationState} />
+      )}
     />
   );
 }
