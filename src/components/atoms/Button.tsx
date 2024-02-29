@@ -33,6 +33,7 @@ function Button({ children, onPress, buttonType, disabled }: ButtonProps) {
       className={`h-20 flex justify-center py-2 px-4 rounded ${disabled ? 'bg-disabled-color' : variant[buttonType]}`}
       onPress={onPress}
       disabled={disabled}
+      accessibilityRole={'button'}
     >
       <Text className="text-center text-lg text-background-light">
         {children}

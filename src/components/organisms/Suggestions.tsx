@@ -34,9 +34,14 @@ function Suggestions({
   };
 
   return (
-    <ScrollView className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black">
+    <ScrollView
+      className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black"
+      accessibilityLabel={`Liste der Vorschläge für ${startOrDestination === 'start' ? 'Start' : 'Ziel'}`}
+      accessibilityRole="list"
+    >
       {suggestions.map((suggestion, index) => (
         <TouchableOpacity
+          accessibilityLabel={`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}
           key={createKey(suggestion, index)}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
           className="

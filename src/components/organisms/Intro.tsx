@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 function Intro() {
   return (
     <View>
-      <Text className="text-4xl font-extrabold dark:text-white">BlndFnd</Text>
+      <Text className="text-4xl font-extrabold">Toni</Text>
       <Text className="text-lg">
         Nun kalibrieren wir deine Schrittlänge, damit die Navigation möglichst
         genau wird. Bitte stelle im Vorfeld sicher, dass die Strecke geeignet
