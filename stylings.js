@@ -8,4 +8,7 @@ module.exports = {
     'background-light': '#fff',
     'background-dark': '#2a2a2a',
   },
+  fonts: {
+    verdana: ['Verdana', 'sans-serif'],
+  },
 };
