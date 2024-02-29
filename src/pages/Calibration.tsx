@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -6,7 +7,8 @@ import useUserStore from '../../store/useUserStore';
 import { CurrentLocationType } from '../../types/Types';
 import { useCurrentLocation } from '../functions/mutations';
 import Button from '../components/atoms/Button';
-import { calculateMedian, getCalibrationValue } from '../functions/functions';
+import { getCalibrationValue } from '../functions/functions';
+import Song from '../../assets/Testtrack.mp3';
 
 function Calibration() {
   const { calibration, actions } = useUserStore();
@@ -15,39 +17,23 @@ function Calibration() {
   const currentLocationMutation = useCurrentLocation();
   let subscription: Pedometer.Subscription | null = null;
 
-  const stopCalibrationIndex = 30;
+  const stopCalibrationIndex = 10;
   const stopPedometer = async (
     start: CurrentLocationType,
-    pedometerSteps: number
+    pedometerSteps: number,
+    sound: Audio.Sound
   ) => {
     if (subscription) {
-      // console.log(
-      //   'Pedometer stopped',
-      //   currentLocation?.coords.latitude,
-      //   currentLocation?.coords.longitude
-      // );
-      //const position = await getCurrentPosition();
       subscription.remove();
-
+      await sound.unloadAsync();
       const currentPositionData = await currentLocationMutation.mutateAsync();
       actions.setCalibration(start, currentPositionData, pedometerSteps);
-      // if (start && currentLocation) {
-      //   const distance = distanceOfLatLon(
-      //     start.coords.latitude,
-      //     start.coords.longitude,
-      //     currentLocation.coords.latitude,
-      //     currentLocation.coords.longitude,
-      //     'K'
-      //   );
-      //   console.log('Distance:', distance);
-      // } else {
-      //   console.log('Something went wrong');
-      // }
     }
   };
   const handlePedometerUpdate = async (
     start: CurrentLocationType,
-    result: Pedometer.PedometerResult
+    result: Pedometer.PedometerResult,
+    sound: Audio.Sound
   ) => {
     setSteps(result.steps);
     if (result.steps >= stopCalibrationIndex) {
@@ -56,32 +42,26 @@ function Calibration() {
       //   currentLocation?.coords.latitude,
       //   currentLocation?.coords.longitude
       // );
-      await stopPedometer(start, result.steps);
+      await stopPedometer(start, result.steps, sound);
     }
   };
   const startPedometer = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     if (isAvailable) {
       setSteps(0);
-      // console.log(
-      //   'Pedometer is available:',
-      //   currentLocation?.coords.latitude,
-      //   currentLocation?.coords.longitude
-      // );
-      //actions.setCalibrationStart(currentLocation);
       const currentPositionData = await currentLocationMutation.mutateAsync();
-
-      //const position = await getCurrentPosition();
+      const { sound } = await Audio.Sound.createAsync(Song);
+      await sound.playAsync();
 
       subscription = Pedometer.watchStepCount((result) =>
-        handlePedometerUpdate(currentPositionData, result)
+        handlePedometerUpdate(currentPositionData, result, sound)
       );
     }
   };
 
   return (
     <View>
-      <Button buttonType={'secondary'} onPress={startPedometer}>
+      <Button buttonType="secondary" onPress={startPedometer}>
         <Text className="text-white text-center text-lg">
           Kalibrierung starten
         </Text>
