@@ -4,7 +4,10 @@ import { SceneMap, TabView } from 'react-native-tab-view';
 import useUserStore from '../store/useUserStore';
 import TripStep from '../src/pages/TripStep';
 import decodePolyline from '../src/functions/decodePolyline';
-import { distanceOfLatLon } from '../src/functions/functions';
+import {
+  distanceOfLatLon,
+  getCalibrationValue,
+} from '../src/functions/functions';
 
 const FirstRoute = () => {
   const { trip, calibration, currentLocation } = useUserStore();
@@ -32,7 +35,7 @@ const FirstRoute = () => {
       <TripStep
         key={maneuver.begin_shape_index + maneuver.end_shape_index}
         maneuver={maneuver}
-        factor={calibration.factor}
+        factor={getCalibrationValue(calibration.factors)}
         decodedShape={decodedShape}
         currentLocation={currentLocation}
       />
@@ -89,7 +92,7 @@ const SecondRoute = () => {
           trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
         }
         maneuver={trip.trip.legs[0].maneuvers[currentManeuver]}
-        factor={calibration.factor}
+        factor={getCalibrationValue(calibration.factors)}
         decodedShape={decodedShape!}
         currentLocation={currentLocation}
       />
