@@ -1,12 +1,19 @@
 import React from 'react';
 import { SceneMap, TabView } from 'react-native-tab-view';
+import { router } from 'expo-router';
+import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 import useUserStore from '../store/useUserStore';
 import TripStep from '../src/pages/TripStep';
 import decodePolyline from '../src/functions/decodePolyline';
 import { distanceOfLatLon } from '../src/functions/functions';
 import TabBar from '../src/components/organisms/TabBar';
+import Button from '../src/components/atoms/Button';
 
-const FirstRoute = () => {
+const backToHomeHandler = async () => {
+  router.back();
+};
+
+function FirstRoute() {
   const { trip, calibration, currentLocation } = useUserStore();
   let decodedShape: {
     result: number;
@@ -24,20 +31,28 @@ const FirstRoute = () => {
   }
 
   return (
-    trip &&
-    currentLocation &&
-    trip.trip &&
-    trip.trip.legs[0].maneuvers.map((maneuver) => (
-      <TripStep
-        key={maneuver.begin_shape_index + maneuver.end_shape_index}
-        maneuver={maneuver}
-        //factor={calibration.factor}
-        //decodedShape={decodedShape}
-        //currentLocation={currentLocation}
-      />
-    ))
+    <SafeAreaView className="flex-1">
+      <ScrollView className="mx-5 my-5">
+        {trip &&
+          currentLocation &&
+          trip.trip &&
+          trip.trip.legs[0].maneuvers.map((maneuver) => (
+            <TripStep
+              key={maneuver.begin_shape_index + maneuver.end_shape_index}
+              maneuver={maneuver}
+            />
+          ))}
+        <Button
+          disabled={false}
+          onPress={backToHomeHandler}
+          buttonType="primaryOutline"
+        >
+          <Text>Beenden</Text>
+        </Button>
+      </ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 function SecondRoute() {
   const { trip, calibration, currentLocation } = useUserStore();
@@ -78,20 +93,26 @@ function SecondRoute() {
   }
 
   return (
-    trip &&
-    currentLocation &&
-    trip.trip && (
-      <TripStep
-        key={
-          trip.trip.legs[0].maneuvers[currentManeuver].begin_shape_index +
-          trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
-        }
-        maneuver={trip.trip.legs[0].maneuvers[currentManeuver]}
-        //factor={calibration.factor}
-        //decodedShape={decodedShape!}
-        //currentLocation={currentLocation}
-      />
-    )
+    <SafeAreaView className="flex-1">
+      <ScrollView className="mx-5 my-5">
+        {trip && currentLocation && trip.trip && (
+          <TripStep
+            key={
+              trip.trip.legs[0].maneuvers[currentManeuver].begin_shape_index +
+              trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
+            }
+            maneuver={trip.trip.legs[0].maneuvers[currentManeuver]}
+          />
+        )}
+        <Button
+          disabled={false}
+          onPress={backToHomeHandler}
+          buttonType="primaryOutline"
+        >
+          <Text>Beenden</Text>
+        </Button>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
