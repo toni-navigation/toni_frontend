@@ -15,7 +15,7 @@ function Calibration() {
   const currentLocationMutation = useCurrentLocation();
   let subscription: Pedometer.Subscription | null = null;
 
-  const stopCalibrationIndex = 10;
+  const stopCalibrationIndex = 30;
   const stopPedometer = async (
     start: CurrentLocationType,
     pedometerSteps: number
@@ -105,6 +105,7 @@ function Calibration() {
       <Text>Meter: {calibration.meters[calibration.meters.length - 1]}</Text>
     );
   };
+
   return (
     <View>
       <Button buttonType={'secondary'} onPress={startPedometer}>
