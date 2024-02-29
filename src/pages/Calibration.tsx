@@ -17,7 +17,7 @@ function Calibration() {
   const currentLocationMutation = useCurrentLocation();
   let subscription: Pedometer.Subscription | null = null;
 
-  const stopCalibrationIndex = 10;
+  const stopCalibrationIndex = 30;
   const stopPedometer = async (
     start: CurrentLocationType,
     pedometerSteps: number,
