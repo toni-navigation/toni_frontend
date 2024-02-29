@@ -20,7 +20,7 @@ import {
   useTrip,
 } from '../../src/functions/mutations';
 import { LocationProps, PointsProps } from '../../types/Types';
-import InputLocation from '../../src/pages/InputLocation';
+import InputLocation from '../../src/components/InputLocation';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },
@@ -118,6 +118,7 @@ export default function Home() {
       };
       newPoints.start.query = `${data.features[0].properties.street} ${data.features[0].properties.housenumber}, ${data.features[0].properties.postcode} ${data.features[0].properties.city}, ${data.features[0].properties.country}`;
       setPoints(newPoints);
+      console.log('useEffect');
     })();
   }, []);
 
