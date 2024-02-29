@@ -6,6 +6,7 @@ import useUserStore from '../../store/useUserStore';
 import { CurrentLocationType } from '../../types/Types';
 import { useCurrentLocation } from '../functions/mutations';
 import Button from '../components/atoms/Button';
+import { calculateMedian } from '../functions/functions';
 
 function Calibration() {
   const { calibration, actions } = useUserStore();
@@ -14,7 +15,7 @@ function Calibration() {
   const currentLocationMutation = useCurrentLocation();
   let subscription: Pedometer.Subscription | null = null;
 
-  const stopCalibrationIndex = 30;
+  const stopCalibrationIndex = 10;
   const stopPedometer = async (
     start: CurrentLocationType,
     pedometerSteps: number
@@ -26,6 +27,8 @@ function Calibration() {
       //   currentLocation?.coords.longitude
       // );
       //const position = await getCurrentPosition();
+      subscription.remove();
+
       const currentPositionData = await currentLocationMutation.mutateAsync();
       actions.setCalibration(start, currentPositionData, pedometerSteps);
       // if (start && currentLocation) {
@@ -40,7 +43,6 @@ function Calibration() {
       // } else {
       //   console.log('Something went wrong');
       // }
-      subscription.remove();
     }
   };
   const handlePedometerUpdate = async (
@@ -60,7 +62,6 @@ function Calibration() {
   const startPedometer = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     if (isAvailable) {
-      actions.setResetCalibration();
       setSteps(0);
       // console.log(
       //   'Pedometer is available:',
@@ -78,6 +79,32 @@ function Calibration() {
     }
   };
 
+  const outputFactor = () => {
+    if (calibration.factors.length === 0) {
+      return <Text>Umrechnungsfaktor: 0</Text>;
+    }
+    if (calibration.factors.length > 5) {
+      return (
+        <Text>Umrechnungsfaktor: {calculateMedian(calibration.factors)}</Text>
+      );
+    }
+    return (
+      <Text>
+        Umrechnungsfaktor: {calibration.factors[calibration.factors.length - 1]}
+      </Text>
+    );
+  };
+  const outputMeters = () => {
+    if (calibration.meters.length === 0) {
+      return <Text>Meter: 0</Text>;
+    }
+    if (calibration.meters.length > 5) {
+      return <Text>Meter: {calculateMedian(calibration.meters)}</Text>;
+    }
+    return (
+      <Text>Meter: {calibration.meters[calibration.meters.length - 1]}</Text>
+    );
+  };
   return (
     <View>
       <Button buttonType={'secondary'} onPress={startPedometer}>
@@ -115,13 +142,10 @@ function Calibration() {
           />
         )}
       </MapView>
+
       <Text className="text-lg">Schritte: {steps}</Text>
-      {calibration.meters !== undefined && calibration.meters !== null && (
-        <Text>{calibration.meters} Meter</Text>
-      )}
-      {calibration.factor && (
-        <Text>Umrechnungsfaktor: {calibration.factor}</Text>
-      )}
+      {outputMeters()}
+      {outputFactor()}
     </View>
   );
 }

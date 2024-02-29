@@ -8,8 +8,8 @@ export interface LocationProps {
 export interface CalibrationProps {
   start?: LocationProps;
   end?: LocationProps;
-  meters?: number | null;
-  factor?: number | null;
+  meters: number[];
+  factors: number[];
 }
 
 export type CurrentLocationType = CurrentLocationProps | null | undefined;

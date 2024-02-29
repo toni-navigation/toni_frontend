@@ -5,7 +5,10 @@ import { CalibrationProps, CurrentLocationType } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import { distanceOfLatLon } from '../src/functions/functions';
 
-const INITIAL_CALIBRATION: CalibrationProps = {};
+const INITIAL_CALIBRATION: CalibrationProps = {
+  factors: [],
+  meters: [],
+};
 
 type UserState = {
   calibration: CalibrationProps;
@@ -44,25 +47,14 @@ const useUserStore = create<UserState>()(
               trip,
             };
           }),
-        /* setCalibrationStart: (currentLocation) =>
-          set((state) => {
-            const newCalibration = { ...state.calibration };
-            newCalibration.start = {
-              lat: currentLocation?.coords.latitude,
-              lon: currentLocation?.coords.longitude,
-              accuracy: currentLocation?.coords.accuracy,
-            };
-            newCalibration.end = undefined;
-            newCalibration.meters = undefined;
-            newCalibration.factor = undefined;
-
-            return {
-              ...state,
-              calibration: newCalibration,
-            };
-          }),*/
         setResetCalibration: () =>
-          set((state) => ({ ...state, calibration: INITIAL_CALIBRATION })),
+          set((state) => ({
+            ...state,
+            calibration: {
+              factors: [],
+              meters: [],
+            },
+          })),
         setCalibration: (start, end, steps) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
@@ -86,14 +78,8 @@ const useUserStore = create<UserState>()(
               );
               const distanceInMeter = distance * 1000;
 
-              newCalibration.meters = distanceInMeter;
-              newCalibration.factor = distanceInMeter / steps;
-              console.log(
-                'Distance: ' + distance,
-                'Distance in Meter: ' + distanceInMeter,
-                'Steps: ' + steps,
-                'Factor: ' + distanceInMeter / steps
-              );
+              newCalibration.meters.push(distanceInMeter);
+              newCalibration.factors.push(distanceInMeter / steps);
             }
             return {
               ...state,
