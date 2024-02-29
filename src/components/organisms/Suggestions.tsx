@@ -1,6 +1,13 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { PhotonFeature } from '../../../types/api-photon';
+import ListItem from '../atoms/ListItem';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];
@@ -14,40 +21,37 @@ function Suggestions({
   onLocationSuggestionClick,
   startOrDestination,
 }: SuggestionProps) {
-  const createKey = (suggestion: PhotonFeature) => {
+  const createKey = (suggestion: PhotonFeature, index: number) => {
     if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
       return (
         suggestion.properties.osm_type +
         suggestion.properties.osm_id +
+        index +
         startOrDestination
       );
     }
-    return suggestion.properties.name + startOrDestination;
+    return index + startOrDestination;
   };
 
   return (
-    <View className="bg-gray-200 border-1">
-      {suggestions.map((locationSuggestion) => (
-        <View
-          key={createKey(locationSuggestion)}
-          className="flex justify-center font-bold border-b-1 border-b-gray-100"
+    <ScrollView className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black">
+      {suggestions.map((suggestion, index) => (
+        <TouchableOpacity
+          key={createKey(suggestion, index)}
+          onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
+          className="
+            border-b-[1px] py-3 px-2 last:border-none"
         >
-          <TouchableOpacity
-            onPress={(): Promise<void> =>
-              onLocationSuggestionClick(locationSuggestion)
-            }
-            className="flex justify-center font-bold py-2 px-4"
-          >
-            <Text>
-              {locationSuggestion.properties.city},{' '}
-              {locationSuggestion.properties.country},{' '}
-              {locationSuggestion.properties.postcode}{' '}
-              {locationSuggestion.properties.name}
-            </Text>
-          </TouchableOpacity>
-        </View>
+          <Text>{`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}</Text>
+        </TouchableOpacity>
+        // <ListItem
+        //   value={`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}
+        //   index={index}
+        //   touchable={true}
+        //   onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
+        // ></ListItem>
       ))}
-    </View>
+    </ScrollView>
   );
 }
 

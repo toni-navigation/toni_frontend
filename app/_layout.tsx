@@ -24,6 +24,12 @@ export default function StackLayout() {
           }}
         />
         <Stack.Screen
+          name="calibration"
+          options={{
+            headerTitle: 'Kalibrierung',
+          }}
+        />
+        <Stack.Screen
           name="(tabs)"
           options={{
             headerShown: false,

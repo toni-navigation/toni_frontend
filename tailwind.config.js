@@ -4,6 +4,7 @@ const styling = require('./stylings');
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
+    './src/**/**/*.{js,jsx,ts,tsx}',
     './app/**/*.{js,jsx,ts,tsx}',
     './app/*.{js,jsx,ts,tsx}',
   ],

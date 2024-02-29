@@ -4,7 +4,7 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import InputText from '../components/atoms/InputText';
+import InputText from './atoms/InputText';
 
 interface InputLocationProps {
   id: string;
