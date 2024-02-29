@@ -11,7 +11,6 @@ import {
 import { debounce } from 'lodash';
 import Button from '../../src/components/atoms/Button';
 import { suggestionHelper } from '../../src/functions/functions';
-import Destination from '../../src/pages/Destination';
 import Suggestions from '../../src/components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
@@ -21,10 +20,10 @@ import {
   useTrip,
 } from '../../src/functions/mutations';
 import { LocationProps, PointsProps } from '../../types/Types';
-import StartPosition from '../../src/pages/StartPosition';
+import InputLocation from '../../src/pages/InputLocation';
 
 const INITIAL_POINTS: PointsProps = {
-  start: {},
+  start: { query: '' },
   destination: {
     query: '',
   },
@@ -74,7 +73,7 @@ export default function Home() {
     []
   );
 
-  const inputChangeHandler = (value: string) => {
+  const inputChangeDestinationHandler = (value: string) => {
     const newPoints = { ...points };
     newPoints.destination.query = value;
     setPoints(newPoints);
@@ -143,9 +142,12 @@ export default function Home() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="mx-5 my-5">
-        <StartPosition
-          prefill={points.start.query}
-          onStartPositionChange={inputChangeStartPositionHandler}
+        <InputLocation
+          id="start"
+          query={points.start.query}
+          placeholder="Startpunkt eingeben"
+          labelText="Startpunkt"
+          onChange={inputChangeStartPositionHandler}
         />
         {points.start.suggestions &&
           points.start.suggestions.features.length > 0 && (
@@ -157,9 +159,12 @@ export default function Home() {
               startOrDestination="start"
             />
           )}
-        <Destination
+        <InputLocation
+          id="destination"
+          placeholder="Ziel eingeben"
+          labelText="Ziel"
           query={points.destination.query}
-          onDestinationChange={inputChangeHandler}
+          onChange={inputChangeDestinationHandler}
         />
         {points.destination.suggestions &&
           points.destination.suggestions.features.length > 0 && (

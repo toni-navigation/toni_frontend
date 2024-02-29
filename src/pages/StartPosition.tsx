@@ -5,14 +5,14 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import MapView from 'react-native-maps';
+import InputText from '../components/atoms/InputText';
 
 interface StartPosition {
   onStartPositionChange: (startPosition: string) => void;
-  prefill?: string;
+  value?: string;
 }
 
-function StartPosition({ onStartPositionChange, prefill }: StartPosition) {
+function StartPosition({ onStartPositionChange, value }: StartPosition) {
   const inputChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {
@@ -21,10 +21,11 @@ function StartPosition({ onStartPositionChange, prefill }: StartPosition) {
 
   return (
     <View>
-      <TextInput
-        placeholder="Start"
-        value={prefill}
-        className="border-2 border-gray-800 rounded w-full p-2"
+      <InputText
+        id="Start"
+        labelText="Startpunkt"
+        placeholder="Gib deinen Startpunkt ein"
+        value={value}
         onChange={inputChangeHandler}
       />
     </View>

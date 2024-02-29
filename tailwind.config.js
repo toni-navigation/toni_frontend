@@ -15,9 +15,7 @@ module.exports = {
       laptop: '1024px',
       desktop: '1280px',
     },
-    fontFamily: {
-      verdana: ['Verdana', 'sans-serif'],
-    },
+    fontFamily: styling.fonts,
     extends: {
       spacing: {
         '8xl': '96rem',

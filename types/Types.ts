@@ -27,18 +27,13 @@ export interface CurrentLocationProps {
   timestamp: number;
 }
 
-export interface DestinationProps {
+export interface LocationInputProps {
   query: string;
   location?: LocationProps | null;
   suggestions?: PhotonFeatureCollection | null;
 }
 
-export interface StartProps {
-  query?: string;
-  location?: LocationProps | null;
-  suggestions?: PhotonFeatureCollection | null;
-}
 export interface PointsProps {
-  start: StartProps;
-  destination: DestinationProps;
+  start: LocationInputProps;
+  destination: LocationInputProps;
 }
