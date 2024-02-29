@@ -11,19 +11,16 @@ import {
 
 interface ListItemProps {
   value: string;
-  customKey?: string;
   onPress?: () => void;
   touchable: boolean;
 }
 
-function ListItem({ value, customKey, onPress, touchable }: ListItemProps) {
+function ListItem({ value, onPress, touchable }: ListItemProps) {
   const colorscheme = useColorScheme();
 
   if (touchable) {
-    console.log('listItem', customKey);
     return (
       <TouchableOpacity
-        key={customKey}
         onPress={onPress}
         className="
             border-b-[1px] py-3 px-2 last:border-none"
@@ -34,7 +31,6 @@ function ListItem({ value, customKey, onPress, touchable }: ListItemProps) {
   } else {
     return (
       <View
-        key={customKey}
         className="
             border-b-[1px] py-3 px-2 bg-repeat last:border-none"
       >

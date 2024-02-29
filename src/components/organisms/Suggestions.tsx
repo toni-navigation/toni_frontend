@@ -40,21 +40,12 @@ function Suggestions({
       accessibilityRole="list"
     >
       {suggestions.map((suggestion, index) => (
-        <TouchableOpacity
-          accessibilityLabel={`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}
+        <ListItem
+          value={`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}
           key={createKey(suggestion, index)}
+          touchable={true}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
-          className="
-            border-b-[1px] py-3 px-2 last:border-none"
-        >
-          <Text>{`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}</Text>
-        </TouchableOpacity>
-        // <ListItem
-        //   value={`${suggestion.properties.name}, ${suggestion.properties.postcode} ${suggestion.properties.city}, ${suggestion.properties.country}`}
-        //   index={index}
-        //   touchable={true}
-        //   onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
-        // ></ListItem>
+        ></ListItem>
       ))}
     </ScrollView>
   );
