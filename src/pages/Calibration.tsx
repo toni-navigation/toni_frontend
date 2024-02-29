@@ -26,6 +26,9 @@ function Calibration() {
     if (subscription) {
       subscription.remove();
       await sound.unloadAsync();
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: false,
+      });
       const currentPositionData = await currentLocationMutation.mutateAsync();
       actions.setCalibration(start, currentPositionData, pedometerSteps);
     }
@@ -45,7 +48,10 @@ function Calibration() {
     if (isAvailable) {
       setSteps(0);
       const currentPositionData = await currentLocationMutation.mutateAsync();
-      const { sound } = await Audio.Sound.createAsync(Song);
+      const { sound } = await Audio.Sound.createAsync(Song, {});
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+      });
       await sound.playAsync();
 
       subscription = Pedometer.watchStepCount((result) =>
