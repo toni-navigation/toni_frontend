@@ -10,63 +10,108 @@ import Button from '../components/atoms/Button';
 import { getCalibrationValue } from '../functions/functions';
 import Song from '../../assets/Testtrack.mp3';
 
+interface CalibrationProps {
+  subscription: Pedometer.Subscription | null;
+  sound: Audio.Sound | null;
+}
+
 function Calibration() {
   const { calibration, actions } = useUserStore();
   const [steps, setSteps] = useState(0);
+  const [sub, setSub] = useState<CalibrationProps | null>(null);
 
   const currentLocationMutation = useCurrentLocation();
-  let subscription: Pedometer.Subscription | null = null;
 
-  const stopCalibrationIndex = 30;
+  const stopCalibrationIndex = 10;
+
+  const cancelCalibration = async () => {
+    if (sub?.subscription && sub.sound) {
+      sub.subscription.remove();
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: false,
+      });
+      await sub.sound.unloadAsync();
+      setSub(null);
+    }
+  };
   const stopPedometer = async (
     start: CurrentLocationType,
     pedometerSteps: number,
-    sound: Audio.Sound
+    subscription: Pedometer.Subscription | null,
+    sound: Audio.Sound | null
   ) => {
     if (subscription) {
       subscription.remove();
-      await sound.unloadAsync();
+      await sound?.unloadAsync();
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: false,
       });
       const currentPositionData = await currentLocationMutation.mutateAsync();
       actions.setCalibration(start, currentPositionData, pedometerSteps);
+      setSub(null);
     }
   };
   const handlePedometerUpdate = async (
     start: CurrentLocationType,
     result: Pedometer.PedometerResult,
-    sound: Audio.Sound
+    subscription: Pedometer.Subscription | null,
+    sound: Audio.Sound | null
   ) => {
     setSteps(result.steps);
     if (result.steps >= stopCalibrationIndex) {
-      await stopPedometer(start, result.steps, sound);
+      await stopPedometer(start, result.steps, subscription, sound);
     }
   };
   const startPedometer = async () => {
+    let subscription: Pedometer.Subscription | null = null;
+    let sound: Audio.Sound | null = null;
     const isAvailable = await Pedometer.isAvailableAsync();
     if (isAvailable) {
       setSteps(0);
       const currentPositionData = await currentLocationMutation.mutateAsync();
-      const { sound } = await Audio.Sound.createAsync(Song, {});
+      sound = new Audio.Sound(); // Initialize the sound object
+      await sound.loadAsync(Song); // Load the audio file
+      await sound.playAsync(); // Start playing the audio
+      // sound = await Audio.Sound.createAsync(Song, {});
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
       });
-      await sound.playAsync();
+      if (sound) {
+        await sound.playAsync();
+      }
 
       subscription = Pedometer.watchStepCount((result) =>
-        handlePedometerUpdate(currentPositionData, result, sound)
+        handlePedometerUpdate(currentPositionData, result, subscription, sound)
       );
+      setSub((prevState) => {
+        if (prevState) {
+          return {
+            ...prevState,
+            subscription,
+            sound,
+          };
+        }
+        return {
+          subscription,
+          sound,
+        };
+      });
     }
   };
 
   return (
     <View>
-      <Button buttonType="secondary" onPress={startPedometer}>
-        <Text className="text-white text-center text-lg">
-          Kalibrierung starten
-        </Text>
-      </Button>
+      {sub ? (
+        <Button buttonType="secondary" onPress={cancelCalibration}>
+          <Text className="text-white text-center text-lg">Abbrechen</Text>
+        </Button>
+      ) : (
+        <Button buttonType="secondary" onPress={startPedometer}>
+          <Text className="text-white text-center text-lg">
+            Start Calibration
+          </Text>
+        </Button>
+      )}
       {currentLocationMutation.isPending && <ActivityIndicator />}
 
       <MapView
