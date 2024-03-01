@@ -109,7 +109,7 @@ function Calibration() {
         </Button>
       ) : (
         <Button buttonType="secondary" onPress={startPedometer}>
-          Start Calibration
+          Start Kalibrierung
         </Button>
       )}
       {currentLocationMutation.isPending && (
