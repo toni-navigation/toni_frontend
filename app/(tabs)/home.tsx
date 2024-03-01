@@ -2,9 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import {
   ActivityIndicator,
+  NativeSyntheticEvent,
   SafeAreaView,
   ScrollView,
   Text,
+  TextInputChangeEventData,
   useColorScheme,
   View,
 } from 'react-native';
@@ -20,7 +22,7 @@ import {
   useTrip,
 } from '../../src/functions/mutations';
 import { LocationProps, PointsProps } from '../../types/Types';
-import InputLocation from '../../src/components/InputLocation';
+import InputText from '../../src/components/atoms/InputText';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },
@@ -73,18 +75,22 @@ export default function Home() {
     []
   );
 
-  const inputChangeDestinationHandler = (value: string) => {
+  const inputChangeDestinationHandler = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
     const newPoints = { ...points };
-    newPoints.destination.query = value;
+    newPoints.destination.query = event.nativeEvent.text;
     setPoints(newPoints);
-    debounceFnDestination(value);
+    debounceFnDestination(event.nativeEvent.text);
   };
 
-  const inputChangeStartPositionHandler = (value: string) => {
+  const inputChangeStartPositionHandler = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
     const newPoints = { ...points };
-    newPoints.start.query = value;
+    newPoints.start.query = event.nativeEvent.text;
     setPoints(newPoints);
-    debounceFnStart(value);
+    debounceFnStart(event.nativeEvent.text);
   };
   const locationSuggestionClickHandler = async (
     locationSuggestion: PhotonFeature,
@@ -142,9 +148,9 @@ export default function Home() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="mx-5 my-5">
-        <InputLocation
+        <InputText
           id="start"
-          query={points.start.query}
+          value={points.start.query}
           placeholder="Startpunkt eingeben"
           labelText="Startpunkt"
           onChange={inputChangeStartPositionHandler}
@@ -159,11 +165,11 @@ export default function Home() {
               startOrDestination="start"
             />
           )}
-        <InputLocation
+        <InputText
           id="destination"
           placeholder="Ziel eingeben"
           labelText="Ziel"
-          query={points.destination.query}
+          value={points.destination.query}
           onChange={inputChangeDestinationHandler}
         />
         {points.destination.suggestions &&
