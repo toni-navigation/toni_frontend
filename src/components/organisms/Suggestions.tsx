@@ -44,8 +44,8 @@ function Suggestions({
           key={createKey(suggestion, index)}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
         >
-          {index + 1}. {suggestion.properties.name},{' '}
-          {suggestion.properties.postcode} {suggestion.properties.city},{' '}
+          {index + 1}. {suggestion.properties.name},
+          {suggestion.properties.postcode} {suggestion.properties.city},
           {suggestion.properties.country}
         </ListItem>
       ))}

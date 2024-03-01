@@ -14,7 +14,7 @@ export default function StackLayout() {
           },
           headerShown: true,
           // eslint-disable-next-line react/jsx-no-undef
-          headerBackVisible: true, // TODO: set to false when back button is implemented
+          headerBackVisible: false, // TODO: set to false when back button is implemented
         }}
       >
         <Stack.Screen

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 interface ListItemProps {
   children: React.ReactNode;

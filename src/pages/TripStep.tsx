@@ -63,19 +63,15 @@ function TripStep() {
       <ScrollView className="mx-5 my-5">
         {maneuverValue.length > 0 && trip && currentLocation && trip.trip && (
           <ListItem
-            touchable={false}
             key={
               trip.trip.legs[0].maneuvers[currentManeuver].begin_shape_index +
               trip.trip.legs[0].maneuvers[currentManeuver].end_shape_index
             }
-            value={maneuverValue}
-          />
+          >
+            {maneuverValue}
+          </ListItem>
         )}
-        <Button
-          disabled={false}
-          onPress={() => router.back()}
-          buttonType="secondary"
-        >
+        <Button onPress={() => router.back()} buttonType="secondary">
           <Text>Beenden</Text>
         </Button>
       </ScrollView>

@@ -7,10 +7,22 @@ import Button from '../components/atoms/Button';
 import ListItem from '../components/atoms/ListItem';
 import { router } from 'expo-router';
 import { getCalibrationValue, valueOutput } from '../functions/functions';
+import { PhotonFeature } from '../../types/api-photon';
 
 function TripList() {
   const { trip, calibration, currentLocation } = useUserStore();
   const factor = getCalibrationValue(calibration.factors);
+
+  const createKey = (maneuver: ValhallaManeuverProps, index: number) => {
+    if (maneuver.begin_shape_index && maneuver.end_shape_index) {
+      return (
+        maneuver.begin_shape_index.toString() +
+        maneuver.end_shape_index.toString() +
+        index
+      );
+    }
+    return maneuver.begin_shape_index.toString() + index.toString();
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -18,21 +30,17 @@ function TripList() {
         {trip &&
           currentLocation &&
           trip.trip &&
-          trip.trip.legs[0].maneuvers.map((maneuver) => (
-            <ListItem
-              touchable={false}
-              key={maneuver.begin_shape_index + maneuver.end_shape_index}
-              value={valueOutput(maneuver, factor)}
-            />
+          trip.trip.legs[0].maneuvers.map((maneuver, index) => (
+            <ListItem key={createKey(maneuver, index)}>
+              {index + 1}. {valueOutput(maneuver, factor)}
+            </ListItem>
           ))}
-        <Button
-          disabled={false}
-          onPress={() => router.back()}
-          buttonType="secondary"
-        >
+      </ScrollView>
+      <View className="mx-5">
+        <Button onPress={() => router.back()} buttonType="secondary">
           <Text>Beenden</Text>
         </Button>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
