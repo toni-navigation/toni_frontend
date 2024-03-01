@@ -10,34 +10,33 @@ import {
 } from 'react-native';
 
 interface ListItemProps {
-  value: string;
+  children: React.ReactNode;
   onPress?: () => void;
-  touchable: boolean;
 }
 
-function ListItem({ value, onPress, touchable }: ListItemProps) {
+// TODO: Add accessibilityLabel and accessibilityRole
+function ListItem({ children, onPress }: ListItemProps) {
   const colorscheme = useColorScheme();
 
-  if (touchable) {
+  if (onPress) {
     return (
       <TouchableOpacity
         onPress={onPress}
         className="
             border-b-[1px] py-3 px-2 last:border-none"
       >
-        <Text>{value}</Text>
+        <Text>{children}</Text>
       </TouchableOpacity>
     );
-  } else {
-    return (
-      <View
-        className="
-            border-b-[1px] py-3 px-2 bg-repeat last:border-none"
-      >
-        <Text>{value}</Text>
-      </View>
-    );
   }
+  return (
+    <View
+      className="
+            border-b-[1px] py-3 px-2 bg-repeat last:border-none"
+    >
+      <Text>{children}</Text>
+    </View>
+  );
 }
 
 export default ListItem;

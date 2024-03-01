@@ -57,42 +57,40 @@ function Calibration() {
   return (
     <View>
       <Button buttonType="secondary" onPress={startPedometer}>
-        <Text className="text-white text-center text-lg">
-          Kalibrierung starten
-        </Text>
+        Kalibrierung starten
       </Button>
       {currentLocationMutation.isPending && <ActivityIndicator />}
 
-      <MapView
-        className="h-36 w-full"
-        region={{
-          latitude: 47.811195,
-          longitude: 13.033229,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        {calibration.start &&
-          calibration.start.lat &&
-          calibration.start.lon && (
-            <Marker
-              coordinate={{
-                latitude: calibration.start.lat,
-                longitude: calibration.start.lon,
-              }}
-            />
-          )}
-        {calibration.end && calibration.end.lat && calibration.end.lon && (
-          <Marker
-            coordinate={{
-              latitude: calibration.end.lat,
-              longitude: calibration.end.lon,
-            }}
-          />
-        )}
-      </MapView>
+      {/*<MapView*/}
+      {/*  className="h-36 w-full"*/}
+      {/*  region={{*/}
+      {/*    latitude: 47.811195,*/}
+      {/*    longitude: 13.033229,*/}
+      {/*    latitudeDelta: 0.0922,*/}
+      {/*    longitudeDelta: 0.0421,*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  {calibration.start &&*/}
+      {/*    calibration.start.lat &&*/}
+      {/*    calibration.start.lon && (*/}
+      {/*      <Marker*/}
+      {/*        coordinate={{*/}
+      {/*          latitude: calibration.start.lat,*/}
+      {/*          longitude: calibration.start.lon,*/}
+      {/*        }}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  {calibration.end && calibration.end.lat && calibration.end.lon && (*/}
+      {/*    <Marker*/}
+      {/*      coordinate={{*/}
+      {/*        latitude: calibration.end.lat,*/}
+      {/*        longitude: calibration.end.lon,*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  )}*/}
+      {/*</MapView>*/}
 
-      <Text className="text-lg">Schritte: {steps}</Text>
+      <Text className="text-lg mt-4">Schritte: {steps}</Text>
       <Text>Meter: {getCalibrationValue(calibration.meters)}</Text>
       <Text>Umrechnungsfaktor: {getCalibrationValue(calibration.factors)}</Text>
     </View>

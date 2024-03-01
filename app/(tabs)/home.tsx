@@ -118,7 +118,6 @@ export default function Home() {
       };
       newPoints.start.query = `${data.features[0].properties.street} ${data.features[0].properties.housenumber}, ${data.features[0].properties.postcode} ${data.features[0].properties.city}, ${data.features[0].properties.country}`;
       setPoints(newPoints);
-      console.log('useEffect');
     })();
   }, []);
 
@@ -179,18 +178,19 @@ export default function Home() {
           )}
 
         <Button
-          disabled={
+          onPress={startNavigationHandler}
+          buttonType={
             points.start.location === undefined ||
             points.destination.location === undefined ||
             points.start.query === undefined ||
             points.destination.query === undefined ||
             points.start.query?.length < 2 ||
             points.destination.query?.length < 2
+              ? 'disabled'
+              : 'primary'
           }
-          onPress={startNavigationHandler}
-          buttonType="primary"
         >
-          <Text>Route starten</Text>
+          Route starten
         </Button>
       </ScrollView>
     </SafeAreaView>
