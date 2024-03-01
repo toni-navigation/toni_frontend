@@ -41,11 +41,13 @@ function Suggestions({
     >
       {suggestions.map((suggestion, index) => (
         <ListItem
-          value={`${suggestion.properties.name ?? ''}, ${suggestion.properties.postcode ?? ''} ${suggestion.properties.city ?? ''}, ${suggestion.properties.country ?? ''}`}
           key={createKey(suggestion, index)}
-          touchable={true}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
-        ></ListItem>
+        >
+          {index + 1}. {suggestion.properties.name},{' '}
+          {suggestion.properties.postcode} {suggestion.properties.city},{' '}
+          {suggestion.properties.country}
+        </ListItem>
       ))}
     </ScrollView>
   );

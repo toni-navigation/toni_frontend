@@ -20,14 +20,12 @@ export default function Page() {
           {JSON.stringify(calibration.factors)}
         </Text>
         <Button
-          buttonType={'secondary'}
+          buttonType="secondary"
           onPress={() => {
             actions.setResetCalibration();
           }}
         >
-          <Text className="text-white text-center text-lg">
-            Kalibrierung zurücksetzen
-          </Text>
+          Kalibrierung zurücksetzen
         </Button>
       </ScrollView>
     </SafeAreaView>
