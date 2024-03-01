@@ -99,7 +99,7 @@ function Navbar({ icons }: NavbarProps) {
       <Tabs.Screen
         name="profile"
         options={{
-          headerTitle: 'Meine Profil',
+          headerTitle: 'Mein Profil',
           tabBarLabel: 'Profil',
           tabBarIcon: ({ color }) => icons.profile({ color }),
           tabBarActiveBackgroundColor:
