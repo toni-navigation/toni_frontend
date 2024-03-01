@@ -22,7 +22,7 @@ function Calibration() {
 
   const currentLocationMutation = useCurrentLocation();
 
-  const stopCalibrationIndex = 10;
+  const stopCalibrationIndex = 30;
 
   const cancelCalibration = async () => {
     if (sub?.subscription && sub.sound) {
