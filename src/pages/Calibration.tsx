@@ -9,6 +9,8 @@ import { useCurrentLocation } from '../functions/mutations';
 import Button from '../components/atoms/Button';
 import { getCalibrationValue } from '../functions/functions';
 import Song from '../../assets/Testtrack.mp3';
+import colors from 'tailwindcss/colors';
+import stylings from '../../stylings';
 
 interface CalibrationProps {
   subscription: Pedometer.Subscription | null;
@@ -103,47 +105,51 @@ function Calibration() {
     <View>
       {sub ? (
         <Button buttonType="secondary" onPress={cancelCalibration}>
-          <Text className="text-white text-center text-lg">Abbrechen</Text>
+          Abbrechen
         </Button>
       ) : (
         <Button buttonType="secondary" onPress={startPedometer}>
-          <Text className="text-white text-center text-lg">
-            Start Calibration
-          </Text>
+          Start Calibration
         </Button>
       )}
-      {currentLocationMutation.isPending && <ActivityIndicator />}
+      {currentLocationMutation.isPending && (
+        <ActivityIndicator
+          className="mt-4 h-[100px]"
+          size="large"
+          color={stylings.colors['primary-color-light']}
+        />
+      )}
 
-      <MapView
-        className="h-36 w-full"
-        region={{
-          latitude: 47.811195,
-          longitude: 13.033229,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        {calibration.start &&
-          calibration.start.lat &&
-          calibration.start.lon && (
-            <Marker
-              coordinate={{
-                latitude: calibration.start.lat,
-                longitude: calibration.start.lon,
-              }}
-            />
-          )}
-        {calibration.end && calibration.end.lat && calibration.end.lon && (
-          <Marker
-            coordinate={{
-              latitude: calibration.end.lat,
-              longitude: calibration.end.lon,
-            }}
-          />
-        )}
-      </MapView>
+      {/*<MapView*/}
+      {/*  className="h-36 w-full"*/}
+      {/*  region={{*/}
+      {/*    latitude: 47.811195,*/}
+      {/*    longitude: 13.033229,*/}
+      {/*    latitudeDelta: 0.0922,*/}
+      {/*    longitudeDelta: 0.0421,*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  {calibration.start &&*/}
+      {/*    calibration.start.lat &&*/}
+      {/*    calibration.start.lon && (*/}
+      {/*      <Marker*/}
+      {/*        coordinate={{*/}
+      {/*          latitude: calibration.start.lat,*/}
+      {/*          longitude: calibration.start.lon,*/}
+      {/*        }}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  {calibration.end && calibration.end.lat && calibration.end.lon && (*/}
+      {/*    <Marker*/}
+      {/*      coordinate={{*/}
+      {/*        latitude: calibration.end.lat,*/}
+      {/*        longitude: calibration.end.lon,*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  )}*/}
+      {/*</MapView>*/}
 
-      <Text className="text-lg">Schritte: {steps}</Text>
+      <Text className="text-lg mt-4">Schritte: {steps}</Text>
       <Text>Meter: {getCalibrationValue(calibration.meters)}</Text>
       <Text>Umrechnungsfaktor: {getCalibrationValue(calibration.factors)}</Text>
     </View>
