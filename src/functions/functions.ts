@@ -1,12 +1,8 @@
 import * as Location from 'expo-location';
-import { Text } from 'react-native';
-import React from 'react';
+import { Pedometer } from 'expo-sensors';
+import { Audio, AVPlaybackSource } from 'expo-av';
 import { PhotonFeature } from '../../types/api-photon';
-import {
-  CurrentLocationType,
-  LocationProps,
-  PointsProps,
-} from '../../types/Types';
+import { LocationProps, PointsProps } from '../../types/Types';
 import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
 
 /*
@@ -134,6 +130,33 @@ export const valueOutput = (
   return `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
 };
 
+export async function pedometerCallback() {
+  const isAvailable = await Pedometer.isAvailableAsync();
+  if (!isAvailable) {
+    return null;
+  }
+  return Pedometer.watchStepCount;
+}
+
+export async function playSound(source: AVPlaybackSource) {
+  let sound: Audio.Sound | null = null;
+  sound = new Audio.Sound();
+
+  await sound.loadAsync(source);
+  await sound.playAsync();
+  await Audio.setAudioModeAsync({
+    playsInSilentModeIOS: true,
+  });
+  return sound;
+}
+
+export async function stopSound(sound: Audio.Sound) {
+  await sound.unloadAsync();
+  await Audio.setAudioModeAsync({
+    playsInSilentModeIOS: false,
+  });
+  return sound;
+}
 /*
 export function suggestionsHelper(
   points: PointsProps,
