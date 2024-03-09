@@ -21,16 +21,15 @@ function Suggestions({
   onLocationSuggestionClick,
   startOrDestination,
 }: SuggestionProps) {
-  const createKey = (suggestion: PhotonFeature, index: number) => {
+  const createKey = (suggestion: PhotonFeature) => {
     if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
       return (
         suggestion.properties.osm_type +
         suggestion.properties.osm_id +
-        index +
         startOrDestination
       );
     }
-    return index + startOrDestination;
+    return startOrDestination;
   };
 
   return (
@@ -41,7 +40,7 @@ function Suggestions({
     >
       {suggestions.map((suggestion, index) => (
         <ListItem
-          key={createKey(suggestion, index)}
+          key={createKey(suggestion)}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
         >
           {index + 1}. {suggestion.properties.name},
