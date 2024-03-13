@@ -170,6 +170,7 @@
           },
           "properties": {
             "type": "object",
+            "required": ["osm_id", "osm_type"],
             "properties": {
               "osm_id": {
                 "type": "integer",

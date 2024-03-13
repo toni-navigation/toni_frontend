@@ -9,8 +9,8 @@ export type PhotonFeature = {
         coordinates: Array<number>;
     };
     properties: {
-        osm_id?: number;
-        osm_type?: string;
+        osm_id: number;
+        osm_type: string;
         extent?: Array<number>;
         country?: string;
         osm_key?: string;
