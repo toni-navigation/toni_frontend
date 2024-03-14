@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
 import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import useUserStore from '../store/useUserStore';
-import { CurrentLocationType } from '../types/Types';
+import MapView, { Marker } from 'react-native-maps';
+
+import Song from '../../assets/Testtrack.mp3';
+import stylings from '../../stylings';
+import Button from '../components/atoms/Button';
+import { getCalibrationValue } from '../functions/functions';
 import {
   useCurrentLocation,
   usePedometer,
   useStartSound,
   useStopSound,
 } from '../functions/mutations';
-import Button from '../components/atoms/Button';
-import { getCalibrationValue } from '../functions/functions';
-import Song from '../../assets/Testtrack.mp3';
-import stylings from '../../stylings';
+import useUserStore from '../store/useUserStore';
+import { CurrentLocationType } from '../types/Types';
 
 interface CalibrationProps {
   subscription: Pedometer.Subscription | null;
@@ -85,6 +86,7 @@ function Calibration() {
             sound,
           };
         }
+
         return {
           subscription,
           sound,
@@ -92,6 +94,7 @@ function Calibration() {
       });
     }
   };
+
   // const locationError =
   //   'Beim Berechnen des Standorts ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
   // const pedometerError =

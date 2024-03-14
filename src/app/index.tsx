@@ -1,7 +1,8 @@
+import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
 import { useEffect } from 'react';
-import * as Location from 'expo-location';
 import { Text } from 'react-native';
+
 import useUserStore from '../store/useUserStore';
 
 export default function Index() {
@@ -35,6 +36,7 @@ export default function Index() {
           actions.setCurrentLocation(position);
         }
       );
+
       return () => watchPosition.remove();
     })();
   }, [actions, actions.setCurrentLocation]);
@@ -42,6 +44,7 @@ export default function Index() {
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;
   }
+
   // if (calibration.start === null || calibration.end === null) {
   //   return <Redirect href="/calibration" />;
   // }

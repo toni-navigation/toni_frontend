@@ -1,15 +1,16 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
-import { router } from 'expo-router';
-import useUserStore from '../store/useUserStore';
+
+import Button from '../components/atoms/Button';
+import ListItem from '../components/atoms/ListItem';
 import decodePolyline from '../functions/decodePolyline';
 import {
   distanceOfLatLon,
   getCalibrationValue,
   valueOutput,
 } from '../functions/functions';
-import Button from '../components/atoms/Button';
-import ListItem from '../components/atoms/ListItem';
+import useUserStore from '../store/useUserStore';
 
 function TripStep() {
   const { trip, calibration, currentLocation } = useUserStore();

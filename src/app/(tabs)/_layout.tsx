@@ -1,5 +1,6 @@
 import { Feather, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import React from 'react';
+
 import Navbar from '../../components/organisms/Navbar';
 
 const iconsArray = {

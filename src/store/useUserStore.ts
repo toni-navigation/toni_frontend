@@ -1,9 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { distanceOfLatLon } from '../functions/functions';
 import { CalibrationProps, CurrentLocationType } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
-import { distanceOfLatLon } from '../functions/functions';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
   factors: [],
@@ -41,12 +42,10 @@ const useUserStore = create<UserState>()(
       ...defaultUserState,
       actions: {
         setTrip: (trip: ValhallaProps | null) =>
-          set((state) => {
-            return {
+          set((state) => ({
               ...state,
               trip,
-            };
-          }),
+            })),
         setResetCalibration: () =>
           set((state) => ({
             ...state,
@@ -81,6 +80,7 @@ const useUserStore = create<UserState>()(
               newCalibration.meters.push(distanceInMeter);
               newCalibration.factors.push(distanceInMeter / steps);
             }
+
             return {
               ...state,
               calibration: newCalibration,

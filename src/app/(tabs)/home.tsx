@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { router } from 'expo-router';
+import { debounce } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -10,19 +11,19 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import { debounce } from 'lodash';
+
 import Button from '../../components/atoms/Button';
-import { suggestionHelper } from '../../functions/functions';
+import InputText from '../../components/atoms/InputText';
 import Suggestions from '../../components/organisms/Suggestions';
-import { PhotonFeature } from '../../types/api-photon';
-import useUserStore from '../../store/useUserStore';
+import { suggestionHelper } from '../../functions/functions';
 import {
   useReverseData,
   useSearchData,
   useTrip,
 } from '../../functions/mutations';
+import useUserStore from '../../store/useUserStore';
 import { LocationProps, PointsProps } from '../../types/Types';
-import InputText from '../../components/atoms/InputText';
+import { PhotonFeature } from '../../types/api-photon';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },

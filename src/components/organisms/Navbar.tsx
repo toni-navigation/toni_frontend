@@ -1,7 +1,8 @@
+import { Tabs } from 'expo-router';
 import React from 'react';
 import { useColorScheme } from 'react-native';
-import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import styling from '../../../stylings';
 
 interface NavbarProps {

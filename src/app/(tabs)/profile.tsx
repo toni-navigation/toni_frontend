@@ -1,7 +1,8 @@
-import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 import React from 'react';
-import Calibration from '../../pages/Calibration';
+import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
+
 import Button from '../../components/atoms/Button';
+import Calibration from '../../pages/Calibration';
 import useUserStore from '../../store/useUserStore';
 
 export default function Page() {

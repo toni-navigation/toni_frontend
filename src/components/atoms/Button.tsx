@@ -56,6 +56,7 @@ function Button({ children, onPress, buttonType }: ButtonProps) {
           : 'text-secondary-color-dark',
     },
   };
+
   return (
     <TouchableOpacity
       className={`h-20 flex justify-center py-2 px-4 rounded-[50px] mt-4 ${variant[buttonType].button}`}

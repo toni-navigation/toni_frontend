@@ -19,6 +19,7 @@ function ListItem({ children, onPress }: ListItemProps) {
       </TouchableOpacity>
     );
   }
+
   return (
     <View
       className="

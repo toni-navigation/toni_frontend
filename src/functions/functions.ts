@@ -1,9 +1,10 @@
+import { Audio, AVPlaybackSource } from 'expo-av';
 import * as Location from 'expo-location';
 import { Pedometer } from 'expo-sensors';
-import { Audio, AVPlaybackSource } from 'expo-av';
-import { PhotonFeature } from '../types/api-photon';
+
 import { LocationProps, PointsProps } from '../types/Types';
 import { ValhallaManeuverProps } from '../types/Valhalla-Types';
+import { PhotonFeature } from '../types/api-photon';
 
 /*
 const startHelper = (
@@ -45,6 +46,7 @@ export function suggestionHelper(
       suggestions: null,
     };
   }
+
   return newPoints;
 }
 
@@ -71,6 +73,7 @@ export function distanceOfLatLon(
   if (unit === 'N') {
     dist *= 0.8684;
   }
+
   return dist;
 }
 
@@ -95,6 +98,7 @@ export function getCalibrationValue(values: number[]) {
   if (values.length > 5) {
     return calculateMedian(values);
   }
+
   return values[values.length - 1];
 }
 export async function getCurrentPosition() {
@@ -106,6 +110,7 @@ export async function getCurrentPosition() {
   const location = await Location.getCurrentPositionAsync({
     accuracy: Location.Accuracy.High,
   });
+
   return {
     coords: {
       speed: location.coords.speed,
@@ -127,6 +132,7 @@ export const valueOutput = (
   if (factor) {
     return `${maneuver.instruction} ${maneuver.length * 1000} Meter, Schritte: ${Math.ceil((maneuver.length * 1000) / factor)}`;
   }
+
   return `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
 };
 
@@ -135,6 +141,7 @@ export async function pedometerCallback() {
   if (!isAvailable) {
     return null;
   }
+
   return Pedometer.watchStepCount;
 }
 
@@ -147,6 +154,7 @@ export async function playSound(source: AVPlaybackSource) {
   await Audio.setAudioModeAsync({
     playsInSilentModeIOS: true,
   });
+
   return sound;
 }
 
@@ -155,6 +163,7 @@ export async function stopSound(sound: Audio.Sound) {
   await Audio.setAudioModeAsync({
     playsInSilentModeIOS: false,
   });
+
   return sound;
 }
 /*

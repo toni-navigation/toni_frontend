@@ -1,18 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
 import { Audio, AVPlaybackSource } from 'expo-av';
 import { AccessibilityInfo } from 'react-native';
+
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
   fetchTripHandler,
 } from './fetch';
-import { CurrentLocationType, LocationProps } from '../types/Types';
 import {
   getCurrentPosition,
   pedometerCallback,
   playSound,
   stopSound,
 } from './functions';
+import { CurrentLocationType, LocationProps } from '../types/Types';
 
 export function useSearchData(currentLocation: CurrentLocationType) {
   return useMutation({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+
 import { ValhallaManeuverProps } from '../types/Valhalla-Types';
 
 interface Trip {

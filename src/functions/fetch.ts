@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { CurrentLocationType, LocationProps } from '../types/Types';
+
 import VALHALLA_CONFIG from '../../valhallaConfig';
+import { CurrentLocationType, LocationProps } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
 import { PhotonFeatureCollection } from '../types/api-photon';
 
@@ -25,6 +26,7 @@ export async function fetchSearchDataHandler(
   if (currentLocation) {
     url = `api/?q=${query}&lat=${currentLocation.coords.latitude}&lon=${currentLocation.coords.longitude}&limit=5&lang=de`;
   }
+
   return (
     await axiosPhotonInstance.get<PhotonFeatureCollection>(url, {
       timeout: 5000,
@@ -39,6 +41,7 @@ export const fetchTripHandler = async (
     ...VALHALLA_CONFIG,
     locations: points.map((point) => ({ ...point, type: 'break' })),
   };
+
   return (
     await axiosValhallaInstance.get<ValhallaProps>(
       `route?json=${JSON.stringify(searchJson)}&language=de-DE`,
