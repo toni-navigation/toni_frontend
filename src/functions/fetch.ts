@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { PhotonFeatureCollection } from 'src/services/api-photon';
 
 import { CurrentLocationType, LocationProps } from '@/types/Types';
 import { ValhallaProps } from '@/types/Valhalla-Types';
-import { PhotonFeatureCollection } from '@/types/api-photon';
 import { VALHALLA_CONFIG } from '@/valhallaConfig';
 
 const PHOTON_URL = 'https://photon.komoot.io';
@@ -10,14 +10,7 @@ const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';
 
 const axiosPhotonInstance = axios.create({ baseURL: PHOTON_URL });
 const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
-export async function fetchReverseDataHandler(latlon: LocationProps) {
-  return (
-    await axiosPhotonInstance.get<PhotonFeatureCollection>(
-      `reverse?lon=${latlon?.lon}&lat=${latlon?.lat}`,
-      { timeout: 5000 }
-    )
-  ).data;
-}
+
 export async function fetchSearchDataHandler(
   query: string,
   currentLocation: CurrentLocationType

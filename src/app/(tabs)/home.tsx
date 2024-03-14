@@ -11,6 +11,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { PhotonFeature } from 'src/services/api-photon';
 
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
@@ -19,7 +20,6 @@ import { suggestionHelper } from '@/functions/functions';
 import { useReverseData, useSearchData, useTrip } from '@/functions/mutations';
 import { useUserStore } from '@/store/useUserStore';
 import { LocationProps, PointsProps } from '@/types/Types';
-import { PhotonFeature } from '@/types/api-photon';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },
@@ -109,9 +109,12 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
+      if (!currentLocation) {
+        return;
+      }
       const startPosition = {
-        lat: currentLocation?.coords.latitude,
-        lon: currentLocation?.coords.longitude,
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
       };
       const data = await reverseData.mutateAsync(startPosition);
       const newPoints = { ...points };

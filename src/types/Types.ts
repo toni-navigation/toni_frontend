@@ -1,4 +1,4 @@
-import { PhotonFeatureCollection } from '@/types/api-photon';
+import { PhotonFeatureCollection } from 'src/services/api-photon';
 
 export interface LocationProps {
   lat?: number;

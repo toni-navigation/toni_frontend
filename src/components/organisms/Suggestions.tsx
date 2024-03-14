@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
+import { PhotonFeature } from 'src/services/api-photon';
 
 import { ListItem } from '@/components/atoms/ListItem';
-import { PhotonFeature } from '@/types/api-photon';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];
