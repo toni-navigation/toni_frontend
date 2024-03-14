@@ -1,19 +1,14 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
+import { router } from 'expo-router';
 import useUserStore from '../../store/useUserStore';
 import Button from '../components/atoms/Button';
 import ListItem from '../components/atoms/ListItem';
-import { router } from 'expo-router';
 import { getCalibrationValue, valueOutput } from '../functions/functions';
 
 function TripList() {
   const { trip, calibration, currentLocation } = useUserStore();
   const factor = getCalibrationValue(calibration.factors);
-
-  const createKey = (maneuver: ValhallaManeuverProps) => {
-    return `${maneuver.begin_shape_index}${maneuver.end_shape_index}List`;
-  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -22,7 +17,8 @@ function TripList() {
           currentLocation &&
           trip.trip &&
           trip.trip.legs[0].maneuvers.map((maneuver, index) => (
-            <ListItem key={createKey(maneuver)}>
+            // eslint-disable-next-line react/no-array-index-key
+            <ListItem key={index}>
               {index + 1}. {valueOutput(maneuver, factor)}
             </ListItem>
           ))}

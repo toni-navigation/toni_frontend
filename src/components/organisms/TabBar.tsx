@@ -21,6 +21,7 @@ function TabBar({ jumpTo, navigationState }: TabBarProps) {
           className={
             index === navigationState.index ? activeButton : inactiveButton
           }
+          key={route.key}
           onPress={() => jumpTo(route.key)}
         >
           <Text

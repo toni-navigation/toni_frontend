@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView } from 'react-native';
 import { PhotonFeature } from '../../../types/api-photon';
 import ListItem from '../atoms/ListItem';
 
@@ -21,17 +15,6 @@ function Suggestions({
   onLocationSuggestionClick,
   startOrDestination,
 }: SuggestionProps) {
-  const createKey = (suggestion: PhotonFeature) => {
-    if (suggestion.properties.osm_type && suggestion.properties.osm_id) {
-      return (
-        suggestion.properties.osm_type +
-        suggestion.properties.osm_id +
-        startOrDestination
-      );
-    }
-    return startOrDestination;
-  };
-
   return (
     <ScrollView
       className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black"
@@ -40,7 +23,7 @@ function Suggestions({
     >
       {suggestions.map((suggestion, index) => (
         <ListItem
-          key={createKey(suggestion)}
+          key={suggestion.properties.osm_type + suggestion.properties.osm_id}
           onPress={(): Promise<void> => onLocationSuggestionClick(suggestion)}
         >
           {index + 1}. {suggestion.properties.name},
