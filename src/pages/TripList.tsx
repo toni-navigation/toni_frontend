@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
-import useUserStore from '../../store/useUserStore';
+import useUserStore from '../store/useUserStore';
 import Button from '../components/atoms/Button';
 import ListItem from '../components/atoms/ListItem';
 import { getCalibrationValue, valueOutput } from '../functions/functions';

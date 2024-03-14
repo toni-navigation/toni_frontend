@@ -6,7 +6,7 @@ import {
   fetchSearchDataHandler,
   fetchTripHandler,
 } from './fetch';
-import { CurrentLocationType, LocationProps } from '../../types/Types';
+import { CurrentLocationType, LocationProps } from '../types/Types';
 import {
   getCurrentPosition,
   pedometerCallback,

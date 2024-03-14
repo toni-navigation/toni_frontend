@@ -3,12 +3,12 @@ import { SceneMap, TabView } from 'react-native-tab-view';
 import { router } from 'expo-router';
 import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 import useUserStore from '../store/useUserStore';
-import TripStep from '../src/pages/TripStep';
-import decodePolyline from '../src/functions/decodePolyline';
-import { distanceOfLatLon } from '../src/functions/functions';
-import TabBar from '../src/components/organisms/TabBar';
-import Button from '../src/components/atoms/Button';
-import TripList from '../src/pages/TripList';
+import TripStep from '../pages/TripStep';
+import decodePolyline from '../functions/decodePolyline';
+import { distanceOfLatLon } from '../functions/functions';
+import TabBar from '../components/organisms/TabBar';
+import Button from '../components/atoms/Button';
+import TripList from '../pages/TripList';
 
 function SecondRoute() {}
 

@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CalibrationProps, CurrentLocationType } from '../types/Types';
 import { ValhallaProps } from '../types/Valhalla-Types';
-import { distanceOfLatLon } from '../src/functions/functions';
+import { distanceOfLatLon } from '../functions/functions';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
   factors: [],
@@ -17,7 +17,7 @@ type UserState = {
 
   actions: {
     setTrip: (trip: ValhallaProps | null) => void;
-    //setCalibrationStart: (currentLocation: CurrentLocationType) => void;
+    // setCalibrationStart: (currentLocation: CurrentLocationType) => void;
     setCalibration: (
       start: CurrentLocationType,
       end: CurrentLocationType,

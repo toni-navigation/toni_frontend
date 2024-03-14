@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 import { router } from 'expo-router';
-import useUserStore from '../../store/useUserStore';
+import useUserStore from '../store/useUserStore';
 import decodePolyline from '../functions/decodePolyline';
 import {
   distanceOfLatLon,

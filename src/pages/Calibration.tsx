@@ -3,8 +3,8 @@ import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import MapView, { Marker } from 'react-native-maps';
 import { ActivityIndicator, Text, View } from 'react-native';
-import useUserStore from '../../store/useUserStore';
-import { CurrentLocationType } from '../../types/Types';
+import useUserStore from '../store/useUserStore';
+import { CurrentLocationType } from '../types/Types';
 import {
   useCurrentLocation,
   usePedometer,

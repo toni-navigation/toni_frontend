@@ -1,9 +1,9 @@
 import * as Location from 'expo-location';
 import { Pedometer } from 'expo-sensors';
 import { Audio, AVPlaybackSource } from 'expo-av';
-import { PhotonFeature } from '../../types/api-photon';
-import { LocationProps, PointsProps } from '../../types/Types';
-import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
+import { PhotonFeature } from '../types/api-photon';
+import { LocationProps, PointsProps } from '../types/Types';
+import { ValhallaManeuverProps } from '../types/Valhalla-Types';
 
 /*
 const startHelper = (

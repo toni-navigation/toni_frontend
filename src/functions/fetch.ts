@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { CurrentLocationType, LocationProps } from '../../types/Types';
+import { CurrentLocationType, LocationProps } from '../types/Types';
 import VALHALLA_CONFIG from '../../valhallaConfig';
-import { ValhallaProps } from '../../types/Valhalla-Types';
-import { PhotonFeatureCollection } from '../../types/api-photon';
+import { ValhallaProps } from '../types/Valhalla-Types';
+import { PhotonFeatureCollection } from '../types/api-photon';
 
 const PHOTON_URL = 'https://photon.komoot.io';
 const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';

@@ -11,18 +11,18 @@ import {
   View,
 } from 'react-native';
 import { debounce } from 'lodash';
-import Button from '../../src/components/atoms/Button';
-import { suggestionHelper } from '../../src/functions/functions';
-import Suggestions from '../../src/components/organisms/Suggestions';
+import Button from '../../components/atoms/Button';
+import { suggestionHelper } from '../../functions/functions';
+import Suggestions from '../../components/organisms/Suggestions';
 import { PhotonFeature } from '../../types/api-photon';
 import useUserStore from '../../store/useUserStore';
 import {
   useReverseData,
   useSearchData,
   useTrip,
-} from '../../src/functions/mutations';
+} from '../../functions/mutations';
 import { LocationProps, PointsProps } from '../../types/Types';
-import InputText from '../../src/components/atoms/InputText';
+import InputText from '../../components/atoms/InputText';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },
