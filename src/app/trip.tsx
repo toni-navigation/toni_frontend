@@ -1,17 +1,9 @@
-import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 
-import Button from '../components/atoms/Button';
-import TabBar from '../components/organisms/TabBar';
-import decodePolyline from '../functions/decodePolyline';
-import { distanceOfLatLon } from '../functions/functions';
-import TripList from '../pages/TripList';
-import TripStep from '../pages/TripStep';
-import useUserStore from '../store/useUserStore';
-
-function SecondRoute() {}
+import { TabBar } from '@/components/organisms/TabBar';
+import { TripList } from '@/pages/TripList';
+import { TripStep } from '@/pages/TripStep';
 
 const renderScene = SceneMap({
   first: TripList,
@@ -31,9 +23,7 @@ export default function TripPage() {
       renderScene={renderScene}
       onIndexChange={setIndex}
       style={{ backgroundColor: 'white' }}
-      renderTabBar={(props) => (
-        <TabBar jumpTo={props.jumpTo} navigationState={props.navigationState} />
-      )}
+      renderTabBar={TabBar}
     />
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable */
-const decodePolyline = (str: string, precision: number = 6) => {
+export const decodePolyline = (str: string, precision: number = 6) => {
   let index = 0;
   let lat = 0;
   let lng = 0;
@@ -52,5 +52,4 @@ const decodePolyline = (str: string, precision: number = 6) => {
   };
 };
 
-export default decodePolyline;
 /* eslint-disable */

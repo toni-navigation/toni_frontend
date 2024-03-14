@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 
-import { PhotonFeature } from '../../types/api-photon';
-import ListItem from '../atoms/ListItem';
+import { ListItem } from '@/components/atoms/ListItem';
+import { PhotonFeature } from '@/types/api-photon';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];
@@ -11,7 +11,7 @@ interface SuggestionProps {
   ) => Promise<void>;
   startOrDestination: 'start' | 'destination';
 }
-function Suggestions({
+export function Suggestions({
   suggestions,
   onLocationSuggestionClick,
   startOrDestination,
@@ -35,5 +35,3 @@ function Suggestions({
     </ScrollView>
   );
 }
-
-export default Suggestions;

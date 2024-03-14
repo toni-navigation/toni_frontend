@@ -30,17 +30,17 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
-    // 'no-restricted-imports': [
-    //   'error',
-    //   {
-    //     patterns: [
-    //       {
-    //         group: ['./', '../'],
-    //         message: "Use '@/...' alias instead.",
-    //       },
-    //     ],
-    //   },
-    // ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['./', '../'],
+            message: "Use '@/...' alias instead.",
+          },
+        ],
+      },
+    ],
 
     'padding-line-between-statements': [
       'error',
@@ -58,6 +58,17 @@ module.exports = {
     ],
     'react/jsx-key': 'error',
     'react/jsx-props-no-spreading': 'off',
+    'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
   },
+
+  overrides: [
+    {
+      files: ['src/app/**'],
+      rules: {
+        'import/no-default-export': 'off',
+        'import/prefer-default-export': 'error',
+      },
+    },
+  ],
 };

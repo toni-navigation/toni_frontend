@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-function Intro() {
+export function Intro() {
   return (
     <View>
       <Text className="text-4xl font-extrabold">Toni</Text>
@@ -15,5 +15,3 @@ function Intro() {
     </View>
   );
 }
-
-export default Intro;

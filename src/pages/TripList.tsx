@@ -2,12 +2,12 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import Button from '../components/atoms/Button';
-import ListItem from '../components/atoms/ListItem';
-import { getCalibrationValue, valueOutput } from '../functions/functions';
-import useUserStore from '../store/useUserStore';
+import { Button } from '@/components/atoms/Button';
+import { ListItem } from '@/components/atoms/ListItem';
+import { getCalibrationValue, valueOutput } from '@/functions/functions';
+import { useUserStore } from '@/store/useUserStore';
 
-function TripList() {
+export function TripList() {
   const { trip, calibration, currentLocation } = useUserStore();
   const factor = getCalibrationValue(calibration.factors);
 
@@ -32,5 +32,3 @@ function TripList() {
     </SafeAreaView>
   );
 }
-
-export default TripList;

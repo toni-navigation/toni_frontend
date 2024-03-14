@@ -1,4 +1,4 @@
-export default {
+export const VALHALLA_CONFIG = {
   costing: 'pedestrian',
   costing_options: {
     pedestrian: {

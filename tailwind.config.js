@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-import-module-exports,@typescript-eslint/no-var-requires
-const styling = require('./stylings');
+const styling = require('./src/stylings');
 
 module.exports = {
   content: [

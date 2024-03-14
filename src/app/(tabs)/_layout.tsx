@@ -1,7 +1,7 @@
 import { Feather, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import React from 'react';
 
-import Navbar from '../../components/organisms/Navbar';
+import { Navbar } from '@/components/organisms/Navbar';
 
 const iconsArray = {
   navigation: ({ color }: { color: string }) => (
@@ -14,6 +14,6 @@ const iconsArray = {
     <AntDesign name="user" size={24} color={color} />
   ),
 };
-export default function () {
+export default function Layout() {
   return <Navbar icons={iconsArray} />;
 }

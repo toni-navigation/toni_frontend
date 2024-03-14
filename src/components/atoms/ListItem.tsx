@@ -7,7 +7,7 @@ interface ListItemProps {
 }
 
 // TODO: Add accessibilityLabel and accessibilityRole
-function ListItem({ children, onPress }: ListItemProps) {
+export function ListItem({ children, onPress }: ListItemProps) {
   if (onPress) {
     return (
       <TouchableOpacity
@@ -29,5 +29,3 @@ function ListItem({ children, onPress }: ListItemProps) {
     </View>
   );
 }
-
-export default ListItem;

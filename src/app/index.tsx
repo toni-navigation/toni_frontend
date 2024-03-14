@@ -1,18 +1,18 @@
 import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
 import { useEffect } from 'react';
-import { Text } from 'react-native';
+import { Linking, Text } from 'react-native';
 
-import useUserStore from '../store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Index() {
-  const { currentLocation, actions, calibration } = useUserStore();
+  const { currentLocation, actions } = useUserStore();
 
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Permission to access location was denied');
+        await Linking.openSettings();
       }
       const watchPosition = await Location.watchPositionAsync(
         {

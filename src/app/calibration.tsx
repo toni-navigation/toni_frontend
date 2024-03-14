@@ -1,10 +1,10 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
+import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
-import Button from '../components/atoms/Button';
-import Intro from '../components/organisms/Intro';
-import Calibration from '../pages/Calibration';
+import { Button } from '@/components/atoms/Button';
+import { Intro } from '@/components/organisms/Intro';
+import { Calibration } from '@/pages/Calibration';
 
 export default function CalibrationPage() {
   const colorscheme = useColorScheme();

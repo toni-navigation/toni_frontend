@@ -1,4 +1,4 @@
-import { distanceOfLatLon } from './functions';
+import { distanceOfLatLon } from '@/functions/functions';
 
 test('distance of coordinates', () => {
   expect(

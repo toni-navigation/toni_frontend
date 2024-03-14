@@ -12,18 +12,14 @@ import {
   View,
 } from 'react-native';
 
-import Button from '../../components/atoms/Button';
-import InputText from '../../components/atoms/InputText';
-import Suggestions from '../../components/organisms/Suggestions';
-import { suggestionHelper } from '../../functions/functions';
-import {
-  useReverseData,
-  useSearchData,
-  useTrip,
-} from '../../functions/mutations';
-import useUserStore from '../../store/useUserStore';
-import { LocationProps, PointsProps } from '../../types/Types';
-import { PhotonFeature } from '../../types/api-photon';
+import { Button } from '@/components/atoms/Button';
+import { InputText } from '@/components/atoms/InputText';
+import { Suggestions } from '@/components/organisms/Suggestions';
+import { suggestionHelper } from '@/functions/functions';
+import { useReverseData, useSearchData, useTrip } from '@/functions/mutations';
+import { useUserStore } from '@/store/useUserStore';
+import { LocationProps, PointsProps } from '@/types/Types';
+import { PhotonFeature } from '@/types/api-photon';
 
 const INITIAL_POINTS: PointsProps = {
   start: { query: '' },
@@ -126,6 +122,7 @@ export default function Home() {
       newPoints.start.query = `${data.features[0].properties.street ?? ''} ${data.features[0].properties.housenumber ?? ''}, ${data.features[0].properties.postcode ?? ''} ${data.features[0].properties.city ?? ''}, ${data.features[0].properties.country ?? ''}`;
       setPoints(newPoints);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (tripData.isPending || reverseData.isPending) {

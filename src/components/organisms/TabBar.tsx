@@ -6,7 +6,7 @@ interface TabBarProps {
   jumpTo: (key: string) => void;
   navigationState: NavigationState<{ key: string; title: string }>;
 }
-function TabBar({ jumpTo, navigationState }: TabBarProps) {
+export function TabBar({ jumpTo, navigationState }: TabBarProps) {
   const activeButton =
     'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-light flex-1 mr-2';
   const inactiveButton =
@@ -36,5 +36,3 @@ function TabBar({ jumpTo, navigationState }: TabBarProps) {
     </View>
   );
 }
-
-export default TabBar;

@@ -2,17 +2,17 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 
-import Button from '../components/atoms/Button';
-import ListItem from '../components/atoms/ListItem';
-import decodePolyline from '../functions/decodePolyline';
+import { Button } from '@/components/atoms/Button';
+import { ListItem } from '@/components/atoms/ListItem';
+import { decodePolyline } from '@/functions/decodePolyline';
 import {
   distanceOfLatLon,
   getCalibrationValue,
   valueOutput,
-} from '../functions/functions';
-import useUserStore from '../store/useUserStore';
+} from '@/functions/functions';
+import { useUserStore } from '@/store/useUserStore';
 
-function TripStep() {
+export function TripStep() {
   const { trip, calibration, currentLocation } = useUserStore();
 
   const [currentManeuver, setCurrentManeuver] = React.useState(0);
@@ -78,5 +78,3 @@ function TripStep() {
     </SafeAreaView>
   );
 }
-
-export default TripStep;

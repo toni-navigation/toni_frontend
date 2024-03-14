@@ -3,7 +3,7 @@ import React from 'react';
 import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import styling from '../../../stylings';
+import styling from '@/stylings';
 
 interface NavbarProps {
   icons: {
@@ -13,7 +13,7 @@ interface NavbarProps {
   };
 }
 
-function Navbar({ icons }: NavbarProps) {
+export function Navbar({ icons }: NavbarProps) {
   const colorscheme = useColorScheme();
   const insets = useSafeAreaInsets();
 
@@ -110,5 +110,3 @@ function Navbar({ icons }: NavbarProps) {
     </Tabs>
   );
 }
-
-export default Navbar;

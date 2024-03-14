@@ -4,25 +4,25 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-import Song from '../../assets/Testtrack.mp3';
-import stylings from '../../stylings';
-import Button from '../components/atoms/Button';
-import { getCalibrationValue } from '../functions/functions';
+import Song from '@/assets/Testtrack.mp3';
+import { Button } from '@/components/atoms/Button';
+import { getCalibrationValue } from '@/functions/functions';
 import {
   useCurrentLocation,
   usePedometer,
   useStartSound,
   useStopSound,
-} from '../functions/mutations';
-import useUserStore from '../store/useUserStore';
-import { CurrentLocationType } from '../types/Types';
+} from '@/functions/mutations';
+import { useUserStore } from '@/store/useUserStore';
+import stylings from '@/stylings';
+import { CurrentLocationType } from '@/types/Types';
 
 interface CalibrationProps {
   subscription: Pedometer.Subscription | null;
   sound: Audio.Sound | null;
 }
 
-function Calibration() {
+export function Calibration() {
   const { calibration, actions } = useUserStore();
   const [steps, setSteps] = useState(0);
   const [sub, setSub] = useState<CalibrationProps | null>(null);
@@ -168,5 +168,3 @@ function Calibration() {
     </View>
   );
 }
-
-export default Calibration;

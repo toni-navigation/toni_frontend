@@ -3,7 +3,8 @@ import { Text, View } from 'react-native';
 interface ErrorProps {
   error: string;
 }
-function Error({ error }: ErrorProps) {
+
+export function Error({ error }: ErrorProps) {
   return (
     <View>
       <Text>Error</Text>
@@ -11,5 +12,3 @@ function Error({ error }: ErrorProps) {
     </View>
   );
 }
-
-export default Error;

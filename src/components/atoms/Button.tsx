@@ -11,7 +11,7 @@ interface ButtonProps {
     | 'secondaryOutline'
     | 'disabled';
 }
-function Button({ children, onPress, buttonType }: ButtonProps) {
+export function Button({ children, onPress, buttonType }: ButtonProps) {
   const colorscheme = useColorScheme();
   const variant = {
     disabled: { button: 'bg-disabled-color', text: 'text-white' },
@@ -73,5 +73,3 @@ function Button({ children, onPress, buttonType }: ButtonProps) {
     </TouchableOpacity>
   );
 }
-
-export default Button;

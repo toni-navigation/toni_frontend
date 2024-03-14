@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { distanceOfLatLon } from '../functions/functions';
-import { CalibrationProps, CurrentLocationType } from '../types/Types';
-import { ValhallaProps } from '../types/Valhalla-Types';
+import { distanceOfLatLon } from '@/functions/functions';
+import { CalibrationProps, CurrentLocationType } from '@/types/Types';
+import { ValhallaProps } from '@/types/Valhalla-Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
   factors: [],
@@ -36,16 +36,16 @@ const defaultUserState: Omit<UserState, 'actions'> = {
   calibration: INITIAL_CALIBRATION,
 };
 
-const useUserStore = create<UserState>()(
+export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       ...defaultUserState,
       actions: {
         setTrip: (trip: ValhallaProps | null) =>
           set((state) => ({
-              ...state,
-              trip,
-            })),
+            ...state,
+            trip,
+          })),
         setResetCalibration: () =>
           set((state) => ({
             ...state,
@@ -101,4 +101,3 @@ const useUserStore = create<UserState>()(
 );
 
 export const invalidateStore = () => useUserStore.persist.clearStorage();
-export default useUserStore;

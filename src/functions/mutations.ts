@@ -6,14 +6,14 @@ import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
   fetchTripHandler,
-} from './fetch';
+} from '@/functions/fetch';
 import {
   getCurrentPosition,
   pedometerCallback,
   playSound,
   stopSound,
-} from './functions';
-import { CurrentLocationType, LocationProps } from '../types/Types';
+} from '@/functions/functions';
+import { CurrentLocationType, LocationProps } from '@/types/Types';
 
 export function useSearchData(currentLocation: CurrentLocationType) {
   return useMutation({

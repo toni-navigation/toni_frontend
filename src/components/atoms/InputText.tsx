@@ -15,7 +15,7 @@ interface InputTextProps {
   value?: string;
 }
 
-function InputText({
+export function InputText({
   id,
   labelText,
   placeholder,
@@ -37,5 +37,3 @@ function InputText({
     </View>
   );
 }
-
-export default InputText;
