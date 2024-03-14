@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface ListItemProps {
   children: React.ReactNode;
@@ -8,8 +8,6 @@ interface ListItemProps {
 
 // TODO: Add accessibilityLabel and accessibilityRole
 function ListItem({ children, onPress }: ListItemProps) {
-  const colorscheme = useColorScheme();
-
   if (onPress) {
     return (
       <TouchableOpacity

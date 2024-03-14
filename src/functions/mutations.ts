@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { Audio, AVPlaybackSource } from 'expo-av';
+import { AccessibilityInfo } from 'react-native';
 import {
   fetchReverseDataHandler,
   fetchSearchDataHandler,
@@ -12,7 +13,6 @@ import {
   playSound,
   stopSound,
 } from './functions';
-import { AccessibilityInfo } from 'react-native';
 
 export function useSearchData(currentLocation: CurrentLocationType) {
   return useMutation({

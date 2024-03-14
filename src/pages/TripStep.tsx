@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { ValhallaManeuverProps } from '../../types/Valhalla-Types';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
+import { router } from 'expo-router';
 import useUserStore from '../../store/useUserStore';
 import decodePolyline from '../functions/decodePolyline';
 import {
@@ -10,7 +10,6 @@ import {
 } from '../functions/functions';
 import Button from '../components/atoms/Button';
 import ListItem from '../components/atoms/ListItem';
-import { router } from 'expo-router';
 
 function TripStep() {
   const { trip, calibration, currentLocation } = useUserStore();

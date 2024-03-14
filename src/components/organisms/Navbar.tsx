@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useColorScheme } from 'react-native';
-import { ViewStyle } from 'react-native';
 import { Tabs } from 'expo-router';
-import styling from '../../../stylings';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Orientation } from 'expo-screen-orientation';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import { OrientationChangeEvent } from 'expo-screen-orientation/src/ScreenOrientation.types';
+import styling from '../../../stylings';
 
 interface NavbarProps {
   icons: {
@@ -19,20 +15,6 @@ interface NavbarProps {
 function Navbar({ icons }: NavbarProps) {
   const colorscheme = useColorScheme();
   const insets = useSafeAreaInsets();
-  const [orientation, setOrientation] = useState<Orientation>();
-
-  const checkOrientation = async () => {
-    const currentOrientation = await ScreenOrientation.getOrientationAsync();
-    setOrientation(currentOrientation);
-  };
-  const handleOrientationChange = (o: OrientationChangeEvent) => {
-    setOrientation(o.orientationInfo.orientation);
-  };
-
-  useEffect(() => {
-    checkOrientation();
-    ScreenOrientation.addOrientationChangeListener(handleOrientationChange);
-  }, []);
 
   return (
     <Tabs

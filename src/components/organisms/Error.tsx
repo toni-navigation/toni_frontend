@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { AccessibilityInfo, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 interface ErrorProps {
   error: string;

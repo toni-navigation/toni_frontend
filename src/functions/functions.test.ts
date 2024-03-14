@@ -11,5 +11,5 @@ test('distance of coordinates', () => {
     )
   ).toBe(324.5192777035608);
 });
-//TODO add more tests
-//TODO test calibration if 0
+// TODO add more tests
+// TODO test calibration if 0

@@ -127,9 +127,9 @@ function Calibration() {
           color={stylings.colors['primary-color-light']}
         />
       )}
-      {/*{currentLocationMutation.isError && <Error error={locationError} />}*/}
-      {/*{pedometerMutation.isError && <Error error={pedometerError} />}*/}
-      {/*{startSoundMutation.isError && <Error error={soundError} />}*/}
+      {/* {currentLocationMutation.isError && <Error error={locationError} />} */}
+      {/* {pedometerMutation.isError && <Error error={pedometerError} />} */}
+      {/* {startSoundMutation.isError && <Error error={soundError} />} */}
       <MapView
         className="h-36 w-full"
         region={{
