@@ -8,6 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest",
+    "lint": "npm run lint:tsc && npm run lint:eslint",
+    "lint:tsc": "tsc --noemit",
+    "lint:eslint": "eslint './src/**/*.{ts,tsx}' --fix",
     "openapi": "openapi --input openapi.photon.json --output types/api-photon --useOptions"
   },
   "jest": {
