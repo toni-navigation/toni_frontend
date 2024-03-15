@@ -60,6 +60,15 @@
             "example": "tourism:museum"
           },
           {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "de"
+          },
+          {
             "name": "lon",
             "in": "query",
             "required": false,
@@ -117,9 +126,29 @@
             "example": "47.80741178491954"
           },
           {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Maximum number of features",
+            "example": "1"
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Maximum radius in km",
+            "example": "5000"
+          },
+          {
             "name": "distance_sort",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "boolean",
               "default": true

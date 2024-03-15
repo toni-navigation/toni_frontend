@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Audio, AVPlaybackSource } from 'expo-av';
 import { AccessibilityInfo } from 'react-native';
 
-import { fetchSearchDataHandler, fetchTripHandler } from '@/functions/fetch';
+import { fetchTripHandler } from '@/functions/fetch';
 import {
   getCurrentPosition,
   pedometerCallback,
@@ -10,14 +10,7 @@ import {
   stopSound,
 } from '@/functions/functions';
 import { PhotonService } from '@/services/api-photon';
-import { CurrentLocationType, LocationProps } from '@/types/Types';
-
-export function useSearchData(currentLocation: CurrentLocationType) {
-  return useMutation({
-    mutationKey: ['searchData'],
-    mutationFn: (data: string) => fetchSearchDataHandler(data, currentLocation),
-  });
-}
+import { LocationProps } from '@/types/Types';
 
 export function useReverseData() {
   return useMutation({

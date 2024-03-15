@@ -1,39 +1,19 @@
-import React from 'react';
-import {
-  NativeSyntheticEvent,
-  TextInput,
-  TextInputChangeEventData,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { forwardRef } from 'react';
+import { TextInput, useColorScheme, View } from 'react-native';
+import { TextInputProps } from 'react-native/Libraries/Components/TextInput/TextInput';
 
-interface InputTextProps {
-  id: string;
-  labelText: string;
-  placeholder: string;
-  onChange: (event: NativeSyntheticEvent<TextInputChangeEventData>) => void;
-  value?: string;
-}
+export const InputText = forwardRef<TextInput, TextInputProps>(
+  ({ className, ...props }, ref) => {
+    const colorscheme = useColorScheme();
 
-export function InputText({
-  id,
-  labelText,
-  placeholder,
-  value,
-  onChange,
-}: InputTextProps) {
-  const colorscheme = useColorScheme();
-
-  return (
-    <View>
-      <TextInput
-        accessibilityLabel={labelText}
-        accessibilityLabelledBy={id}
-        placeholder={placeholder}
-        value={value}
-        className={`border-2 rounded-full w-full p-4 mb-4 ${colorscheme === 'light' ? 'border-primary-color-light' : 'border-primary-color-dark'}`}
-        onChange={onChange}
-      />
-    </View>
-  );
-}
+    return (
+      <View>
+        <TextInput
+          ref={ref}
+          className={`border-2 rounded-full w-full p-4 mb-4 ${colorscheme === 'light' ? 'border-primary-color-light' : 'border-primary-color-dark'} ${className}`}
+          {...props}
+        />
+      </View>
+    );
+  }
+);

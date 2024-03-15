@@ -17,6 +17,7 @@ export class PhotonService {
         locationBiasScale,
         limit,
         osmTag,
+        lang,
         lon,
         lat,
     }: {
@@ -24,6 +25,7 @@ export class PhotonService {
         locationBiasScale?: string,
         limit?: number,
         osmTag?: string,
+        lang?: string,
         lon?: number,
         lat?: number,
     }): CancelablePromise<PhotonFeatureCollection> {
@@ -35,6 +37,7 @@ export class PhotonService {
                 'location_bias_scale': locationBiasScale,
                 'limit': limit,
                 'osm_tag': osmTag,
+                'lang': lang,
                 'lon': lon,
                 'lat': lat,
             },
@@ -48,10 +51,20 @@ export class PhotonService {
     public static reverse({
         lon,
         lat,
+        limit,
+        radius,
         distanceSort = true,
     }: {
         lon: number,
         lat: number,
+        /**
+         * Maximum number of features
+         */
+        limit?: number,
+        /**
+         * Maximum radius in km
+         */
+        radius?: number,
         distanceSort?: boolean,
     }): CancelablePromise<PhotonFeatureCollection> {
         return __request(OpenAPI, {
@@ -60,6 +73,8 @@ export class PhotonService {
             query: {
                 'lon': lon,
                 'lat': lat,
+                'limit': limit,
+                'radius': radius,
                 'distance_sort': distanceSort,
             },
         });

@@ -1,23 +1,19 @@
 import { router } from 'expo-router';
-import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  NativeSyntheticEvent,
   SafeAreaView,
   ScrollView,
   Text,
-  TextInputChangeEventData,
   useColorScheme,
   View,
 } from 'react-native';
 import { PhotonFeature } from 'src/services/api-photon';
 
 import { Button } from '@/components/atoms/Button';
-import { InputText } from '@/components/atoms/InputText';
-import { Suggestions } from '@/components/organisms/Suggestions';
-import { suggestionHelper } from '@/functions/functions';
-import { useReverseData, useSearchData, useTrip } from '@/functions/mutations';
+import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import { photonValue } from '@/functions/functions';
+import { useReverseData, useTrip } from '@/functions/mutations';
 import { useUserStore } from '@/store/useUserStore';
 import { LocationProps, PointsProps } from '@/types/Types';
 
@@ -29,11 +25,12 @@ const INITIAL_POINTS: PointsProps = {
 };
 export default function Home() {
   const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
+  const [origin, setOrigin] = useState<PhotonFeature>();
+  const [destination, setDestination] = useState<PhotonFeature>();
 
   const { actions, currentLocation } = useUserStore();
   const colorscheme = useColorScheme();
 
-  const searchData = useSearchData(currentLocation);
   const reverseData = useReverseData();
 
   const start = {
@@ -45,61 +42,6 @@ export default function Home() {
     points.destination.location,
   ];
   const tripData = useTrip();
-
-  const suggestionsHandlerDestination = async (query: string) => {
-    const data = await searchData.mutateAsync(query);
-    const newPoints = { ...points };
-    newPoints.destination.suggestions = data;
-    setPoints(newPoints);
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceFnDestination = useCallback(
-    debounce(suggestionsHandlerDestination, 500),
-    []
-  );
-
-  const suggestionsHandlerStart = async (query: string) => {
-    const data = await searchData.mutateAsync(query);
-    const newPoints = { ...points };
-    newPoints.start.suggestions = data;
-    setPoints(newPoints);
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceFnStart = useCallback(
-    debounce(suggestionsHandlerStart, 500),
-    []
-  );
-
-  const inputChangeDestinationHandler = (
-    event: NativeSyntheticEvent<TextInputChangeEventData>
-  ) => {
-    const newPoints = { ...points };
-    newPoints.destination.query = event.nativeEvent.text;
-    setPoints(newPoints);
-    debounceFnDestination(event.nativeEvent.text);
-  };
-
-  const inputChangeStartPositionHandler = (
-    event: NativeSyntheticEvent<TextInputChangeEventData>
-  ) => {
-    const newPoints = { ...points };
-    newPoints.start.query = event.nativeEvent.text;
-    setPoints(newPoints);
-    debounceFnStart(event.nativeEvent.text);
-  };
-  const locationSuggestionClickHandler = async (
-    locationSuggestion: PhotonFeature,
-    startOrDestination: string
-  ) => {
-    const newPoints = suggestionHelper(
-      locationSuggestion,
-      points,
-      startOrDestination
-    );
-    setPoints(newPoints);
-  };
 
   const startNavigationHandler = async () => {
     const data = await tripData.mutateAsync(tripPoints);
@@ -115,6 +57,7 @@ export default function Home() {
       const startPosition = {
         lat: currentLocation.coords.latitude,
         lon: currentLocation.coords.longitude,
+        radius: 0.05,
       };
       const data = await reverseData.mutateAsync(startPosition);
       const newPoints = { ...points };
@@ -122,7 +65,7 @@ export default function Home() {
         lat: data.features[0].geometry.coordinates[1],
         lon: data.features[0].geometry.coordinates[0],
       };
-      newPoints.start.query = `${data.features[0].properties.street ?? ''} ${data.features[0].properties.housenumber ?? ''}, ${data.features[0].properties.postcode ?? ''} ${data.features[0].properties.city ?? ''}, ${data.features[0].properties.country ?? ''}`;
+      newPoints.start.query = photonValue(data.features[0]);
       setPoints(newPoints);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,41 +91,19 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5 my-5">
-        <InputText
-          id="start"
-          value={points.start.query}
+      <ScrollView className="mx-5 my-5" keyboardShouldPersistTaps="always">
+        <GeocoderAutocomplete
+          value={origin}
           placeholder="Startpunkt eingeben"
-          labelText="Startpunkt"
-          onChange={inputChangeStartPositionHandler}
+          label="Startpunkt"
+          onChange={(value) => setOrigin(value)}
         />
-        {points.start.suggestions &&
-          points.start.suggestions.features.length > 0 && (
-            <Suggestions
-              suggestions={points.start.suggestions.features}
-              onLocationSuggestionClick={(suggestion: PhotonFeature) =>
-                locationSuggestionClickHandler(suggestion, 'start')
-              }
-              startOrDestination="start"
-            />
-          )}
-        <InputText
-          id="destination"
-          placeholder="Ziel eingeben"
-          labelText="Ziel"
-          value={points.destination.query}
-          onChange={inputChangeDestinationHandler}
+        <GeocoderAutocomplete
+          value={destination}
+          placeholder="Zielpunkt eingeben"
+          label="Zielpunkt"
+          onChange={(value) => setDestination(value)}
         />
-        {points.destination.suggestions &&
-          points.destination.suggestions.features.length > 0 && (
-            <Suggestions
-              suggestions={points.destination.suggestions.features}
-              onLocationSuggestionClick={(suggestion: PhotonFeature) =>
-                locationSuggestionClickHandler(suggestion, 'destination')
-              }
-              startOrDestination="destination"
-            />
-          )}
 
         <Button
           onPress={startNavigationHandler}

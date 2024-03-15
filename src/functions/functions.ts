@@ -21,7 +21,10 @@ const startHelper = (
   };
 };
 */
-
+export function photonValue(feature: PhotonFeature) {
+  return `${feature.properties.name} ${feature.properties.postcode} ${feature.properties.city},
+  ${feature.properties.country}`;
+}
 export function suggestionHelper(
   locationSuggestion: PhotonFeature,
   points: PointsProps,
