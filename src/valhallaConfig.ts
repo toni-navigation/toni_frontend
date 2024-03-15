@@ -20,6 +20,7 @@ export const VALHALLA_CONFIG = {
       use_lit: 0,
       transit_start_end_max_distance: 2145,
       transit_transfer_max_distance: 800,
+      type: 'blind',
     },
   },
   exclude_polygons: [],
