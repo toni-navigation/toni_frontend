@@ -1,6 +1,6 @@
 import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
@@ -9,7 +9,7 @@ import { Button } from '@/components/atoms/Button';
 import { getCalibrationValue } from '@/functions/functions';
 import {
   useCurrentLocation,
-  usePedometer,
+  usePedometerAvailable,
   useStartSound,
   useStopSound,
 } from '@/functions/mutations';
@@ -17,81 +17,55 @@ import { useUserStore } from '@/store/useUserStore';
 import stylings from '@/stylings';
 import { CurrentLocationType } from '@/types/Types';
 
-interface CalibrationProps {
-  subscription: Pedometer.Subscription | null;
-  sound: Audio.Sound | null;
-}
+const STOP_CALIBRATION_COUNT = 30;
 
 export function Calibration() {
   const { calibration, actions } = useUserStore();
   const [steps, setSteps] = useState(0);
-  const [sub, setSub] = useState<CalibrationProps | null>(null);
+
+  const pedometerSubscription = useRef<Pedometer.Subscription>();
+  const audioSound = useRef<Audio.Sound>();
 
   const currentLocationMutation = useCurrentLocation();
-  const pedometerMutation = usePedometer();
+  const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
 
-  const stopCalibrationIndex = 30;
+  const stopPedometer = async () => {
+    pedometerSubscription.current?.remove();
+    pedometerSubscription.current = undefined;
 
-  const cancelCalibration = async () => {
-    if (sub?.subscription) {
-      sub.subscription.remove();
-    }
-    if (sub?.sound) {
-      await stopSoundMutation.mutateAsync(sub.sound);
-    }
-    setSub(null);
-    setSteps(0);
-  };
-  const stopPedometer = async (
-    start: CurrentLocationType,
-    pedometerSteps: number,
-    subscription: Pedometer.Subscription | null,
-    sound: Audio.Sound
-  ) => {
-    if (subscription) {
-      subscription.remove();
-      await stopSoundMutation.mutateAsync(sound);
-      const currentPositionData = await currentLocationMutation.mutateAsync();
-      actions.setCalibration(start, currentPositionData, pedometerSteps);
-      setSub(null);
-      setSteps(0);
+    if (audioSound.current) {
+      await stopSoundMutation.mutateAsync(audioSound.current);
+      audioSound.current = undefined;
     }
   };
+
   const handlePedometerUpdate = async (
     start: CurrentLocationType,
-    result: Pedometer.PedometerResult,
-    subscription: Pedometer.Subscription | null,
-    sound: Audio.Sound
+    result: Pedometer.PedometerResult
   ) => {
     setSteps(result.steps);
-    if (result.steps >= stopCalibrationIndex) {
-      await stopPedometer(start, result.steps, subscription, sound);
+
+    if (result.steps >= STOP_CALIBRATION_COUNT) {
+      await stopPedometer();
+      const currentPositionData = await currentLocationMutation.mutateAsync();
+
+      actions.addCalibration(start, currentPositionData, result.steps);
     }
   };
+
   const startPedometer = async () => {
+    setSteps(0);
     const sound = await startSoundMutation.mutateAsync(Song);
     const currentPositionData = await currentLocationMutation.mutateAsync();
-    const pedometerCallback = await pedometerMutation.mutateAsync();
-    if (pedometerCallback) {
-      const subscription = pedometerCallback((result) =>
-        handlePedometerUpdate(currentPositionData, result, subscription, sound)
-      );
-      setSub((prevState) => {
-        if (prevState) {
-          return {
-            ...prevState,
-            subscription,
-            sound,
-          };
-        }
+    const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
 
-        return {
-          subscription,
-          sound,
-        };
-      });
+    if (pedometerAvailable) {
+      pedometerSubscription.current = Pedometer.watchStepCount((result) =>
+        handlePedometerUpdate(currentPositionData, result)
+      );
+      audioSound.current = sound;
     }
   };
 
@@ -103,15 +77,15 @@ export function Calibration() {
   //   'SoundError: Es ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
   return (
     <View>
-      {sub ? (
-        <Button buttonType="secondary" onPress={cancelCalibration}>
+      {pedometerSubscription.current && audioSound.current ? (
+        <Button buttonType="secondary" onPress={stopPedometer}>
           Abbrechen
         </Button>
       ) : (
         <Button
           buttonType={
             currentLocationMutation.isPending ||
-            pedometerMutation.isPending ||
+            pedometerAvailableMutation.isPending ||
             startSoundMutation.isPending
               ? 'disabled'
               : 'secondary'
@@ -122,7 +96,7 @@ export function Calibration() {
         </Button>
       )}
       {(currentLocationMutation.isPending ||
-        pedometerMutation.isPending ||
+        pedometerAvailableMutation.isPending ||
         startSoundMutation.isPending) && (
         <ActivityIndicator
           className="mt-4 h-[100px]"

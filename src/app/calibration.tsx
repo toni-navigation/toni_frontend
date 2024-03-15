@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 

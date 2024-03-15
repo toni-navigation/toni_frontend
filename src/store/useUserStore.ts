@@ -18,14 +18,13 @@ type UserState = {
 
   actions: {
     setTrip: (trip: ValhallaProps | null) => void;
-    // setCalibrationStart: (currentLocation: CurrentLocationType) => void;
-    setCalibration: (
+    addCalibration: (
       start: CurrentLocationType,
       end: CurrentLocationType,
       steps: number
     ) => void;
     setCurrentLocation: (currentLocation: CurrentLocationType) => void;
-    setResetCalibration: () => void;
+    resetCalibration: () => void;
     resetStore: () => void;
   };
 };
@@ -46,7 +45,8 @@ export const useUserStore = create<UserState>()(
             ...state,
             trip,
           })),
-        setResetCalibration: () =>
+
+        resetCalibration: () =>
           set((state) => ({
             ...state,
             calibration: {
@@ -54,19 +54,11 @@ export const useUserStore = create<UserState>()(
               meters: [],
             },
           })),
-        setCalibration: (start, end, steps) =>
+
+        addCalibration: (start, end, steps) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
-            newCalibration.start = {
-              lat: start?.coords.latitude,
-              lon: start?.coords.longitude,
-              accuracy: start?.coords.accuracy ?? undefined,
-            };
-            newCalibration.end = {
-              lat: end?.coords.latitude,
-              lon: end?.coords.longitude,
-              accuracy: end?.coords.accuracy ?? undefined,
-            };
+
             if (start && end) {
               const distance = distanceOfLatLon(
                 start.coords.latitude,

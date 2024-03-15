@@ -1,6 +1,5 @@
 import { Audio, AVPlaybackSource } from 'expo-av';
 import * as Location from 'expo-location';
-import { Pedometer } from 'expo-sensors';
 import { PhotonFeature } from 'src/services/api-photon';
 
 import { LocationProps, PointsProps } from '@/types/Types';
@@ -138,15 +137,6 @@ export const valueOutput = (
 
   return `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
 };
-
-export async function pedometerCallback() {
-  const isAvailable = await Pedometer.isAvailableAsync();
-  if (!isAvailable) {
-    return null;
-  }
-
-  return Pedometer.watchStepCount;
-}
 
 export async function playSound(source: AVPlaybackSource) {
   let sound: Audio.Sound | null = null;

@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { Audio, AVPlaybackSource } from 'expo-av';
+import { Pedometer } from 'expo-sensors';
 import { AccessibilityInfo } from 'react-native';
 
 import { fetchTripHandler } from '@/functions/fetch';
 import {
   getCurrentPosition,
-  pedometerCallback,
   playSound,
   stopSound,
 } from '@/functions/functions';
@@ -21,21 +21,18 @@ export function useReverseData() {
 
 export function useTrip() {
   return useMutation({
-    mutationKey: ['trip'],
     mutationFn: (points: (LocationProps | undefined | null)[]) =>
       fetchTripHandler(points),
   });
 }
 export function useCurrentLocation() {
   return useMutation({
-    mutationKey: ['currentLocation'],
     mutationFn: getCurrentPosition,
   });
 }
-export function usePedometer() {
+export function usePedometerAvailable() {
   return useMutation({
-    mutationKey: ['pedometer'],
-    mutationFn: pedometerCallback,
+    mutationFn: Pedometer.isAvailableAsync,
     onError: (error: Error) => {
       AccessibilityInfo.announceForAccessibility(error.message);
     },
@@ -44,14 +41,12 @@ export function usePedometer() {
 
 export function useStartSound() {
   return useMutation({
-    mutationKey: ['sound'],
     mutationFn: (source: AVPlaybackSource) => playSound(source),
   });
 }
 
 export function useStopSound() {
   return useMutation({
-    mutationKey: ['sound'],
     mutationFn: (sound: Audio.Sound) => stopSound(sound),
   });
 }

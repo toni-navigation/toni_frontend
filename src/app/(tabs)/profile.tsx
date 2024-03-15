@@ -22,7 +22,7 @@ export default function Page() {
         <Button
           buttonType="secondary"
           onPress={() => {
-            actions.setResetCalibration();
+            actions.resetCalibration();
           }}
         >
           Kalibrierung zurücksetzen
