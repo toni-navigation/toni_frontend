@@ -55,7 +55,7 @@ export function GeocoderAutocomplete({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
-      {data && data.features.length > 0 && (
+      {data && data.features.length > 0 && focused && (
         <Suggestions
           suggestions={data.features}
           onLocationSuggestionClick={(suggestion: PhotonFeature) => {

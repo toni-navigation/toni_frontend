@@ -108,12 +108,7 @@ export default function Home() {
         <Button
           onPress={startNavigationHandler}
           buttonType={
-            points.start.location === undefined ||
-            points.destination.location === undefined ||
-            points.start.query === undefined ||
-            points.destination.query === undefined ||
-            points.start.query?.length < 2 ||
-            points.destination.query?.length < 2
+            origin === undefined || destination === undefined
               ? 'disabled'
               : 'primary'
           }
