@@ -60,13 +60,7 @@ export default function Home() {
         radius: 0.05,
       };
       const data = await reverseData.mutateAsync(startPosition);
-      const newPoints = { ...points };
-      newPoints.start.location = {
-        lat: data.features[0].geometry.coordinates[1],
-        lon: data.features[0].geometry.coordinates[0],
-      };
-      newPoints.start.query = photonValue(data.features[0]);
-      setPoints(newPoints);
+      setOrigin(data.features[0]);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
