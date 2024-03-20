@@ -7,12 +7,10 @@ import MapView, { Marker } from 'react-native-maps';
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
 import { getCalibrationValue } from '@/functions/functions';
-import {
-  useCurrentLocation,
-  usePedometerAvailable,
-  useStartSound,
-  useStopSound,
-} from '@/functions/mutations';
+import { useCurrentLocation } from '@/mutations/useCurrentLocation';
+import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
+import { useStartSound } from '@/mutations/useStartSound';
+import { useStopSound } from '@/mutations/useStopSound';
 import { useUserStore } from '@/store/useUserStore';
 import stylings from '@/stylings';
 import { CurrentLocationType } from '@/types/Types';

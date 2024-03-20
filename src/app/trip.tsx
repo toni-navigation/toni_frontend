@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -6,9 +5,11 @@ import { SceneMap, TabView } from 'react-native-tab-view';
 
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
-import { fetchTripHandler } from '@/functions/fetch';
+import { parseCoordinate } from '@/functions/functions';
 import { TripList } from '@/pages/TripList';
 import { TripStep } from '@/pages/TripStep';
+import { useTrip } from '@/queries/useTrip';
+import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
   origin: string;
@@ -23,21 +24,12 @@ export default function TripPage() {
 
   const tripData = useLocalSearchParams() as SearchParamType;
 
-  const restructureTripData = [
-    {
-      lat: Number(tripData.origin.split(',')[1]),
-      lon: Number(tripData.origin.split(',')[0]),
-    },
-    {
-      lat: Number(tripData.destination.split(',')[1]),
-      lon: Number(tripData.destination.split(',')[0]),
-    },
+  const restructureTripData: LocationProps[] = [
+    parseCoordinate(tripData.origin),
+    parseCoordinate(tripData.destination),
   ];
 
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ['valhalla', restructureTripData],
-    queryFn: () => fetchTripHandler(restructureTripData),
-  });
+  const { data, isPending, isError, error } = useTrip(restructureTripData);
 
   if (isPending) {
     return (

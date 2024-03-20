@@ -11,7 +11,7 @@ import { PhotonFeature } from 'src/services/api-photon';
 
 import { Button } from '@/components/atoms/Button';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { useReverseData } from '@/functions/mutations';
+import { useReverseData } from '@/mutations/useReverseData';
 import { useUserStore } from '@/store/useUserStore';
 
 export default function Home() {
