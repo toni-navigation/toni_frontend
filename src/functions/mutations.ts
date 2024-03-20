@@ -3,14 +3,12 @@ import { Audio, AVPlaybackSource } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import { AccessibilityInfo } from 'react-native';
 
-import { fetchTripHandler } from '@/functions/fetch';
 import {
   getCurrentPosition,
   playSound,
   stopSound,
 } from '@/functions/functions';
 import { PhotonService } from '@/services/api-photon';
-import { LocationProps } from '@/types/Types';
 
 export function useReverseData() {
   return useMutation({
@@ -19,12 +17,6 @@ export function useReverseData() {
   });
 }
 
-export function useTrip() {
-  return useMutation({
-    mutationFn: (points: (LocationProps | undefined | null)[]) =>
-      fetchTripHandler(points),
-  });
-}
 export function useCurrentLocation() {
   return useMutation({
     mutationFn: getCurrentPosition,

@@ -1,53 +1,53 @@
 export interface ValhallaProps {
-  trip: {
-    locations: {
-      type: string;
-      lat: number;
-      lon: number;
-      side_of_street: string;
-      original_index: number;
-    }[];
-
-    legs: [
-      {
-        maneuvers: ValhallaManeuverProps[];
-        summary: {
-          has_time_restrictions: boolean;
-          has_toll: boolean;
-          has_highway: boolean;
-          has_ferry: boolean;
-          min_lat: number;
-          min_lon: number;
-          max_lat: number;
-          max_lon: number;
-          time: number;
-          length: number;
-          cost: number;
-        };
-        shape: string;
-      },
-    ];
-    summary: {
-      has_time_restrictions: boolean;
-      has_toll: boolean;
-      has_highway: boolean;
-      has_ferry: boolean;
-      min_lat: number;
-      min_lon: number;
-      max_lat: number;
-      max_lon: number;
-      time: number;
-      length: number;
-      cost: number;
-    };
-    status_message: string;
-    status: number;
-    units: string;
-    language: string;
-  };
+  trip: TripProps;
   id: string;
 }
+export interface TripProps {
+  locations: {
+    type: string;
+    lat: number;
+    lon: number;
+    side_of_street: string;
+    original_index: number;
+  }[];
 
+  legs: [
+    {
+      maneuvers: ValhallaManeuverProps[];
+      summary: {
+        has_time_restrictions: boolean;
+        has_toll: boolean;
+        has_highway: boolean;
+        has_ferry: boolean;
+        min_lat: number;
+        min_lon: number;
+        max_lat: number;
+        max_lon: number;
+        time: number;
+        length: number;
+        cost: number;
+      };
+      shape: string;
+    },
+  ];
+  summary: {
+    has_time_restrictions: boolean;
+    has_toll: boolean;
+    has_highway: boolean;
+    has_ferry: boolean;
+    min_lat: number;
+    min_lon: number;
+    max_lat: number;
+    max_lon: number;
+    time: number;
+    length: number;
+    cost: number;
+  };
+  status_message: string;
+  status: number;
+  units: string;
+  language: string;
+}
 export interface ValhallaManeuverProps {
   type: number;
   instruction: string;

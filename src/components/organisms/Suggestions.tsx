@@ -8,18 +8,16 @@ import { photonValue } from '@/functions/functions';
 interface SuggestionProps {
   suggestions: PhotonFeature[];
   onLocationSuggestionClick: (newValue: PhotonFeature) => void;
-  startOrDestination: 'start' | 'destination';
 }
 export function Suggestions({
   suggestions,
   onLocationSuggestionClick,
-  startOrDestination,
 }: SuggestionProps) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
       className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black"
-      accessibilityLabel={`Liste der Vorschläge für ${startOrDestination === 'start' ? 'Start' : 'Ziel'}`}
+      accessibilityLabel="Liste der Vorschläge"
       accessibilityRole="list"
     >
       {suggestions.map((suggestion, index) => (
