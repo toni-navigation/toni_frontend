@@ -51,7 +51,7 @@ export function GeocoderAutocomplete({
         value={inputValue}
         accessibilityLabel={label}
         placeholder={placeholder}
-        onChange={(event) => setInputValue(event.nativeEvent.text)}
+        onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
@@ -59,10 +59,10 @@ export function GeocoderAutocomplete({
         <Suggestions
           suggestions={data.features}
           onLocationSuggestionClick={(suggestion: PhotonFeature) => {
+            setFocused(false);
             onChange(suggestion);
             ref.current?.blur();
           }}
-          startOrDestination="start"
         />
       )}
     </>
