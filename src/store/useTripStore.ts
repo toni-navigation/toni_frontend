@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -25,9 +26,20 @@ export const useTripStore = create<TripState>()(
     (set) => ({
       ...defaultTripState,
       actions: {
-        resetTripStore: () => set(defaultTripState),
-        changeOrigin: (origin: PhotonFeature) => set({ origin }),
-        changeDestination: (destination: PhotonFeature) => set({ destination }),
+        resetTripStore: () =>
+          set(produce((state) => ({ ...state, ...defaultTripState }))),
+        changeOrigin: (origin: PhotonFeature) =>
+          set(
+            produce((state) => {
+              state.origin = origin;
+            })
+          ),
+        changeDestination: (destination: PhotonFeature) =>
+          set(
+            produce((state) => {
+              state.destination = destination;
+            })
+          ),
       },
     }),
     {

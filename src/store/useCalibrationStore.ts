@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -32,29 +33,29 @@ export const useCalibrationStore = create<CalibrationState>()(
       ...defaultCalibrationState,
       actions: {
         addCalibration: (start, end, steps) =>
-          set((state) => {
-            const newCalibration = { ...state.calibration };
+          set(
+            produce((state) => {
+              const newCalibration = { ...state.calibration };
 
-            if (start && end) {
-              const distance = distanceOfLatLon(
-                start.coords.latitude,
-                start.coords.longitude,
-                end.coords.latitude,
-                end.coords.longitude,
-                'K'
-              );
-              const distanceInMeter = distance * 1000;
+              if (start && end) {
+                const distance = distanceOfLatLon(
+                  start.coords.latitude,
+                  start.coords.longitude,
+                  end.coords.latitude,
+                  end.coords.longitude,
+                  'K'
+                );
+                const distanceInMeter = distance * 1000;
 
-              newCalibration.meters.push(distanceInMeter);
-              newCalibration.factors.push(distanceInMeter / steps);
-            }
+                newCalibration.meters.push(distanceInMeter);
+                newCalibration.factors.push(distanceInMeter / steps);
+              }
 
-            return {
-              ...state,
-              calibration: newCalibration,
-            };
-          }),
-        resetCalibrationStore: () => set(defaultCalibrationState),
+              state.calibration = newCalibration;
+            })
+          ),
+        resetCalibrationStore: () =>
+          set(produce((state) => ({ ...state, ...defaultCalibrationState }))),
       },
     }),
     {

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -22,9 +23,16 @@ export const useCurrentLocationStore = create<CurrentLocationState>()(
       ...defaultCurrentLocationState,
       actions: {
         updateCurrentLocation: (currentLocation) =>
-          set((state) => ({ ...state, currentLocation })),
+          set(
+            produce((state) => {
+              state.currentLocation = currentLocation;
+            })
+          ),
 
-        resetCurrentLocationStore: () => set(defaultCurrentLocationState),
+        resetCurrentLocationStore: () =>
+          set(
+            produce((state) => ({ ...state, ...defaultCurrentLocationState }))
+          ),
       },
     }),
     {
