@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,18 +7,24 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import { PhotonFeature } from 'src/services/api-photon';
 
 import { Button } from '@/components/atoms/Button';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { useReverseData } from '@/mutations/useReverseData';
-import { useUserStore } from '@/store/useUserStore';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useTripStore } from '@/store/useTripStore';
 
 export default function Home() {
-  const [origin, setOrigin] = useState<PhotonFeature>();
-  const [destination, setDestination] = useState<PhotonFeature>();
+  const { changeOrigin, changeDestination } = useTripStore(
+    (state) => state.actions
+  );
+  const origin = useTripStore((state) => state.origin);
+  const destination = useTripStore((state) => state.destination);
 
-  const { currentLocation } = useUserStore();
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+
   const colorscheme = useColorScheme();
 
   const reverseData = useReverseData();
@@ -45,7 +51,7 @@ export default function Home() {
         radius: 0.05,
       };
       const data = await reverseData.mutateAsync(startPosition);
-      setOrigin(data.features[0]);
+      changeOrigin(data.features[0]);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -67,13 +73,13 @@ export default function Home() {
           value={origin}
           placeholder="Startpunkt eingeben"
           label="Startpunkt"
-          onChange={(value) => setOrigin(value)}
+          onChange={(value) => changeOrigin(value)}
         />
         <GeocoderAutocomplete
           value={destination}
           placeholder="Zielpunkt eingeben"
           label="Zielpunkt"
-          onChange={(value) => setDestination(value)}
+          onChange={(value) => changeDestination(value)}
         />
 
         <Button

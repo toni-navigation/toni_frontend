@@ -4,57 +4,33 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { distanceOfLatLon } from '@/functions/functions';
 import { CalibrationProps, CurrentLocationType } from '@/types/Types';
-import { ValhallaProps } from '@/types/Valhalla-Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
   factors: [],
   meters: [],
 };
 
-type UserState = {
+type CalibrationState = {
   calibration: CalibrationProps;
-  trip: ValhallaProps | null | undefined;
-  currentLocation: CurrentLocationType;
-
   actions: {
-    setTrip: (trip: ValhallaProps | null) => void;
     addCalibration: (
       start: CurrentLocationType,
       end: CurrentLocationType,
       steps: number
     ) => void;
-    setCurrentLocation: (currentLocation: CurrentLocationType) => void;
-    resetCalibration: () => void;
-    resetStore: () => void;
+    resetCalibrationStore: () => void;
   };
 };
 
-const defaultUserState: Omit<UserState, 'actions'> = {
-  trip: undefined,
-  currentLocation: undefined,
+const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
   calibration: INITIAL_CALIBRATION,
 };
 
-export const useUserStore = create<UserState>()(
+export const useCalibrationStore = create<CalibrationState>()(
   persist(
     (set) => ({
-      ...defaultUserState,
+      ...defaultCalibrationState,
       actions: {
-        setTrip: (trip: ValhallaProps | null) =>
-          set((state) => ({
-            ...state,
-            trip,
-          })),
-
-        resetCalibration: () =>
-          set((state) => ({
-            ...state,
-            calibration: {
-              factors: [],
-              meters: [],
-            },
-          })),
-
         addCalibration: (start, end, steps) =>
           set((state) => {
             const newCalibration = { ...state.calibration };
@@ -78,13 +54,11 @@ export const useUserStore = create<UserState>()(
               calibration: newCalibration,
             };
           }),
-        setCurrentLocation: (currentLocation) =>
-          set((state) => ({ ...state, currentLocation })),
-        resetStore: () => set(defaultUserState),
+        resetCalibrationStore: () => set(defaultCalibrationState),
       },
     }),
     {
-      name: `USER_STORE`,
+      name: `CALIBRATION_STORE`,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: ({ actions, ...rest }) => rest,
       version: 1,
@@ -92,4 +66,5 @@ export const useUserStore = create<UserState>()(
   )
 );
 
-export const invalidateStore = () => useUserStore.persist.clearStorage();
+export const invalidateCalibrationStore = () =>
+  useCalibrationStore.persist.clearStorage();

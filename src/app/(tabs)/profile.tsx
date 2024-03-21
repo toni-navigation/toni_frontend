@@ -3,11 +3,13 @@ import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Calibration } from '@/pages/Calibration';
-import { useUserStore } from '@/store/useUserStore';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 export default function Page() {
-  const { actions, calibration } = useUserStore();
-
+  const { resetCalibrationStore } = useCalibrationStore(
+    (state) => state.actions
+  );
+  const calibration = useCalibrationStore((state) => state.calibration);
   const colorscheme = useColorScheme();
 
   return (
@@ -22,7 +24,7 @@ export default function Page() {
         <Button
           buttonType="secondary"
           onPress={() => {
-            actions.resetCalibration();
+            resetCalibrationStore();
           }}
         >
           Kalibrierung zurücksetzen

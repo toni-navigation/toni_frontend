@@ -10,11 +10,15 @@ import {
   getCalibrationValue,
   valueOutput,
 } from '@/functions/functions';
-import { useUserStore } from '@/store/useUserStore';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
 export function TripStep({ data }: { data: TripProps }) {
-  const { calibration, currentLocation } = useUserStore();
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+  const calibration = useCalibrationStore((state) => state.calibration);
 
   const [currentManeuver, setCurrentManeuver] = React.useState(0);
   const factor = getCalibrationValue(calibration.factors);
