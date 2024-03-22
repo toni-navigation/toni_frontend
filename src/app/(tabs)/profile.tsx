@@ -1,8 +1,8 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 
+import { Calibration } from '@/components/Calibration';
 import { Button } from '@/components/atoms/Button';
-import { Calibration } from '@/pages/Calibration';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 export default function Page() {

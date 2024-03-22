@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 
+import { TripList } from '@/components/TripList';
+import { TripStep } from '@/components/TripStep';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
 import { parseCoordinate } from '@/functions/functions';
-import { TripList } from '@/pages/TripList';
-import { TripStep } from '@/pages/TripStep';
 import { useTrip } from '@/queries/useTrip';
 import { LocationProps } from '@/types/Types';
 
