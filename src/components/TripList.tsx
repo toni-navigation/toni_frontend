@@ -11,16 +11,14 @@ export function TripList({ data }: { data: TripProps }) {
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="mx-5 my-5">
-        {
-          // currentLocation &&
-          data &&
-            data.legs[0].maneuvers.map((maneuver, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <ListItem key={index}>
-                {index + 1}. {valueOutput(maneuver, 1)}
-              </ListItem>
-            ))
-        }
+        {data.legs[0].maneuvers.map((maneuver, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <ListItem key={index}>
+            <Text>
+              {index + 1}. {valueOutput(maneuver, 0)}
+            </Text>
+          </ListItem>
+        ))}
       </ScrollView>
       <View className="mx-5">
         <Button onPress={() => router.back()} buttonType="secondary">
