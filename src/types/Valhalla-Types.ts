@@ -11,25 +11,7 @@ export interface TripProps {
     original_index: number;
   }[];
 
-  legs: [
-    {
-      maneuvers: ValhallaManeuverProps[];
-      summary: {
-        has_time_restrictions: boolean;
-        has_toll: boolean;
-        has_highway: boolean;
-        has_ferry: boolean;
-        min_lat: number;
-        min_lon: number;
-        max_lat: number;
-        max_lon: number;
-        time: number;
-        length: number;
-        cost: number;
-      };
-      shape: string;
-    },
-  ];
+  legs: ValhallaLegProps[];
   summary: {
     has_time_restrictions: boolean;
     has_toll: boolean;
@@ -63,4 +45,22 @@ export interface ValhallaManeuverProps {
   end_shape_index: number;
   travel_mode: string;
   travel_type: string;
+}
+
+export interface ValhallaLegProps {
+  maneuvers: ValhallaManeuverProps[];
+  summary: {
+    has_time_restrictions: boolean;
+    has_toll: boolean;
+    has_highway: boolean;
+    has_ferry: boolean;
+    min_lat: number;
+    min_lon: number;
+    max_lat: number;
+    max_lon: number;
+    time: number;
+    length: number;
+    cost: number;
+  };
+  shape: string;
 }
