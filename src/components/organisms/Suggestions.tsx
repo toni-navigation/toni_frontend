@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import { PhotonFeature } from 'src/services/api-photon';
 
 import { ListItem } from '@/components/atoms/ListItem';
-import { photonValue } from '@/functions/functions';
+import { photonValue } from '@/functions/photonValue';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];

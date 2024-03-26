@@ -4,7 +4,8 @@ import { SafeAreaView, ScrollView, Text } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
-import { getCalibrationValue, valueOutput } from '@/functions/functions';
+import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { TripProps } from '@/types/Valhalla-Types';
@@ -49,7 +50,7 @@ export function TripStep({ data }: { data: TripProps }) {
 
   if (data) {
     const maneuver = data.legs[0].maneuvers[0];
-    maneuverValue = valueOutput(maneuver, factor);
+    maneuverValue = tripInstructionOutput(maneuver, factor);
   }
 
   return (

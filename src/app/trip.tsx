@@ -13,7 +13,7 @@ import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
-import { parseCoordinate } from '@/functions/functions';
+import { parseCoordinate } from '@/functions/parseCoordinate';
 import { useTrip } from '@/queries/useTrip';
 import { LocationProps } from '@/types/Types';
 

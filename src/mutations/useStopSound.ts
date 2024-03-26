@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Audio } from 'expo-av';
 
-import { stopSound } from '@/functions/functions';
+import { stopSound } from '@/functions/stopSound';
 
 export function useStopSound() {
   return useMutation({

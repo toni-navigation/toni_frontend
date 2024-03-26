@@ -6,7 +6,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
-import { getCalibrationValue } from '@/functions/functions';
+import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
 import { useStartSound } from '@/mutations/useStartSound';

@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
-import { valueOutput } from '@/functions/functions';
+import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { TripProps } from '@/types/Valhalla-Types';
 
 export function TripList({ data }: { data: TripProps }) {
@@ -15,7 +15,7 @@ export function TripList({ data }: { data: TripProps }) {
           // eslint-disable-next-line react/no-array-index-key
           <ListItem key={index}>
             <Text>
-              {index + 1}. {valueOutput(maneuver, 0)}
+              {index + 1}. {tripInstructionOutput(maneuver, 0)}
             </Text>
           </ListItem>
         ))}

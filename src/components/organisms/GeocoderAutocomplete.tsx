@@ -4,7 +4,7 @@ import { TextInput } from 'react-native';
 
 import { InputText } from '@/components/atoms/InputText';
 import { Suggestions } from '@/components/organisms/Suggestions';
-import { photonValue } from '@/functions/functions';
+import { photonValue } from '@/functions/photonValue';
 import { useGeocoding } from '@/queries/useGeocoding';
 import { PhotonFeature } from '@/services/api-photon';
 
