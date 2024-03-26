@@ -19,6 +19,7 @@ export default function Page() {
       <ScrollView className="mx-5 my-5">
         <Calibration />
         <Text className="text-white text-center text-lg">
+          {JSON.stringify(calibration.meters)}
           {JSON.stringify(calibration.factors)}
         </Text>
         <Button

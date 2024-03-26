@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import distance from '@turf/distance';
-import turf from '@turf/helpers';
+import * as turf from '@turf/helpers';
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -45,10 +45,9 @@ export const useCalibrationStore = create<CalibrationState>()(
                   end.coords.longitude,
                   end.coords.latitude,
                 ]);
-
                 const distanceInMeter = distance(from, to) * 1000;
-                state.meters.push(distanceInMeter);
-                state.factors.push(distanceInMeter / steps);
+                state.calibration.meters.push(distanceInMeter);
+                state.calibration.factors.push(distanceInMeter / steps);
               }
             })
           ),
