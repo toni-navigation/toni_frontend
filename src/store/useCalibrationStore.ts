@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import distance from '@turf/distance';
-import * as turf from '@turf/helpers';
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { addCalibrationHelper } from '@/functions/addCalibrationHelper';
 import { CalibrationProps, CurrentLocationType } from '@/types/Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
@@ -35,21 +34,9 @@ export const useCalibrationStore = create<CalibrationState>()(
       actions: {
         addCalibration: (start, end, steps) =>
           set(
-            produce((state) => {
-              if (start && end) {
-                const from = turf.point([
-                  start.coords.longitude,
-                  start.coords.latitude,
-                ]);
-                const to = turf.point([
-                  end.coords.longitude,
-                  end.coords.latitude,
-                ]);
-                const distanceInMeter = distance(from, to) * 1000;
-                state.calibration.meters.push(distanceInMeter);
-                state.calibration.factors.push(distanceInMeter / steps);
-              }
-            })
+            produce((state) =>
+              addCalibrationHelper(start, end, steps, state.calibration)
+            )
           ),
         resetCalibrationStore: () =>
           set(produce((state) => ({ ...state, ...defaultCalibrationState }))),

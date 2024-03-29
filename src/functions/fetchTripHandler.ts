@@ -11,6 +11,9 @@ const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
 export const fetchTripHandler = async (
   points: LocationProps[]
 ): Promise<ValhallaProps | null> => {
+  if (points.length === 0) {
+    return null;
+  }
   const searchJson = {
     ...VALHALLA_CONFIG,
     locations: points.map((point) => ({ ...point, type: 'break' })),
