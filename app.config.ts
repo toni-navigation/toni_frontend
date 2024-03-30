@@ -4,8 +4,8 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 // eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'blndfnd',
-  slug: 'blndfnd',
+  name: 'toni',
+  slug: 'toni',
   version: '1.0.0',
   icon: './src/assets/icon.png',
   userInterfaceStyle: 'automatic',
@@ -47,5 +47,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     favicon: './src/assets/favicon.png',
   },
-  scheme: 'blndfnd',
+  scheme: 'toni',
 });
