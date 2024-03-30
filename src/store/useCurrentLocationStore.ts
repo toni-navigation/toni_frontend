@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 import { CurrentLocationType } from '@/types/Types';
 
@@ -19,22 +20,18 @@ const defaultCurrentLocationState: Omit<CurrentLocationState, 'actions'> = {
 
 export const useCurrentLocationStore = create<CurrentLocationState>()(
   persist(
-    (set) => ({
+    immer((set) => ({
       ...defaultCurrentLocationState,
       actions: {
         updateCurrentLocation: (currentLocation) =>
-          set(
-            produce((state) => {
-              state.currentLocation = currentLocation;
-            })
-          ),
+          set((state) => {
+            state.currentLocation = currentLocation;
+          }),
 
         resetCurrentLocationStore: () =>
-          set(
-            produce((state) => ({ ...state, ...defaultCurrentLocationState }))
-          ),
+          set((state) => ({ ...state, ...defaultCurrentLocationState })),
       },
-    }),
+    })),
     {
       name: `CALIBRATION_STORE`,
       storage: createJSONStorage(() => AsyncStorage),

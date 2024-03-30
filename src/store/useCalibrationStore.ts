@@ -4,6 +4,7 @@ import * as turf from '@turf/helpers';
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 import { CalibrationProps, CurrentLocationType } from '@/types/Types';
 
@@ -30,31 +31,29 @@ const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
 
 export const useCalibrationStore = create<CalibrationState>()(
   persist(
-    (set) => ({
+    immer((set) => ({
       ...defaultCalibrationState,
       actions: {
         addCalibration: (start, end, steps) =>
-          set(
-            produce((state) => {
-              if (start && end) {
-                const from = turf.point([
-                  start.coords.longitude,
-                  start.coords.latitude,
-                ]);
-                const to = turf.point([
-                  end.coords.longitude,
-                  end.coords.latitude,
-                ]);
-                const distanceInMeter = distance(from, to) * 1000;
-                state.calibration.meters.push(distanceInMeter);
-                state.calibration.factors.push(distanceInMeter / steps);
-              }
-            })
-          ),
+          set((state) => {
+            if (start && end) {
+              const from = turf.point([
+                start.coords.longitude,
+                start.coords.latitude,
+              ]);
+              const to = turf.point([
+                end.coords.longitude,
+                end.coords.latitude,
+              ]);
+              const distanceInMeter = distance(from, to) * 1000;
+              state.calibration.meters.push(distanceInMeter);
+              state.calibration.factors.push(distanceInMeter / steps);
+            }
+          }),
         resetCalibrationStore: () =>
-          set(produce((state) => ({ ...state, ...defaultCalibrationState }))),
+          set((state) => ({ ...state, ...defaultCalibrationState })),
       },
-    }),
+    })),
     {
       name: `CALIBRATION_STORE`,
       storage: createJSONStorage(() => AsyncStorage),
