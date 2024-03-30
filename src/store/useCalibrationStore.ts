@@ -63,6 +63,3 @@ export const useCalibrationStore = create<CalibrationState>()(
     }
   )
 );
-
-export const invalidateCalibrationStore = () =>
-  useCalibrationStore.persist.clearStorage();

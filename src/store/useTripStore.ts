@@ -50,5 +50,3 @@ export const useTripStore = create<TripState>()(
     }
   )
 );
-
-export const invalidateTripStore = () => useTripStore.persist.clearStorage();

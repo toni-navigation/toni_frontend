@@ -43,6 +43,3 @@ export const useCurrentLocationStore = create<CurrentLocationState>()(
     }
   )
 );
-
-export const invalidateCurrentLocationStore = () =>
-  useCurrentLocationStore.persist.clearStorage();
