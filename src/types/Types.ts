@@ -14,16 +14,16 @@ export interface CalibrationProps {
 export type CurrentLocationType = CurrentLocationProps | null | undefined;
 export interface CurrentLocationProps {
   coords: {
-    speed: number | null;
-    heading: number | null;
-    accuracy: number | null;
-    altitudeAccuracy: number | null;
-    altitude: number | null;
+    speed?: number | null;
+    heading?: number | null;
+    accuracy?: number | null;
+    altitudeAccuracy?: number | null;
+    altitude?: number | null;
     longitude: number;
     latitude: number;
   };
 
-  timestamp: number;
+  timestamp?: number;
 }
 
 export interface LocationInputProps {

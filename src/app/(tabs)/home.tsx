@@ -7,6 +7,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import MapView, { Marker, Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
@@ -15,6 +16,8 @@ import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
 
 export default function Home() {
+  const markerRef = React.useRef(null);
+  const polygonRef = React.useRef(null);
   const { changeOrigin, changeDestination } = useTripStore(
     (state) => state.actions
   );
@@ -81,7 +84,22 @@ export default function Home() {
           label="Zielpunkt"
           onChange={(value) => changeDestination(value)}
         />
-
+        <MapView
+          className="h-36 w-full"
+          region={{
+            latitude: 47.811195,
+            longitude: 13.033229,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            ref={markerRef}
+            coordinate={{ latitude: 47.811195, longitude: 13.033229 }}
+            key={0}
+          />
+          {/* {bbox && <Polygon ref={polygonRef} key={1} coordinates={getBbox({})} />} */}
+        </MapView>
         <Button
           onPress={startNavigationHandler}
           buttonType={
