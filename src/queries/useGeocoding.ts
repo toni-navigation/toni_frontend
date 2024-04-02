@@ -8,7 +8,6 @@ export function useGeocoding(
   bbox?: number[][],
   limit = 5
 ) {
-  console.log(bbox);
   const parameters: Parameters<typeof PhotonService.geocoding>[0] = {
     q: debouncedInputValue,
     limit,

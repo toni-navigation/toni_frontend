@@ -34,25 +34,8 @@ export const useCalibrationStore = create<CalibrationState>()(
       ...defaultCalibrationState,
       actions: {
         addCalibration: (start, end, steps) =>
-          set((state) => {
-            if (start && end) {
-              const from = turf.point([
-                start.coords.longitude,
-                start.coords.latitude,
-              ]);
-              const to = turf.point([
-                end.coords.longitude,
-                end.coords.latitude,
-              ]);
-              const distanceInMeter = distance(from, to) * 1000;
-              state.calibration.meters.push(distanceInMeter);
-              state.calibration.factors.push(distanceInMeter / steps);
-            }
-          }),
-          set(
-            produce((state) =>
-              addCalibrationHelper(start, end, steps, state.calibration)
-            )
+          set((state) =>
+            addCalibrationHelper(start, end, steps, state.calibration)
           ),
         resetCalibrationStore: () =>
           set((state) => ({ ...state, ...defaultCalibrationState })),
