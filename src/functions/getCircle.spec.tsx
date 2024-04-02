@@ -12,7 +12,7 @@ describe('getCircle', () => {
     };
     const perimeter = circle(center, radius, options);
     // const circle = getCircle(10);
-    expect(perimeter.geometry.coordinates).toBe([
+    expect(perimeter.geometry.coordinates).toStrictEqual([
       [
         [-75.343, 40.02896601818623],
         [-75.40168521055865, 39.983985202669075],
