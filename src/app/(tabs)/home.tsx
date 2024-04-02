@@ -1,52 +1,43 @@
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   Text,
   useColorScheme,
   View,
 } from 'react-native';
-import { PhotonFeature } from 'src/services/api-photon';
 
 import { Button } from '@/components/atoms/Button';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { photonValue } from '@/functions/functions';
-import { useReverseData, useTrip } from '@/functions/mutations';
-import { useUserStore } from '@/store/useUserStore';
-import { LocationProps, PointsProps } from '@/types/Types';
+import { useReverseData } from '@/mutations/useReverseData';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useTripStore } from '@/store/useTripStore';
 
-const INITIAL_POINTS: PointsProps = {
-  start: { query: '' },
-  destination: {
-    query: '',
-  },
-};
 export default function Home() {
-  const [points, setPoints] = useState<PointsProps>(INITIAL_POINTS);
-  const [origin, setOrigin] = useState<PhotonFeature>();
-  const [destination, setDestination] = useState<PhotonFeature>();
+  const { changeOrigin, changeDestination } = useTripStore(
+    (state) => state.actions
+  );
+  const origin = useTripStore((state) => state.origin);
+  const destination = useTripStore((state) => state.destination);
 
-  const { actions, currentLocation } = useUserStore();
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+
   const colorscheme = useColorScheme();
 
   const reverseData = useReverseData();
 
-  const start = {
-    lat: currentLocation?.coords.latitude,
-    lon: currentLocation?.coords.longitude,
-  };
-  const tripPoints: (LocationProps | undefined | null)[] = [
-    start,
-    points.destination.location,
-  ];
-  const tripData = useTrip();
+  const startNavigationHandler = () => {
+    if (origin && destination) {
+      const params = {
+        origin: origin.geometry.coordinates,
+        destination: destination.geometry.coordinates,
+      };
 
-  const startNavigationHandler = async () => {
-    const data = await tripData.mutateAsync(tripPoints);
-    actions.setTrip(data);
-    router.push('/trip');
+      router.push({ pathname: `/trip`, params });
+    }
   };
 
   useEffect(() => {
@@ -60,18 +51,10 @@ export default function Home() {
         radius: 0.05,
       };
       const data = await reverseData.mutateAsync(startPosition);
-      setOrigin(data.features[0]);
+      changeOrigin(data.features[0]);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (tripData.isPending || reverseData.isPending) {
-    return <ActivityIndicator />;
-  }
-
-  if (tripData.error) {
-    return <Text>Error loading TripData, {tripData.error.message}</Text>;
-  }
 
   if (reverseData.error) {
     return (
@@ -90,13 +73,13 @@ export default function Home() {
           value={origin}
           placeholder="Startpunkt eingeben"
           label="Startpunkt"
-          onChange={(value) => setOrigin(value)}
+          onChange={(value) => changeOrigin(value)}
         />
         <GeocoderAutocomplete
           value={destination}
           placeholder="Zielpunkt eingeben"
           label="Zielpunkt"
-          onChange={(value) => setDestination(value)}
+          onChange={(value) => changeDestination(value)}
         />
 
         <Button

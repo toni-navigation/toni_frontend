@@ -6,21 +6,21 @@ import MapView, { Marker } from 'react-native-maps';
 
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
-import { getCalibrationValue } from '@/functions/functions';
-import {
-  useCurrentLocation,
-  usePedometerAvailable,
-  useStartSound,
-  useStopSound,
-} from '@/functions/mutations';
-import { useUserStore } from '@/store/useUserStore';
+import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { useCurrentLocation } from '@/mutations/useCurrentLocation';
+import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
+import { useStartSound } from '@/mutations/useStartSound';
+import { useStopSound } from '@/mutations/useStopSound';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 import stylings from '@/stylings';
 import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 30;
 
 export function Calibration() {
-  const { calibration, actions } = useUserStore();
+  const { addCalibration } = useCalibrationStore((state) => state.actions);
+  const calibration = useCalibrationStore((state) => state.calibration);
+
   const [steps, setSteps] = useState(0);
 
   const pedometerSubscription = useRef<Pedometer.Subscription>();
@@ -51,7 +51,7 @@ export function Calibration() {
       await stopPedometer();
       const currentPositionData = await currentLocationMutation.mutateAsync();
 
-      actions.addCalibration(start, currentPositionData, result.steps);
+      addCalibration(start, currentPositionData, result.steps);
     }
   };
 

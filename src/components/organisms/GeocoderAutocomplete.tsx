@@ -1,12 +1,12 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
 import { InputText } from '@/components/atoms/InputText';
 import { Suggestions } from '@/components/organisms/Suggestions';
-import { photonValue } from '@/functions/functions';
-import { PhotonFeature, PhotonService } from '@/services/api-photon';
+import { photonValue } from '@/functions/photonValue';
+import { useGeocoding } from '@/queries/useGeocoding';
+import { PhotonFeature } from '@/services/api-photon';
 
 type GeocoderAutocompleteProps = {
   value?: PhotonFeature;
@@ -26,17 +26,7 @@ export function GeocoderAutocomplete({
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
 
-  const parameters: Parameters<typeof PhotonService.geocoding>[0] = {
-    q: debouncedInputValue,
-    limit: 5,
-    lang: 'de',
-  };
-  const { data } = useQuery({
-    queryKey: ['photon', parameters],
-    queryFn: () => PhotonService.geocoding(parameters),
-    enabled: focused,
-    placeholderData: keepPreviousData,
-  });
+  const { data } = useGeocoding(debouncedInputValue, focused);
 
   useEffect(() => {
     if (value) {
@@ -51,7 +41,7 @@ export function GeocoderAutocomplete({
         value={inputValue}
         accessibilityLabel={label}
         placeholder={placeholder}
-        onChange={(event) => setInputValue(event.nativeEvent.text)}
+        onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
@@ -59,10 +49,10 @@ export function GeocoderAutocomplete({
         <Suggestions
           suggestions={data.features}
           onLocationSuggestionClick={(suggestion: PhotonFeature) => {
+            setFocused(false);
             onChange(suggestion);
             ref.current?.blur();
           }}
-          startOrDestination="start"
         />
       )}
     </>

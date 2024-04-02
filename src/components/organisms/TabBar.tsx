@@ -1,12 +1,11 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { NavigationState } from 'react-native-tab-view';
 
 interface TabBarProps {
-  jumpTo: (key: string) => void;
-  navigationState: NavigationState<{ key: string; title: string }>;
+  setPage: (page: number) => void;
+  activePage: number;
 }
-export function TabBar({ jumpTo, navigationState }: TabBarProps) {
+export function TabBar({ setPage, activePage }: TabBarProps) {
   const activeButton =
     'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-light flex-1 mr-2';
   const inactiveButton =
@@ -16,23 +15,22 @@ export function TabBar({ jumpTo, navigationState }: TabBarProps) {
 
   return (
     <View className="flex-row">
-      {navigationState.routes.map((route, index) => (
-        <TouchableOpacity
-          className={
-            index === navigationState.index ? activeButton : inactiveButton
-          }
-          key={route.key}
-          onPress={() => jumpTo(route.key)}
-        >
-          <Text
-            className={
-              index === navigationState.index ? activeText : inactiveText
-            }
-          >
-            {route.title}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      <TouchableOpacity
+        onPress={() => setPage(0)}
+        className={activePage === 0 ? activeButton : inactiveButton}
+      >
+        <Text className={activePage === 0 ? activeText : inactiveText}>
+          Überblick
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => setPage(1)}
+        className={activePage === 1 ? activeButton : inactiveButton}
+      >
+        <Text className={activePage === 1 ? activeText : inactiveText}>
+          Aktuelles Maneuver
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

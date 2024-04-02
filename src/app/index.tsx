@@ -3,10 +3,15 @@ import { Redirect } from 'expo-router';
 import { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 
-import { useUserStore } from '@/store/useUserStore';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
-  const { currentLocation, actions } = useUserStore();
+  const { updateCurrentLocation } = useCurrentLocationStore(
+    (state) => state.actions
+  );
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
 
   useEffect(() => {
     (async () => {
@@ -33,13 +38,13 @@ export default function Index() {
             },
             timestamp: locationObject.timestamp,
           };
-          actions.setCurrentLocation(position);
+          updateCurrentLocation(position);
         }
       );
 
       return () => watchPosition.remove();
     })();
-  }, [actions, actions.setCurrentLocation]);
+  }, [updateCurrentLocation]);
 
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;

@@ -1,9 +1,8 @@
 import { PhotonFeatureCollection } from 'src/services/api-photon';
 
 export interface LocationProps {
-  lat?: number;
-  lon?: number;
-  accuracy?: number | null;
+  lat: number;
+  lon: number;
 }
 export interface CalibrationProps {
   start?: LocationProps;
