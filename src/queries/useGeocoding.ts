@@ -1,18 +1,24 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
+import { getBbox } from '@/functions/getBbox';
 import { PhotonService } from '@/services/api-photon';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export function useGeocoding(
   debouncedInputValue: string,
   focused: boolean,
-  bbox?: number[][],
   limit = 5
 ) {
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+  const defaultBbox = currentLocation && getBbox(currentLocation);
+
   const parameters: Parameters<typeof PhotonService.geocoding>[0] = {
     q: debouncedInputValue,
     limit,
     lang: 'de',
-    ...(bbox ? { bbox } : {}),
+    ...(defaultBbox ? { bbox: defaultBbox.join(',') } : {}),
   };
 
   return useQuery({

@@ -21,20 +21,12 @@ export function GeocoderAutocomplete({
   value,
   onChange,
 }: GeocoderAutocompleteProps) {
-  // const currentLocation = useCurrentLocationStore(
-  //   (state) => state.currentLocation
-  // );
   const ref = useRef<TextInput>(null);
   const [inputValue, setInputValue] = useState('');
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
 
-  // const bbox = getBbox(currentLocation);
-  const { data, error } = useGeocoding(
-    debouncedInputValue,
-    focused
-    // bbox?.coords
-  );
+  const { data } = useGeocoding(debouncedInputValue, focused);
 
   useEffect(() => {
     if (value) {

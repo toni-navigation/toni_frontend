@@ -11,6 +11,7 @@ import MapView, { Marker, Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import { getBbox } from '@/functions/getBbox';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
@@ -67,6 +68,20 @@ export default function Home() {
     );
   }
 
+  const position = currentLocation?.coords.longitude &&
+    currentLocation.coords.longitude && {
+      longitude: currentLocation.coords.longitude,
+      latitude: currentLocation.coords.latitude,
+    };
+  const bbox = currentLocation && getBbox(currentLocation);
+  const bboxCoordinates = bbox && [
+    { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
+    { latitude: bbox[1], longitude: bbox[2] }, // northwest corner
+    { latitude: bbox[3], longitude: bbox[2] }, // northeast corner
+    { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
+    { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
+  ];
+
   return (
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
@@ -92,13 +107,13 @@ export default function Home() {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          key={0}
+          scrollEnabled
         >
-          <Marker
-            ref={markerRef}
-            coordinate={{ latitude: 47.811195, longitude: 13.033229 }}
-            key={0}
-          />
-          {/* {bbox && <Polygon ref={polygonRef} key={1} coordinates={getBbox({})} />} */}
+          {position && <Marker ref={markerRef} coordinate={position} key={0} />}
+          {bboxCoordinates && (
+            <Polygon ref={polygonRef} key={1} coordinates={bboxCoordinates} />
+          )}
         </MapView>
         <Button
           onPress={startNavigationHandler}

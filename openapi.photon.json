@@ -93,7 +93,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "bbox=9.5,51.5,11.5,53.5"
+            "example": "9.5,51.5,11.5,53.5"
           }
         ],
         "responses": {

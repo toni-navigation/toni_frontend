@@ -20,6 +20,7 @@ export class PhotonService {
         lang,
         lon,
         lat,
+        bbox,
     }: {
         q: string,
         locationBiasScale?: string,
@@ -28,6 +29,7 @@ export class PhotonService {
         lang?: string,
         lon?: number,
         lat?: number,
+        bbox?: string,
     }): CancelablePromise<PhotonFeatureCollection> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -40,6 +42,7 @@ export class PhotonService {
                 'lang': lang,
                 'lon': lon,
                 'lat': lat,
+                'bbox': bbox,
             },
         });
     }
