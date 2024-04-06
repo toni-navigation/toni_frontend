@@ -8,6 +8,7 @@ import MapView, { Marker } from 'react-native-maps';
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
 import { useStartSound } from '@/mutations/useStartSound';
@@ -21,7 +22,6 @@ const STOP_CALIBRATION_COUNT = 30;
 export function Calibration() {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
-
   const [steps, setSteps] = useState(0);
 
   const pedometerSubscription = useRef<Pedometer.Subscription>();
@@ -40,10 +40,6 @@ export function Calibration() {
       await stopSoundMutation.mutateAsync(audioSound.current);
       audioSound.current = undefined;
     }
-
-    Speech.speak(
-      `Kalibrierung abgeschlossen. Sie sind ${steps} Schritte und ${calibration.meters[calibration.meters.length - 1]} Meter gegangen. Ihr Umrechnungsfaktor beträgt ${getCalibrationValue(calibration.meters)}.`
-    );
   };
 
   const handlePedometerUpdate = async (
@@ -53,10 +49,24 @@ export function Calibration() {
     setSteps(result.steps);
 
     if (result.steps >= STOP_CALIBRATION_COUNT) {
+      Speech.speak(
+        'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor'
+      );
       await stopPedometer();
       const currentPositionData = await currentLocationMutation.mutateAsync();
 
       addCalibration(start, currentPositionData, result.steps);
+      const distanceInMeter = getDistanceInMeter(start, currentPositionData);
+      if (!distanceInMeter) {
+        Speech.speak(
+          `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`
+        );
+
+        return;
+      }
+      Speech.speak(
+        `Du bist ${result.steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / result.steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`
+      );
     }
   };
 

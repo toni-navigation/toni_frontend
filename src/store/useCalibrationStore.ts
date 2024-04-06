@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { addCalibrationHelper } from '@/functions/addCalibrationHelper';
+import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { CalibrationProps, CurrentLocationType } from '@/types/Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
@@ -33,9 +33,12 @@ export const useCalibrationStore = create<CalibrationState>()(
       ...defaultCalibrationState,
       actions: {
         addCalibration: (start, end, steps) =>
-          set((state) =>
-            addCalibrationHelper(start, end, steps, state.calibration)
-          ),
+          set((state) => {
+            const distanceInMeter = getDistanceInMeter(start, end);
+            if (!distanceInMeter) return;
+            state.calibration.meters.push(distanceInMeter);
+            state.calibration.factors.push(distanceInMeter / steps);
+          }),
         resetCalibrationStore: () =>
           set((state) => ({ ...state, ...defaultCalibrationState })),
       },
