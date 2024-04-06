@@ -1,5 +1,6 @@
 import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
+import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -39,6 +40,10 @@ export function Calibration() {
       await stopSoundMutation.mutateAsync(audioSound.current);
       audioSound.current = undefined;
     }
+
+    Speech.speak(
+      `Kalibrierung abgeschlossen. Sie sind ${steps} Schritte und ${calibration.meters[calibration.meters.length - 1]} Meter gegangen. Ihr Umrechnungsfaktor beträgt ${getCalibrationValue(calibration.meters)}.`
+    );
   };
 
   const handlePedometerUpdate = async (
