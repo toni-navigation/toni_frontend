@@ -13,6 +13,7 @@ type TripState = {
     resetTripStore: () => void;
     changeOrigin: (origin: PhotonFeature) => void;
     changeDestination: (destination: PhotonFeature) => void;
+    switchOriginDestination: () => void;
   };
 };
 
@@ -35,6 +36,12 @@ export const useTripStore = create<TripState>()(
         changeDestination: (destination: PhotonFeature) =>
           set((state) => {
             state.destination = destination;
+          }),
+        switchOriginDestination: () =>
+          set((state) => {
+            const { origin, destination } = state;
+            state.origin = destination;
+            state.destination = origin;
           }),
       },
     })),

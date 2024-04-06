@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
@@ -10,6 +11,7 @@ import {
 import MapView, { Marker, Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
+import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
 import { useReverseData } from '@/mutations/useReverseData';
@@ -19,9 +21,8 @@ import { useTripStore } from '@/store/useTripStore';
 export default function Home() {
   const markerRef = React.useRef(null);
   const polygonRef = React.useRef(null);
-  const { changeOrigin, changeDestination } = useTripStore(
-    (state) => state.actions
-  );
+  const { changeOrigin, changeDestination, switchOriginDestination } =
+    useTripStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
 
@@ -93,6 +94,13 @@ export default function Home() {
           label="Startpunkt"
           onChange={(value) => changeOrigin(value)}
         />
+
+        <IconButton
+          onPress={switchOriginDestination}
+          buttonType={!origin || !destination ? 'disabled' : 'primary'}
+        >
+          <Ionicons name="swap-vertical" size={32} color="white" />
+        </IconButton>
         <GeocoderAutocomplete
           value={destination}
           placeholder="Zielpunkt eingeben"
