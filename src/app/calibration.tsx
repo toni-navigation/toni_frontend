@@ -4,7 +4,6 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import { Calibration } from '@/components/Calibration';
 import { Button } from '@/components/atoms/Button';
-import { Intro } from '@/components/organisms/Intro';
 
 export default function CalibrationPage() {
   const colorscheme = useColorScheme();
@@ -14,7 +13,6 @@ export default function CalibrationPage() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="mx-5 my-5">
-        <Intro />
         <Calibration />
         <Button buttonType="primary" onPress={() => router.push('/home')}>
           Weiter
