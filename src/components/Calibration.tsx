@@ -2,7 +2,7 @@ import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import Song from '@/assets/Testtrack.mp3';
@@ -14,24 +14,31 @@ import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
 import { useStartSound } from '@/mutations/useStartSound';
 import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
-import stylings from '@/stylings';
 import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 30;
-
+export const SPEECH_CONFIG = {
+  language: 'de',
+};
 export function Calibration() {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
   const [steps, setSteps] = useState(0);
 
-  const pedometerSubscription = useRef<Pedometer.Subscription>();
+  const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
 
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
-
+  const speakAndWait = (text: string) =>
+    new Promise((resolve: any) => {
+      Speech.speak(text, {
+        ...SPEECH_CONFIG,
+        onDone: resolve,
+      });
+    });
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -50,7 +57,8 @@ export function Calibration() {
 
     if (result.steps >= STOP_CALIBRATION_COUNT) {
       Speech.speak(
-        'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor'
+        'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor',
+        SPEECH_CONFIG
       );
       await stopPedometer();
       const currentPositionData = await currentLocationMutation.mutateAsync();
@@ -58,13 +66,13 @@ export function Calibration() {
       addCalibration(start, currentPositionData, result.steps);
       const distanceInMeter = getDistanceInMeter(start, currentPositionData);
       if (!distanceInMeter) {
-        Speech.speak(
+        await speakAndWait(
           `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`
         );
 
         return;
       }
-      Speech.speak(
+      await speakAndWait(
         `Du bist ${result.steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / result.steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`
       );
     }
@@ -72,16 +80,51 @@ export function Calibration() {
 
   const startPedometer = async () => {
     setSteps(0);
-    const sound = await startSoundMutation.mutateAsync(Song);
-    const currentPositionData = await currentLocationMutation.mutateAsync();
     const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
-
+    await speakAndWait(
+      'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.'
+    );
+    const currentPositionData = await currentLocationMutation.mutateAsync();
+    if (!pedometerAvailable) {
+      pedometerSubscription.current = null;
+      await speakAndWait('Gehe 30 Schritte und klicke dann auf Stopp.');
+    }
+    const sound = await startSoundMutation.mutateAsync(Song);
+    if (!sound) {
+      await speakAndWait(
+        'Die Musik kann leider nicht abgespielt werden. Gehe 30 Meter und klicke dann auf Stopp.'
+      );
+    }
     if (pedometerAvailable) {
       pedometerSubscription.current = Pedometer.watchStepCount((result) =>
         handlePedometerUpdate(currentPositionData, result)
       );
       audioSound.current = sound;
     }
+  };
+
+  const buttonOutput = () => {
+    if (pedometerSubscription.current && audioSound.current) {
+      return (
+        <Button buttonType="secondary" onPress={stopPedometer}>
+          Abbrechen
+        </Button>
+      );
+    }
+
+    if (pedometerSubscription.current === null && audioSound.current) {
+      return (
+        <Button buttonType="secondary" onPress={stopPedometer}>
+          Stop
+        </Button>
+      );
+    }
+
+    return (
+      <Button buttonType="secondary" onPress={startPedometer}>
+        Start Kalibrierung
+      </Button>
+    );
   };
 
   // const locationError =
@@ -92,33 +135,16 @@ export function Calibration() {
   //   'SoundError: Es ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
   return (
     <View>
-      {pedometerSubscription.current && audioSound.current ? (
-        <Button buttonType="secondary" onPress={stopPedometer}>
-          Abbrechen
-        </Button>
-      ) : (
-        <Button
-          buttonType={
-            currentLocationMutation.isPending ||
-            pedometerAvailableMutation.isPending ||
-            startSoundMutation.isPending
-              ? 'disabled'
-              : 'secondary'
-          }
-          onPress={startPedometer}
-        >
-          Start Kalibrierung
-        </Button>
-      )}
-      {(currentLocationMutation.isPending ||
-        pedometerAvailableMutation.isPending ||
-        startSoundMutation.isPending) && (
-        <ActivityIndicator
-          className="mt-4 h-[100px]"
-          size="large"
-          color={stylings.colors['primary-color-light']}
-        />
-      )}
+      {buttonOutput()}
+      {/* {(currentLocationMutation.isPending || */}
+      {/*  pedometerAvailableMutation.isPending || */}
+      {/*  startSoundMutation.isPending) && ( */}
+      {/*  <ActivityIndicator */}
+      {/*    className="mt-4 h-[100px]" */}
+      {/*    size="large" */}
+      {/*    color={stylings.colors['primary-color-light']} */}
+      {/*  /> */}
+      {/* )} */}
       {/* {currentLocationMutation.isError && <Error error={locationError} />} */}
       {/* {pedometerMutation.isError && <Error error={pedometerError} />} */}
       {/* {startSoundMutation.isError && <Error error={soundError} />} */}
@@ -130,6 +156,8 @@ export function Calibration() {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        showsUserLocation
+        followsUserLocation
       >
         {calibration.start &&
           calibration.start.lat &&
