@@ -27,6 +27,7 @@ export function Calibration() {
 
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
+  const fallback = useRef<CurrentLocationType>();
 
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
@@ -49,6 +50,33 @@ export function Calibration() {
     }
   };
 
+  const fallbackStop = async (_start?: CurrentLocationType, _steps = 30) => {
+    await stopPedometer();
+    await speakAndWait(
+      'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor'
+    );
+    const currentPositionData = await currentLocationMutation.mutateAsync();
+    addCalibration(fallback.current || _start, currentPositionData, _steps);
+    const distanceInMeter = getDistanceInMeter(
+      fallback.current || _start,
+      currentPositionData
+    );
+    if (!distanceInMeter) {
+      await speakAndWait(
+        `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`
+      );
+
+      return;
+    }
+    await speakAndWait(
+      `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`
+    );
+
+    if (fallback.current) {
+      fallback.current = undefined;
+    }
+  };
+
   const handlePedometerUpdate = async (
     start: CurrentLocationType,
     result: Pedometer.PedometerResult
@@ -56,51 +84,33 @@ export function Calibration() {
     setSteps(result.steps);
 
     if (result.steps >= STOP_CALIBRATION_COUNT) {
-      Speech.speak(
-        'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor',
-        SPEECH_CONFIG
-      );
-      await stopPedometer();
-      const currentPositionData = await currentLocationMutation.mutateAsync();
-
-      addCalibration(start, currentPositionData, result.steps);
-      const distanceInMeter = getDistanceInMeter(start, currentPositionData);
-      if (!distanceInMeter) {
-        await speakAndWait(
-          `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`
-        );
-
-        return;
-      }
-      await speakAndWait(
-        `Du bist ${result.steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / result.steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`
-      );
+      await fallbackStop(start, result.steps);
     }
   };
 
   const startPedometer = async () => {
     setSteps(0);
-    const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     await speakAndWait(
       'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.'
     );
+    const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     const currentPositionData = await currentLocationMutation.mutateAsync();
     if (!pedometerAvailable) {
-      pedometerSubscription.current = null;
       await speakAndWait('Gehe 30 Schritte und klicke dann auf Stopp.');
     }
     const sound = await startSoundMutation.mutateAsync(Song);
     if (!sound) {
-      await speakAndWait(
-        'Die Musik kann leider nicht abgespielt werden. Gehe 30 Meter und klicke dann auf Stopp.'
-      );
+      await speakAndWait('Die Musik kann leider nicht abgespielt werden.');
     }
+
     if (pedometerAvailable) {
       pedometerSubscription.current = Pedometer.watchStepCount((result) =>
         handlePedometerUpdate(currentPositionData, result)
       );
-      audioSound.current = sound;
+    } else {
+      fallback.current = currentPositionData;
     }
+    audioSound.current = sound;
   };
 
   const buttonOutput = () => {
@@ -111,11 +121,19 @@ export function Calibration() {
         </Button>
       );
     }
-
-    if (pedometerSubscription.current === null && audioSound.current) {
+    // console.log(
+    //   pedometerSubscription.current,
+    //   audioSound.current,
+    //   fallback.current
+    // );
+    if (
+      pedometerSubscription.current === undefined &&
+      audioSound.current &&
+      fallback.current
+    ) {
       return (
-        <Button buttonType="secondary" onPress={stopPedometer}>
-          Stop
+        <Button buttonType="secondary" onPress={fallbackStop}>
+          Stopp
         </Button>
       );
     }
