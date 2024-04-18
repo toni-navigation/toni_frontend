@@ -11,9 +11,6 @@ on:
       - dev
       - main
 
-permissions:
-  packages: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
