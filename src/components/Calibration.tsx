@@ -103,7 +103,7 @@ export function Calibration() {
             pedometerAvailableMutation.isPending ||
             startSoundMutation.isPending
               ? 'disabled'
-              : 'secondary'
+              : 'primary'
           }
           onPress={startPedometer}
         >

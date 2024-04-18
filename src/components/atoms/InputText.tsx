@@ -10,7 +10,7 @@ export const InputText = forwardRef<TextInput, TextInputProps>(
       <View>
         <TextInput
           ref={ref}
-          className={`border-2 rounded-full w-full p-4 mb-4 ${colorscheme === 'light' ? 'border-primary-color-light' : 'border-primary-color-dark'} ${className}`}
+          className={`border-2 rounded-full w-full p-4 mb-4 ${colorscheme === 'light' ? 'border-mint-dark' : 'border-mint-light'} ${className}`}
           {...props}
         />
       </View>

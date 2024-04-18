@@ -31,16 +31,20 @@ export function Navbar({ icons }: NavbarProps) {
           tabBarIcon: ({ color }) => icons.navigation({ color }),
           tabBarActiveBackgroundColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
+          tabBarInactiveBackgroundColor:
+            colorscheme === 'light'
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
           tabBarActiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['background-light']
-              : styling.colors['background-dark'],
+              ? styling.colors['orange-accent']
+              : styling.colors['orange-accent'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-light']
+              : styling.colors['mint-dark'],
           tabBarAccessibilityLabel: 'Navigation',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {
@@ -59,16 +63,20 @@ export function Navbar({ icons }: NavbarProps) {
           tabBarIcon: ({ color }) => icons.favoriteList({ color }),
           tabBarActiveBackgroundColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
+          tabBarInactiveBackgroundColor:
+            colorscheme === 'light'
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
           tabBarActiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['background-light']
-              : styling.colors['background-dark'],
+              ? styling.colors['orange-accent']
+              : styling.colors['orange-accent'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-light']
+              : styling.colors['mint-dark'],
           tabBarAccessibilityLabel: 'Favoriten',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {
@@ -87,16 +95,20 @@ export function Navbar({ icons }: NavbarProps) {
           tabBarIcon: ({ color }) => icons.profile({ color }),
           tabBarActiveBackgroundColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
+          tabBarInactiveBackgroundColor:
+            colorscheme === 'light'
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
           tabBarActiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['background-light']
-              : styling.colors['background-dark'],
+              ? styling.colors['orange-accent']
+              : styling.colors['orange-accent'],
           tabBarInactiveTintColor:
             colorscheme === 'light'
-              ? styling.colors['primary-color-light']
-              : styling.colors['primary-color-dark'],
+              ? styling.colors['mint-light']
+              : styling.colors['mint-dark'],
           tabBarAccessibilityLabel: 'Profil',
           tabBarLabelPosition: 'below-icon',
           tabBarItemStyle: {

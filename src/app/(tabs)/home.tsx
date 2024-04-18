@@ -128,7 +128,7 @@ export default function Home() {
           buttonType={
             origin === undefined || destination === undefined
               ? 'disabled'
-              : 'primary'
+              : 'accent'
           }
         >
           Route starten
