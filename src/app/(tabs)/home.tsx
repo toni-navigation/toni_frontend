@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+// import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
@@ -99,7 +99,7 @@ export default function Home() {
           onPress={switchOriginDestination}
           buttonType={!origin || !destination ? 'disabled' : 'primary'}
         >
-          <Ionicons name="swap-vertical" size={32} color="white" />
+          {/* <Ionicons name="swap-vertical" size={32} color="white" /> */}
         </IconButton>
         <GeocoderAutocomplete
           value={destination}
