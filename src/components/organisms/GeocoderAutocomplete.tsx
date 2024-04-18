@@ -37,6 +37,7 @@ export function GeocoderAutocomplete({
   return (
     <>
       <InputText
+        accessibilityHint={label}
         ref={ref}
         value={inputValue}
         accessibilityLabel={label}

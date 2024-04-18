@@ -8,7 +8,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import MapView, { Marker, Polygon } from 'react-native-maps';
+import MapView, { Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
 import { IconButton } from '@/components/atoms/IconButton';
@@ -19,7 +19,7 @@ import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
 
 export default function Home() {
-  const markerRef = React.useRef(null);
+  // const markerRef = React.useRef(null);
   const polygonRef = React.useRef(null);
   const { changeOrigin, changeDestination, switchOriginDestination } =
     useTripStore((state) => state.actions);
@@ -68,12 +68,12 @@ export default function Home() {
       </View>
     );
   }
-
-  const position = currentLocation?.coords.longitude &&
-    currentLocation.coords.longitude && {
-      longitude: currentLocation.coords.longitude,
-      latitude: currentLocation.coords.latitude,
-    };
+  //
+  // const position = currentLocation?.coords.longitude &&
+  //   currentLocation.coords.longitude && {
+  //     longitude: currentLocation.coords.longitude,
+  //     latitude: currentLocation.coords.latitude,
+  //   };
   const bbox = currentLocation && getBbox(currentLocation);
   const bboxCoordinates = bbox && [
     { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
@@ -117,8 +117,10 @@ export default function Home() {
           }}
           key={0}
           scrollEnabled
+          showsUserLocation
+          followsUserLocation
         >
-          {position && <Marker ref={markerRef} coordinate={position} key={0} />}
+          {/* {position && <Marker ref={markerRef} coordinate={position} key={0} />} */}
           {bboxCoordinates && (
             <Polygon ref={polygonRef} key={1} coordinates={bboxCoordinates} />
           )}

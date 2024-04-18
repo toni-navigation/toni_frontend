@@ -15,6 +15,7 @@ export function Suggestions({
 }: SuggestionProps) {
   return (
     <ScrollView
+      accessibilityHint="Liste der Vorschläge"
       keyboardShouldPersistTaps="always"
       className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black"
       accessibilityLabel="Liste der Vorschläge"

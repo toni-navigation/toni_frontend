@@ -49,6 +49,7 @@ export function IconButton({ children, onPress, buttonType }: IconButtonProps) {
   return (
     <View className="flex justify-end items-end mb-4">
       <TouchableOpacity
+        accessibilityHint={buttonType === 'disabled' ? 'Nicht nutzbar' : ''}
         className={`h-10 w-10 flex justify-center items-center rounded-[5px]  ${variant[buttonType].button}`}
         onPress={onPress}
         accessibilityRole="button"

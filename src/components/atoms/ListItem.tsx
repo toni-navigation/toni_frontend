@@ -10,7 +10,7 @@ interface ListItemProps {
 export function ListItem({ children, onPress }: ListItemProps) {
   if (onPress) {
     return (
-      <TouchableOpacity
+      <TouchableOpacity accessibilityRole="button"
         onPress={onPress}
         className="
             border-b-[1px] py-3 px-2 last:border-none"

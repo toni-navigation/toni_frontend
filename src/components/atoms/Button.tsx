@@ -57,6 +57,7 @@ export function Button({ children, onPress, buttonType }: ButtonProps) {
 
   return (
     <TouchableOpacity
+      accessibilityHint={buttonType === 'disabled' ? 'Nicht nutzbar' : ''}
       className={`h-20 flex justify-center py-2 px-4 rounded-[35px] mt-4 ${variant[buttonType].button}`}
       onPress={onPress}
       accessibilityRole="button"
