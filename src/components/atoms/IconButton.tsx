@@ -15,20 +15,14 @@ export function IconButton({ children, onPress, buttonType }: IconButtonProps) {
         colorscheme === 'light'
           ? 'bg-primary-color-light'
           : 'bg-primary-color-dark',
-      text:
-        colorscheme === 'light'
-          ? 'text-background-light'
-          : 'text-background-dark',
+      text: colorscheme === 'light' ? 'text-white' : 'text-background-dark',
     },
     secondary: {
       button:
         colorscheme === 'light'
           ? 'bg-secondary-color-light'
           : 'bg-secondary-color-dark',
-      text:
-        colorscheme === 'light'
-          ? 'text-background-light'
-          : 'text-background-dark',
+      text: colorscheme === 'light' ? 'text-white' : 'text-background-dark',
     },
     primaryOutline: {
       button:

@@ -21,7 +21,7 @@ export function TripList({ data }: { data: TripProps }) {
         ))}
       </ScrollView>
       <View className="mx-5">
-        <Button onPress={() => router.back()} buttonType="secondary">
+        <Button onPress={() => router.back()} buttonType="primary">
           <Text>Beenden</Text>
         </Button>
       </View>

@@ -15,13 +15,6 @@ module.exports = {
       laptop: '1024px',
       desktop: '1280px',
     },
-    fontFamily: styling.fonts,
-    extends: {
-      spacing: {
-        '8xl': '96rem',
-        '9xl': '128rem',
-      },
-    },
   },
   plugins: [],
 };

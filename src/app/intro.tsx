@@ -19,8 +19,16 @@ export default function CalibrationPage() {
     >
       <ScrollView className="mx-5 my-5">
         <View>
-          <Text className="text-4xl font-extrabold">Toni</Text>
-          <Text className="text-lg">
+          <Text
+            className="text-4xl font-extrabold "
+            style={{ fontFamily: 'generalSansSemi', fontSize: 38 }}
+          >
+            Toni
+          </Text>
+          <Text
+            className="text-lg"
+            style={{ fontFamily: 'atkinsonRegular', fontSize: 24 }}
+          >
             Nun kalibrieren wir deine Schrittlänge, damit die Navigation
             möglichst genau wird. Bitte stelle im Vorfeld sicher, dass die
             Strecke geeignet ist, also möglichst gerade und ohne Hindernisse.
