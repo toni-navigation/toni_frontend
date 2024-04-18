@@ -5,6 +5,7 @@ module.exports = {
     'airbnb-typescript',
     'plugin:@tanstack/eslint-plugin-query/recommended',
     'prettier',
+    'plugin:react-native-a11y/ios',
   ],
   plugins: ['@typescript-eslint', 'react', '@tanstack/query'],
 
