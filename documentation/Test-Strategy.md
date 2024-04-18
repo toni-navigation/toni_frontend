@@ -24,7 +24,10 @@ Accessibility and the smooth calibration of steps are the most important quality
 - Usability Testing: Gather feedback from blind users to improve user experience.
  
 ### Accessibility Testing
-Assess the app's usability for blind users, including screen reader compatibility and voice-guided navigation. 
+Assess the app's usability for blind users:
+  - On iOS, we use the Accessibility Inspector. It ships with macOS and can be accessed easily via Xcode or the macOS Spotlight.
+  - On Android, we use Accessibility Scanner.
+  - Using the ESLint "a11y" plugin.
   - https://medium.com/reactbrasil/introducing-react-native-accessibility-engine-fcf78f2a3805
 
 ### Calibration Testing
