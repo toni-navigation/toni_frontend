@@ -6,6 +6,7 @@ export const InputText = forwardRef<TextInput, TextInputProps>(
   ({ className, ...props }, ref) => {
     const colorscheme = useColorScheme();
 
+    // TODO: add cross to delete value
     return (
       <View>
         <TextInput
