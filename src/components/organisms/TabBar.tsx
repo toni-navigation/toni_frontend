@@ -20,7 +20,8 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
 
   return (
     <View className="flex-row">
-      <TouchableOpacity accessibilityRole="button"
+      <TouchableOpacity
+        accessibilityRole="button"
         onPress={() => setPage(0)}
         className={activePage === 0 ? activeButton : inactiveButton}
       >
@@ -31,7 +32,8 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
           Überblick
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity accessibilityRole="button"
+      <TouchableOpacity
+        accessibilityRole="button"
         onPress={() => setPage(1)}
         className={activePage === 1 ? activeButton : inactiveButton}
       >

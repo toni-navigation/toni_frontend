@@ -67,8 +67,7 @@ export function Button({ children, onPress, buttonType }: ButtonProps) {
       }
     >
       <Text
-        style={{ fontFamily: 'generalSansSemi' }}
-        className={`text-center text-lg font-atkinson ${variant[buttonType].text}`}
+        className={`text-center text-lg font-generalSansSemi ${variant[buttonType].text}`}
       >
         {children}
       </Text>

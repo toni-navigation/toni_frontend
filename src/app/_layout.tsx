@@ -1,36 +1,30 @@
+import { AtkinsonHyperlegible_400Regular } from '@expo-google-fonts/atkinson-hyperlegible';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+import React, { useEffect, useState } from 'react';
 
-import { atkinsonBold } from '@/assets/fonts/Atkinson-Hyperlegible-Bold.ttf';
-import atkinsonRegular from '@/assets/fonts/Atkinson-Hyperlegible-Regular.ttf';
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+SplashScreen.preventAutoHideAsync();
 
 export default function StackLayout() {
   const [queryClient] = useState(() => new QueryClient());
 
-  const [fontsLoaded] = useFonts({
-    atkinsonRegular,
-    atkinsonBold,
+  const [fontsLoaded, fontError] = useFonts({
+    atkinsonRegular: AtkinsonHyperlegible_400Regular,
     generalSansSemi,
   });
 
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
-      </View>
-    );
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
   }
 
   return (

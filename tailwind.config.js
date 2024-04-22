@@ -10,6 +10,12 @@ module.exports = {
   darkMode: 'media',
   theme: {
     colors: styling.colors,
+    extend: {
+      fontFamily: {
+        atkinsonRegular: ['atkinsonRegular'],
+        generalSansSemi: ['generalSansSemi'],
+      },
+    },
     screens: {
       tablet: '640px',
       laptop: '1024px',
