@@ -7,12 +7,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'toni',
   slug: 'toni',
   version: '1.0.0',
-  icon: './src/assets/icon.png',
+  icon: './src/assets/images/icon.png',
   userInterfaceStyle: 'automatic',
   splash: {
-    image: './src/assets/splash.png',
+    image: './src/assets/images/splash.png',
     resizeMode: 'contain',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#0A585C',
   },
   experiments: {
     typedRoutes: true,
@@ -37,11 +37,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     requireFullScreen: true,
+    splash: {
+      image: './src/assets/images/splash.png',
+      resizeMode: 'contain',
+      backgroundColor: '#0A585C',
+    },
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './src/assets/adaptive-icon.png',
-      backgroundColor: '#ffffff',
+      foregroundImage: './src/assets/images/adaptive-icon.png',
+      backgroundColor: '#0A585C',
     },
   },
   web: {
