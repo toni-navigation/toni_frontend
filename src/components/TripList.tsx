@@ -6,8 +6,12 @@ import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { TripProps } from '@/types/Valhalla-Types';
+import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 export function TripList({ data }: { data: TripProps }) {
+  const calibration = useCalibrationStore((state) => state.calibration);
+
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="mx-5 my-5">
@@ -15,7 +19,11 @@ export function TripList({ data }: { data: TripProps }) {
           // eslint-disable-next-line react/no-array-index-key
           <ListItem key={index}>
             <Text>
-              {index + 1}. {tripInstructionOutput(maneuver, 0)}
+              {index + 1}.{' '}
+              {tripInstructionOutput(
+                maneuver,
+                getCalibrationValue(calibration.factors)
+              )}
             </Text>
           </ListItem>
         ))}
