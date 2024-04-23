@@ -49,7 +49,7 @@ export const useTripStore = create<TripState>()(
     {
       name: `TRIP_STORE`,
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: ({ actions, destination, ...rest }) => rest,
+      partialize: ({ actions, destination, origin, ...rest }) => rest,
       version: 1,
     }
   )

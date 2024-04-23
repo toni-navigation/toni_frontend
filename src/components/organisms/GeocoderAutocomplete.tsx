@@ -33,6 +33,9 @@ export function GeocoderAutocomplete({
     if (value) {
       setInputValue(photonValue(value));
     }
+    if (value === null) {
+      setInputValue('Mein Standort');
+    }
   }, [value]);
 
   return (
