@@ -1,17 +1,17 @@
-import { Feather, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import React from 'react';
 
+import { Icon } from '@/components/atoms/Icon';
 import { Navbar } from '@/components/organisms/Navbar';
 
 const iconsArray = {
-  navigation: ({ color }: { color: string }) => (
-    <Feather name="navigation" size={24} color={color} />
+  heart: ({ color }: { color: string }) => (
+    <Icon color={color} icon="heart" size={48} />
   ),
-  favoriteList: ({ color }: { color: string }) => (
-    <MaterialIcons name="favorite-outline" size={24} color={color} />
+  navigationArrow: ({ color }: { color: string }) => (
+    <Icon color={color} icon="navigationArrow" size={48} />
   ),
-  profile: ({ color }: { color: string }) => (
-    <AntDesign name="user" size={24} color={color} />
+  person: ({ color }: { color: string }) => (
+    <Icon color={color} icon="person" size={48} />
   ),
 };
 export default function Layout() {

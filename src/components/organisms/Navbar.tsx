@@ -1,90 +1,64 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { useColorScheme } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import styling from '@/stylings';
 
 interface NavbarProps {
   icons: {
-    navigation: (props: { color: string }) => React.JSX.Element;
-    favoriteList: (props: { color: string }) => React.JSX.Element;
-    profile: (props: { color: string }) => React.JSX.Element;
+    heart: (props: { color: string }) => React.JSX.Element;
+    person: (props: { color: string }) => React.JSX.Element;
+    navigationArrow: (props: { color: string }) => React.JSX.Element;
   };
 }
 
 export function Navbar({ icons }: NavbarProps) {
   const colorscheme = useColorScheme();
-  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { height: 110 },
+        tabBarStyle: {
+          height: 118,
+          borderTopRightRadius: 40,
+          borderTopLeftRadius: 40,
+          backgroundColor:
+            colorscheme === 'light'
+              ? styling.colors['mint-dark']
+              : styling.colors['mint-light'],
+        },
+
+        tabBarShowLabel: false,
+        tabBarActiveTintColor:
+          colorscheme === 'light'
+            ? styling.colors['orange-accent']
+            : styling.colors['orange-accent'],
+        tabBarInactiveTintColor:
+          colorscheme === 'light'
+            ? styling.colors['mint-light']
+            : styling.colors['mint-dark'],
+        tabBarIconStyle: {
+          justifyContent: 'center',
+          alignContent: 'center',
+        },
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="favorites"
         options={{
           headerTitle: 'Navigation',
           tabBarLabel: 'Navigation',
-          tabBarIcon: ({ color }) => icons.navigation({ color }),
-          tabBarActiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarInactiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarActiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['orange-accent']
-              : styling.colors['orange-accent'],
-          tabBarInactiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-light']
-              : styling.colors['mint-dark'],
+          tabBarIcon: ({ color }) => icons.heart({ color }),
           tabBarAccessibilityLabel: 'Navigation',
-          tabBarLabelPosition: 'below-icon',
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            height: 110 - insets.bottom,
-            alignContent: 'center',
-            paddingBottom: 15,
-          },
         }}
       />
       <Tabs.Screen
-        name="favorites"
+        name="home"
         options={{
           headerTitle: 'Meine Favoriten',
           tabBarLabel: 'Favoriten',
-          tabBarIcon: ({ color }) => icons.favoriteList({ color }),
-          tabBarActiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarInactiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarActiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['orange-accent']
-              : styling.colors['orange-accent'],
-          tabBarInactiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-light']
-              : styling.colors['mint-dark'],
+          tabBarIcon: ({ color }) => icons.navigationArrow({ color }),
           tabBarAccessibilityLabel: 'Favoriten',
-          tabBarLabelPosition: 'below-icon',
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            height: 110 - insets.bottom,
-            alignContent: 'center',
-            paddingBottom: 15,
-          },
         }}
       />
       <Tabs.Screen
@@ -92,31 +66,8 @@ export function Navbar({ icons }: NavbarProps) {
         options={{
           headerTitle: 'Mein Profil',
           tabBarLabel: 'Profil',
-          tabBarIcon: ({ color }) => icons.profile({ color }),
-          tabBarActiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarInactiveBackgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-dark']
-              : styling.colors['mint-light'],
-          tabBarActiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['orange-accent']
-              : styling.colors['orange-accent'],
-          tabBarInactiveTintColor:
-            colorscheme === 'light'
-              ? styling.colors['mint-light']
-              : styling.colors['mint-dark'],
+          tabBarIcon: ({ color }) => icons.person({ color }),
           tabBarAccessibilityLabel: 'Profil',
-          tabBarLabelPosition: 'below-icon',
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            height: 110 - insets.bottom,
-            alignContent: 'center',
-            paddingBottom: 15,
-          },
         }}
       />
     </Tabs>
