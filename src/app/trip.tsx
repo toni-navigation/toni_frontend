@@ -13,6 +13,7 @@ import PagerView from 'react-native-pager-view';
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
 import { parseCoordinate } from '@/functions/parseCoordinate';
@@ -33,6 +34,7 @@ export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0); // Add this state to track the active page
+  const [pause, setPause] = React.useState(false);
 
   const restructureTripData: LocationProps[] = [
     parseCoordinate(tripData.origin),
@@ -60,25 +62,29 @@ export default function TripPage() {
 
   return data ? (
     <SafeAreaView className="flex-1 bg-background-light">
-      <TabBar
-        setPage={(page) => ref.current?.setPage(page)}
-        activePage={activePage}
-      />
-      <PagerView
-        onPageSelected={(event) => handlePageSelected(event)}
-        initialPage={0}
-        style={styles.pager}
-        ref={ref}
-      >
-        <TripList data={data.trip} key="0" />
-        <TripStep data={data.trip} key="1" />
-      </PagerView>
+      {pause ? (
+        <Card iconKey="pause">Pause</Card>
+      ) : (
+        <>
+          <TabBar
+            setPage={(page) => ref.current?.setPage(page)}
+            activePage={activePage}
+          />
+          <PagerView
+            onPageSelected={(event) => handlePageSelected(event)}
+            initialPage={activePage}
+            style={styles.pager}
+            ref={ref}
+          >
+            <TripList data={data.trip} key="0" />
+            <TripStep data={data.trip} key="1" />
+          </PagerView>
+        </>
+      )}
+
       <View className="mx-5">
-        <Button
-          onPress={() => router.replace('/home')}
-          buttonType="primaryOutline"
-        >
-          <Text>Pause</Text>
+        <Button onPress={() => setPause(!pause)} buttonType="primaryOutline">
+          {pause ? <Text>Fortsetzen</Text> : <Text>Pause</Text>}
         </Button>
         <Button onPress={() => router.replace('/home')} buttonType="primary">
           <Text>Beenden</Text>

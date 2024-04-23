@@ -1,12 +1,8 @@
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
-import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
 
-import { Button } from '@/components/atoms/Button';
-import { ListItem } from '@/components/atoms/ListItem';
 import { Card } from '@/components/organisms/Card';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -84,21 +80,27 @@ export function TripStep({ data }: { data: TripProps }) {
 
   const shortestDistance = distances[0];
 
-  const instruction = tripInstructionOutput(
+  let instruction = tripInstructionOutput(
     data.legs[0].maneuvers[shortestDistance.maneuverIndex],
     factor
   );
-  // if (
-  //   nearestPoint.properties.dist &&
-  //   nearestPoint.properties.dist * 1000 >
-  //     THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  // ) {
-  //   instruction = 'Bitte gehe wieder auf die Route.';
-  // }
+  if (
+    nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  ) {
+    instruction = 'Bitte gehe wieder auf die Route.';
+  }
 
   return (
     <SafeAreaView className="flex-1 m-5">
-      <Card>{instruction}</Card>
+      <Card
+        directionType={
+          data.legs[0].maneuvers[shortestDistance.maneuverIndex].type
+        }
+      >
+        {instruction}
+      </Card>
     </SafeAreaView>
   );
 }
