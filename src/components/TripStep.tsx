@@ -1,5 +1,6 @@
+import { lineString, point } from '@turf/helpers';
+import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router } from 'expo-router';
-import * as Speech from 'expo-speech';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -14,15 +15,13 @@ import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
+const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
+
 export function TripStep({ data }: { data: TripProps }) {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
   const calibration = useCalibrationStore((state) => state.calibration);
-
-  const [currentManeuver, setCurrentManeuver] = React.useState(0);
-  const factor = getCalibrationValue(calibration.factors);
-  // let maneuverValue = '';
 
   const decodedShape: {
     result: number;
@@ -34,34 +33,66 @@ export function TripStep({ data }: { data: TripProps }) {
     factor: number;
     lat: number;
   } = decodePolyline(data.legs[0].shape);
-  if (currentLocation && data) {
-    const startLat =
-      decodedShape.coordinates[
-        data.legs[0].maneuvers[currentManeuver + 1].begin_shape_index
-      ][0];
-    const startLon =
-      decodedShape.coordinates[
-        data.legs[0].maneuvers[currentManeuver + 1].begin_shape_index
-      ][1];
 
-    const distanceChange = getDistanceInMeter(
+  if (!currentLocation || !data) {
+    return (
+      <SafeAreaView>
+        <ScrollView>
+          <Text>Loading...</Text>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+  const currentLocationPoint = point([
+    currentLocation.coords.latitude,
+    currentLocation.coords.longitude,
+  ]);
+
+  const line = lineString(decodedShape.coordinates);
+
+  const nearestPoint = nearestPointOnLine(line, currentLocationPoint);
+  const factor = getCalibrationValue(calibration.factors);
+
+  const distances = data.legs[0].maneuvers.map((maneuver, index) => {
+    const startLat = decodedShape.coordinates[maneuver.begin_shape_index][0];
+    const startLon = decodedShape.coordinates[maneuver.begin_shape_index][1];
+
+    const distance = getDistanceInMeter(
       {
         coords: {
           latitude: startLat,
           longitude: startLon,
         },
       },
-      currentLocation
+      {
+        coords: {
+          latitude: nearestPoint.geometry.coordinates[0],
+          longitude: nearestPoint.geometry.coordinates[1],
+        },
+      }
     );
-    if (distanceChange && distanceChange < 5) {
-      setCurrentManeuver((prevState) => prevState + 1);
-      Speech.speak(
-        tripInstructionOutput(data.legs[0].maneuvers[currentManeuver], factor),
-        {
-          language: 'de',
-        }
-      );
-    }
+
+    return {
+      maneuverIndex: index,
+      distance,
+    };
+  });
+
+  // TODO Fallback if distance === null (not: a.distance ?? 0)
+  distances.sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
+
+  const shortestDistance = distances[0];
+
+  let instruction = tripInstructionOutput(
+    data.legs[0].maneuvers[shortestDistance.maneuverIndex],
+    factor
+  );
+  if (
+    nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  ) {
+    instruction = 'Bitte gehe wieder auf die Route.';
   }
 
   return (
@@ -76,6 +107,14 @@ export function TripStep({ data }: { data: TripProps }) {
             longitudeDelta: 0.0421,
           }}
         >
+          <Marker
+            coordinate={{
+              latitude: nearestPoint.geometry.coordinates[0],
+              longitude: nearestPoint.geometry.coordinates[1],
+            }}
+            title="Nearest Point"
+            description="You are here"
+          />
           {currentLocation && (
             <Marker
               coordinate={{
@@ -111,16 +150,15 @@ export function TripStep({ data }: { data: TripProps }) {
         </MapView>
         <ListItem
           key={
-            data.legs[0].maneuvers[currentManeuver].begin_shape_index +
-            data.legs[0].maneuvers[currentManeuver].end_shape_index
+            data.legs[0].maneuvers[shortestDistance.maneuverIndex]
+              .begin_shape_index +
+            data.legs[0].maneuvers[shortestDistance.maneuverIndex]
+              .end_shape_index
           }
         >
-          {tripInstructionOutput(
-            data.legs[0].maneuvers[currentManeuver],
-            factor
-          )}
+          {instruction}
         </ListItem>
-        <Button onPress={() => router.back()} buttonType="secondary">
+        <Button onPress={() => router.replace('/home')} buttonType="secondary">
           <Text>Beenden</Text>
         </Button>
       </ScrollView>
