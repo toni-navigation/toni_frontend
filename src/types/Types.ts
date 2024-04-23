@@ -36,3 +36,14 @@ export interface PointsProps {
   start: LocationInputProps;
   destination: LocationInputProps;
 }
+
+export interface DecodedShapeProps {
+  result: number;
+  lng: number;
+  byte: null | number;
+  shift: number;
+  coordinates: [number, number][];
+  index: number;
+  factor: number;
+  lat: number;
+}

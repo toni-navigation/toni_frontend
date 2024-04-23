@@ -7,9 +7,10 @@ import { Suggestions } from '@/components/organisms/Suggestions';
 import { photonValue } from '@/functions/photonValue';
 import { useGeocoding } from '@/queries/useGeocoding';
 import { PhotonFeature } from '@/services/api-photon';
+import { PointType } from '@/store/useTripStore';
 
 type GeocoderAutocompleteProps = {
-  value?: PhotonFeature;
+  value?: PointType;
   label: string;
   placeholder: string;
   onChange: (newValue: PhotonFeature) => void;
@@ -31,6 +32,9 @@ export function GeocoderAutocomplete({
   useEffect(() => {
     if (value) {
       setInputValue(photonValue(value));
+    }
+    if (value === null) {
+      setInputValue('Mein Standort');
     }
   }, [value]);
 

@@ -1,20 +1,32 @@
-import { useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import { lineString, point } from '@turf/helpers';
+import nearestPointOnLine from '@turf/nearest-point-on-line';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import PagerView from 'react-native-pager-view';
 
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
+import { ListItem } from '@/components/atoms/ListItem';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
+import { decodePolyline } from '@/functions/decodePolyline';
+import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { getShortestDistanceFromPoLToManeuver } from '@/functions/getShortestDistanceFromPoLToManeuver';
 import { parseCoordinate } from '@/functions/parseCoordinate';
+import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useTrip } from '@/queries/useTrip';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
@@ -33,10 +45,17 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
+const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
+const THRESHOLD_REROUTING = 100;
+
 export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0); // Add this state to track the active page
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+  const calibration = useCalibrationStore((state) => state.calibration);
 
   const restructureTripData: LocationProps[] = [
     parseCoordinate(tripData.origin),
@@ -45,10 +64,72 @@ export default function TripPage() {
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
 
+  const handlePageSelected = (
+    event: NativeSyntheticEvent<Readonly<{ position: number }>>
+  ) => {
+    setActivePage(event.nativeEvent.position);
+  };
+
+  const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
+
+  const currentLocationPoint = currentLocation
+    ? point([currentLocation.coords.latitude, currentLocation.coords.longitude])
+    : null;
+
+  const line = decodedShape && lineString(decodedShape.coordinates);
+
+  const nearestPoint =
+    line &&
+    currentLocationPoint &&
+    nearestPointOnLine(line, currentLocationPoint);
+  const factor = getCalibrationValue(calibration.factors);
+  const shortestDistance =
+    data &&
+    decodedShape &&
+    nearestPoint &&
+    getShortestDistanceFromPoLToManeuver(data, decodedShape, nearestPoint);
+
+  let instruction =
+    data &&
+    shortestDistance &&
+    tripInstructionOutput(
+      data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex],
+      factor
+    );
+  if (
+    nearestPoint &&
+    nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  ) {
+    instruction = 'Bitte gehe wieder auf die Route.';
+  }
+
+  // TODO Wenn keine Route gefunden wird -> unfinite loop, da useEffect jedes Mal ausgeführt wird
+  useEffect(() => {
+    if (
+      nearestPoint &&
+      currentLocation &&
+      nearestPoint.properties.dist &&
+      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
+    ) {
+      const params = {
+        origin: [
+          currentLocation.coords.longitude,
+          currentLocation.coords.latitude,
+        ],
+        destination: tripData.destination,
+      };
+
+      router.replace({ pathname: `/trip`, params });
+    }
+  }, [nearestPoint, currentLocation, tripData.destination]);
+
   if (isPending) {
     return (
       <View>
         <ActivityIndicator size="large" />
+        <Text>Route wird berechnet</Text>
       </View>
     );
   }
@@ -56,13 +137,18 @@ export default function TripPage() {
   if (isError) {
     return <Error error={error.message} />;
   }
-  const handlePageSelected = (
-    event: NativeSyntheticEvent<Readonly<{ position: number }>>
-  ) => {
-    setActivePage(event.nativeEvent.position);
-  };
 
-  return data ? (
+  if (!currentLocation || !data) {
+    return (
+      <SafeAreaView>
+        <ScrollView>
+          <Text>Loading...</Text>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  return data && shortestDistance ? (
     <SafeAreaView style={styles.container}>
       <TabBar
         setPage={(page) => ref.current?.setPage(page)}
@@ -75,7 +161,68 @@ export default function TripPage() {
         ref={ref}
       >
         <TripList data={data.trip} key="0" />
-        <TripStep data={data.trip} key="1" />
+        <TripStep key="1">
+          <ListItem
+            key={
+              data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
+                .begin_shape_index +
+              data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
+                .end_shape_index
+            }
+          >
+            {instruction}
+          </ListItem>
+          <MapView
+            style={{ height: 400 }}
+            initialRegion={{
+              latitude: currentLocation?.coords.latitude || 0,
+              longitude: currentLocation?.coords.longitude || 0,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: nearestPoint.geometry.coordinates[0],
+                longitude: nearestPoint.geometry.coordinates[1],
+              }}
+              title="Nearest Point"
+              description="You are here"
+            />
+            {currentLocation && (
+              <Marker
+                coordinate={{
+                  latitude: currentLocation.coords.latitude,
+                  longitude: currentLocation.coords.longitude,
+                }}
+                title="Current Location"
+                description="You are here"
+              />
+            )}
+            {data.trip.legs[0] &&
+              decodedShape?.coordinates.map((coord, index) => {
+                if (index === 0) {
+                  return null;
+                }
+
+                return (
+                  <Polyline
+                    key={coord.toString()}
+                    coordinates={[
+                      {
+                        latitude: decodedShape.coordinates[index - 1][0],
+                        longitude: decodedShape.coordinates[index - 1][1],
+                      },
+                      {
+                        latitude: coord[0],
+                        longitude: coord[1],
+                      },
+                    ]}
+                  />
+                );
+              })}
+          </MapView>
+        </TripStep>
       </PagerView>
     </SafeAreaView>
   ) : (

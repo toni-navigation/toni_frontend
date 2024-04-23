@@ -14,6 +14,7 @@ import { Button } from '@/components/atoms/Button';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
+import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
@@ -34,32 +35,22 @@ export default function Home() {
 
   const reverseData = useReverseData();
 
-  const startNavigationHandler = () => {
-    if (origin && destination) {
+  const startNavigationHandler = async () => {
+    let newOrigin;
+    if (origin === null) {
+      newOrigin = currentLocation
+        ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
+        : undefined;
+    }
+    if (newOrigin && destination) {
       const params = {
-        origin: origin.geometry.coordinates,
+        origin: newOrigin,
         destination: destination.geometry.coordinates,
       };
 
       router.push({ pathname: `/trip`, params });
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      if (!currentLocation) {
-        return;
-      }
-      const startPosition = {
-        lat: currentLocation.coords.latitude,
-        lon: currentLocation.coords.longitude,
-        radius: 0.05,
-      };
-      const data = await reverseData.mutateAsync(startPosition);
-      changeOrigin(data.features[0]);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (reverseData.error) {
     return (
@@ -68,12 +59,7 @@ export default function Home() {
       </View>
     );
   }
-  //
-  // const position = currentLocation?.coords.longitude &&
-  //   currentLocation.coords.longitude && {
-  //     longitude: currentLocation.coords.longitude,
-  //     latitude: currentLocation.coords.latitude,
-  //   };
+
   const bbox = currentLocation && getBbox(currentLocation);
   const bboxCoordinates = bbox && [
     { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
