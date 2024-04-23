@@ -21,14 +21,13 @@ import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
-import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { getShortestDistanceFromPoLToManeuver } from '@/functions/getShortestDistanceFromPoLToManeuver';
 import { parseCoordinate } from '@/functions/parseCoordinate';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useTrip } from '@/queries/useTrip';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { DecodedShapeProps, LocationProps } from '@/types/Types';
+import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
   origin: string;
@@ -65,10 +64,72 @@ export default function TripPage() {
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
 
+  const handlePageSelected = (
+    event: NativeSyntheticEvent<Readonly<{ position: number }>>
+  ) => {
+    setActivePage(event.nativeEvent.position);
+  };
+
+  const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
+
+  const currentLocationPoint = currentLocation
+    ? point([currentLocation.coords.latitude, currentLocation.coords.longitude])
+    : null;
+
+  const line = decodedShape && lineString(decodedShape.coordinates);
+
+  const nearestPoint =
+    line &&
+    currentLocationPoint &&
+    nearestPointOnLine(line, currentLocationPoint);
+  const factor = getCalibrationValue(calibration.factors);
+  const shortestDistance =
+    data &&
+    decodedShape &&
+    nearestPoint &&
+    getShortestDistanceFromPoLToManeuver(data, decodedShape, nearestPoint);
+
+  let instruction =
+    data &&
+    shortestDistance &&
+    tripInstructionOutput(
+      data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex],
+      factor
+    );
+  if (
+    nearestPoint &&
+    nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  ) {
+    instruction = 'Bitte gehe wieder auf die Route.';
+  }
+
+  // TODO Wenn keine Route gefunden wird -> unfinite loop, da useEffect jedes Mal ausgeführt wird
+  useEffect(() => {
+    if (
+      nearestPoint &&
+      currentLocation &&
+      nearestPoint.properties.dist &&
+      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
+    ) {
+      const params = {
+        origin: [
+          currentLocation.coords.longitude,
+          currentLocation.coords.latitude,
+        ],
+        destination: tripData.destination,
+      };
+
+      router.replace({ pathname: `/trip`, params });
+    }
+  }, [nearestPoint, currentLocation, tripData.destination]);
+
   if (isPending) {
     return (
       <View>
         <ActivityIndicator size="large" />
+        <Text>Route wird berechnet</Text>
       </View>
     );
   }
@@ -86,60 +147,8 @@ export default function TripPage() {
       </SafeAreaView>
     );
   }
-  const handlePageSelected = (
-    event: NativeSyntheticEvent<Readonly<{ position: number }>>
-  ) => {
-    setActivePage(event.nativeEvent.position);
-  };
 
-  const decodedShape: DecodedShapeProps = decodePolyline(
-    data.trip.legs[0].shape
-  );
-
-  const currentLocationPoint = point([
-    currentLocation.coords.latitude,
-    currentLocation.coords.longitude,
-  ]);
-
-  const line = lineString(decodedShape.coordinates);
-
-  const nearestPoint = nearestPointOnLine(line, currentLocationPoint);
-  const factor = getCalibrationValue(calibration.factors);
-  const shortestDistance = getShortestDistanceFromPoLToManeuver(
-    data,
-    decodedShape,
-    nearestPoint
-  );
-  let instruction = tripInstructionOutput(
-    data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex],
-    factor
-  );
-  if (
-    nearestPoint.properties.dist &&
-    nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
-    instruction = 'Bitte gehe wieder auf die Route.';
-  }
-
-  // useEffect(() => {
-  //   if (
-  //     nearestPoint.properties.dist &&
-  //     nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
-  //   ) {
-  //     const params = {
-  //       origin: [
-  //         currentLocation.coords.longitude,
-  //         currentLocation.coords.latitude,
-  //       ],
-  //       destination: tripData.destination,
-  //     };
-  //
-  //     router.push({ pathname: `/trip`, params });
-  //   }
-  // }, [nearestPoint, currentLocation, tripData.destination]);
-
-  return (
+  return data && shortestDistance ? (
     <SafeAreaView style={styles.container}>
       <TabBar
         setPage={(page) => ref.current?.setPage(page)}
@@ -216,5 +225,7 @@ export default function TripPage() {
         </TripStep>
       </PagerView>
     </SafeAreaView>
+  ) : (
+    <Error error="No data found" />
   );
 }
