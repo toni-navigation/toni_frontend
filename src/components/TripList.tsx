@@ -7,15 +7,19 @@ import { ListItem } from '@/components/atoms/ListItem';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
-import { TripProps } from '@/types/Valhalla-Types';
+import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
-export function TripList({ data }: { data: TripProps }) {
+export function TripList({
+  maneuvers,
+}: {
+  maneuvers: ValhallaManeuverProps[];
+}) {
   const calibration = useCalibrationStore((state) => state.calibration);
 
   return (
     <SafeAreaView className="flex-1">
       <FlatList
-        data={data.legs[0].maneuvers}
+        data={maneuvers}
         className="mx-5 my-5"
         renderItem={({ item, index }) => (
           <ListItem>

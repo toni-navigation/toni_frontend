@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -141,9 +140,7 @@ export default function TripPage() {
   if (!currentLocation || !data) {
     return (
       <SafeAreaView>
-        <ScrollView>
-          <Text>Loading...</Text>
-        </ScrollView>
+        <Text>Loading...</Text>
       </SafeAreaView>
     );
   }
@@ -160,7 +157,12 @@ export default function TripPage() {
         style={styles.pager}
         ref={ref}
       >
-        <TripList data={data.trip} key="0" />
+        <TripList
+          maneuvers={data.trip.legs[0].maneuvers.slice(
+            shortestDistance.maneuverIndex
+          )}
+          key="0"
+        />
         <TripStep key="1">
           <ListItem
             key={
