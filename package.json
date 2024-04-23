@@ -53,9 +53,11 @@
     "react-native-pager-view": "6.2.3",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
+    "react-native-svg": "^15.1.0",
     "react-native-tab-view": "^3.5.2",
     "ts-node": "^10.9.2",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.0",
+    "expo-system-ui": "~2.9.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
