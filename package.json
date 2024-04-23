@@ -25,6 +25,7 @@
     "@turf/circle": "^6.5.0",
     "@turf/distance": "^6.5.0",
     "@turf/helpers": "^6.5.0",
+    "@turf/nearest-point-on-line": "^6.5.0",
     "@uidotdev/usehooks": "2.4.1",
     "axios": "^1.6.7",
     "expo": "~50.0.17",
