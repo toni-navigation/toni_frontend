@@ -5,21 +5,20 @@ import { immer } from 'zustand/middleware/immer';
 
 import { PhotonFeature } from '@/services/api-photon';
 
-export type PointType = PhotonFeature | null | undefined;
 type TripState = {
-  origin: PointType;
-  destination: PointType;
+  origin: PhotonFeature | undefined;
+  destination: PhotonFeature | undefined;
 
   actions: {
     resetTripStore: () => void;
-    changeOrigin: (origin: PointType) => void;
-    changeDestination: (destination: PointType) => void;
+    changeOrigin: (origin: PhotonFeature) => void;
+    changeDestination: (destination: PhotonFeature) => void;
     switchOriginDestination: () => void;
   };
 };
 
 const defaultTripState: Omit<TripState, 'actions'> = {
-  origin: null,
+  origin: undefined,
   destination: undefined,
 };
 
@@ -30,11 +29,11 @@ export const useTripStore = create<TripState>()(
       actions: {
         resetTripStore: () =>
           set((state) => ({ ...state, ...defaultTripState })),
-        changeOrigin: (origin: PointType) =>
+        changeOrigin: (origin: PhotonFeature) =>
           set((state) => {
             state.origin = origin;
           }),
-        changeDestination: (destination: PointType) =>
+        changeDestination: (destination: PhotonFeature) =>
           set((state) => {
             state.destination = destination;
           }),

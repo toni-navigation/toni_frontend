@@ -14,7 +14,6 @@ import { Button } from '@/components/atoms/Button';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
-import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
@@ -34,17 +33,39 @@ export default function Home() {
   const colorscheme = useColorScheme();
 
   const reverseData = useReverseData();
+  useEffect(() => {
+    (async () => {
+      if (!currentLocation) {
+        return;
+      }
+      const startPosition = {
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+        radius: 0.05,
+      };
+      const data = await reverseData.mutateAsync(startPosition);
+      changeOrigin(data.features[0]);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  if (reverseData.error) {
+    return (
+      <View>
+        <Text>reverseData Error, {reverseData.error.message}</Text>
+      </View>
+    );
+  }
   const startNavigationHandler = async () => {
-    let newOrigin;
-    if (origin === null) {
-      newOrigin = currentLocation
-        ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
-        : undefined;
-    }
-    if (newOrigin && destination) {
+    // let newOrigin;
+    // if (origin === null) {
+    //   newOrigin = currentLocation
+    //     ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
+    //     : undefined;
+    // }
+    if (origin && destination) {
       const params = {
-        origin: newOrigin,
+        origin: origin.geometry.coordinates,
         destination: destination.geometry.coordinates,
       };
 
@@ -55,7 +76,7 @@ export default function Home() {
   if (reverseData.error) {
     return (
       <View>
-        <Text>reverseData Error, {reverseData.error.message}</Text>
+        <Text>reverseData Error</Text>
       </View>
     );
   }
