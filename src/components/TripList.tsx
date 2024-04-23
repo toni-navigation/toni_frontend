@@ -1,33 +1,35 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
-import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
-import { TripProps } from '@/types/Valhalla-Types';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { TripProps } from '@/types/Valhalla-Types';
 
 export function TripList({ data }: { data: TripProps }) {
   const calibration = useCalibrationStore((state) => state.calibration);
 
   return (
     <SafeAreaView className="flex-1">
-      <ScrollView className="mx-5 my-5">
-        {data.legs[0].maneuvers.map((maneuver, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <ListItem key={index}>
+      <FlatList
+        data={data.legs[0].maneuvers}
+        className="mx-5 my-5"
+        renderItem={({ item, index }) => (
+          <ListItem>
             <Text>
-              {index + 1}.{' '}
+              {index + 1}
+              {'. '}
               {tripInstructionOutput(
-                maneuver,
+                item,
                 getCalibrationValue(calibration.factors)
               )}
             </Text>
           </ListItem>
-        ))}
-      </ScrollView>
+        )}
+      />
       <View className="mx-5">
         <Button onPress={() => router.back()} buttonType="primary">
           <Text>Beenden</Text>
