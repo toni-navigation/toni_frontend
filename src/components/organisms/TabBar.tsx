@@ -18,6 +18,7 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
   const activeText = 'text-center text-base text-mint-light';
   const inactiveText = 'text-center text-base text-mint-dark';
 
+  // TODO: insert fontFamily via Nativewind
   return (
     <View className="flex-row">
       <TouchableOpacity

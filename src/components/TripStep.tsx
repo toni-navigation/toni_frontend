@@ -2,11 +2,12 @@ import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, Text } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
+import { Card } from '@/components/organisms/Card';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
@@ -83,85 +84,21 @@ export function TripStep({ data }: { data: TripProps }) {
 
   const shortestDistance = distances[0];
 
-  let instruction = tripInstructionOutput(
+  const instruction = tripInstructionOutput(
     data.legs[0].maneuvers[shortestDistance.maneuverIndex],
     factor
   );
-  if (
-    nearestPoint.properties.dist &&
-    nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
-    instruction = 'Bitte gehe wieder auf die Route.';
-  }
+  // if (
+  //   nearestPoint.properties.dist &&
+  //   nearestPoint.properties.dist * 1000 >
+  //     THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  // ) {
+  //   instruction = 'Bitte gehe wieder auf die Route.';
+  // }
 
   return (
-    <SafeAreaView className="flex-1">
-      <ScrollView className="mx-5 my-5">
-        <MapView
-          style={{ height: 400 }}
-          initialRegion={{
-            latitude: currentLocation?.coords.latitude || 0,
-            longitude: currentLocation?.coords.longitude || 0,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{
-              latitude: nearestPoint.geometry.coordinates[0],
-              longitude: nearestPoint.geometry.coordinates[1],
-            }}
-            title="Nearest Point"
-            description="You are here"
-          />
-          {currentLocation && (
-            <Marker
-              coordinate={{
-                latitude: currentLocation.coords.latitude,
-                longitude: currentLocation.coords.longitude,
-              }}
-              title="Current Location"
-              description="You are here"
-            />
-          )}
-          {data.legs[0] &&
-            decodedShape?.coordinates.map((coord, index) => {
-              if (index === 0) {
-                return null;
-              }
-
-              return (
-                <Polyline
-                  key={coord.toString()}
-                  coordinates={[
-                    {
-                      latitude: decodedShape.coordinates[index - 1][0],
-                      longitude: decodedShape.coordinates[index - 1][1],
-                    },
-                    {
-                      latitude: coord[0],
-                      longitude: coord[1],
-                    },
-                  ]}
-                />
-              );
-            })}
-        </MapView>
-        <ListItem
-          key={
-            data.legs[0].maneuvers[shortestDistance.maneuverIndex]
-              .begin_shape_index +
-            data.legs[0].maneuvers[shortestDistance.maneuverIndex]
-              .end_shape_index
-          }
-        >
-          {instruction}
-        </ListItem>
-        <Button onPress={() => router.replace('/home')} buttonType="secondary">
-          <Text>Beenden</Text>
-        </Button>
-      </ScrollView>
+    <SafeAreaView className="flex-1 m-5">
+      <Card>{instruction}</Card>
     </SafeAreaView>
   );
 }

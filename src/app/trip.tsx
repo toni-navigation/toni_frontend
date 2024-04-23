@@ -1,16 +1,18 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
+import { Button } from '@/components/atoms/Button';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
 import { parseCoordinate } from '@/functions/parseCoordinate';
@@ -22,12 +24,6 @@ export type SearchParamType = {
   destination: string;
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   pager: {
     flex: 1,
     alignSelf: 'stretch',
@@ -63,7 +59,7 @@ export default function TripPage() {
   };
 
   return data ? (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-background-light">
       <TabBar
         setPage={(page) => ref.current?.setPage(page)}
         activePage={activePage}
@@ -77,6 +73,17 @@ export default function TripPage() {
         <TripList data={data.trip} key="0" />
         <TripStep data={data.trip} key="1" />
       </PagerView>
+      <View className="mx-5">
+        <Button
+          onPress={() => router.replace('/home')}
+          buttonType="primaryOutline"
+        >
+          <Text>Pause</Text>
+        </Button>
+        <Button onPress={() => router.replace('/home')} buttonType="primary">
+          <Text>Beenden</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   ) : (
     <Error error="No data found" />
