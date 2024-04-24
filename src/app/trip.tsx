@@ -1,6 +1,7 @@
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as Speech from 'expo-speech';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,6 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
@@ -15,6 +17,7 @@ import PagerView from 'react-native-pager-view';
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
+import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { Map } from '@/components/organisms/Map';
@@ -24,10 +27,13 @@ import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getShortestDistanceFromPoLToManeuver } from '@/functions/getShortestDistanceFromPoLToManeuver';
 import { matchIconType } from '@/functions/matchIconType';
 import { parseCoordinate } from '@/functions/parseCoordinate';
+import { photonValue } from '@/functions/photonValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
+import { useReverseData } from '@/mutations/useReverseData';
 import { useTrip } from '@/queries/useTrip';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import stylings from '@/stylings';
 import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
@@ -116,6 +122,21 @@ export default function TripPage() {
     instruction = 'Bitte gehe wieder auf die Route.';
   }
 
+  const reverseLocation = useReverseData();
+  const createCurrentLocationMessage = async () => {
+    Speech.speak('Berechne Standort', {
+      language: 'de',
+    });
+    if (currentLocation) {
+      const currentLocationData = await reverseLocation.mutateAsync({
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+      });
+      Speech.speak(photonValue(currentLocationData.features[0]), {
+        language: 'de',
+      });
+    }
+  };
   const shouldReroute = useCallback(
     () =>
       nearestPoint &&
@@ -152,6 +173,24 @@ export default function TripPage() {
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
           />
+          <View className="mx-auto my-3">
+            <TouchableOpacity
+              accessibilityHint="Aktueller Standort"
+              accessibilityRole="button"
+              className="flex flex-row items-center gap-x-4"
+              onPress={createCurrentLocationMessage}
+            >
+              <Icon
+                color={stylings.colors['primary-color-dark']}
+                size={24}
+                icon="location"
+              />
+              <Text className="text-primary-color-dark opacity-50">
+                Aktueller Standort
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <PagerView
             onPageSelected={(event) => handlePageSelected(event)}
             initialPage={activePage}

@@ -37,3 +37,6 @@ export const cross =
   '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
   '<path d="M16 8L8 16M8.00001 8L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n' +
   '</svg>';
+
+export const location =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="34.939" height="34.939" viewBox="0 0 34.939 34.939"><path d="M19.468,2A17.469,17.469,0,1,1,2,19.468,17.469,17.469,0,0,1,19.468,2Zm0,2.62A14.849,14.849,0,1,0,34.317,19.468,14.849,14.849,0,0,0,19.468,4.619Zm-.006,4.367A10.477,10.477,0,1,1,8.985,19.462,10.477,10.477,0,0,1,19.462,8.986Z" transform="translate(-1.998 -1.999)" fill="currentColor"/></svg>';
