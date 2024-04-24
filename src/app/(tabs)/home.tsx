@@ -10,6 +10,7 @@ import {
 import MapView, { Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
@@ -93,7 +94,8 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5 my-5" keyboardShouldPersistTaps="always">
+      <ScrollView className="mx-8 my-8" keyboardShouldPersistTaps="always">
+        <Header>Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
           placeholder="Startpunkt eingeben"

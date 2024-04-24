@@ -18,6 +18,7 @@ export function Navbar({ icons }: NavbarProps) {
   return (
     <Tabs
       screenOptions={{
+        headerShown: false,
         tabBarStyle: {
           height: 118,
           borderTopWidth: 0,
