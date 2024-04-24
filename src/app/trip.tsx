@@ -1,7 +1,7 @@
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -17,6 +17,7 @@ import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
+import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -45,11 +46,13 @@ const THRESHOLD_REROUTING = 100;
 export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
-  const [activePage, setActivePage] = React.useState(0); // Add this state to track the active page
+  const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const [shouldBeRerouted, setShouldBeRerouted] = useState(false);
+
   const calibration = useCalibrationStore((state) => state.calibration);
 
   const restructureTripData: LocationProps[] = [
@@ -58,7 +61,20 @@ export default function TripPage() {
   ];
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
+  const rerouteHandler = () => {
+    if (!currentLocation) return;
 
+    const params = {
+      origin: [
+        currentLocation.coords.longitude,
+        currentLocation.coords.latitude,
+      ],
+      destination: tripData.destination,
+    };
+
+    setShouldBeRerouted(false);
+    router.replace({ pathname: `/trip`, params });
+  };
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
   ) => {
@@ -100,25 +116,18 @@ export default function TripPage() {
     instruction = 'Bitte gehe wieder auf die Route.';
   }
 
-  // TODO Wenn keine Route gefunden wird -> unfinite loop, da useEffect jedes Mal ausgeführt wird
-  useEffect(() => {
-    if (
+  const shouldReroute = useCallback(
+    () =>
       nearestPoint &&
       currentLocation &&
       nearestPoint.properties.dist &&
-      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
-    ) {
-      const params = {
-        origin: [
-          currentLocation.coords.longitude,
-          currentLocation.coords.latitude,
-        ],
-        destination: tripData.destination,
-      };
+      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING,
+    [nearestPoint, currentLocation]
+  );
 
-      router.replace({ pathname: `/trip`, params });
-    }
-  }, [nearestPoint, currentLocation, tripData.destination]);
+  useEffect(() => {
+    setShouldBeRerouted(!!shouldReroute());
+  }, [nearestPoint, currentLocation, tripData.destination, shouldReroute]);
 
   if (isPending) {
     return (
@@ -156,6 +165,21 @@ export default function TripPage() {
               key="0"
             />
             <TripStep key="1">
+              {shouldBeRerouted && (
+                <View>
+                  <Text>
+                    Du befindest dich nicht auf der Route. Möchtest du die Route
+                    neu berechnen?
+                  </Text>
+                  <Button
+                    onPress={rerouteHandler}
+                    disabled={!currentLocation}
+                    buttonType="primary"
+                  >
+                    Reroute
+                  </Button>
+                </View>
+              )}
               <Card
                 iconKey={matchIconType(
                   data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
@@ -164,12 +188,13 @@ export default function TripPage() {
               >
                 {instruction}
               </Card>
-              {/* <Map */}
-              {/*  currentLocation={currentLocation} */}
-              {/*  nearestPoint={nearestPoint} */}
-              {/*  data={data} */}
-              {/*  decodedShape={decodedShape} */}
-              {/* /> */}
+              <Map
+                origin={parseCoordinate(tripData.origin)}
+                destination={parseCoordinate(tripData.destination)}
+                currentLocation={currentLocation}
+                nearestPoint={nearestPoint}
+                decodedShape={decodedShape}
+              />
             </TripStep>
           </PagerView>
         </>
