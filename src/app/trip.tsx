@@ -17,6 +17,7 @@ import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { ListItem } from '@/components/atoms/ListItem';
 import { Error } from '@/components/organisms/Error';
+import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -174,56 +175,12 @@ export default function TripPage() {
           >
             {instruction}
           </ListItem>
-          <MapView
-            style={{ height: 400 }}
-            initialRegion={{
-              latitude: currentLocation?.coords.latitude || 0,
-              longitude: currentLocation?.coords.longitude || 0,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: nearestPoint.geometry.coordinates[0],
-                longitude: nearestPoint.geometry.coordinates[1],
-              }}
-              title="Nearest Point"
-              description="You are here"
-            />
-            {currentLocation && (
-              <Marker
-                coordinate={{
-                  latitude: currentLocation.coords.latitude,
-                  longitude: currentLocation.coords.longitude,
-                }}
-                title="Current Location"
-                description="You are here"
-              />
-            )}
-            {data.trip.legs[0] &&
-              decodedShape?.coordinates.map((coord, index) => {
-                if (index === 0) {
-                  return null;
-                }
-
-                return (
-                  <Polyline
-                    key={coord.toString()}
-                    coordinates={[
-                      {
-                        latitude: decodedShape.coordinates[index - 1][0],
-                        longitude: decodedShape.coordinates[index - 1][1],
-                      },
-                      {
-                        latitude: coord[0],
-                        longitude: coord[1],
-                      },
-                    ]}
-                  />
-                );
-              })}
-          </MapView>
+          <Map
+            currentLocation={currentLocation}
+            nearestPoint={nearestPoint}
+            data={data}
+            decodedShape={decodedShape}
+          />
         </TripStep>
       </PagerView>
     </SafeAreaView>
