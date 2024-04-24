@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import { Calibration } from '@/components/Calibration';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 
 export default function CalibrationPage() {
   const colorscheme = useColorScheme();
@@ -12,7 +13,8 @@ export default function CalibrationPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5 my-5">
+      <ScrollView className="mx-8 my-8">
+        <Header>Schrittlänge konfigurieren</Header>
         <Calibration />
         <Button
           buttonType="primary"

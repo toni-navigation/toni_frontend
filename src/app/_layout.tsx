@@ -36,7 +36,8 @@ export default function StackLayout() {
               fontFamily: 'generalSansSemi',
               fontWeight: 'bold',
             },
-            headerShown: true,
+
+            headerShown: false,
             // eslint-disable-next-line react/jsx-no-undef
             headerBackVisible: false, // TODO: set to false when back button is implemented
           }}
@@ -44,13 +45,13 @@ export default function StackLayout() {
           <Stack.Screen
             name="trip"
             options={{
-              headerTitle: 'Derzeitige Navigation',
+              headerShown: false,
             }}
           />
           <Stack.Screen
             name="calibration"
             options={{
-              headerTitle: 'Kalibrierung',
+              headerShown: false,
             }}
           />
           <Stack.Screen

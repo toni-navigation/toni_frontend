@@ -3,6 +3,7 @@ import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 
 import { Calibration } from '@/components/Calibration';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 export default function Page() {
@@ -16,7 +17,8 @@ export default function Page() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5 my-5">
+      <ScrollView className="mx-8 my-8">
+        <Header>Profil</Header>
         <Calibration />
         <Text className="text-white text-center text-lg">
           {JSON.stringify(calibration.meters)}

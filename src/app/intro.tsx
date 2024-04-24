@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 
 export default function CalibrationPage() {
   const colorscheme = useColorScheme();
@@ -17,12 +18,10 @@ export default function CalibrationPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-5 my-5">
+      <ScrollView className="mx-8 my-8">
+        <Header>Schrittlänge konfigurieren</Header>
         <View>
-          <Text className="text-4xl font-extrabold font-generalSansSemi">
-            Toni
-          </Text>
-          <Text className="text-xl font-atkinsonRegular">
+          <Text className="text-2xl font-atkinsonRegular">
             Nun kalibrieren wir deine Schrittlänge, damit die Navigation
             möglichst genau wird. Bitte stelle im Vorfeld sicher, dass die
             Strecke geeignet ist, also möglichst gerade und ohne Hindernisse.
