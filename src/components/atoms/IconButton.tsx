@@ -50,15 +50,15 @@ export function IconButton({
   };
 
   return (
-    <View className="flex justify-end items-end mb-4">
+    <View className="flex justify-center items-center mb-4">
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`h-10 w-10 flex justify-center items-center rounded-[5px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`p-3 flex justify-center items-center rounded-[100px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
       >
-        <Icon icon={icon} size={24} color={`${variant[buttonType].fill}`} />
+        <Icon icon={icon} size={40} color={`${variant[buttonType].fill}`} />
       </TouchableOpacity>
     </View>
   );

@@ -95,7 +95,7 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 my-8" keyboardShouldPersistTaps="always">
+      <ScrollView className="mx-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
@@ -117,19 +117,21 @@ export default function Home() {
           onChange={(value) => changeDestination(value)}
         />
 
-        <Map
-          bbox={bboxCoordinates}
-          origin={newOrigin}
-          destination={
-            destination
-              ? {
-                  lat: destination.geometry.coordinates[1],
-                  lon: destination.geometry.coordinates[0],
-                }
-              : undefined
-          }
-          currentLocation={currentLocation}
-        />
+        {/* <Map */}
+        {/*  bbox={bboxCoordinates} */}
+        {/*  origin={newOrigin} */}
+        {/*  destination={ */}
+        {/*    destination */}
+        {/*      ? { */}
+        {/*          lat: destination.geometry.coordinates[1], */}
+        {/*          lon: destination.geometry.coordinates[0], */}
+        {/*        } */}
+        {/*      : undefined */}
+        {/*  } */}
+        {/*  currentLocation={currentLocation} */}
+        {/* /> */}
+      </ScrollView>
+      <View className="mx-5 mb-8">
         <Button
           onPress={startNavigationHandler}
           disabled={origin === undefined || destination === undefined}
@@ -137,7 +139,7 @@ export default function Home() {
         >
           Route starten
         </Button>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
