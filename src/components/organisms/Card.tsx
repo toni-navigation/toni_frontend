@@ -18,13 +18,13 @@ export function Card({ iconKey, children }: CardProps) {
     <View className="flex-1 justify-center items-center">
       {iconKey && (
         <Icon
-          color={styling.colors['primary-color-light']}
+          color={styling.colors['primary-color-dark']}
           icon={iconKey}
           size={200}
         />
       )}
 
-      <Text className="text-primary-color-light font-atkinsonRegular">
+      <Text className="text-primary-color-dark font-atkinsonRegular">
         {children}
       </Text>
     </View>

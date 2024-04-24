@@ -10,20 +10,18 @@ import {
   Text,
   View,
 } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps';
 import PagerView from 'react-native-pager-view';
 
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/organisms/Card';
-import { ListItem } from '@/components/atoms/ListItem';
 import { Error } from '@/components/organisms/Error';
-import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getShortestDistanceFromPoLToManeuver } from '@/functions/getShortestDistanceFromPoLToManeuver';
+import { matchIconType } from '@/functions/matchIconType';
 import { parseCoordinate } from '@/functions/parseCoordinate';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useTrip } from '@/queries/useTrip';
@@ -151,34 +149,45 @@ export default function TripPage() {
             style={styles.pager}
             ref={ref}
           >
-            <TripList maneuvers={data.trip.legs[0].maneuvers.slice(
-              shortestDistance.maneuverIndex
-            )} key="0" />
-            <TripStep  key="1"><ListItem
-              key={
-                data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
-                  .begin_shape_index +
-                data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
-                  .end_shape_index
-              }
-            >
-              {instruction}
-            </ListItem>
-              <Map
-                currentLocation={currentLocation}
-                nearestPoint={nearestPoint}
-                data={data}
-                decodedShape={decodedShape}
-              /></TripStep>
+            <TripList
+              maneuvers={data.trip.legs[0].maneuvers.slice(
+                shortestDistance.maneuverIndex
+              )}
+              key="0"
+            />
+            <TripStep key="1">
+              <Card
+                iconKey={matchIconType(
+                  data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
+                    .type
+                )}
+              >
+                {instruction}
+              </Card>
+              {/* <Map */}
+              {/*  currentLocation={currentLocation} */}
+              {/*  nearestPoint={nearestPoint} */}
+              {/*  data={data} */}
+              {/*  decodedShape={decodedShape} */}
+              {/* /> */}
+            </TripStep>
           </PagerView>
         </>
       )}
 
       <View className="mx-5">
-        <Button onPress={() => setPause(!pause)} buttonType="primaryOutline" disabled={false}>
+        <Button
+          onPress={() => setPause(!pause)}
+          buttonType="primaryOutline"
+          disabled={false}
+        >
           {pause ? <Text>Fortsetzen</Text> : <Text>Pause</Text>}
         </Button>
-        <Button onPress={() => router.replace('/home')} buttonType="primary" disabled={false}>
+        <Button
+          onPress={() => router.replace('/home')}
+          buttonType="primary"
+          disabled={false}
+        >
           <Text>Beenden</Text>
         </Button>
       </View>
