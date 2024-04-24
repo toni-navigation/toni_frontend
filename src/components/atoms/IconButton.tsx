@@ -1,68 +1,64 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { TouchableOpacity, useColorScheme, View } from 'react-native';
+
+import { Icon, IconByKey } from '@/components/atoms/Icon';
+import styling from '@/stylings';
 
 interface IconButtonProps {
-  children: React.ReactNode;
+  icon: IconByKey;
   onPress: () => void;
-  buttonType: 'primary' | 'disabled';
+  disabled: true | false;
+  buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
-export function IconButton({ children, onPress, buttonType }: IconButtonProps) {
+export function IconButton({
+  icon,
+  disabled,
+  onPress,
+  buttonType,
+}: IconButtonProps) {
   const colorscheme = useColorScheme();
   const variant = {
-    disabled: { button: 'bg-disabled-color', text: 'text-white' },
+    accent: {
+      button: 'bg-orange-accent',
+      fill: 'fill-background-light',
+    },
+    accentOutline: {
+      button:
+        'bg-transparent border border-2 border-solid border-orange-accent',
+      fill: 'fill-orange-accent',
+    },
     primary: {
       button:
         colorscheme === 'light'
-          ? 'bg-primary-color-light'
-          : 'bg-primary-color-dark',
-      text: colorscheme === 'light' ? 'text-white' : 'text-background-dark',
-    },
-    secondary: {
-      button:
+          ? 'bg-primary-color-dark'
+          : 'bg-primary-color-light',
+      fill:
         colorscheme === 'light'
-          ? 'bg-secondary-color-light'
-          : 'bg-secondary-color-dark',
-      text: colorscheme === 'light' ? 'text-white' : 'text-background-dark',
+          ? styling.colors['primary-color-light']
+          : styling.colors['primary-color-dark'],
     },
     primaryOutline: {
       button:
         colorscheme === 'light'
-          ? 'bg-transparent border border-2 border-solid border-primary-color-light'
-          : 'bg-transparent border border-2 border-solid border-primary-color-dark',
-      text:
+          ? 'bg-transparent border border-2 border-solid border-primary-color-dark'
+          : 'bg-transparent border border-2 border-solid border-primary-color-light',
+      fill:
         colorscheme === 'light'
-          ? 'text-primary-color-light'
-          : 'text-primary-color-dark',
-    },
-    secondaryOutline: {
-      button:
-        colorscheme === 'light'
-          ? 'bg-transparent border border-2 border-solid border-secondary-color-light'
-          : 'bg-transparent border border-2 border-solid border-secondary-color-dark',
-      text:
-        colorscheme === 'light'
-          ? 'text-secondary-color-light'
-          : 'text-secondary-color-dark',
+          ? styling.colors['primary-color-dark']
+          : styling.colors['primary-color-light'],
     },
   };
 
   return (
     <View className="flex justify-end items-end mb-4">
       <TouchableOpacity
-        accessibilityHint={buttonType === 'disabled' ? 'Nicht nutzbar' : ''}
-        className={`h-10 w-10 flex justify-center items-center rounded-[5px]  ${variant[buttonType].button}`}
+        accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
+        className={`h-10 w-10 flex justify-center items-center rounded-[5px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
-        disabled={buttonType === 'disabled'}
-        accessibilityLabel={
-          buttonType === 'disabled'
-            ? `${children} nicht nutzbar`
-            : `${children}`
-        }
+        accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
       >
-        <Text className={`text-center text-lg ${variant[buttonType].text}`}>
-          {children}
-        </Text>
+        <Icon icon={icon} size={24} color={`${variant[buttonType].fill}`} />
       </TouchableOpacity>
     </View>
   );

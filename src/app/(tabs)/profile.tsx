@@ -23,7 +23,8 @@ export default function Page() {
           {JSON.stringify(calibration.factors)}
         </Text>
         <Button
-          buttonType="secondary"
+          buttonType="primaryOutline"
+          disabled={false}
           onPress={() => {
             resetCalibrationStore();
           }}

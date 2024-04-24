@@ -116,7 +116,7 @@ export function Calibration() {
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
-        <Button buttonType="secondary" onPress={stopPedometer}>
+        <Button buttonType="primary" onPress={stopPedometer} disabled={false}>
           Abbrechen
         </Button>
       );
@@ -132,14 +132,14 @@ export function Calibration() {
       fallback.current
     ) {
       return (
-        <Button buttonType="secondary" onPress={fallbackStop}>
+        <Button buttonType="primary" onPress={fallbackStop} disabled={false}>
           Stopp
         </Button>
       );
     }
 
     return (
-      <Button buttonType="secondary" onPress={startPedometer}>
+      <Button buttonType="primary" onPress={startPedometer} disabled={false}>
         Start Kalibrierung
       </Button>
     );

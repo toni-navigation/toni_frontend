@@ -158,7 +158,11 @@ export function TripStep({ data }: { data: TripProps }) {
         >
           {instruction}
         </ListItem>
-        <Button onPress={() => router.replace('/home')} buttonType="secondary">
+        <Button
+          onPress={() => router.replace('/home')}
+          disabled={false}
+          buttonType="primary"
+        >
           <Text>Beenden</Text>
         </Button>
       </ScrollView>
