@@ -42,6 +42,7 @@ export function GeocoderAutocomplete({
         value={inputValue}
         accessibilityLabel={label}
         placeholder={placeholder}
+        onClickDelete={() => setInputValue('')}
         onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
