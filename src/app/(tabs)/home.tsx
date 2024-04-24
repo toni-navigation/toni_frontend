@@ -96,8 +96,8 @@ export default function Home() {
       <ScrollView className="mx-5 my-5" keyboardShouldPersistTaps="always">
         <GeocoderAutocomplete
           value={origin}
-          placeholder="Startpunkt eingeben"
-          label="Startpunkt"
+          placeholder="Start eingeben"
+          label="Start"
           onChange={(value) => changeOrigin(value)}
         />
 
@@ -109,8 +109,8 @@ export default function Home() {
         />
         <GeocoderAutocomplete
           value={destination}
-          placeholder="Zielpunkt eingeben"
-          label="Zielpunkt"
+          placeholder="Ziel eingeben"
+          label="Ziel"
           onChange={(value) => changeDestination(value)}
         />
         <MapView
