@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,12 +7,12 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import MapView, { Polygon } from 'react-native-maps';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import { Map } from '@/components/organisms/Map';
 import { getBbox } from '@/functions/getBbox';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -20,7 +20,6 @@ import { useTripStore } from '@/store/useTripStore';
 
 export default function Home() {
   // const markerRef = React.useRef(null);
-  const polygonRef = React.useRef(null);
   const { changeOrigin, changeDestination, switchOriginDestination } =
     useTripStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
@@ -33,21 +32,6 @@ export default function Home() {
   const colorscheme = useColorScheme();
 
   const reverseData = useReverseData();
-  useEffect(() => {
-    (async () => {
-      if (!currentLocation) {
-        return;
-      }
-      const startPosition = {
-        lat: currentLocation.coords.latitude,
-        lon: currentLocation.coords.longitude,
-        radius: 0.05,
-      };
-      const data = await reverseData.mutateAsync(startPosition);
-      changeOrigin(data.features[0]);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (reverseData.error) {
     return (
@@ -57,15 +41,17 @@ export default function Home() {
     );
   }
   const startNavigationHandler = async () => {
-    // let newOrigin;
-    // if (origin === null) {
-    //   newOrigin = currentLocation
-    //     ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
-    //     : undefined;
-    // }
-    if (origin && destination) {
+    let newOrigin;
+    if (origin === null) {
+      newOrigin = currentLocation
+        ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
+        : undefined;
+    } else if (origin) {
+      newOrigin = origin.geometry.coordinates;
+    }
+    if (newOrigin && destination) {
       const params = {
-        origin: origin.geometry.coordinates,
+        origin: newOrigin,
         destination: destination.geometry.coordinates,
       };
 
@@ -89,6 +75,21 @@ export default function Home() {
     { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
     { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
   ];
+
+  let newOrigin;
+  if (origin === null) {
+    newOrigin = currentLocation
+      ? {
+          lat: currentLocation.coords.latitude,
+          lon: currentLocation.coords.longitude,
+        }
+      : undefined;
+  } else if (origin) {
+    newOrigin = {
+      lat: origin.geometry.coordinates[1],
+      lon: origin.geometry.coordinates[0],
+    };
+  }
 
   return (
     <SafeAreaView
@@ -115,24 +116,20 @@ export default function Home() {
           label="Ziel"
           onChange={(value) => changeDestination(value)}
         />
-        <MapView
-          className="h-36 w-full"
-          region={{
-            latitude: 47.811195,
-            longitude: 13.033229,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          key={0}
-          scrollEnabled
-          showsUserLocation
-          followsUserLocation
-        >
-          {/* {position && <Marker ref={markerRef} coordinate={position} key={0} />} */}
-          {bboxCoordinates && (
-            <Polygon ref={polygonRef} key={1} coordinates={bboxCoordinates} />
-          )}
-        </MapView>
+
+        <Map
+          bbox={bboxCoordinates}
+          origin={newOrigin}
+          destination={
+            destination
+              ? {
+                  lat: destination.geometry.coordinates[1],
+                  lon: destination.geometry.coordinates[0],
+                }
+              : undefined
+          }
+          currentLocation={currentLocation}
+        />
         <Button
           onPress={startNavigationHandler}
           disabled={origin === undefined || destination === undefined}
