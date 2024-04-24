@@ -8,7 +8,7 @@ const iconsArray = {
     <Icon color={color} icon="heart" size={48} />
   ),
   navigationArrow: ({ color }: { color: string }) => (
-    <Icon color={color} icon="navigationArrow" size={48} />
+    <Icon color={color} icon="navigationArrow" size={41} />
   ),
   person: ({ color }: { color: string }) => (
     <Icon color={color} icon="person" size={48} />

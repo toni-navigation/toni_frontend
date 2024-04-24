@@ -34,6 +34,7 @@ export default function CalibrationPage() {
         </View>
         <Button
           buttonType="primary"
+          disabled={false}
           onPress={() => router.push('/calibration')}
         >
           Weiter

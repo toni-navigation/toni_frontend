@@ -9,14 +9,14 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
   const colorscheme = useColorScheme();
   const activeButton =
     colorscheme === 'light'
-      ? 'h-20 flex justify-center py-2 px-4 rounded bg-mint-dark flex-1'
-      : 'h-20 flex justify-center py-2 px-4 rounded bg-mint-light flex-1';
+      ? 'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-dark flex-1'
+      : 'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-light flex-1';
   const inactiveButton =
     colorscheme === 'light'
-      ? 'h-20 flex justify-center py-2 px-4 rounded bg-mint-light flex-1'
-      : 'h-20 flex justify-center py-2 px-4 rounded bg-mint-dark flex-1';
-  const activeText = 'text-center text-base text-mint-light';
-  const inactiveText = 'text-center text-base text-mint-dark';
+      ? 'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-light flex-1'
+      : 'h-20 flex justify-center py-2 px-4 rounded bg-primary-color-dark flex-1';
+  const activeText = 'text-center text-base text-primary-color-light';
+  const inactiveText = 'text-center text-base text-primary-color-dark';
 
   return (
     <View className="flex-row">

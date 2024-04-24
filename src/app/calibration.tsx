@@ -14,7 +14,11 @@ export default function CalibrationPage() {
     >
       <ScrollView className="mx-5 my-5">
         <Calibration />
-        <Button buttonType="primary" onPress={() => router.push('/home')}>
+        <Button
+          buttonType="primary"
+          disabled={false}
+          onPress={() => router.push('/home')}
+        >
           Weiter
         </Button>
       </ScrollView>

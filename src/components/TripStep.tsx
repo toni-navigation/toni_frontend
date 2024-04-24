@@ -13,7 +13,7 @@ export function TripStep({ children }: TripStepProps) {
       <ScrollView className="mx-5 my-5">
         {children}
 
-        <Button onPress={() => router.replace('/home')} buttonType="secondary">
+        <Button onPress={() => router.replace('/home')} buttonType="primary" disabled={false}>
           <Text>Beenden</Text>
         </Button>
       </ScrollView>
