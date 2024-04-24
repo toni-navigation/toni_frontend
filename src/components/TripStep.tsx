@@ -7,6 +7,7 @@ import { Card } from '@/components/organisms/Card';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
+import { matchIconType } from '@/functions/matchIconType';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -95,9 +96,9 @@ export function TripStep({ data }: { data: TripProps }) {
   return (
     <SafeAreaView className="flex-1 m-5">
       <Card
-        directionType={
+        iconKey={matchIconType(
           data.legs[0].maneuvers[shortestDistance.maneuverIndex].type
-        }
+        )}
       >
         {instruction}
       </Card>

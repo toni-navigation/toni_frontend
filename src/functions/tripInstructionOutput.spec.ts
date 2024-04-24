@@ -15,6 +15,6 @@ describe('tripInstructionOutput', () => {
     const maneuver = { instruction: 'Turn left', length: 1 };
     const result = tripInstructionOutput(maneuver, undefined);
 
-    expect(result).toEqual('Turn left 1000 Meter');
+    expect(result).toEqual('1000 Meter turn left');
   });
 });
