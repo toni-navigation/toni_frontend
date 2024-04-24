@@ -25,5 +25,9 @@ export const tripInstructionOutput = (
     return `${maneuver.instruction}`;
   }
 
-  return `${maneuver.instruction} ${maneuver.length * 1000} Meter`;
+  if (maneuver.length * 1000 > 0) {
+    return `${maneuver.length * 1000} Meter ${maneuver.instruction.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
+  }
+
+  return `${maneuver.instruction}`;
 };

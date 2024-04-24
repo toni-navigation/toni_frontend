@@ -15,6 +15,8 @@ import PagerView from 'react-native-pager-view';
 
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/organisms/Card';
 import { ListItem } from '@/components/atoms/ListItem';
 import { Error } from '@/components/organisms/Error';
 import { Map } from '@/components/organisms/Map';
@@ -34,12 +36,6 @@ export type SearchParamType = {
   destination: string;
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   pager: {
     flex: 1,
     alignSelf: 'stretch',
@@ -52,6 +48,7 @@ export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0); // Add this state to track the active page
+  const [pause, setPause] = React.useState(false);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -138,51 +135,53 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  if (!currentLocation || !data) {
-    return (
-      <SafeAreaView>
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
-
   return data && shortestDistance ? (
-    <SafeAreaView style={styles.container}>
-      <TabBar
-        setPage={(page) => ref.current?.setPage(page)}
-        activePage={activePage}
-      />
-      <PagerView
-        onPageSelected={(event) => handlePageSelected(event)}
-        initialPage={0}
-        style={styles.pager}
-        ref={ref}
-      >
-        <TripList
-          maneuvers={data.trip.legs[0].maneuvers.slice(
-            shortestDistance.maneuverIndex
-          )}
-          key="0"
-        />
-        <TripStep key="1">
-          <ListItem
-            key={
-              data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
-                .begin_shape_index +
-              data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
-                .end_shape_index
-            }
-          >
-            {instruction}
-          </ListItem>
-          <Map
-            currentLocation={currentLocation}
-            nearestPoint={nearestPoint}
-            data={data}
-            decodedShape={decodedShape}
+    <SafeAreaView className="flex-1 bg-background-light">
+      {pause ? (
+        <Card iconKey="pause">Pause</Card>
+      ) : (
+        <>
+          <TabBar
+            setPage={(page) => ref.current?.setPage(page)}
+            activePage={activePage}
           />
-        </TripStep>
-      </PagerView>
+          <PagerView
+            onPageSelected={(event) => handlePageSelected(event)}
+            initialPage={activePage}
+            style={styles.pager}
+            ref={ref}
+          >
+            <TripList maneuvers={data.trip.legs[0].maneuvers.slice(
+              shortestDistance.maneuverIndex
+            )} key="0" />
+            <TripStep  key="1"><ListItem
+              key={
+                data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
+                  .begin_shape_index +
+                data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
+                  .end_shape_index
+              }
+            >
+              {instruction}
+            </ListItem>
+              <Map
+                currentLocation={currentLocation}
+                nearestPoint={nearestPoint}
+                data={data}
+                decodedShape={decodedShape}
+              /></TripStep>
+          </PagerView>
+        </>
+      )}
+
+      <View className="mx-5">
+        <Button onPress={() => setPause(!pause)} buttonType="primaryOutline" disabled={false}>
+          {pause ? <Text>Fortsetzen</Text> : <Text>Pause</Text>}
+        </Button>
+        <Button onPress={() => router.replace('/home')} buttonType="primary" disabled={false}>
+          <Text>Beenden</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   ) : (
     <Error error="No data found" />

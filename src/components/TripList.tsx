@@ -1,8 +1,6 @@
-import { router } from 'expo-router';
 import React from 'react';
-import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, Text } from 'react-native';
 
-import { Button } from '@/components/atoms/Button';
 import { ListItem } from '@/components/atoms/ListItem';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
@@ -17,10 +15,9 @@ export function TripList({
   const calibration = useCalibrationStore((state) => state.calibration);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 m-5">
       <FlatList
         data={maneuvers}
-        className="mx-5 my-5"
         renderItem={({ item, index }) => (
           <ListItem>
             <Text>
@@ -34,11 +31,6 @@ export function TripList({
           </ListItem>
         )}
       />
-      <View className="mx-5">
-        <Button onPress={() => router.back()} buttonType="primary">
-          <Text>Beenden</Text>
-        </Button>
-      </View>
     </SafeAreaView>
   );
 }
