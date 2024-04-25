@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,7 +25,7 @@ import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
-import { getShortestDistanceFromPoLToManeuver } from '@/functions/getShortestDistanceFromPoLToManeuver';
+import { getMatchingManeuvers } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { parseCoordinate } from '@/functions/parseCoordinate';
 import { photonValue } from '@/functions/photonValue';
@@ -79,6 +80,7 @@ export default function TripPage() {
     };
 
     setShouldBeRerouted(false);
+    // TODO
     router.replace({ pathname: `/trip`, params });
   };
   const handlePageSelected = (
@@ -89,9 +91,9 @@ export default function TripPage() {
 
   const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
 
-  const currentLocationPoint = currentLocation
-    ? point([currentLocation.coords.latitude, currentLocation.coords.longitude])
-    : null;
+  const currentLocationPoint =
+    currentLocation &&
+    point([currentLocation.coords.latitude, currentLocation.coords.longitude]);
 
   const line = decodedShape && lineString(decodedShape.coordinates);
 
@@ -100,19 +102,13 @@ export default function TripPage() {
     currentLocationPoint &&
     nearestPointOnLine(line, currentLocationPoint);
   const factor = getCalibrationValue(calibration.factors);
-  const shortestDistance =
-    data &&
-    decodedShape &&
-    nearestPoint &&
-    getShortestDistanceFromPoLToManeuver(data, decodedShape, nearestPoint);
+  const calculatedManeuvers =
+    data && nearestPoint && getMatchingManeuvers(data, nearestPoint);
 
   let instruction =
     data &&
-    shortestDistance &&
-    tripInstructionOutput(
-      data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex],
-      factor
-    );
+    calculatedManeuvers?.currentManeuver &&
+    tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
   if (
     nearestPoint &&
     nearestPoint.properties.dist &&
@@ -137,6 +133,7 @@ export default function TripPage() {
       });
     }
   };
+
   const shouldReroute = useCallback(
     () =>
       nearestPoint &&
@@ -163,7 +160,9 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  return data && shortestDistance ? (
+  return data &&
+    calculatedManeuvers?.currentManeuver &&
+    calculatedManeuvers.maneuverIndex ? (
     <SafeAreaView className="flex-1 bg-background-light">
       {pause ? (
         <Card iconKey="pause">Pause</Card>
@@ -199,7 +198,7 @@ export default function TripPage() {
           >
             <TripList
               maneuvers={data.trip.legs[0].maneuvers.slice(
-                shortestDistance.maneuverIndex
+                calculatedManeuvers.maneuverIndex
               )}
               key="0"
             />
@@ -221,8 +220,7 @@ export default function TripPage() {
               )}
               <Card
                 iconKey={matchIconType(
-                  data.trip.legs[0].maneuvers[shortestDistance.maneuverIndex]
-                    .type
+                  calculatedManeuvers?.currentManeuver.type
                 )}
               >
                 {instruction}
@@ -233,6 +231,8 @@ export default function TripPage() {
               {/*  currentLocation={currentLocation} */}
               {/*  nearestPoint={nearestPoint} */}
               {/*  decodedShape={decodedShape} */}
+              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
               {/* /> */}
             </TripStep>
           </PagerView>

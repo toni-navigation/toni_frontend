@@ -1,8 +1,9 @@
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import React from 'react';
-import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
+import MapView, { Circle, Marker, Polygon, Polyline } from 'react-native-maps';
 
 import { CurrentLocationType, DecodedShapeProps } from '@/types/Types';
+import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
 type CoordsType = { lat: number; lon: number };
 interface MapProps {
@@ -10,8 +11,10 @@ interface MapProps {
   destination?: CoordsType;
   currentLocation?: CurrentLocationType;
   nearestPoint?: NearestPointOnLine | null | undefined;
-  decodedShape?: DecodedShapeProps;
+  decodedShape?: DecodedShapeProps | null;
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
+  maneuvers?: ValhallaManeuverProps[];
+  currentManeuverIndex?: number;
 }
 export function Map({
   origin,
@@ -20,10 +23,12 @@ export function Map({
   currentLocation,
   decodedShape,
   bbox,
+  maneuvers,
+  currentManeuverIndex,
 }: MapProps) {
   return (
     <MapView
-      style={{ height: 400 }}
+      style={{ height: 300 }}
       initialRegion={{
         latitude: currentLocation?.coords.latitude || 0,
         longitude: currentLocation?.coords.longitude || 0,
@@ -64,6 +69,7 @@ export function Map({
         />
       )}
       {bbox && <Polygon key={1} coordinates={bbox} />}
+
       {decodedShape?.coordinates.map((coord, index) => {
         if (index === 0) {
           return null;
@@ -82,9 +88,50 @@ export function Map({
                 longitude: coord[1],
               },
             ]}
+            zIndex={98}
           />
         );
       })}
+
+      {decodedShape?.coordinates.map((coord, index) => (
+        <Circle
+          radius={2}
+          /* eslint-disable-next-line react/no-array-index-key */
+          key={index}
+          center={{
+            latitude: coord[0],
+            longitude: coord[1],
+          }}
+          fillColor={
+            maneuvers?.find((maneuver) => maneuver.begin_shape_index === index)
+              ? 'red'
+              : 'blue'
+          }
+          zIndex={99}
+        />
+      ))}
+      {currentManeuverIndex !== undefined &&
+      decodedShape &&
+      maneuvers &&
+      decodedShape.coordinates[
+        maneuvers[currentManeuverIndex].begin_shape_index
+      ] ? (
+        <Circle
+          center={{
+            latitude:
+              decodedShape.coordinates[
+                maneuvers[currentManeuverIndex].begin_shape_index
+              ][0],
+            longitude:
+              decodedShape.coordinates[
+                maneuvers[currentManeuverIndex].begin_shape_index
+              ][1],
+          }}
+          radius={2}
+          fillColor="green"
+          zIndex={100}
+        />
+      ) : null}
     </MapView>
   );
 }
