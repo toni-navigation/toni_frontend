@@ -16,15 +16,13 @@ import { Map } from '@/components/organisms/Map';
 import { getBbox } from '@/functions/getBbox';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { useTripStore } from '@/store/useTripStore';
+import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function Home() {
-  // const markerRef = React.useRef(null);
   const { changeOrigin, changeDestination, switchOriginDestination } =
     useTripStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
-
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -40,22 +38,38 @@ export default function Home() {
       </View>
     );
   }
-  const startNavigationHandler = async () => {
-    let newOrigin;
-    if (origin === null) {
-      newOrigin = currentLocation
-        ? [currentLocation.coords.longitude, currentLocation.coords.latitude]
-        : undefined;
-    } else if (origin) {
-      newOrigin = origin.geometry.coordinates;
+
+  const getCoordinates = (location: OriginDestinationType) => {
+    if (location) {
+      return location.geometry.coordinates;
     }
-    if (newOrigin && destination) {
+    if (location === null && currentLocation) {
+      return [
+        currentLocation.coords.longitude,
+        currentLocation.coords.latitude,
+      ];
+    }
+
+    return undefined;
+  };
+  const navigateToTrip = (params: {
+    origin: number[];
+    destination: number[];
+  }) => {
+    // Assuming router.push handles navigation to the trip page
+    router.push({ pathname: `/trip`, params });
+  };
+  const startNavigationHandler = async () => {
+    const newOrigin = getCoordinates(origin);
+    const newDestination = getCoordinates(destination);
+
+    if (newOrigin && newDestination) {
       const params = {
         origin: newOrigin,
-        destination: destination.geometry.coordinates,
+        destination: newDestination,
       };
 
-      router.push({ pathname: `/trip`, params });
+      navigateToTrip(params);
     }
   };
 
@@ -75,21 +89,6 @@ export default function Home() {
     { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
     { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
   ];
-
-  let newOrigin;
-  if (origin === null) {
-    newOrigin = currentLocation
-      ? {
-          lat: currentLocation.coords.latitude,
-          lon: currentLocation.coords.longitude,
-        }
-      : undefined;
-  } else if (origin) {
-    newOrigin = {
-      lat: origin.geometry.coordinates[1],
-      lon: origin.geometry.coordinates[0],
-    };
-  }
 
   return (
     <SafeAreaView
@@ -119,12 +118,19 @@ export default function Home() {
 
         {/* <Map */}
         {/*  bbox={bboxCoordinates} */}
-        {/*  origin={newOrigin} */}
+        {/*  origin={ */}
+        {/*    origin */}
+        {/*      ? { */}
+        {/*          lat: origin.geometry.coordinates[1], */}
+        {/*          lon: origin.geometry.coordinates[0], */}
+        {/*        } */}
+        {/*      : undefined */}
+        {/*  } */}
         {/*  destination={ */}
         {/*    destination */}
         {/*      ? { */}
-        {/*          lat: destination.geometry.coordinates[1], */}
-        {/*          lon: destination.geometry.coordinates[0], */}
+        {/*          lat: destination.geometry.coordinates[0], */}
+        {/*          lon: destination.geometry.coordinates[1], */}
         {/*        } */}
         {/*      : undefined */}
         {/*  } */}
@@ -134,7 +140,7 @@ export default function Home() {
       <View className="mx-5 mb-8">
         <Button
           onPress={startNavigationHandler}
-          disabled={origin === undefined || destination === undefined}
+          disabled={origin === undefined || !destination}
           buttonType="accent"
         >
           Route starten

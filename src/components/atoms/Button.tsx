@@ -56,6 +56,7 @@ export function Button({
       accessibilityLabel={
         disabled ? `${children} nicht nutzbar` : `${children}`
       }
+      disabled={disabled}
     >
       <Text
         className={`text-center text-lg font-generalSansSemi ${variant[buttonType].text}`}

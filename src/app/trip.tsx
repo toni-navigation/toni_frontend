@@ -227,13 +227,13 @@ export default function TripPage() {
               >
                 {instruction}
               </Card>
-              <Map
-                origin={parseCoordinate(tripData.origin)}
-                destination={parseCoordinate(tripData.destination)}
-                currentLocation={currentLocation}
-                nearestPoint={nearestPoint}
-                decodedShape={decodedShape}
-              />
+              {/* <Map */}
+              {/*  origin={parseCoordinate(tripData.origin)} */}
+              {/*  destination={parseCoordinate(tripData.destination)} */}
+              {/*  currentLocation={currentLocation} */}
+              {/*  nearestPoint={nearestPoint} */}
+              {/*  decodedShape={decodedShape} */}
+              {/* /> */}
             </TripStep>
           </PagerView>
         </>
