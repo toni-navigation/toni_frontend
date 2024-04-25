@@ -37,7 +37,7 @@ export function Navbar({ icons }: NavbarProps) {
         tabBarInactiveTintColor:
           colorscheme === 'light'
             ? styling.colors['primary-color-light']
-            : styling.colors['primary-color-dark'],
+            : styling.colors['background-dark'],
         tabBarIconStyle: {
           justifyContent: 'center',
           alignContent: 'center',
