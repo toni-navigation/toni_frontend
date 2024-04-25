@@ -1,19 +1,12 @@
 import { router } from 'expo-router';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
-import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -26,16 +19,6 @@ export default function Home() {
     (state) => state.currentLocation
   );
   const colorscheme = useColorScheme();
-
-  const reverseData = useReverseData();
-
-  if (reverseData.error) {
-    return (
-      <View>
-        <Text>reverseData Error, {reverseData.error.message}</Text>
-      </View>
-    );
-  }
 
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
@@ -70,14 +53,6 @@ export default function Home() {
       navigateToTrip(params);
     }
   };
-
-  if (reverseData.error) {
-    return (
-      <View>
-        <Text>reverseData Error</Text>
-      </View>
-    );
-  }
 
   const bbox = currentLocation && getBbox(currentLocation);
   const bboxCoordinates = bbox && [
