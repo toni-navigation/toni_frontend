@@ -5,8 +5,8 @@ export function getCalibrationValue(values: number[]) {
     return 0;
   }
   if (values.length > 5) {
-    return calculateMedian(values);
+    return calculateMedian(values).toFixed(2);
   }
 
-  return values[values.length - 1];
+  return values[values.length - 1].toFixed(2);
 }
