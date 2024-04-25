@@ -33,7 +33,7 @@ export function Button({
       text:
         colorscheme === 'light'
           ? 'text-primary-color-light'
-          : 'text-primary-color-dark',
+          : 'text-background-dark',
     },
     primaryOutline: {
       button:

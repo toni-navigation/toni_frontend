@@ -10,6 +10,7 @@ import {
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
+import { Logo } from '@/components/atoms/Logo';
 
 export default function CalibrationPage() {
   const colorscheme = useColorScheme();
@@ -19,6 +20,9 @@ export default function CalibrationPage() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="mx-8 my-8">
+        <View className="flex items-center pb-6">
+          <Logo mode={colorscheme} size={85} />
+        </View>
         <Header>Schrittlänge konfigurieren</Header>
         <View>
           <Text className="text-2xl font-atkinsonRegular">
@@ -34,7 +38,7 @@ export default function CalibrationPage() {
         <Button
           buttonType="primary"
           disabled={false}
-          onPress={() => router.push('/calibration')}
+          onPress={() => router.push('/profile/calibration')}
         >
           Weiter
         </Button>

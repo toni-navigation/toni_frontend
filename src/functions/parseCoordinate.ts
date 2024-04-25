@@ -1,4 +1,10 @@
-export const parseCoordinate = (coordinateString: string) => {
+export const parseCoordinate = (coordinateString: string | undefined) => {
+  if (!coordinateString) {
+    return {
+      lat: NaN,
+      lon: NaN,
+    };
+  }
   const [lon, lat] = coordinateString.split(',');
 
   return {
