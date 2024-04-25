@@ -73,7 +73,7 @@ export default function CalibrationPage() {
       fallback.current || _start,
       currentPositionData
     );
-    if (!distanceInMeter) {
+    if (distanceInMeter === null) {
       Speech.speak(
         `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`,
         SPEECH_CONFIG
