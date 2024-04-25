@@ -7,7 +7,7 @@ import styling from '@/stylings';
 interface IconButtonProps {
   icon: IconByKey;
   onPress: () => void;
-  disabled: true | false;
+  disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 export function IconButton({
@@ -57,6 +57,7 @@ export function IconButton({
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
+        disabled={disabled}
       >
         <Icon icon={icon} size={40} color={`${variant[buttonType].fill}`} />
       </TouchableOpacity>

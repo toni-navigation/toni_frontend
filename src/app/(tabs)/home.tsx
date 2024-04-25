@@ -25,7 +25,6 @@ export default function Home() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
   const colorscheme = useColorScheme();
 
   const reverseData = useReverseData();
@@ -104,8 +103,8 @@ export default function Home() {
 
         <IconButton
           onPress={switchOriginDestination}
-          disabled={origin === undefined || destination === undefined}
           buttonType="primary"
+          disabled={origin === undefined && destination === undefined}
           icon="switchArrow"
         />
         <GeocoderAutocomplete

@@ -13,7 +13,7 @@ type GeocoderAutocompleteProps = {
   value?: OriginDestinationType;
   label: string;
   placeholder: string;
-  onChange: (newValue: PhotonFeature) => void;
+  onChange: (newValue: PhotonFeature | undefined) => void;
 };
 
 export function GeocoderAutocomplete({
@@ -28,14 +28,14 @@ export function GeocoderAutocomplete({
   const debouncedInputValue = useDebounce(inputValue, 500);
 
   const { data } = useGeocoding(debouncedInputValue, focused);
-
   useEffect(() => {
+    let newValue = '';
     if (value) {
-      setInputValue(photonValue(value));
+      newValue = photonValue(value);
+    } else if (value === null) {
+      newValue = 'Mein Standort';
     }
-    if (value === null) {
-      setInputValue('Mein Standort');
-    }
+    setInputValue(newValue);
   }, [value]);
 
   return (
@@ -46,7 +46,11 @@ export function GeocoderAutocomplete({
         value={inputValue}
         accessibilityLabel={label}
         placeholder={placeholder}
-        onClickDelete={() => setInputValue('')}
+        onClickDelete={() => {
+          setInputValue('');
+          ref.current?.focus();
+          onChange(undefined);
+        }}
         onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}

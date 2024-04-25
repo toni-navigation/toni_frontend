@@ -15,7 +15,7 @@ interface InputTextProps extends TextInputProps {
   onClickDelete: () => void;
 }
 export const InputText = forwardRef<TextInput, InputTextProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, onClickDelete, ...props }, ref) => {
     const colorscheme = useColorScheme();
 
     // TODO: add cross to delete value
@@ -33,7 +33,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
           <TouchableOpacity
             accessibilityRole="button"
             accessibilityHint="Eingabe löschen"
-            onPress={props.onClickDelete}
+            onPress={onClickDelete}
             className="absolute bottom-6 right-3"
           >
             <Icon

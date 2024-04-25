@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -21,7 +20,6 @@ import { Button } from '@/components/atoms/Button';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
-import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
