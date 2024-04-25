@@ -245,14 +245,14 @@ export default function TripPage() {
           buttonType="primaryOutline"
           disabled={false}
         >
-          {pause ? <Text>Fortsetzen</Text> : <Text>Pause</Text>}
+          {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
         <Button
           onPress={() => router.replace('/home')}
           buttonType="primary"
           disabled={false}
         >
-          <Text>Beenden</Text>
+          Beenden
         </Button>
       </View>
     </SafeAreaView>

@@ -3,11 +3,9 @@ import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
 
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
-import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -22,9 +20,7 @@ export const SPEECH_CONFIG = {
 };
 export function Calibration() {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
-  const calibration = useCalibrationStore((state) => state.calibration);
   const [steps, setSteps] = useState(0);
-
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
   const fallback = useRef<CurrentLocationType>();
@@ -131,24 +127,26 @@ export function Calibration() {
     }
 
     return (
-      <Button
+      <>
+        <Text className="text-2xl font-atkinsonRegular">
+          Sobald du auf Start Kalibrierung klickst, wird eine Melodie ertönen.
+          Laufe so lange gerade aus, bis die Melodie stoppt.
+        </Text>
+        <Button
           buttonType="primary"
-          disabled={currentLocationMutation.isPending ||
-              startSoundMutation.isPending ||
-              pedometerAvailableMutation.isPending}
-        onPress={startPedometer}
-      >
-        Start Kalibrierung
-      </Button>
+          disabled={
+            currentLocationMutation.isPending ||
+            startSoundMutation.isPending ||
+            pedometerAvailableMutation.isPending
+          }
+          onPress={startPedometer}
+        >
+          Start Kalibrierung
+        </Button>
+      </>
     );
   };
 
-  // const locationError =
-  //   'Beim Berechnen des Standorts ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
-  // const pedometerError =
-  //   'Es ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
-  // const soundError =
-  //   'SoundError: Es ist leider etwas schiefgelaufen, bitte versuche es nocheinmal';
   return (
     <View>
       {buttonOutput()}
@@ -157,43 +155,8 @@ export function Calibration() {
         startSoundMutation.isPending) && (
         <ActivityIndicator className="mt-4 h-[100px]" size="large" />
       )}
-      {/* {currentLocationMutation.isError && <Error error={locationError} />} */}
-      {/* {pedometerMutation.isError && <Error error={pedometerError} />} */}
-      {/* {startSoundMutation.isError && <Error error={soundError} />} */}
-      <MapView
-        className="h-36 w-full"
-        region={{
-          latitude: 47.811195,
-          longitude: 13.033229,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        showsUserLocation
-        followsUserLocation
-      >
-        {calibration.start &&
-          calibration.start.lat &&
-          calibration.start.lon && (
-            <Marker
-              coordinate={{
-                latitude: calibration.start.lat,
-                longitude: calibration.start.lon,
-              }}
-            />
-          )}
-        {calibration.end && calibration.end.lat && calibration.end.lon && (
-          <Marker
-            coordinate={{
-              latitude: calibration.end.lat,
-              longitude: calibration.end.lon,
-            }}
-          />
-        )}
-      </MapView>
 
       <Text className="text-lg mt-4">Schritte: {steps}</Text>
-      <Text>Meter: {getCalibrationValue(calibration.meters)}</Text>
-      <Text>Umrechnungsfaktor: {getCalibrationValue(calibration.factors)}</Text>
     </View>
   );
 }
