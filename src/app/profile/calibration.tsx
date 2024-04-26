@@ -50,19 +50,21 @@ export default function CalibrationPage() {
   const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound(() => Speech.stop());
   const stopSoundMutation = useStopSound();
-
-  const stopPedometer = async (cancelFlag: boolean = false) => {
+  const speakAsync = (text: string, options: Speech.SpeechOptions) =>
+    new Promise((resolve: any, reject) => {
+      Speech.speak(text, {
+        ...options,
+        onDone: () => resolve(),
+        onError: () => reject(),
+      });
+    });
+  const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
 
     if (audioSound.current) {
       await stopSoundMutation.mutateAsync(audioSound.current);
       audioSound.current = undefined;
-    }
-    if (cancelFlag) {
-      setIndex(index);
-    } else {
-      setIndex(index + 1);
     }
   };
 
@@ -86,6 +88,7 @@ export default function CalibrationPage() {
 
       return;
     }
+    setIndex(index + 1);
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG
@@ -107,15 +110,23 @@ export default function CalibrationPage() {
     }
   };
   const startPedometer = async () => {
-    setSteps(0);
-    Speech.speak(
+    await speakAsync(
       'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
       SPEECH_CONFIG
     );
+    // Speech.speak(
+    //   'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
+    //   SPEECH_CONFIG
+    // );
+    setSteps(0);
     const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     const currentPositionData = await currentLocationMutation.mutateAsync();
     if (!pedometerAvailable) {
-      Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
+      // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
+      await speakAsync(
+        'Gehe 30 Schritte und klicke dann auf Stopp.',
+        SPEECH_CONFIG
+      );
     }
     const sound = await startSoundMutation.mutateAsync(Song);
     if (!sound) {
@@ -136,7 +147,7 @@ export default function CalibrationPage() {
       return (
         <Button
           buttonType="primary"
-          onPress={() => stopPedometer(true)}
+          onPress={() => stopPedometer()}
           disabled={false}
         >
           Abbrechen
@@ -174,7 +185,7 @@ export default function CalibrationPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 mt-8">
+      <ScrollView className="px-8 mt-8">
         <View className="flex items-center pb-6">
           <Logo
             icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}

@@ -12,7 +12,7 @@ export default function Page() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 my-8">
+      <ScrollView className="px-8 my-8">
         <Header>Profil</Header>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
         Profil

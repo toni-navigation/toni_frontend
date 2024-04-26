@@ -78,7 +78,7 @@ export default function TripPage() {
     };
 
     setShouldBeRerouted(false);
-    // TODO
+    // Evtl andere Lösung?
     router.replace({ pathname: `/trip`, params });
   };
   const handlePageSelected = (
@@ -158,6 +158,7 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
+  // TODO Gyroscope & Pedometer einbauen
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (

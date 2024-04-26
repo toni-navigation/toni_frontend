@@ -26,7 +26,7 @@ export default function CalibrationOverviewPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 mt-8">
+      <ScrollView className="px-8 mt-8">
         <View className="flex items-center pb-6">
           <Logo mode={colorscheme} size={85} />
         </View>

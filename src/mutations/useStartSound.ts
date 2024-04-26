@@ -7,7 +7,8 @@ export function useStartSound(stopSpeech: () => void) {
   return useMutation({
     mutationFn: (source: AVPlaybackSource) => playSound(source),
     onSuccess: () => {
-      stopSpeech();
+      // console.log('success');
+      // stopSpeech();
     },
   });
 }

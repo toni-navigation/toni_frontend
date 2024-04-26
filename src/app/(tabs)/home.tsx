@@ -67,7 +67,7 @@ export default function Home() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 my-8" keyboardShouldPersistTaps="always">
+      <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
@@ -81,7 +81,7 @@ export default function Home() {
           buttonType="primary"
           disabled={origin === undefined && destination === undefined}
           icon="switchArrow"
-          classes="m-4"
+          classes="m-0"
         />
         <GeocoderAutocomplete
           value={destination}
