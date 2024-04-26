@@ -28,7 +28,10 @@ export default function CalibrationOverviewPage() {
     >
       <ScrollView className="px-8 mt-8">
         <View className="flex items-center pb-6">
-          <Logo mode={colorscheme} size={85} />
+          <Logo
+            icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
+            size={85}
+          />
         </View>
         <Header>Schrittlänge konfigurieren</Header>
         <Text
