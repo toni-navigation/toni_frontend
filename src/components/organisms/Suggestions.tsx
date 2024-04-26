@@ -17,7 +17,7 @@ export function Suggestions({
     <ScrollView
       accessibilityHint="Liste der Vorschläge"
       keyboardShouldPersistTaps="always"
-      className="mx-2 -mt-2 mb-4 border-solid border-2 p-4 rounded-[25px] border-black"
+      className="-mt-10 mb-4 border-solid border-x-2 border-b-2 p-4 rounded-b-[25px] border-primary-color-dark"
       accessibilityLabel="Liste der Vorschläge"
       accessibilityRole="list"
     >
@@ -25,6 +25,11 @@ export function Suggestions({
         <ListItem
           key={`${suggestion.properties.osm_id}-${suggestion.properties.osm_type}-${suggestion.properties.osm_key}`}
           onPress={() => onLocationSuggestionClick(suggestion)}
+          classes={
+            index !== suggestions.length - 1
+              ? 'border-solid border-b-2 border-primary-color-dark'
+              : ''
+          }
         >
           {index + 1}. {photonValue(suggestion)}
         </ListItem>

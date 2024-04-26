@@ -185,7 +185,7 @@ export default function TripPage() {
                 size={24}
                 icon="location"
               />
-              <Text className="text-primary-color-dark opacity-50">
+              <Text className="text-primary-color-dark opacity-50 text-2xl">
                 Aktueller Standort
               </Text>
             </TouchableOpacity>

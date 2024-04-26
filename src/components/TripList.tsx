@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, SafeAreaView, Text } from 'react-native';
+import { FlatList, SafeAreaView, Text, View } from 'react-native';
 
 import { ListItem } from '@/components/atoms/ListItem';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -15,20 +15,24 @@ export function TripList({
   const calibration = useCalibrationStore((state) => state.calibration);
 
   return (
-    <SafeAreaView className="flex-1 m-5">
+    <SafeAreaView className="flex-1 m-4">
       <FlatList
         data={maneuvers}
         renderItem={({ item, index }) => (
-          <ListItem>
-            <Text>
-              {index + 1}
-              {'. '}
-              {tripInstructionOutput(
-                item,
-                getCalibrationValue(calibration.factors)
-              )}
-            </Text>
-          </ListItem>
+          <View
+            className={` px-2 py-1 ${index === 0 ? 'border-solid border-2 rounded-[25px] border-primary-color-dark' : ''}`}
+          >
+            <ListItem>
+              <Text className="text-2xl font-atkinsonRegular">
+                {index + 1}
+                {'. '}
+                {tripInstructionOutput(
+                  item,
+                  getCalibrationValue(calibration.factors)
+                )}
+              </Text>
+            </ListItem>
+          </View>
         )}
       />
     </SafeAreaView>

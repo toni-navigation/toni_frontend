@@ -108,6 +108,7 @@ export default function Home() {
           disabled={origin === undefined || destination === undefined}
           buttonType="primary"
           icon="switchArrow"
+          classes="m-4"
         />
         <GeocoderAutocomplete
           value={destination}

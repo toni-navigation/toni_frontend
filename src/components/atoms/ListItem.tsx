@@ -3,29 +3,23 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 interface ListItemProps {
   children: React.ReactNode;
+  classes?: string;
   onPress?: () => void;
 }
 
 // TODO: Add accessibilityLabel and accessibilityRole
-export function ListItem({ children, onPress }: ListItemProps) {
+export function ListItem({ children, onPress, classes }: ListItemProps) {
   if (onPress) {
     return (
-      <TouchableOpacity accessibilityRole="button"
+      <TouchableOpacity
+        accessibilityRole="button"
         onPress={onPress}
-        className="
-            border-b-[1px] py-3 px-2 last:border-none"
+        className={`py-3 px-2 ${classes}`}
       >
-        <Text>{children}</Text>
+        <Text className="font-atkinsonRegular">{children}</Text>
       </TouchableOpacity>
     );
   }
 
-  return (
-    <View
-      className="
-            border-b-[1px] py-3 px-2 bg-repeat last:border-none"
-    >
-      <Text>{children}</Text>
-    </View>
-  );
+  return <View className={`py-3 px-2 ${classes}`}>{children}</View>;
 }
