@@ -38,7 +38,12 @@ export default function CalibrationPage() {
         <Button
           buttonType="primary"
           disabled={false}
-          onPress={() => router.push('/profile/calibration')}
+          onPress={() => {
+            const params = {
+              fromProfile: 0,
+            };
+            router.push({ pathname: '/profile/calibration', params });
+          }}
         >
           Weiter
         </Button>

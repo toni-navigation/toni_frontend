@@ -1,5 +1,5 @@
 import { Audio } from 'expo-av';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 
 import Song from '@/assets/Testtrack.mp3';
+import { CalibrationText } from '@/components/CalibrationText';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Logo } from '@/components/atoms/Logo';
-import { CalibrationText } from '@/components/calibration/CalibrationText';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -33,6 +33,9 @@ export const SPEECH_CONFIG = {
 };
 
 export default function CalibrationPage() {
+  const { resetCalibrationStore } = useCalibrationStore(
+    (state) => state.actions
+  );
   const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
   const { addCalibration } = useCalibrationStore((state) => state.actions);
@@ -40,6 +43,8 @@ export default function CalibrationPage() {
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
   const fallback = useRef<CurrentLocationType>();
+  const params = useLocalSearchParams();
+  const isFromProfile = Number(params.fromProfile);
 
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
@@ -169,8 +174,8 @@ export default function CalibrationPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8 my-8">
-        <View className="flex-1 items-center pb-6">
+      <ScrollView className="mx-8 mt-8">
+        <View className="flex items-center pb-6">
           <Logo mode={colorscheme} size={85} />
         </View>
         <Header>Schrittlänge konfigurieren</Header>
@@ -206,17 +211,23 @@ export default function CalibrationPage() {
         {index === 4 && <CalibrationText index={4} />}
       </ScrollView>
 
-      <View className="mx-8 mb-8">
+      <View className="mx-8 mb-3">
         {index === 0 && (
           <>
+            <Text
+              className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Schritt 1 / 4
+            </Text>
+
             <Button
               buttonType="primaryOutline"
               disabled={false}
-              onPress={() => {
-                router.push('/home');
-              }}
+              onPress={() =>
+                isFromProfile ? router.back() : router.push('/home')
+              }
             >
-              Überspringen
+              {isFromProfile ? 'Zurück' : 'Überspringen'}
             </Button>
             <Button
               buttonType="primary"
@@ -229,6 +240,11 @@ export default function CalibrationPage() {
         )}
         {index === 1 && (
           <>
+            <Text
+              className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Schritt 2 / 4
+            </Text>
             <Button
               buttonType="primaryOutline"
               disabled={false}
@@ -249,6 +265,11 @@ export default function CalibrationPage() {
         )}
         {index === 2 && (
           <>
+            <Text
+              className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Schritt 3 / 4
+            </Text>
             <Button
               buttonType="primaryOutline"
               disabled={false}
@@ -269,6 +290,11 @@ export default function CalibrationPage() {
         )}
         {index === 3 && (
           <>
+            <Text
+              className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Schritt 4 / 4
+            </Text>
             <Button
               buttonType="primaryOutline"
               disabled={false}
@@ -288,6 +314,7 @@ export default function CalibrationPage() {
               disabled={false}
               onPress={() => {
                 setIndex(index - 1);
+                resetCalibrationStore();
               }}
             >
               Wiederholen
@@ -295,9 +322,9 @@ export default function CalibrationPage() {
             <Button
               buttonType="accent"
               disabled={false}
-              onPress={() => {
-                router.push('/home');
-              }}
+              onPress={() =>
+                isFromProfile ? router.push('/profile') : router.push('/home')
+              }
             >
               Fertig
             </Button>
