@@ -54,6 +54,11 @@ export function GeocoderAutocomplete({
         onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        className={
+          data && data.features.length > 0 && focused
+            ? '!border-b-0 !rounded-b-[0px]'
+            : ''
+        }
       />
       {data && data.features.length > 0 && focused && (
         <Suggestions

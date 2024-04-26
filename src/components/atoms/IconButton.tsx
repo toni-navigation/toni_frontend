@@ -8,12 +8,14 @@ interface IconButtonProps {
   icon: IconByKey;
   onPress: () => void;
   disabled?: boolean;
+  classes?: string;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 export function IconButton({
   icon,
   disabled,
   onPress,
+  classes,
   buttonType,
 }: IconButtonProps) {
   const colorscheme = useColorScheme();
@@ -50,7 +52,7 @@ export function IconButton({
   };
 
   return (
-    <View className="flex justify-center items-center mb-4">
+    <View className={`flex justify-center items-center ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
         className={`p-3 flex justify-center items-center rounded-[100px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
