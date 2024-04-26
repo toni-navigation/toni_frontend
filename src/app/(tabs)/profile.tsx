@@ -14,9 +14,9 @@ export default function Page() {
     >
       <ScrollView className="mx-8 my-8">
         <Header>Profil</Header>
-        <MenuButton onPress={() => router.push('/profile')} icon="person">
-          Profil
-        </MenuButton>
+        {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
+        Profil
+        </MenuButton> */}
         <MenuButton
           onPress={() => {
             router.push('/profile/calibrationOverview');
@@ -25,9 +25,9 @@ export default function Page() {
         >
           Schrittlänge
         </MenuButton>
-        <MenuButton onPress={() => router.push('/profile')} icon="audio">
-          Audio
-        </MenuButton>
+        {/* <MenuButton onPress={() => router.push('/profile')} icon="audio">
+        Audio
+        </MenuButton> */}
       </ScrollView>
     </SafeAreaView>
   );
