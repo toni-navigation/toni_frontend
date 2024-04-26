@@ -35,7 +35,7 @@ export function IconButton({
       fill:
         colorscheme === 'light'
           ? styling.colors['primary-color-light']
-          : styling.colors['primary-color-dark'],
+          : styling.colors['background-dark'],
     },
     primaryOutline: {
       button:

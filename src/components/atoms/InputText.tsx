@@ -37,7 +37,11 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
             className="absolute bottom-6 right-3"
           >
             <Icon
-              color={styling.colors['primary-color-dark']}
+              color={
+                colorscheme === 'light'
+                  ? styling.colors['primary-color-dark']
+                  : styling.colors['primary-color-light']
+              }
               icon="cross"
               size={40}
             />

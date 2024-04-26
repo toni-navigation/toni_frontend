@@ -12,8 +12,7 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { Map } from '@/components/organisms/Map';
-import { getBbox } from '@/functions/getBbox';
+// import { getBbox } from '@/functions/getBbox';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
@@ -81,20 +80,20 @@ export default function Home() {
     );
   }
 
-  const bbox = currentLocation && getBbox(currentLocation);
-  const bboxCoordinates = bbox && [
+  /* const bbox = currentLocation && getBbox(currentLocation);
+   const bboxCoordinates = bbox && [
     { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
     { latitude: bbox[1], longitude: bbox[2] }, // northwest corner
     { latitude: bbox[3], longitude: bbox[2] }, // northeast corner
     { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
     { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
-  ];
+  ]; */
 
   return (
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="mx-8" keyboardShouldPersistTaps="always">
+      <ScrollView className="mx-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
@@ -102,7 +101,7 @@ export default function Home() {
           label="Start"
           onChange={(value) => changeOrigin(value)}
         />
-
+        <View className="pt-8" />
         <IconButton
           onPress={switchOriginDestination}
           disabled={origin === undefined || destination === undefined}
