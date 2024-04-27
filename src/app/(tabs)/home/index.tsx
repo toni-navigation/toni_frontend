@@ -2,11 +2,14 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
 
+import { Intro } from '@/components/Intro';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
+import { Calibration } from '@/components/calibration/Calibration';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -18,6 +21,7 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const calibration = useCalibrationStore((state) => state.calibration);
   const colorscheme = useColorScheme();
 
   const getCoordinates = (location: OriginDestinationType) => {
@@ -62,6 +66,9 @@ export default function HomePage() {
     { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
     { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
   ];
+  if (calibration.factors.length === 0) {
+    return <Intro />;
+  }
 
   return (
     <SafeAreaView

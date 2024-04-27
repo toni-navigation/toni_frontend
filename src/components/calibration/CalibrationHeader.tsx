@@ -13,6 +13,7 @@ interface CalibrationHeaderProps {
 export function CalibrationHeader({ index }: CalibrationHeaderProps) {
   const colorscheme = useColorScheme();
   const calibration = useCalibrationStore((state) => state.calibration);
+  console.log(calibration);
 
   return (
     <>

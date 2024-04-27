@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Link } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
   SafeAreaView,
@@ -12,7 +12,7 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/Logo';
 
-export default function IntroPage() {
+export function Intro() {
   const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
 
@@ -99,18 +99,15 @@ export default function IntroPage() {
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
-          <Button
-            buttonType="primary"
-            disabled={false}
-            onPress={() => {
-              const params = {
-                fromProfile: 0,
-              };
-              router.push({ pathname: '/(tabs)/home', params });
-            }}
+          <Link
+            // buttonType="primary"
+            // disabled={false}
+            href="/profile/calibration"
+
+            // onPress={() => router.push('/(tabs)/home')}
           >
             Los gehts
-          </Button>
+          </Link>
         </>
       </View>
     </SafeAreaView>

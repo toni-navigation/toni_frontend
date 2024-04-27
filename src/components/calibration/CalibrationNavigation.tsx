@@ -5,7 +5,7 @@ import { Text, useColorScheme, View } from 'react-native';
 import { Button } from '@/components/atoms/Button';
 import { calibrationTexts } from '@/components/calibration/calibrationTexts';
 
-export function Navigation({
+export function CalibrationNavigation({
   index,
   setIndex,
   calibrationModeButtons,
@@ -28,7 +28,7 @@ export function Navigation({
     if (pageIndex === 3) {
       buttonText = 'Los gehts';
     }
-    if (pageIndex === 6) {
+    if (pageIndex === 5) {
       buttonText = 'Fertig';
     }
 
