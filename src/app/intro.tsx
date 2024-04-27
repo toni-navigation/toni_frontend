@@ -106,7 +106,7 @@ export default function IntroPage() {
               const params = {
                 fromProfile: 0,
               };
-              router.push({ pathname: '/profile/calibration', params });
+              router.push({ pathname: '/(tabs)/home', params });
             }}
           >
             Los gehts

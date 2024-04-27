@@ -49,6 +49,7 @@ export default function Layout() {
       }}
     >
       <Tabs.Screen
+        key="favorites"
         name="favorites"
         options={{
           headerTitle: 'Meine Favoriten',
@@ -63,6 +64,7 @@ export default function Layout() {
             borderTopLeftRadius: 40,
             height: 118,
           },
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -71,7 +73,7 @@ export default function Layout() {
           headerTitle: 'Navigation',
           tabBarLabel: 'Navigation',
           tabBarIcon: ({ color }) => iconsArray.navigationArrow({ color }),
-
+          href: '/home',
           tabBarAccessibilityLabel: 'Favoriten',
           tabBarItemStyle: {
             backgroundColor:
@@ -80,6 +82,7 @@ export default function Layout() {
                 : styling.colors['primary-color-light'],
             height: 118,
           },
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -98,6 +101,7 @@ export default function Layout() {
             borderTopRightRadius: 40,
             height: 118,
           },
+          headerShown: false,
         }}
       />
     </Tabs>

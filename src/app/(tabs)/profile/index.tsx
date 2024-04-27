@@ -5,7 +5,7 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 
-export default function Page() {
+export default function ProfilePage() {
   const colorscheme = useColorScheme();
 
   return (

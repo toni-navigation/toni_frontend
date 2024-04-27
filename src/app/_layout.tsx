@@ -4,28 +4,16 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
+import { useColorScheme } from 'react-native';
 
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
-export default function StackLayout() {
-  // const [queryClient] = React.useState(() => new QueryClient());
 
-  const [fontsLoaded, fontError] = useFonts({
-    atkinsonRegular: AtkinsonHyperlegible_400Regular,
-    generalSansSemi,
-  });
-
-  useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
+function RootLayoutNav() {
+  // TODO add Theme Provider
+  const colorScheme = useColorScheme();
 
   return (
     <React.StrictMode>
@@ -42,13 +30,6 @@ export default function StackLayout() {
             // headerBackVisible: false, // TODO: set to false when back button is implemented
           }}
         >
-          {/* <Stack.Screen */}
-          {/*  name="trip" */}
-          {/*  options={{ */}
-          {/*    headerShown: false, */}
-          {/*  }} */}
-          {/* /> */}
-
           <Stack.Screen
             name="(tabs)"
             options={{
@@ -61,4 +42,27 @@ export default function StackLayout() {
       </QueryClientProvider>
     </React.StrictMode>
   );
+}
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    atkinsonRegular: AtkinsonHyperlegible_400Regular,
+    generalSansSemi,
+  });
+
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
+  return <RootLayoutNav />;
 }

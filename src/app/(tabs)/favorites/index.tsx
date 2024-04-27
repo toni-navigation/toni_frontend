@@ -2,7 +2,7 @@ import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 
-export default function Page() {
+export default function FavoritesPage() {
   const colorscheme = useColorScheme();
 
   return (
