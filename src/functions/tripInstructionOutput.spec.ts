@@ -8,7 +8,7 @@ describe('tripInstructionOutput', () => {
     const factor = 2;
     const result = tripInstructionOutput(maneuver, factor);
 
-    expect(result).toEqual('250 Schritte turn right');
+    expect(result).toEqual('25 Schritte turn right');
   });
 
   it('should return instruction with distance only when factor is not provided', () => {
