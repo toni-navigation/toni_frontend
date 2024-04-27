@@ -6,7 +6,6 @@ import { Intro } from '@/components/Intro';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
-import { Calibration } from '@/components/calibration/Calibration';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { getBbox } from '@/functions/getBbox';
 import { useCalibrationStore } from '@/store/useCalibrationStore';

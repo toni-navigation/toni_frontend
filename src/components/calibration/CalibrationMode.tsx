@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Text, useColorScheme, View } from 'react-native';
+import { Text, useColorScheme, View } from 'react-native';
 
 import { Icon } from '@/components/atoms/Icon';
 import styling from '@/stylings';

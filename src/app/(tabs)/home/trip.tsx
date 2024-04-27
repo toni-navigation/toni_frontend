@@ -20,7 +20,6 @@ import { Button } from '@/components/atoms/Button';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
-import { Map } from '@/components/organisms/Map';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -80,7 +79,7 @@ export default function TripPage() {
 
     setShouldBeRerouted(false);
     // Evtl andere Lösung?
-    router.replace({ pathname: `/trip`, params });
+    router.replace({ pathname: `/home/trip`, params });
   };
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
@@ -248,7 +247,7 @@ export default function TripPage() {
           {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
         <Button
-          onPress={() => router.replace('/home')}
+          onPress={() => router.back()}
           buttonType="primary"
           disabled={false}
         >
