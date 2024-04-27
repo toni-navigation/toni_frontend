@@ -8,9 +8,9 @@ import React, { useEffect, useState } from 'react';
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 
 SplashScreen.preventAutoHideAsync();
-
+const queryClient = new QueryClient();
 export default function StackLayout() {
-  const [queryClient] = useState(() => new QueryClient());
+  // const [queryClient] = React.useState(() => new QueryClient());
 
   const [fontsLoaded, fontError] = useFonts({
     atkinsonRegular: AtkinsonHyperlegible_400Regular,
@@ -37,17 +37,17 @@ export default function StackLayout() {
               fontWeight: 'bold',
             },
 
-            headerShown: false,
+            // headerShown: false,
             // eslint-disable-next-line react/jsx-no-undef
-            headerBackVisible: false, // TODO: set to false when back button is implemented
+            // headerBackVisible: false, // TODO: set to false when back button is implemented
           }}
         >
-          <Stack.Screen
-            name="trip"
-            options={{
-              headerShown: false,
-            }}
-          />
+          {/* <Stack.Screen */}
+          {/*  name="trip" */}
+          {/*  options={{ */}
+          {/*    headerShown: false, */}
+          {/*  }} */}
+          {/* /> */}
 
           <Stack.Screen
             name="(tabs)"

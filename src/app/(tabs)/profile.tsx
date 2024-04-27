@@ -19,7 +19,7 @@ export default function Page() {
         </MenuButton> */}
         <MenuButton
           onPress={() => {
-            router.push('/profile/calibrationOverview');
+            router.push('/profile/calibration');
           }}
           icon="steplength"
         >
