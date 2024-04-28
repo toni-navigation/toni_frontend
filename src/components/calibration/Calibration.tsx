@@ -14,6 +14,7 @@ import { Button } from '@/components/atoms/Button';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
+import { calibrationSteps } from '@/components/calibration/calibrationSteps';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -179,7 +180,9 @@ export function Calibration() {
     >
       <ScrollView className="px-8 mt-8">
         <CalibrationHeader index={index} />
-        {index === 4 && <CalibrationMode steps={steps} />}
+        {!calibrationSteps()[index].forwardButtonText && (
+          <CalibrationMode steps={steps} />
+        )}
         {(currentLocationMutation.isPending ||
           pedometerAvailableMutation.isPending ||
           startSoundMutation.isPending) && (
