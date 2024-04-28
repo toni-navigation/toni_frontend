@@ -3,12 +3,8 @@ import { AVPlaybackSource } from 'expo-av';
 
 import { playSound } from '@/functions/playSound';
 
-export function useStartSound(stopSpeech: () => void) {
+export function useStartSound() {
   return useMutation({
     mutationFn: (source: AVPlaybackSource) => playSound(source),
-    onSuccess: () => {
-      // console.log('success');
-      // stopSpeech();
-    },
   });
 }

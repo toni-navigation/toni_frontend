@@ -19,6 +19,7 @@ import { calibrationSteps } from '@/components/calibration/calibrationSteps';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
+import { useSpeak } from '@/mutations/useSpeak';
 import { useStartSound } from '@/mutations/useStartSound';
 import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
@@ -45,16 +46,18 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
 
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
-  const startSoundMutation = useStartSound(() => Speech.stop());
+  const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
-  const speakAsync = (text: string, options: Speech.SpeechOptions) =>
-    new Promise((resolve: any, reject) => {
-      Speech.speak(text, {
-        ...options,
-        onDone: () => resolve(),
-        onError: () => reject(),
-      });
-    });
+  const speakMutation = useSpeak();
+  console.log(speakMutation.isPending);
+  // const speakAsync = (text: string, options: Speech.SpeechOptions) =>
+  //   new Promise((resolve: any, reject) => {
+  //     Speech.speak(text, {
+  //       ...options,
+  //       onDone: () => resolve(),
+  //       onError: () => reject(),
+  //     });
+  //   });
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -107,9 +110,8 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     }
   };
   const startPedometer = async () => {
-    await speakAsync(
-      'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
-      SPEECH_CONFIG
+    await speakMutation.mutateAsync(
+      'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.'
     );
     // Speech.speak(
     //   'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
@@ -120,9 +122,8 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     const currentPositionData = await currentLocationMutation.mutateAsync();
     if (!pedometerAvailable) {
       // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
-      await speakAsync(
-        'Gehe 30 Schritte und klicke dann auf Stopp.',
-        SPEECH_CONFIG
+      await speakMutation.mutateAsync(
+        'Gehe 30 Schritte und klicke dann auf Stopp.'
       );
     }
     const sound = await startSoundMutation.mutateAsync(Song);
@@ -168,8 +169,9 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         buttonType="primary"
         disabled={
           currentLocationMutation.isPending ||
-          startSoundMutation.isPending ||
-          pedometerAvailableMutation.isPending
+          pedometerAvailableMutation.isPending ||
+          speakMutation.isPending ||
+          startSoundMutation.isPending
         }
         onPress={startPedometer}
       >
@@ -194,6 +196,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         ) : null}
         {(currentLocationMutation.isPending ||
           pedometerAvailableMutation.isPending ||
+          speakMutation.isPending ||
           startSoundMutation.isPending) && (
           <ActivityIndicator className="mt-4 h-[100px]" size="large" />
         )}
