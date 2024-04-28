@@ -56,7 +56,6 @@ export default function TripPage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const [shouldBeRerouted, setShouldBeRerouted] = useState(false);
 
   const calibration = useCalibrationStore((state) => state.calibration);
 
@@ -77,7 +76,6 @@ export default function TripPage() {
       destination: tripData.destination,
     };
 
-    setShouldBeRerouted(false);
     // Evtl andere Lösung?
     router.replace({ pathname: `/home/trip`, params });
   };
@@ -131,19 +129,6 @@ export default function TripPage() {
       });
     }
   };
-  // TODO Refactor
-  const shouldReroute = useCallback(
-    () =>
-      nearestPoint &&
-      currentLocation &&
-      nearestPoint.properties.dist &&
-      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING,
-    [nearestPoint, currentLocation]
-  );
-
-  useEffect(() => {
-    setShouldBeRerouted(!!shouldReroute());
-  }, [nearestPoint, currentLocation, tripData.destination, shouldReroute]);
 
   if (isPending) {
     return (
@@ -202,21 +187,24 @@ export default function TripPage() {
               key="0"
             />
             <TripStep key="1">
-              {shouldBeRerouted && (
-                <View>
-                  <Text>
-                    Du befindest dich nicht auf der Route. Möchtest du die Route
-                    neu berechnen?
-                  </Text>
-                  <Button
-                    onPress={rerouteHandler}
-                    disabled={!currentLocation}
-                    buttonType="primary"
-                  >
-                    Reroute
-                  </Button>
-                </View>
-              )}
+              {nearestPoint &&
+                currentLocation &&
+                nearestPoint.properties.dist &&
+                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING && (
+                  <View>
+                    <Text>
+                      Du befindest dich nicht auf der Route. Möchtest du die
+                      Route neu berechnen?
+                    </Text>
+                    <Button
+                      onPress={rerouteHandler}
+                      disabled={!currentLocation}
+                      buttonType="primary"
+                    >
+                      Reroute
+                    </Button>
+                  </View>
+                )}
               <Card
                 iconKey={matchIconType(
                   calculatedManeuvers?.currentManeuver.type
