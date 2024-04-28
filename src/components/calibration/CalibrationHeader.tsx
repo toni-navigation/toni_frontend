@@ -3,8 +3,7 @@ import { Text, useColorScheme, View } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/Logo';
-import { calibrationTexts } from '@/components/calibration/calibrationTexts';
-import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { calibrationSteps } from '@/components/calibration/calibrationSteps';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 interface CalibrationHeaderProps {
@@ -13,7 +12,10 @@ interface CalibrationHeaderProps {
 export function CalibrationHeader({ index }: CalibrationHeaderProps) {
   const colorscheme = useColorScheme();
   const calibration = useCalibrationStore((state) => state.calibration);
-  console.log(calibration);
+  const { calibrationValueNode } = calibrationSteps(
+    calibration.meters,
+    colorscheme
+  )[index];
 
   return (
     <>
@@ -28,15 +30,9 @@ export function CalibrationHeader({ index }: CalibrationHeaderProps) {
         <Text
           className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
         >
-          {calibrationTexts(calibration.meters)[index]}
+          {calibrationSteps(calibration.meters)[index].text}
         </Text>
-        {index === 0 && (
-          <Text
-            className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
-          >
-            {getCalibrationValue(calibration.meters)} m
-          </Text>
-        )}
+        {calibrationValueNode && calibrationValueNode}
       </View>
     </>
   );

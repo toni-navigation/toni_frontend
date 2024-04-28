@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Text, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
-import { calibrationTexts } from '@/components/calibration/calibrationTexts';
+import { calibrationSteps } from '@/components/calibration/calibrationSteps';
 
 export function CalibrationNavigation({
   index,
@@ -15,30 +15,25 @@ export function CalibrationNavigation({
   calibrationModeButtons: () => React.ReactNode;
 }) {
   const colorscheme = useColorScheme();
-  const isLastStep = calibrationTexts().length - 1 === index;
+  const isLastStep = calibrationSteps().length - 1 === index;
   const isFirstStep = index === 0;
-  const navigationButton = (pageIndex: number) => {
-    if (pageIndex === 4) {
+  const currentElement = calibrationSteps()[index];
+  const navigationButton = () => {
+    if (!currentElement.forwardButtonText) {
       return calibrationModeButtons();
-    }
-    let buttonText = 'Weiter';
-    if (pageIndex === 0) {
-      buttonText = 'Kalibrieren';
-    }
-    if (pageIndex === 3) {
-      buttonText = 'Los gehts';
-    }
-    if (pageIndex === 5) {
-      buttonText = 'Fertig';
     }
 
     return (
       <Button
         buttonType={isFirstStep ? 'accent' : 'primary'}
         disabled={false}
-        onPress={isLastStep ? () => router.back() : () => setIndex(index + 1)}
+        onPress={
+          isLastStep
+            ? () => router.back()
+            : () => setIndex((prevIndex) => prevIndex + 1)
+        }
       >
-        {buttonText}
+        {currentElement.forwardButtonText}
       </Button>
     );
   };
@@ -48,18 +43,22 @@ export function CalibrationNavigation({
       <Text
         className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
       >
-        Schritt {index + 1} / {calibrationTexts().length}
+        Schritt {index + 1} / {calibrationSteps().length}
       </Text>
 
       <Button
         buttonType="primaryOutline"
         disabled={false}
         // TODO Last step delete newest calibration
-        onPress={isFirstStep ? () => router.back() : () => setIndex(index - 1)}
+        onPress={
+          isFirstStep
+            ? () => router.back()
+            : () => setIndex((prevIndex) => prevIndex - 1)
+        }
       >
-        {index === 5 ? 'Wiederholen' : 'Zurück'}
+        {currentElement.backButtonText}
       </Button>
-      {navigationButton(index)}
+      {navigationButton()}
     </View>
   );
 }

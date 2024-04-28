@@ -16,7 +16,7 @@ It is a pure frontend application without its own backend.
 - Assess the app's accessibility and usability for blind users.
 - Validate the integration with external APIs (Photon for Geocoding, Valhalla for Routing).
 
-Accessibility and the smooth calibration of steps are the most important quality attributes of our app. CalibrationNavigation is of course also important, but as the routing takes place via an external API (Valhalla), we only have limited influence on it.
+Accessibility and the smooth calibration of steps are the most important quality attributes of our app. Navigation is of course also important, but as the routing takes place via an external API (Valhalla), we only have limited influence on it.
 ## Testing Types
 - Unit Testing: Testing all pure functions in the functions folder using Jest.
 - Integration Testing: Testing integration with external APIs for geocoding (Photon) and routing (Valhalla) using Jest.
