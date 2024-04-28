@@ -41,7 +41,6 @@ export const calibrationSteps = (
     backButtonText: 'Zurück',
   },
   {
-    // forwardButtonText: 'Weiter',
     text: 'Wenn du auf Start Kalibrierung klickst, ertönt eine Melodie. Laufe so lange geradeaus, bis die Melodie stoppt.',
     backButtonText: 'Zurück',
   },

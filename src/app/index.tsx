@@ -1,8 +1,10 @@
 import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 
+import { Intro } from '@/components/Intro';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
@@ -12,6 +14,8 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const calibration = useCalibrationStore((state) => state.calibration);
+  const skipped = useCalibrationStore((state) => state.skipped);
 
   useEffect(() => {
     (async () => {
@@ -48,6 +52,9 @@ export default function Index() {
 
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;
+  }
+  if (!skipped && calibration.factors.length === 0) {
+    return <Intro />;
   }
 
   // if (calibration.start === null || calibration.end === null) {

@@ -131,7 +131,7 @@ export default function TripPage() {
       });
     }
   };
-
+  // TODO Refactor
   const shouldReroute = useCallback(
     () =>
       nearestPoint &&

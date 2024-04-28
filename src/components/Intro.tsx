@@ -1,4 +1,3 @@
-import { Link } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
   SafeAreaView,
@@ -11,11 +10,12 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/Logo';
+import { Calibration } from '@/components/calibration/Calibration';
 
 export function Intro() {
   const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
-
+  const [showCalibration, setShowCalibration] = React.useState(false);
   useEffect(() => {
     const toggle = setInterval(() => {
       if (index === 0) {
@@ -31,6 +31,9 @@ export function Intro() {
 
     return () => clearInterval(toggle);
   });
+  if (showCalibration) {
+    return <Calibration isFromIntro />;
+  }
 
   return (
     <SafeAreaView
@@ -99,15 +102,13 @@ export function Intro() {
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
-          <Link
-            // buttonType="primary"
-            // disabled={false}
-            href="/profile/calibration"
-
-            // onPress={() => router.push('/(tabs)/home')}
+          <Button
+            buttonType="primary"
+            disabled={false}
+            onPress={() => setShowCalibration(true)}
           >
             Los gehts
-          </Link>
+          </Button>
         </>
       </View>
     </SafeAreaView>

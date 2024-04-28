@@ -11,6 +11,7 @@ import {
 
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
+import { IconButton } from '@/components/atoms/IconButton';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
@@ -27,7 +28,10 @@ const STOP_CALIBRATION_COUNT = 30;
 export const SPEECH_CONFIG = {
   language: 'de',
 };
-export function Calibration() {
+interface CalibrationProps {
+  isFromIntro?: boolean;
+}
+export function Calibration({ isFromIntro }: CalibrationProps) {
   const { resetCalibrationStore } = useCalibrationStore(
     (state) => state.actions
   );
@@ -179,10 +183,15 @@ export function Calibration() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="px-8 mt-8">
+        <IconButton
+          icon="cross"
+          onPress={resetCalibrationStore}
+          buttonType="primary"
+        />
         <CalibrationHeader index={index} />
-        {!calibrationSteps()[index].forwardButtonText && (
+        {calibrationSteps()[index].forwardButtonText === undefined ? (
           <CalibrationMode steps={steps} />
-        )}
+        ) : null}
         {(currentLocationMutation.isPending ||
           pedometerAvailableMutation.isPending ||
           startSoundMutation.isPending) && (
@@ -193,6 +202,7 @@ export function Calibration() {
         index={index}
         setIndex={setIndex}
         calibrationModeButtons={buttonOutput}
+        isFromIntro={isFromIntro}
       />
     </SafeAreaView>
   );

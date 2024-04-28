@@ -4,38 +4,56 @@ import { Text, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { calibrationSteps } from '@/components/calibration/calibrationSteps';
+import { useCalibrationStore } from '@/store/useCalibrationStore';
 
+interface CalibrationNavigationProps {
+  index: number;
+  setIndex: Dispatch<SetStateAction<number>>;
+  calibrationModeButtons: () => React.ReactNode;
+  isFromIntro?: boolean;
+}
 export function CalibrationNavigation({
   index,
   setIndex,
   calibrationModeButtons,
-}: {
-  index: number;
-  setIndex: Dispatch<SetStateAction<number>>;
-  calibrationModeButtons: () => React.ReactNode;
-}) {
+  isFromIntro,
+}: CalibrationNavigationProps) {
+  const { toggleSkipped } = useCalibrationStore((state) => state.actions);
   const colorscheme = useColorScheme();
   const isLastStep = calibrationSteps().length - 1 === index;
   const isFirstStep = index === 0;
   const currentElement = calibrationSteps()[index];
-  const navigationButton = () => {
-    if (!currentElement.forwardButtonText) {
-      return calibrationModeButtons();
+
+  const backButtonHandler = () => {
+    const skip = isFromIntro && isFirstStep;
+    if (skip) {
+      toggleSkipped();
+
+      return;
+    }
+    if (isFirstStep) {
+      router.back();
+
+      return;
     }
 
-    return (
-      <Button
-        buttonType={isFirstStep ? 'accent' : 'primary'}
-        disabled={false}
-        onPress={
-          isLastStep
-            ? () => router.back()
-            : () => setIndex((prevIndex) => prevIndex + 1)
-        }
-      >
-        {currentElement.forwardButtonText}
-      </Button>
-    );
+    setIndex((prevIndex) => prevIndex - 1);
+  };
+
+  const nextButtonHandler = () => {
+    if (isFromIntro && isLastStep) {
+      router.setParams({});
+      router.replace({ pathname: '/home/' });
+
+      return;
+    }
+    if (isLastStep) {
+      router.back();
+
+      return;
+    }
+
+    setIndex((prevIndex) => prevIndex + 1);
   };
 
   return (
@@ -50,15 +68,23 @@ export function CalibrationNavigation({
         buttonType="primaryOutline"
         disabled={false}
         // TODO Last step delete newest calibration
-        onPress={
-          isFirstStep
-            ? () => router.back()
-            : () => setIndex((prevIndex) => prevIndex - 1)
-        }
+        onPress={backButtonHandler}
       >
-        {currentElement.backButtonText}
+        {isFromIntro && isFirstStep
+          ? 'Überspringen'
+          : currentElement.backButtonText}
       </Button>
-      {navigationButton()}
+      {currentElement.forwardButtonText === undefined ? (
+        calibrationModeButtons()
+      ) : (
+        <Button
+          buttonType={isFirstStep ? 'accent' : 'primary'}
+          disabled={false}
+          onPress={nextButtonHandler}
+        >
+          {currentElement.forwardButtonText}
+        </Button>
+      )}
     </View>
   );
 }
