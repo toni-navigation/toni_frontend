@@ -1,6 +1,13 @@
 import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
+import { Gyroscope, Magnetometer } from 'expo-sensors';
+import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -18,6 +25,55 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const [{ x, y, z }, setData] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+  const [subscription, setSubscription] = useState<any>(null);
+  const [magnetometerSubscription, setMagnetometerSubscription] =
+    useState<any>(null);
+
+  const slow = () => Gyroscope.setUpdateInterval(1000);
+  const fast = () => Gyroscope.setUpdateInterval(16);
+
+  const subscribe = () => {
+    Gyroscope.addListener((gyroscopeData) => {
+      // console.log(gyroscopeData);
+      // setData(gyroscopeData);
+    });
+  };
+
+  const unsubscribe = () => {
+    if (subscription) {
+      subscription.remove();
+    }
+    setSubscription(null);
+  };
+
+  const magnetometerSubscribe = () => {
+    Magnetometer.addListener((result) => {
+      // console.log(result);
+      setData(result);
+    });
+  };
+
+  const magnetometerUnsubscribe = () => {
+    if (magnetometerSubscription) {
+      magnetometerSubscription.remove();
+    }
+    setMagnetometerSubscription(null);
+  };
+
+  useEffect(() => {
+    // subscribe();
+    magnetometerSubscribe();
+
+    return () => {
+      magnetometerUnsubscribe();
+      // unsubscribe();
+    };
+  }, []);
   const colorscheme = useColorScheme();
 
   const getCoordinates = (location: OriginDestinationType) => {
@@ -71,6 +127,27 @@ export default function HomePage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
+      <View>
+        <Text>Gyroscope:</Text>
+        <Text>x: {x}</Text>
+        <Text>y: {y}</Text>
+        <Text>z: {z}</Text>
+        <View>
+          <Button
+            buttonType="primary"
+            disabled={false}
+            onPress={subscription ? unsubscribe : subscribe}
+          >
+            {subscription ? 'Off' : 'On'}
+          </Button>
+          <Button buttonType="primary" disabled={false} onPress={slow}>
+            <Text>Slow</Text>
+          </Button>
+          <Button buttonType="primary" disabled={false} onPress={fast}>
+            <Text>Fast</Text>
+          </Button>
+        </View>
+      </View>
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete
