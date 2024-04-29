@@ -8,7 +8,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       vars:
-        PACKAGE_NAME: "io.toni" # <-- Put your package name here e.g. com.domain.myapp
+        PACKAGE_NAME: "io.toni.app" # <-- Put your package name here e.g. com.domain.myapp
       node: 20.11
     scripts:
       - name: Install dependencies and Expo CLI, and eject app
@@ -37,7 +37,7 @@ workflows:
       vars:
         XCODE_WORKSPACE: "ExpoApp.xcworkspace" # <-- Put the name of your Xcode workspace here
         XCODE_SCHEME: "ExpoApp" # <-- Put the name of your Xcode scheme here
-        BUNDLE_ID: "io.codemagic.expoapp" # <-- Put your Bundle Id here e.g com.domain.myapp
+        BUNDLE_ID: "io.toni.app" # <-- Put your Bundle Id here e.g com.domain.myapp
         APP_ID: 1616629701 # <-- Put the app id number here. This is found in App Store Connect > App > General > App Information
       node: 20.11
       cocoapods: default
