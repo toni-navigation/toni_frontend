@@ -6,7 +6,6 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { getBbox } from '@/functions/getBbox';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -54,14 +53,14 @@ export default function HomePage() {
     }
   };
 
-  const bbox = currentLocation && getBbox(currentLocation);
-  const bboxCoordinates = bbox && [
-    { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
-    { latitude: bbox[1], longitude: bbox[2] }, // northwest corner
-    { latitude: bbox[3], longitude: bbox[2] }, // northeast corner
-    { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
-    { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
-  ];
+  // const bbox = currentLocation && getBbox(currentLocation);
+  // const bboxCoordinates = bbox && [
+  //   { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
+  //   { latitude: bbox[1], longitude: bbox[2] }, // northwest corner
+  //   { latitude: bbox[3], longitude: bbox[2] }, // northeast corner
+  //   { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
+  //   { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
+  // ];
 
   // if (!skipped && calibration.factors.length === 0) {
   //   return <Calibration isFromIntro />;

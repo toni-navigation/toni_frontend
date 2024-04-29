@@ -49,7 +49,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  console.log(speakMutation.isPending);
+  // console.log(speakMutation.isPending);
   // const speakAsync = (text: string, options: Speech.SpeechOptions) =>
   //   new Promise((resolve: any, reject) => {
   //     Speech.speak(text, {
