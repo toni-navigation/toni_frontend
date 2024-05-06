@@ -251,7 +251,7 @@ describe('fetchTripHandler', () => {
   });
 
   it('does not make a request when points array is empty', async () => {
-    const result = await fetchTripHandler([]);
+    const result = await fetchTripHandler([], mockAxios);
 
     expect(result).toBeNull();
     expect(mockAxios.get).toHaveBeenCalledTimes(0);
