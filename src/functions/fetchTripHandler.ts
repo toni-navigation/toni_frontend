@@ -9,10 +9,10 @@ const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';
 const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
 
 export const fetchTripHandler = async (
-  points: LocationProps[],
+  points?: LocationProps[] | null,
   _axios = axiosValhallaInstance
 ): Promise<ValhallaProps | null> => {
-  if (points.length === 0) {
+  if (!points || points?.length === 0) {
     return null;
   }
   const searchJson = {

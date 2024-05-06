@@ -239,7 +239,12 @@ describe('fetchTripHandler', () => {
     mockAxios.create.mockReturnValue(mockAxios);
     mockAxios.get.mockResolvedValue({ data: VALHALLA_STUB });
   });
+  it('does not make a request when points array is empty', async () => {
+    const result = await fetchTripHandler(null!, mockAxios);
 
+    expect(result).toBeNull();
+    expect(mockAxios.get).toHaveBeenCalledTimes(0);
+  });
   it('makes a request when points array is not empty', async () => {
     const points = [
       { lat: 47.724156, lon: 13.086473 },
@@ -248,12 +253,5 @@ describe('fetchTripHandler', () => {
     const result = await fetchTripHandler(points, mockAxios);
     expect(result).toEqual(VALHALLA_STUB);
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not make a request when points array is empty', async () => {
-    const result = await fetchTripHandler([], mockAxios);
-
-    expect(result).toBeNull();
-    expect(mockAxios.get).toHaveBeenCalledTimes(0);
   });
 });
