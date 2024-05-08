@@ -240,7 +240,7 @@ describe('fetchTripHandler', () => {
     mockAxios.get.mockResolvedValue({ data: VALHALLA_STUB });
   });
   it('does not make a request when points array is empty', async () => {
-    const result = await fetchTripHandler(null!, mockAxios);
+    const result = await fetchTripHandler([], mockAxios);
 
     expect(result).toBeNull();
     expect(mockAxios.get).toHaveBeenCalledTimes(0);
