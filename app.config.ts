@@ -26,6 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-router',
+    'expo-font',
     [
       'expo-screen-orientation',
       {
