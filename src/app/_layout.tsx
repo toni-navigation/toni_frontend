@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
+import 'react-native-reanimated';
 
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 
@@ -24,7 +25,7 @@ function RootLayoutNav() {
               fontWeight: 'bold',
             },
 
-            // headerShown: false,
+            headerShown: false,
             // eslint-disable-next-line react/jsx-no-undef
             // headerBackVisible: false, // TODO: set to false when back button is implemented
           }}

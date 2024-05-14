@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import 'react-native-reanimated';
 
 function ProfileLayout() {
   return (
@@ -7,6 +8,7 @@ function ProfileLayout() {
         name="index"
         options={{
           headerTitle: 'Mein Profil',
+          headerShown: false,
         }}
       />
     </Stack>
