@@ -32,7 +32,7 @@ jobs:
           npx prettier --check .
 
       - name: Run Unit Tests
-        run: npm test:unit
+        run: npm run test:unit
 
       - name: Run Integration Tests
-        run: npm test:integration
+        run: npm run test:integration
