@@ -31,5 +31,9 @@ jobs:
           npm install --save-dev --save-exact prettier
           npx prettier --check .
 
-      - name: Run tests
-        run: npm test
+      - name: Run Unit Tests
+        run: npm test:unit
+
+      - name: Run Integration Tests
+        run: npm test:integration
+
