@@ -14,7 +14,7 @@ export const calibrationSteps = (
   colorscheme?: ColorSchemeName
 ): CalibrationStepsProps[] => [
   {
-    forwardButtonText: 'Kalibrieren',
+    forwardButtonText: `${meters ? 'Zurücksetzen' : 'Kalibrieren'}`,
     text: `Deine kalibrierte Schrittlänge beträgt`,
     backButtonText: 'Zurück',
     calibrationValueNode: (

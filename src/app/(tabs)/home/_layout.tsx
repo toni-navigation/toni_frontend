@@ -8,6 +8,7 @@ function HomeLayout() {
         name="index"
         options={{
           headerTitle: 'Navigation',
+          headerShown: false,
         }}
       />
     </Stack>

@@ -11,7 +11,6 @@ import {
 
 import Song from '@/assets/Testtrack.mp3';
 import { Button } from '@/components/atoms/Button';
-import { IconButton } from '@/components/atoms/IconButton';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
@@ -185,11 +184,6 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="px-8 mt-8">
-        <IconButton
-          icon="cross"
-          onPress={resetCalibrationStore}
-          buttonType="primary"
-        />
         <CalibrationHeader index={index} />
         {calibrationSteps()[index].forwardButtonText === undefined ? (
           <CalibrationMode steps={steps} />

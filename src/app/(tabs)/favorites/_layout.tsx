@@ -8,6 +8,7 @@ function FavoritesLayout() {
         name="index"
         options={{
           headerTitle: 'Meine Favoriten',
+          headerShown: false,
         }}
       />
     </Stack>

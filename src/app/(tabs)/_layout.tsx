@@ -22,9 +22,9 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        // headerShown: false,
+        headerShown: false,
         tabBarStyle: {
-          height: 118,
+          height: 110,
           borderTopWidth: 0,
           elevation: 0,
           backgroundColor:
@@ -62,7 +62,7 @@ export default function Layout() {
                 ? styling.colors['primary-color-dark']
                 : styling.colors['primary-color-light'],
             borderTopLeftRadius: 40,
-            height: 118,
+            height: 110,
           },
           headerShown: false,
         }}
@@ -80,7 +80,7 @@ export default function Layout() {
               colorscheme === 'light'
                 ? styling.colors['primary-color-dark']
                 : styling.colors['primary-color-light'],
-            height: 118,
+            height: 110,
           },
           headerShown: false,
         }}
@@ -99,7 +99,7 @@ export default function Layout() {
                 ? styling.colors['primary-color-dark']
                 : styling.colors['primary-color-light'],
             borderTopRightRadius: 40,
-            height: 118,
+            height: 110,
           },
           headerShown: false,
         }}

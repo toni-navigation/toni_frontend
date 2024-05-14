@@ -25,7 +25,7 @@ function RootLayoutNav() {
               fontWeight: 'bold',
             },
 
-            // headerShown: false,
+            headerShown: false,
             // eslint-disable-next-line react/jsx-no-undef
             // headerBackVisible: false, // TODO: set to false when back button is implemented
           }}
