@@ -65,7 +65,7 @@
     "@types/jest": "^29.5.11",
     "@types/lodash.debounce": "^4.0.9",
     "@types/react": "~18.2.45",
-    "@types/react-test-renderer": "^18.0.7",
+    "@types/react-test-renderer": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "eslint": "^8.56.0",
