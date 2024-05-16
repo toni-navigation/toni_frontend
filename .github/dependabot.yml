@@ -10,20 +10,11 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      angular:
-        applies-to: version-updates
-        patterns:
-        - "@angular*"
-        update-types:
-        - "minor"
-        - "patch"
       minor-and-patch:
         applies-to: security-updates
-        patterns:
-        - "@angular*"
         update-types:
         - "patch"
         - "minor"
-    ignore:
-      - dependency-name: "@angular*"
-        update-types: ["version-update:semver-major"]
+      major:
+        update-types:
+        - "major"
