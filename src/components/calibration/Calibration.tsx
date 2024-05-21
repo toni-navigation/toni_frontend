@@ -32,22 +32,23 @@ interface CalibrationProps {
   isFromIntro?: boolean;
 }
 export function Calibration({ isFromIntro }: CalibrationProps) {
-  const { resetCalibrationStore } = useCalibrationStore(
-    (state) => state.actions
-  );
+  const { addCalibration } = useCalibrationStore((state) => state.actions);
+  const calibration = useCalibrationStore((state) => state.calibration);
   const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
-  const { addCalibration } = useCalibrationStore((state) => state.actions);
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
   const fallback = useRef<CurrentLocationType>();
-
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
+  const calSteps = calibrationSteps(calibration.meters, colorscheme);
+  const currentStep = calSteps[index];
+  const isLastStep = calSteps.length - 1 === index;
+
   // console.log(speakMutation.isPending);
   // const speakAsync = (text: string, options: Speech.SpeechOptions) =>
   //   new Promise((resolve: any, reject) => {
@@ -138,7 +139,6 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     }
     audioSound.current = sound;
   };
-
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
@@ -184,8 +184,13 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="px-8 mt-8">
-        <CalibrationHeader index={index} />
-        {calibrationSteps()[index].forwardButtonText === undefined ? (
+        {/* <IconButton */}
+        {/*  icon="cross" */}
+        {/*  onPress={resetCalibrationStore} */}
+        {/*  buttonType="primary" */}
+        {/* /> */}
+        <CalibrationHeader currentStep={currentStep} />
+        {currentStep.forwardButtonText === undefined ? (
           <CalibrationMode steps={steps} />
         ) : null}
         {(currentLocationMutation.isPending ||
@@ -196,10 +201,13 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         )}
       </ScrollView>
       <CalibrationNavigation
-        index={index}
         setIndex={setIndex}
         calibrationModeButtons={buttonOutput}
         isFromIntro={isFromIntro}
+        isLastStep={isLastStep}
+        currentElement={currentStep}
+        isFirstStep={index === 0}
+        stepText={`Schritt ${index + 1} / ${calSteps.length}`}
       />
     </SafeAreaView>
   );
