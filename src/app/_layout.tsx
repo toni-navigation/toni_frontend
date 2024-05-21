@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import 'react-native-reanimated';
 
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 
@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   // TODO add Theme Provider
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   return (
     <React.StrictMode>
@@ -25,7 +25,7 @@ function RootLayoutNav() {
               fontWeight: 'bold',
             },
 
-            // headerShown: false,
+            headerShown: false,
             // eslint-disable-next-line react/jsx-no-undef
             // headerBackVisible: false, // TODO: set to false when back button is implemented
           }}

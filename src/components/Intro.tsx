@@ -73,7 +73,7 @@ export function Intro() {
                 className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
               >
                 Entscheide individuell welche Stimme dich auf deinem Weg
-                begleitet!
+                begleitet!!!
               </Text>
             </View>
           </>

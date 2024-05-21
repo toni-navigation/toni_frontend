@@ -6,7 +6,7 @@ import { getCalibrationValue } from '@/functions/getCalibrationValue';
 export interface CalibrationStepsProps {
   text: string;
   forwardButtonText?: string;
-  backButtonText?: string;
+  backButtonText?: string | false;
   calibrationValueNode?: React.ReactNode;
 }
 export const calibrationSteps = (
@@ -16,7 +16,7 @@ export const calibrationSteps = (
   {
     forwardButtonText: 'Kalibrieren',
     text: `Deine kalibrierte Schrittlänge beträgt`,
-    backButtonText: 'Zurück',
+    backButtonText: 'Zurücksetzen',
     calibrationValueNode: (
       <Text
         className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}

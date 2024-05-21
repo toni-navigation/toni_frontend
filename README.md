@@ -1,5 +1,5 @@
 ## Update packages
 
-```npx expo install --fix```
+`npx expo install --fix`
 
-```npx expo start --clear```
+`npx expo start --clear`

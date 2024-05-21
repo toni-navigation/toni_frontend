@@ -3,19 +3,14 @@ import { Text, useColorScheme, View } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/Logo';
-import { calibrationSteps } from '@/components/calibration/calibrationSteps';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
 
 interface CalibrationHeaderProps {
-  index: number;
+  currentStep: CalibrationStepsProps;
 }
-export function CalibrationHeader({ index }: CalibrationHeaderProps) {
+export function CalibrationHeader({ currentStep }: CalibrationHeaderProps) {
   const colorscheme = useColorScheme();
-  const calibration = useCalibrationStore((state) => state.calibration);
-  const { calibrationValueNode } = calibrationSteps(
-    calibration.meters,
-    colorscheme
-  )[index];
+  const { calibrationValueNode } = currentStep;
 
   return (
     <>
@@ -30,7 +25,7 @@ export function CalibrationHeader({ index }: CalibrationHeaderProps) {
         <Text
           className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
         >
-          {calibrationSteps(calibration.meters)[index].text}
+          {currentStep.text}
         </Text>
         {calibrationValueNode && calibrationValueNode}
       </View>

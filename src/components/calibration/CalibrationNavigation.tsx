@@ -3,31 +3,41 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Text, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
-import { calibrationSteps } from '@/components/calibration/calibrationSteps';
+import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 interface CalibrationNavigationProps {
-  index: number;
   setIndex: Dispatch<SetStateAction<number>>;
   calibrationModeButtons: () => React.ReactNode;
   isFromIntro?: boolean;
+  currentElement: CalibrationStepsProps;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  stepText: string;
 }
 export function CalibrationNavigation({
-  index,
   setIndex,
   calibrationModeButtons,
   isFromIntro,
+  currentElement,
+  isFirstStep,
+  isLastStep,
+  stepText,
 }: CalibrationNavigationProps) {
   const { toggleSkipped } = useCalibrationStore((state) => state.actions);
   const colorscheme = useColorScheme();
-  const isLastStep = calibrationSteps().length - 1 === index;
-  const isFirstStep = index === 0;
-  const currentElement = calibrationSteps()[index];
-
+  const { resetCalibrationStore } = useCalibrationStore(
+    (state) => state.actions
+  );
   const backButtonHandler = () => {
     const skip = isFromIntro && isFirstStep;
     if (skip) {
       toggleSkipped();
+
+      return;
+    }
+    if (!isFromIntro && isFirstStep) {
+      resetCalibrationStore();
 
       return;
     }
@@ -61,7 +71,7 @@ export function CalibrationNavigation({
       <Text
         className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
       >
-        Schritt {index + 1} / {calibrationSteps().length}
+        {stepText}
       </Text>
 
       <Button
