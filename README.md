@@ -7,4 +7,5 @@
 `npx expo start --clear`
 
 ## Run Prettier in whole project
+
 `prettier . --write`
