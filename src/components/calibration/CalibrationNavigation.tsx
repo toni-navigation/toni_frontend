@@ -74,18 +74,16 @@ export function CalibrationNavigation({
         {stepText}
       </Text>
 
-      {currentElement.backButtonText && (
-        <Button
-          buttonType="primaryOutline"
-          disabled={false}
-          // TODO Last step delete newest calibration
-          onPress={backButtonHandler}
-        >
-          {isFromIntro && isFirstStep
-            ? 'Überspringen'
-            : currentElement.backButtonText}
-        </Button>
-      )}
+      <Button
+        buttonType="primaryOutline"
+        disabled={false}
+        // TODO Last step delete newest calibration
+        onPress={backButtonHandler}
+      >
+        {isFromIntro && isFirstStep
+          ? 'Überspringen'
+          : currentElement.backButtonText}
+      </Button>
       {currentElement.forwardButtonText === undefined ? (
         calibrationModeButtons()
       ) : (
