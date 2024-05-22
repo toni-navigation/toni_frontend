@@ -11,7 +11,11 @@ export default function FavoritesPage() {
     >
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8">
-        <Header>Meine Favoriten</Header>
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+        >
+          Meine Favoriten
+        </Header>
         <Text>Favoriten Liste</Text>
       </ScrollView>
     </SafeAreaView>

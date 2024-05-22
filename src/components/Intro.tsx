@@ -49,7 +49,11 @@ export function Intro() {
               />
             </View>
             <View className="flex items-center">
-              <Header>Dein Weg</Header>
+              <Header
+                classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+              >
+                Dein Weg
+              </Header>
               <Text
                 className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
               >
@@ -68,7 +72,11 @@ export function Intro() {
               />
             </View>
             <View className="flex items-center">
-              <Header>Dein Klang</Header>
+              <Header
+                classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+              >
+                Dein Klang
+              </Header>
               <Text
                 className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
               >
@@ -87,7 +95,11 @@ export function Intro() {
               />
             </View>
             <View className="flex items-center">
-              <Header>Deine Freiheit</Header>
+              <Header
+                classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+              >
+                Deine Freiheit
+              </Header>
               <Text
                 className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
               >

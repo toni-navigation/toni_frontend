@@ -20,7 +20,11 @@ export function CalibrationHeader({ currentStep }: CalibrationHeaderProps) {
           size={85}
         />
       </View>
-      <Header>Schrittlänge konfigurieren</Header>
+      <Header
+        classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+      >
+        Schrittlänge konfigurieren
+      </Header>
       <View>
         <Text
           className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}

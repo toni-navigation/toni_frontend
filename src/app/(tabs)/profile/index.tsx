@@ -13,7 +13,11 @@ export default function ProfilePage() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="px-8 my-8">
-        <Header>Profil</Header>
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+        >
+          Profil
+        </Header>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
         Profil
         </MenuButton> */}

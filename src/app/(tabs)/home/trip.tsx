@@ -2,7 +2,7 @@ import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
@@ -17,9 +18,11 @@ import PagerView from 'react-native-pager-view';
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
+import { PopUp } from '@/components/organisms/PopUp';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -49,10 +52,14 @@ const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
 const THRESHOLD_REROUTING = 100;
 
 export default function TripPage() {
+  const colorscheme = useColorScheme();
+
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
+  const [showPopUp, setShowPopUp] = React.useState(false);
+
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -129,7 +136,6 @@ export default function TripPage() {
       });
     }
   };
-
   if (isPending) {
     return (
       <View>
@@ -148,6 +154,25 @@ export default function TripPage() {
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
     <SafeAreaView className="flex-1 bg-background-light">
+      <PopUp
+        visible={showPopUp}
+        onClick={() => {
+          setShowPopUp(false);
+          router.back();
+        }}
+        onClickButtonText="Beenden"
+        onCloseClick={() => {
+          setShowPopUp(false);
+          router.push({ pathname: `/home` });
+        }}
+        onCloseButtonText="Schließen"
+      >
+        <Text
+          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+        >
+          Möchtest du die Navigation wirklich beenden?
+        </Text>
+      </PopUp>
       {pause ? (
         <Card iconKey="pause">Pause</Card>
       ) : (
@@ -226,7 +251,7 @@ export default function TripPage() {
         </>
       )}
 
-      <View className="mx-5">
+      <View className="mx-5 mb-5">
         <Button
           onPress={() => setPause(!pause)}
           buttonType="primaryOutline"
@@ -235,7 +260,7 @@ export default function TripPage() {
           {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
         <Button
-          onPress={() => router.back()}
+          onPress={() => setShowPopUp(true)}
           buttonType="primary"
           disabled={false}
         >
