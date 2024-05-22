@@ -1,36 +1,85 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   Text,
   useColorScheme,
   View,
+  StyleSheet,
 } from 'react-native';
+import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
+import { IconByKey } from '@/components/atoms/Icon';
 import { Logo } from '@/components/atoms/Logo';
 import { Calibration } from '@/components/calibration/Calibration';
+import styling from '@/stylings';
 
 export function Intro() {
-  const colorscheme = useColorScheme();
-  const [index, setIndex] = React.useState(0);
   const [showCalibration, setShowCalibration] = React.useState(false);
-  useEffect(() => {
+  const pagerRef = useRef<any>(null);
+  const [currentPage, setCurrentPage] = React.useState(0); // Add this line
+
+  const colorscheme = useColorScheme();
+
+  const pagerViewData: { headline: string; text: string; icon: IconByKey }[] = [
+    {
+      headline: 'Dein Weg',
+      text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
+      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+    },
+    {
+      headline: 'Dein Klang',
+      text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
+      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+    },
+    {
+      headline: 'Deine Freiheit',
+      text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
+      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+    },
+  ];
+
+  const styles = StyleSheet.create({
+    activeDot: {
+      backgroundColor:
+        colorscheme === 'light'
+          ? styling.colors['primary-color-dark']
+          : styling.colors['primary-color-light'],
+      width: 20,
+      height: 20,
+      borderRadius: 25,
+      marginLeft: 8,
+      marginRight: 8,
+    },
+    dot: {
+      backgroundColor: 'transparent',
+      borderColor:
+        colorscheme === 'light'
+          ? styling.colors['primary-color-dark']
+          : styling.colors['primary-color-light'],
+      borderWidth: 3,
+      width: 20,
+      height: 20,
+      borderRadius: 25,
+      marginLeft: 8,
+      marginRight: 8,
+    },
+  });
+
+  const handlePageChange = (pageNumber: number) => {
+    pagerRef.current?.setPage(pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  /*  useEffect(() => {
     const toggle = setInterval(() => {
-      if (index === 0) {
-        setIndex(1);
-      }
-      if (index === 1) {
-        setIndex(2);
-      }
-      if (index === 2) {
-        setIndex(0);
-      }
+      handlePageChange(currentPage === 2 ? 0 : currentPage + 1);
     }, 3000);
 
     return () => clearInterval(toggle);
-  });
+  }, [currentPage]); */
+
   if (showCalibration) {
     return <Calibration isFromIntro />;
   }
@@ -39,66 +88,44 @@ export function Intro() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <ScrollView className="px-8 pt-20 ">
-        {index === 0 && (
-          <>
-            <View className="flex items-center pb-8">
-              <Logo
-                icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
-                size={115}
-              />
+      <View className="flex-1">
+        <PagerView
+          className="flex-1"
+          initialPage={0}
+          ref={pagerRef}
+          onPageSelected={(event) =>
+            handlePageChange(event.nativeEvent.position)
+          }
+        >
+          {pagerViewData.map((data, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <View key={index} className="px-8 mt-8">
+              <View className="flex items-center pb-8">
+                <Logo icon={data.icon} size={115} />
+              </View>
+              <View className="flex items-center">
+                <Header>{data.headline}</Header>
+                <Text
+                  className={`mx-auto text-center font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+                >
+                  {data.text}
+                </Text>
+              </View>
             </View>
-            <View className="flex items-center">
-              <Header>Dein Weg</Header>
-              <Text
-                className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-              >
-                Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an
-                dein Ziel!
-              </Text>
-            </View>
-          </>
-        )}
-        {index === 1 && (
-          <>
-            <View className="flex items-center pb-8">
-              <Logo
-                icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
-                size={115}
-              />
-            </View>
-            <View className="flex items-center">
-              <Header>Dein Klang</Header>
-              <Text
-                className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-              >
-                Entscheide individuell welche Stimme dich auf deinem Weg
-                begleitet!!!
-              </Text>
-            </View>
-          </>
-        )}
-        {index === 2 && (
-          <>
-            <View className="flex items-center pb-8">
-              <Logo
-                icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
-                size={115}
-              />
-            </View>
-            <View className="flex items-center">
-              <Header>Deine Freiheit</Header>
-              <Text
-                className={`mx-auto text-center font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-              >
-                Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!
-              </Text>
-            </View>
-          </>
-        )}
-      </ScrollView>
+          ))}
+        </PagerView>
+      </View>
       <View className="mx-8 mb-3">
         <>
+          <View className="flex justify-center flex-row mb-14">
+            {pagerViewData.map((data, index) => (
+              <View
+                style={index === currentPage ? styles.activeDot : styles.dot}
+                /* eslint-disable-next-line react/no-array-index-key */
+                key={index}
+              />
+            ))}
+          </View>
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
