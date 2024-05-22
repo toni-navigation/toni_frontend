@@ -1,3 +1,4 @@
+import distance from '@turf/distance';
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -14,17 +15,19 @@ import {
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
-import { TripList } from '@/components/TripList';
-import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
+import { RouteToStart } from '@/components/trip/RouteToStart';
+import { TripList } from '@/components/trip/TripList';
+import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getMatchingManeuvers } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
+import { notEmpty } from '@/functions/notEmpty';
 import { parseCoordinate } from '@/functions/parseCoordinate';
 import { photonValue } from '@/functions/photonValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
 });
 const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
 const THRESHOLD_REROUTING = 100;
-
+const DISTANCE_ROUTE_TO_START = 5;
 export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
@@ -56,7 +59,6 @@ export default function TripPage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
   const calibration = useCalibrationStore((state) => state.calibration);
 
   const restructureTripData: LocationProps[] = [
@@ -65,6 +67,8 @@ export default function TripPage() {
   ];
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
+
+  // const startPoint = point([data?.trip., tripData.origin[0]]);
   const rerouteHandler = () => {
     if (!currentLocation) return;
 
@@ -86,10 +90,13 @@ export default function TripPage() {
   };
 
   const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
-
   const currentLocationPoint =
     currentLocation &&
     point([currentLocation.coords.latitude, currentLocation.coords.longitude]);
+
+  const startPoint =
+    decodedShape &&
+    point([decodedShape.coordinates[0][0], decodedShape.coordinates[0][1]]);
 
   const line = decodedShape && lineString(decodedShape.coordinates);
 
@@ -129,6 +136,20 @@ export default function TripPage() {
       });
     }
   };
+  const nearestManeuverPoint = decodedShape?.coordinates
+    .map((coord) => {
+      const elPoint = point([coord[0], coord[1]]);
+
+      return (
+        currentLocationPoint && distance(currentLocationPoint, elPoint) * 1000
+      );
+    })
+    .filter(notEmpty);
+
+  const smallestValue =
+    nearestManeuverPoint && Math.min(...nearestManeuverPoint);
+  const currentPositionIsNearStartingPoint =
+    nearestManeuverPoint && nearestManeuverPoint[0] === smallestValue;
 
   if (isPending) {
     return (
@@ -141,6 +162,28 @@ export default function TripPage() {
 
   if (isError) {
     return <Error error={error.message} />;
+  }
+
+  if (
+    currentLocationPoint &&
+    startPoint &&
+    distance(currentLocationPoint, startPoint) * 1000 >
+      DISTANCE_ROUTE_TO_START &&
+    nearestPoint &&
+    nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 > DISTANCE_ROUTE_TO_START &&
+    currentPositionIsNearStartingPoint
+  ) {
+    return (
+      <RouteToStart
+        currentLocation={currentLocation}
+        distanceToStart={distance(currentLocationPoint, startPoint) * 1000}
+        startLocation={[
+          decodedShape.coordinates[0][0],
+          decodedShape.coordinates[0][1],
+        ]}
+      />
+    );
   }
 
   // TODO Gyroscope & Pedometer einbauen

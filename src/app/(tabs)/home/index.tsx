@@ -1,13 +1,6 @@
 import { router } from 'expo-router';
-import { Gyroscope, Magnetometer } from 'expo-sensors';
-import React, { useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -24,55 +17,49 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const [{ x, y, z }, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState<any>(null);
-  const [magnetometerSubscription, setMagnetometerSubscription] =
-    useState<any>(null);
 
-  const slow = () => Gyroscope.setUpdateInterval(1000);
-  const fast = () => Gyroscope.setUpdateInterval(16);
+  // useEffect(() => {
+  //   subscribe();
+  //
+  //   return () => unsubscribe();
+  // }, []);
+  // const calculateDirection = () => {
+  //   if (!currentLocation) return;
+  //
+  //   const { latitude, longitude } = currentLocation.coords;
+  //   const deltaLongitude = targetLocation.longitude - longitude;
+  //   const y = Math.sin(deltaLongitude) * Math.cos(targetLocation.latitude);
+  //   const x =
+  //     Math.cos(latitude) * Math.sin(targetLocation.latitude) -
+  //     Math.sin(latitude) *
+  //       Math.cos(targetLocation.latitude) *
+  //       Math.cos(deltaLongitude);
+  //   const theta = Math.atan2(y, x);
+  //   const bearing = (theta * 180) / Math.PI;
+  //   const direction = (bearing + 360) % 360;
+  //   // console.log(gyroscopeData.x);
+  //   // if (Math.abs(gyroscopeData.x - direction) <= 0.5) {
+  //     // Vibrate for 500ms
+  //     // Vibration.vibrate(500);
+  //   }
+  //
+  //   return direction;
+  // };
 
-  const subscribe = () => {
-    Gyroscope.addListener((gyroscopeData) => {
-      // console.log(gyroscopeData);
-      // setData(gyroscopeData);
-    });
-  };
+  // const direction = calculateDirection();
 
-  const unsubscribe = () => {
-    if (subscription) {
-      subscription.remove();
-    }
-    setSubscription(null);
-  };
+  useEffect(
+    () =>
+      // const gyroscopeSubscription = Gyroscope.addListener((data) => {
+      //   setGyroscopeData(data);
+      // });
+      //
+      () => {
+        // gyroscopeSubscription && gyroscopeSubscription.remove();
+      },
+    []
+  );
 
-  const magnetometerSubscribe = () => {
-    Magnetometer.addListener((result) => {
-      // console.log(result);
-      setData(result);
-    });
-  };
-
-  const magnetometerUnsubscribe = () => {
-    if (magnetometerSubscription) {
-      magnetometerSubscription.remove();
-    }
-    setMagnetometerSubscription(null);
-  };
-
-  useEffect(() => {
-    // subscribe();
-    magnetometerSubscribe();
-
-    return () => {
-      magnetometerUnsubscribe();
-      // unsubscribe();
-    };
-  }, []);
   const colorscheme = useColorScheme();
 
   const getCoordinates = (location: OriginDestinationType) => {
@@ -108,7 +95,6 @@ export default function HomePage() {
       navigateToTrip(params);
     }
   };
-
   // const bbox = currentLocation && getBbox(currentLocation);
   // const bboxCoordinates = bbox && [
   //   { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
@@ -126,27 +112,10 @@ export default function HomePage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <View>
-        <Text>Gyroscope:</Text>
-        <Text>x: {x}</Text>
-        <Text>y: {y}</Text>
-        <Text>z: {z}</Text>
-        <View>
-          <Button
-            buttonType="primary"
-            disabled={false}
-            onPress={subscription ? unsubscribe : subscribe}
-          >
-            {subscription ? 'Off' : 'On'}
-          </Button>
-          <Button buttonType="primary" disabled={false} onPress={slow}>
-            <Text>Slow</Text>
-          </Button>
-          <Button buttonType="primary" disabled={false} onPress={fast}>
-            <Text>Fast</Text>
-          </Button>
-        </View>
-      </View>
+      {/* <Text>Current Location: {JSON.stringify(currentLocation)}</Text> */}
+      {/* <Text>Gyroscope Data: {JSON.stringify(gyroscopeData)}</Text> */}
+      {/* <Text>Direction to Target: {direction}</Text> */}
+
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete
@@ -169,27 +138,6 @@ export default function HomePage() {
           label="Ziel"
           onChange={(value) => changeDestination(value)}
         />
-
-        {/* <Map */}
-        {/*  bbox={bboxCoordinates} */}
-        {/*  origin={ */}
-        {/*    origin */}
-        {/*      ? { */}
-        {/*          lat: origin.geometry.coordinates[1], */}
-        {/*          lon: origin.geometry.coordinates[0], */}
-        {/*        } */}
-        {/*      : undefined */}
-        {/*  } */}
-        {/*  destination={ */}
-        {/*    destination */}
-        {/*      ? { */}
-        {/*          lat: destination.geometry.coordinates[0], */}
-        {/*          lon: destination.geometry.coordinates[1], */}
-        {/*        } */}
-        {/*      : undefined */}
-        {/*  } */}
-        {/*  currentLocation={currentLocation} */}
-        {/* /> */}
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button

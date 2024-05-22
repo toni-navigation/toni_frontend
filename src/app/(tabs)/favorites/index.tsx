@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { SafeAreaView, ScrollView, Text, useColorScheme } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
@@ -13,6 +14,7 @@ export default function FavoritesPage() {
       <ScrollView className="px-8 my-8">
         <Header>Meine Favoriten</Header>
         <Text>Favoriten Liste</Text>
+        <Link href="/favorites/modal/1">Present modal</Link>
       </ScrollView>
     </SafeAreaView>
   );
