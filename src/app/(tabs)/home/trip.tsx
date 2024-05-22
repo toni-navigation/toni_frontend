@@ -2,7 +2,7 @@ import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -113,7 +113,13 @@ export default function TripPage() {
   ) {
     instruction = 'Bitte gehe wieder auf die Route.';
   }
-
+  useEffect(() => {
+    if (instruction) {
+      Speech.speak(instruction, {
+        language: 'de',
+      });
+    }
+  }, [instruction]);
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -205,6 +211,14 @@ export default function TripPage() {
                     </Button>
                   </View>
                 )}
+              {/* <Map */}
+              {/*  origin={parseCoordinate(tripData.origin)} */}
+              {/*  destination={parseCoordinate(tripData.destination)} */}
+              {/*  nearestPoint={nearestPoint} */}
+              {/*  decodedShape={decodedShape} */}
+              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
+              {/* /> */}
               <Card
                 iconKey={matchIconType(
                   calculatedManeuvers?.currentManeuver.type
@@ -212,15 +226,6 @@ export default function TripPage() {
               >
                 {instruction}
               </Card>
-              {/* <Map */}
-              {/*  origin={parseCoordinate(tripData.origin)} */}
-              {/*  destination={parseCoordinate(tripData.destination)} */}
-              {/*  currentLocation={currentLocation} */}
-              {/*  nearestPoint={nearestPoint} */}
-              {/*  decodedShape={decodedShape} */}
-              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
-              {/* /> */}
             </TripStep>
           </PagerView>
         </>
