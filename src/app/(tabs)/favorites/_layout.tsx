@@ -11,6 +11,14 @@ function FavoritesLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="create"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

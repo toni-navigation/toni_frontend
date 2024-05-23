@@ -21,7 +21,9 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
     // TODO: add cross to delete value
     return (
       <>
-        <Text className="font-atkinsonRegular mb-3">
+        <Text
+          className={`font-atkinsonRegular mb-3 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+        >
           {props.accessibilityLabel}
         </Text>
         <View className="relative mb-2">

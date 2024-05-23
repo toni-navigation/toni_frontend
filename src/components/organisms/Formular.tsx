@@ -1,0 +1,71 @@
+import { log } from 'expo/build/devtools/logger';
+import React, { useRef, useState } from 'react';
+import { ScrollView, TextInput, View } from 'react-native';
+
+import { Button } from '@/components/atoms/Button';
+import { InputText } from '@/components/atoms/InputText';
+import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import {
+  OriginDestinationType,
+  useFavoriteStore,
+} from '@/store/useFavoritesStore';
+
+export function Formular() {
+  const [title, setTitle] = useState('');
+  const [photonData, setPhotonData] =
+    useState<OriginDestinationType>(undefined);
+  const ref = useRef<TextInput>(null);
+
+  const { addFavorite, resetFavoritesStore } = useFavoriteStore(
+    (state) => state.actions
+  );
+
+  const favorites = useFavoriteStore((state) => state.favorites);
+
+  const getAddressHandler = () => {
+    resetFavoritesStore();
+    // setSubmitted(true);
+    if (photonData) {
+      addFavorite(title, photonData);
+    }
+  };
+
+  return (
+    <>
+      <ScrollView className="">
+        <InputText
+          className="mb-4"
+          accessibilityLabel="Titel *"
+          accessibilityHint="Pflichtfeld: Geben Sie einen Titel für Ihren Favoriten ein"
+          placeholder="Name"
+          inputMode="text"
+          maxLength={300}
+          value={title}
+          onChange={(event) => setTitle(event.nativeEvent.text)}
+          onClickDelete={() => {
+            setTitle('');
+            ref.current?.focus();
+          }}
+        />
+        <GeocoderAutocomplete
+          value={photonData}
+          placeholder="Start eingeben"
+          label="Start"
+          onChange={(value) => {
+            console.log(value);
+            setPhotonData(value);
+          }}
+        />
+      </ScrollView>
+      <View className="mx-5 mb-8">
+        <Button
+          onPress={getAddressHandler}
+          disabled={false}
+          buttonType="primary"
+        >
+          Speichern
+        </Button>
+      </View>
+    </>
+  );
+}

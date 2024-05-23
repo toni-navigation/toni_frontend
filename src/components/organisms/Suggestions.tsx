@@ -24,7 +24,10 @@ export function Suggestions({
       {suggestions.map((suggestion, index) => (
         <ListItem
           key={`${suggestion.properties.osm_id}-${suggestion.properties.osm_type}-${suggestion.properties.osm_key}`}
-          onPress={() => onLocationSuggestionClick(suggestion)}
+          onPress={() => {
+            console.log('suggestion', suggestion);
+            onLocationSuggestionClick(suggestion);
+          }}
           classes={
             index !== suggestions.length - 1
               ? 'border-solid border-b-2 border-primary-color-dark'
