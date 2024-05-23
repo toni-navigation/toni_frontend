@@ -22,14 +22,13 @@ import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { TabBar } from '@/components/organisms/TabBar';
-import { RouteToRoute } from '@/components/trip/RouteToRoute';
+import { NavigateToRoute } from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getMatchingManeuvers } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
-import { notEmpty } from '@/functions/notEmpty';
 import { parseCoordinate } from '@/functions/parseCoordinate';
 import { photonValue } from '@/functions/photonValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
@@ -114,25 +113,35 @@ export default function TripPage() {
   const calculatedManeuvers =
     data && nearestPoint && getMatchingManeuvers(data, nearestPoint);
 
-  let instruction =
+  const instruction =
     data &&
     calculatedManeuvers?.currentManeuver &&
     tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
-  if (
-    nearestPoint &&
-    nearestPoint.properties.dist &&
+  // if (
+  //   nearestPoint &&
+  //   nearestPoint.properties.dist &&
+  //   nearestPoint.properties.dist * 1000 >
+  //     THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
+  // ) {
+  //   instruction = 'Bitte gehe wieder auf die Route.';
+  // }
+  const notOnRoute =
+    currentLocationPoint &&
+    startPoint &&
+    distance(currentLocationPoint, startPoint) * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS &&
+    !!nearestPoint &&
+    !!nearestPoint.properties.dist &&
     nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
-    instruction = 'Bitte gehe wieder auf die Route.';
-  }
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS;
+
   useEffect(() => {
-    if (instruction) {
+    if (instruction && !notOnRoute) {
       Speech.speak(instruction, {
         language: 'de',
       });
     }
-  }, [instruction]);
+  }, [instruction, notOnRoute]);
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -148,15 +157,15 @@ export default function TripPage() {
       });
     }
   };
-  const nearestManeuverPoint = decodedShape?.coordinates
-    .map((coord) => {
-      const elPoint = point([coord[0], coord[1]]);
-
-      return (
-        currentLocationPoint && distance(currentLocationPoint, elPoint) * 1000
-      );
-    })
-    .filter(notEmpty);
+  // const nearestManeuverPoint = decodedShape?.coordinates
+  //   .map((coord) => {
+  //     const elPoint = point([coord[0], coord[1]]);
+  //
+  //     return (
+  //       currentLocationPoint && distance(currentLocationPoint, elPoint) * 1000
+  //     );
+  //   })
+  //   .filter(notEmpty);
 
   if (isPending) {
     return (
@@ -171,18 +180,9 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  if (
-    currentLocationPoint &&
-    startPoint &&
-    distance(currentLocationPoint, startPoint) * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS &&
-    nearestPoint &&
-    nearestPoint.properties.dist &&
-    nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
+  if (notOnRoute) {
     return (
-      <RouteToRoute
+      <NavigateToRoute
         currentLocation={currentLocation}
         distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
         nearestPoint={nearestPoint}

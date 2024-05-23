@@ -2,6 +2,7 @@ import bearing from '@turf/bearing';
 import { point } from '@turf/helpers';
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import { Magnetometer } from 'expo-sensors';
+import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, Vibration, View } from 'react-native';
 
@@ -14,7 +15,7 @@ interface RouteToStartProps {
   nearestPoint: NearestPointOnLine;
 }
 
-export function RouteToRoute({
+export function NavigateToRoute({
   distanceToStart,
   currentLocation,
   nearestPoint,
@@ -67,6 +68,12 @@ export function RouteToRoute({
 
   useEffect(() => {
     subscribe();
+    Speech.speak(
+      'Du befindest dich nicht auf der Route. Richte das Handy nach vorne und drehe dich, um die Route zu finden. Sobald dein Handy vibriert, schaust du in die richtige Richtung',
+      {
+        language: 'de',
+      }
+    );
 
     return () => {
       unsubscribe();
