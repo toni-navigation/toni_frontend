@@ -11,6 +11,12 @@ function HomeLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="trip"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

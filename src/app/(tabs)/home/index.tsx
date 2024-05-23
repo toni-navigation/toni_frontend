@@ -1,11 +1,18 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -20,6 +27,8 @@ export default function HomePage() {
 
   const colorscheme = useColorScheme();
 
+  const [showPopUp, setShowPopUp] = React.useState(false);
+
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
       return location.geometry.coordinates;
@@ -33,6 +42,8 @@ export default function HomePage() {
 
     return undefined;
   };
+
+  // TODO: redirect direkt in startNavigationHandler
   const navigateToTrip = (params: {
     origin: number[];
     destination: number[];
@@ -40,6 +51,7 @@ export default function HomePage() {
     // Assuming router.push handles navigation to the trip page
     router.push({ pathname: `/home/trip`, params });
   };
+
   const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
     const newDestination = getCoordinates(destination);
@@ -71,8 +83,34 @@ export default function HomePage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
+      <PopUp
+        visible={showPopUp}
+        onCloseClick={() => {
+          setShowPopUp(false);
+          startNavigationHandler();
+        }}
+        onCloseButtonText="Alles klar!"
+      >
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+        >
+          Hinweis
+        </Header>
+
+        <Text
+          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+        >
+          Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
+          Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
+        </Text>
+      </PopUp>
+
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header>Hallo</Header>
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+        >
+          Hallo
+        </Header>
         <GeocoderAutocomplete
           value={origin}
           placeholder="Start eingeben"
@@ -96,7 +134,7 @@ export default function HomePage() {
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button
-          onPress={startNavigationHandler}
+          onPress={() => setShowPopUp(true)}
           disabled={origin === undefined || !destination}
           buttonType="accent"
         >

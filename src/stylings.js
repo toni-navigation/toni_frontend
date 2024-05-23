@@ -6,5 +6,6 @@ module.exports = {
     'background-light': '#fff',
     'background-dark': '#172621',
     'text-color-light': '#000',
+    'text-color-dark': '#fff',
   },
 };
