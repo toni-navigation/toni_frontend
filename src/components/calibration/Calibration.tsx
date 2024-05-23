@@ -45,7 +45,11 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const calSteps = calibrationSteps(calibration.meters, colorscheme);
+  const calSteps = calibrationSteps(
+    calibration.factors,
+    calibration.meters,
+    colorscheme
+  );
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
 

@@ -10,7 +10,8 @@ export interface CalibrationStepsProps {
   calibrationValueNode?: React.ReactNode;
 }
 export const calibrationSteps = (
-  meters?: number[] | undefined,
+  factors: number[] | undefined,
+  meters: number[] | undefined,
   colorscheme?: ColorSchemeName
 ): CalibrationStepsProps[] => [
   {
@@ -21,7 +22,7 @@ export const calibrationSteps = (
       <Text
         className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
       >
-        {meters ? getCalibrationValue(meters) : 0} m
+        {factors ? getCalibrationValue(factors) : 0} m
       </Text>
     ),
   },
@@ -46,7 +47,7 @@ export const calibrationSteps = (
   },
   {
     forwardButtonText: 'Fertig',
-    text: `Deine kalibrierte Schrittlänge beträgt ${meters ? getCalibrationValue(meters) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
+    text: `Deine kalibrierte Schrittlänge beträgt ${factors ? getCalibrationValue(factors) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
     backButtonText: 'Zurück',
   },
 ];

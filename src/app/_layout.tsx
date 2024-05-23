@@ -36,8 +36,6 @@ function RootLayoutNav() {
               headerShown: false,
             }}
           />
-
-          {/* <Stack.Screen name={'trip'} options={{ presentation: 'modal' }} /> */}
         </Stack>
       </QueryClientProvider>
     </React.StrictMode>

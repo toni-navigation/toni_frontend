@@ -24,6 +24,7 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+
   const colorscheme = useColorScheme();
 
   const [showPopUp, setShowPopUp] = React.useState(false);
@@ -130,27 +131,6 @@ export default function HomePage() {
           label="Ziel"
           onChange={(value) => changeDestination(value)}
         />
-
-        {/* <Map */}
-        {/*  bbox={bboxCoordinates} */}
-        {/*  origin={ */}
-        {/*    origin */}
-        {/*      ? { */}
-        {/*          lat: origin.geometry.coordinates[1], */}
-        {/*          lon: origin.geometry.coordinates[0], */}
-        {/*        } */}
-        {/*      : undefined */}
-        {/*  } */}
-        {/*  destination={ */}
-        {/*    destination */}
-        {/*      ? { */}
-        {/*          lat: destination.geometry.coordinates[0], */}
-        {/*          lon: destination.geometry.coordinates[1], */}
-        {/*        } */}
-        {/*      : undefined */}
-        {/*  } */}
-        {/*  currentLocation={currentLocation} */}
-        {/* /> */}
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button

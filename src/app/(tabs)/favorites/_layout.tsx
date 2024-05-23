@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
+import React from 'react';
 
 function FavoritesLayout() {
   return (
@@ -11,6 +12,7 @@ function FavoritesLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }
