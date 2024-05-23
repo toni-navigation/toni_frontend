@@ -159,7 +159,9 @@ export default function TripPage() {
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
-    <SafeAreaView className="flex-1 bg-background-light">
+    <SafeAreaView
+      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+    >
       <PopUp
         visible={showPopUp}
         onClick={() => {
@@ -191,21 +193,18 @@ export default function TripPage() {
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
           />
-          <View className="mx-auto my-3">
+          <View className="flex flex-row justify-end mx-5 my-5">
             <TouchableOpacity
-              accessibilityHint="Aktueller Standort"
+              accessibilityHint="Mein aktueller Standort"
               accessibilityRole="button"
-              className="flex flex-row items-center gap-x-4"
+              className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
               <Icon
-                color={stylings.colors['primary-color-dark']}
-                size={24}
-                icon="location"
+                color={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                size={50}
+                icon="currentLocation"
               />
-              <Text className="text-primary-color-dark opacity-50 text-2xl">
-                Aktueller Standort
-              </Text>
             </TouchableOpacity>
           </View>
 
