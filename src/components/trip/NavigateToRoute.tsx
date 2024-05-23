@@ -1,41 +1,36 @@
 import bearing from '@turf/bearing';
 import { point } from '@turf/helpers';
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
+import { Subscription } from 'expo-modules-core';
 import { Magnetometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, Vibration, View } from 'react-native';
 
 import { Map } from '@/components/organisms/Map';
+import { calculateOrientation } from '@/functions/calculateOrientation';
+import { directionToMove } from '@/functions/directionToMove';
 import { CurrentLocationProps } from '@/types/Types';
 
 interface RouteToStartProps {
   distanceToStart: number;
   currentLocation: CurrentLocationProps;
   nearestPoint: NearestPointOnLine;
+  isStart: boolean;
 }
 
 export function NavigateToRoute({
   distanceToStart,
   currentLocation,
   nearestPoint,
+  isStart,
 }: RouteToStartProps) {
   const [{ x, y }, setData] = useState({
     x: 0,
     y: 0,
   });
-  const [subscription, setSubscription] = useState<any>();
+  const [subscription, setSubscription] = useState<Subscription>();
 
-  const calculateOrientation = (_x: number, _y: number) => {
-    const angle = Math.atan2(_y, _x);
-
-    return (angle * 180) / Math.PI;
-  };
-  const directionToMove = (_bearing: number, _orientation: number) => {
-    const difference = _bearing - _orientation;
-
-    return Math.abs(difference) < 10;
-  };
   const subscribe = () => {
     Magnetometer.setUpdateInterval(16);
     setSubscription(
@@ -106,9 +101,6 @@ export function NavigateToRoute({
           lon: nearestPoint.geometry.coordinates[1],
         }}
       />
-      {/* <Button disabled={false} onPress={subscribe} buttonType="primary"> */}
-      {/*  Zurück zur Route */}
-      {/* </Button> */}
     </SafeAreaView>
   );
 }

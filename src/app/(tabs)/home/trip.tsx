@@ -22,7 +22,6 @@ import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { TabBar } from '@/components/organisms/TabBar';
-import { NavigateToRoute } from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -59,7 +58,6 @@ export default function TripPage() {
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
-  const [navigateBack, setNavigateBack] = React.useState(false);
 
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -73,7 +71,6 @@ export default function TripPage() {
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
 
-  // const startPoint = point([data?.trip., tripData.origin[0]]);
   const rerouteHandler = () => {
     if (!currentLocation) return;
 
@@ -117,14 +114,7 @@ export default function TripPage() {
     data &&
     calculatedManeuvers?.currentManeuver &&
     tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
-  // if (
-  //   nearestPoint &&
-  //   nearestPoint.properties.dist &&
-  //   nearestPoint.properties.dist * 1000 >
-  //     THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  // ) {
-  //   instruction = 'Bitte gehe wieder auf die Route.';
-  // }
+
   const notOnRoute =
     currentLocationPoint &&
     startPoint &&
@@ -157,15 +147,6 @@ export default function TripPage() {
       });
     }
   };
-  // const nearestManeuverPoint = decodedShape?.coordinates
-  //   .map((coord) => {
-  //     const elPoint = point([coord[0], coord[1]]);
-  //
-  //     return (
-  //       currentLocationPoint && distance(currentLocationPoint, elPoint) * 1000
-  //     );
-  //   })
-  //   .filter(notEmpty);
 
   if (isPending) {
     return (
@@ -180,37 +161,29 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  if (notOnRoute) {
-    return (
-      <NavigateToRoute
-        currentLocation={currentLocation}
-        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-        nearestPoint={nearestPoint}
-      />
-    );
-  }
+  // if (notOnRoute) {
+  //   return (
+  //     <NavigateToRoute
+  //       currentLocation={currentLocation}
+  //       distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+  //       nearestPoint={nearestPoint}
+  //       // TODO
+  //       isStart={false}
+  //     />
+  //   );
+  // }
 
-  // TODO Gyroscope & Pedometer einbauen
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
     <SafeAreaView className="flex-1 bg-background-light">
       <PopUp
         visible={showPopUp}
-        onClick={() => {
-          setShowPopUp(false);
-          setNavigateBack(true);
-        }}
+        onClick={() => setShowPopUp(false)}
         onClickButtonText="Beenden"
-        onCloseClick={() => {
-          setShowPopUp(false);
-        }}
+        onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Schließen"
-        onDismiss={() => {
-          if (navigateBack) {
-            router.back();
-          }
-        }}
+        onDismiss={() => router.back()}
       >
         <Text
           className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
