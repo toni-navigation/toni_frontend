@@ -53,14 +53,10 @@ export default function Index() {
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;
   }
-  console.log(skipped, calibration);
 
-  // if (!skipped && calibration.factors.length === 0) {
-  return <Intro />;
-  // }
+  if (!skipped && calibration.factors.length === 0) {
+    return <Intro />;
+  }
 
-  // if (calibration.start === null || calibration.end === null) {
-  //   return <Redirect href="/calibration" />;
-  // }
-  // return <Redirect href="/home/" />;
+  return <Redirect href="/home/" />;
 }

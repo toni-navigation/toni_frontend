@@ -41,6 +41,8 @@ export default function HomePage() {
 
     return undefined;
   };
+
+  // TODO: redirect direkt in startNavigationHandler
   const navigateToTrip = (params: {
     origin: number[];
     destination: number[];
@@ -48,6 +50,7 @@ export default function HomePage() {
     // Assuming router.push handles navigation to the trip page
     router.push({ pathname: `/home/trip`, params });
   };
+
   const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
     const newDestination = getCoordinates(destination);

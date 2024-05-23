@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  Modal,
-  SafeAreaView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Modal, SafeAreaView, useColorScheme, View } from 'react-native';
 
 import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
@@ -20,6 +13,7 @@ interface PopUpProps {
   onCloseClick: () => void;
   onCloseButtonText: string;
   children: React.ReactNode;
+  onDismiss?: () => void;
 }
 
 export function PopUp({
@@ -29,6 +23,7 @@ export function PopUp({
   onClickButtonText,
   onCloseClick,
   onCloseButtonText,
+  onDismiss,
 }: PopUpProps) {
   const colorscheme = useColorScheme();
 
@@ -37,6 +32,7 @@ export function PopUp({
       animationType="slide"
       visible={visible}
       onRequestClose={onCloseClick}
+      onDismiss={onDismiss}
     >
       <SafeAreaView>
         <View className="justify-center items-center h-full w-full p-4">

@@ -18,7 +18,6 @@ import PagerView from 'react-native-pager-view';
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
@@ -59,6 +58,7 @@ export default function TripPage() {
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
+  const [navigateBack, setNavigateBack] = React.useState(false);
 
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -164,14 +164,18 @@ export default function TripPage() {
         visible={showPopUp}
         onClick={() => {
           setShowPopUp(false);
-          router.back();
+          setNavigateBack(true);
         }}
         onClickButtonText="Beenden"
         onCloseClick={() => {
           setShowPopUp(false);
-          router.push({ pathname: `/home` });
         }}
         onCloseButtonText="Schließen"
+        onDismiss={() => {
+          if (navigateBack) {
+            router.back();
+          }
+        }}
       >
         <Text
           className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
