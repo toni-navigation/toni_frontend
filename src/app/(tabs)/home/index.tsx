@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
@@ -16,48 +16,6 @@ export default function HomePage() {
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
-  );
-
-  // useEffect(() => {
-  //   subscribe();
-  //
-  //   return () => unsubscribe();
-  // }, []);
-  // const calculateDirection = () => {
-  //   if (!currentLocation) return;
-  //
-  //   const { latitude, longitude } = currentLocation.coords;
-  //   const deltaLongitude = targetLocation.longitude - longitude;
-  //   const y = Math.sin(deltaLongitude) * Math.cos(targetLocation.latitude);
-  //   const x =
-  //     Math.cos(latitude) * Math.sin(targetLocation.latitude) -
-  //     Math.sin(latitude) *
-  //       Math.cos(targetLocation.latitude) *
-  //       Math.cos(deltaLongitude);
-  //   const theta = Math.atan2(y, x);
-  //   const bearing = (theta * 180) / Math.PI;
-  //   const direction = (bearing + 360) % 360;
-  //   // console.log(gyroscopeData.x);
-  //   // if (Math.abs(gyroscopeData.x - direction) <= 0.5) {
-  //     // Vibrate for 500ms
-  //     // Vibration.vibrate(500);
-  //   }
-  //
-  //   return direction;
-  // };
-
-  // const direction = calculateDirection();
-
-  useEffect(
-    () =>
-      // const gyroscopeSubscription = Gyroscope.addListener((data) => {
-      //   setGyroscopeData(data);
-      // });
-      //
-      () => {
-        // gyroscopeSubscription && gyroscopeSubscription.remove();
-      },
-    []
   );
 
   const colorscheme = useColorScheme();
@@ -82,7 +40,7 @@ export default function HomePage() {
     // Assuming router.push handles navigation to the trip page
     router.push({ pathname: `/home/trip`, params });
   };
-  const startNavigationHandler = async () => {
+  const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
     const newDestination = getCoordinates(destination);
 
@@ -95,6 +53,7 @@ export default function HomePage() {
       navigateToTrip(params);
     }
   };
+
   // const bbox = currentLocation && getBbox(currentLocation);
   // const bboxCoordinates = bbox && [
   //   { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
@@ -112,10 +71,6 @@ export default function HomePage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      {/* <Text>Current Location: {JSON.stringify(currentLocation)}</Text> */}
-      {/* <Text>Gyroscope Data: {JSON.stringify(gyroscopeData)}</Text> */}
-      {/* <Text>Direction to Target: {direction}</Text> */}
-
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Hallo</Header>
         <GeocoderAutocomplete

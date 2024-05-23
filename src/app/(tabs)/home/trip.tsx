@@ -20,7 +20,7 @@ import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { TabBar } from '@/components/organisms/TabBar';
-import { RouteToStart } from '@/components/trip/RouteToStart';
+import { RouteToRoute } from '@/components/trip/RouteToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -48,9 +48,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
-const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
+const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
 const THRESHOLD_REROUTING = 100;
-const DISTANCE_ROUTE_TO_START = 5;
 export default function TripPage() {
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
@@ -146,11 +145,6 @@ export default function TripPage() {
     })
     .filter(notEmpty);
 
-  const smallestValue =
-    nearestManeuverPoint && Math.min(...nearestManeuverPoint);
-  const currentPositionIsNearStartingPoint =
-    nearestManeuverPoint && nearestManeuverPoint[0] === smallestValue;
-
   if (isPending) {
     return (
       <View>
@@ -168,20 +162,17 @@ export default function TripPage() {
     currentLocationPoint &&
     startPoint &&
     distance(currentLocationPoint, startPoint) * 1000 >
-      DISTANCE_ROUTE_TO_START &&
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS &&
     nearestPoint &&
     nearestPoint.properties.dist &&
-    nearestPoint.properties.dist * 1000 > DISTANCE_ROUTE_TO_START &&
-    currentPositionIsNearStartingPoint
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
   ) {
     return (
-      <RouteToStart
+      <RouteToRoute
         currentLocation={currentLocation}
-        distanceToStart={distance(currentLocationPoint, startPoint) * 1000}
-        startLocation={[
-          decodedShape.coordinates[0][0],
-          decodedShape.coordinates[0][1],
-        ]}
+        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+        nearestPoint={nearestPoint}
       />
     );
   }
