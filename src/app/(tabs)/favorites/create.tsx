@@ -12,7 +12,7 @@ export default function CreatePage() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       {/* eslint-disable-next-line react/jsx-no-undef */}
-      <ScrollView className="px-8 my-8">
+      <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Favorit hinzufügen</Header>
         <Formular />
       </ScrollView>

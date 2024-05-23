@@ -1,4 +1,3 @@
-import { log } from 'expo/build/devtools/logger';
 import React, { useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 
@@ -32,7 +31,7 @@ export function Formular() {
 
   return (
     <>
-      <ScrollView className="">
+      <ScrollView className="" keyboardShouldPersistTaps="always">
         <InputText
           className="mb-4"
           accessibilityLabel="Titel *"
