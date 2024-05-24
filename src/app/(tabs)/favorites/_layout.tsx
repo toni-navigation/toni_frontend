@@ -23,7 +23,8 @@ function FavoritesLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '',
         }}
       />
     </Stack>
