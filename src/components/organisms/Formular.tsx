@@ -1,3 +1,5 @@
+import { uuid } from 'expo-modules-core';
+import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 
@@ -15,17 +17,13 @@ export function Formular() {
     useState<OriginDestinationType>(undefined);
   const ref = useRef<TextInput>(null);
 
-  const { addFavorite, resetFavoritesStore } = useFavoriteStore(
-    (state) => state.actions
-  );
-
-  const favorites = useFavoriteStore((state) => state.favorites);
+  const { addFavorite } = useFavoriteStore((state) => state.actions);
 
   const getAddressHandler = () => {
-    resetFavoritesStore();
-    // setSubmitted(true);
-    if (photonData) {
-      addFavorite(title, photonData);
+    if (photonData && title) {
+      const id = uuid.v4(); // Renamed 'uuid' to 'id'
+      addFavorite(id, title, photonData);
+      router.back();
     }
   };
 
@@ -51,7 +49,6 @@ export function Formular() {
           placeholder="Start eingeben"
           label="Start"
           onChange={(value) => {
-            console.log(value);
             setPhotonData(value);
           }}
         />

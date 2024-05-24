@@ -12,7 +12,12 @@ type FavoriteState = {
   favorites: FavoriteProps[];
 
   actions: {
-    addFavorite: (title: string, address: OriginDestinationType) => void;
+    addFavorite: (
+      id: string,
+      title: string,
+      address: OriginDestinationType
+    ) => void;
+    deleteFavorite: (id: string) => void;
     resetFavoritesStore: () => void;
     updateFavoriteItem: (
       title: string,
@@ -31,10 +36,18 @@ export const useFavoriteStore = create<FavoriteState>()(
     immer((set) => ({
       ...defaultFavoriteState,
       actions: {
-        addFavorite: (title, address) =>
+        addFavorite: (id, title, address) =>
           set((state) => {
             if (address) {
-              state.favorites.push({ title, address });
+              state.favorites.push({ id, title, address });
+            }
+          }),
+        deleteFavorite: (id) =>
+          set((state) => {
+            if (id) {
+              state.favorites = state.favorites.filter(
+                (favorite) => favorite.id !== id
+              );
             }
           }),
         updateFavoriteItem: (

@@ -64,7 +64,6 @@ export function GeocoderAutocomplete({
         <Suggestions
           suggestions={data.features}
           onLocationSuggestionClick={(suggestion: PhotonFeature) => {
-            console.log('suggestion', suggestion);
             setFocused(false);
             onChange(suggestion);
             ref.current?.blur();

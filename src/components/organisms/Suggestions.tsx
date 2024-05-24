@@ -25,7 +25,6 @@ export function Suggestions({
         <ListItem
           key={`${suggestion.properties.osm_id}-${suggestion.properties.osm_type}-${suggestion.properties.osm_key}`}
           onPress={() => {
-            console.log('suggestion', suggestion);
             onLocationSuggestionClick(suggestion);
           }}
           classes={

@@ -54,6 +54,7 @@ export interface DecodedShapeProps {
 export interface FavoriteProps {
   title: string;
   address: PhotonFeature;
+  id: string;
 }
 // export interface FavoriteProps {
 //  favorites: FavoriteItemProps[];

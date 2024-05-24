@@ -19,6 +19,12 @@ function FavoritesLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
