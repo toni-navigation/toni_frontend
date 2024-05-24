@@ -29,12 +29,41 @@ export default function FavoritePage() {
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>{favorite.title}</Header>
         <View>
-          <Text
-            className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-          >{`${favorite.address?.properties?.street} ${favorite.address?.properties?.housenumber}`}</Text>
-          <Text
-            className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-          >{`${favorite.address?.properties?.postcode} ${favorite.address?.properties?.city}`}</Text>
+          {favorite.address?.properties?.name && (
+            <Text
+              className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              {favorite.address?.properties?.name}
+            </Text>
+          )}
+          {favorite.address?.properties?.street && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Straße: {favorite.address?.properties?.street}
+            </Text>
+          )}
+          {favorite.address?.properties?.housenumber && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Hausnummer: {favorite.address?.properties?.housenumber}
+            </Text>
+          )}
+          {favorite.address?.properties?.street && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Postleitzahl: {favorite.address?.properties?.postcode}
+            </Text>
+          )}
+          {favorite.address?.properties?.housenumber && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Ort: {favorite.address?.properties?.city}
+            </Text>
+          )}
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">
