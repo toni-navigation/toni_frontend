@@ -146,6 +146,8 @@ export default function TripPage() {
     }
   };
 
+  const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
+
   if (isPending) {
     return (
       <View>
@@ -186,9 +188,19 @@ export default function TripPage() {
         </Header>
 
         <Text
-          className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
         >
-          {data.trip.summary.length}
+          Deine Route beträgt:
+        </Text>
+        <Text
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          {data.trip.summary.length} km
+        </Text>
+        <Text
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          {convertSecondsToMinutes(data.trip.summary.time)} Minuten
         </Text>
       </RouteOverview>
       <PopUp
