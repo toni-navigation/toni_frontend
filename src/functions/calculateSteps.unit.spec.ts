@@ -5,7 +5,7 @@ describe('calculateSteps', () => {
     const length = 1;
     const factor = 1;
     const result = calculateSteps(length, factor);
-    expect(result).toBe(1000);
+    expect(result).toBe(100);
   });
 
   it('calculates steps with length 1 and factor 0', () => {

@@ -9,7 +9,6 @@ type CoordsType = { lat: number; lon: number };
 interface MapProps {
   origin?: CoordsType;
   destination?: CoordsType;
-  currentLocation?: CurrentLocationType;
   nearestPoint?: NearestPointOnLine | null | undefined;
   decodedShape?: DecodedShapeProps | null;
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
@@ -20,7 +19,6 @@ export function Map({
   origin,
   nearestPoint,
   destination,
-  currentLocation,
   decodedShape,
   bbox,
   maneuvers,
@@ -30,8 +28,8 @@ export function Map({
     <MapView
       style={{ height: 300 }}
       initialRegion={{
-        latitude: currentLocation?.coords.latitude || 0,
-        longitude: currentLocation?.coords.longitude || 0,
+        latitude: origin?.lat || 0,
+        longitude: origin?.lon || 0,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}

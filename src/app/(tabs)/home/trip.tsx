@@ -1,8 +1,9 @@
+import distance from '@turf/distance';
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -10,17 +11,21 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
-import { TripList } from '@/components/TripList';
-import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
+import { PopUp } from '@/components/organisms/PopUp';
+import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
+import { TripList } from '@/components/trip/TripList';
+import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getMatchingManeuvers } from '@/functions/getMatchingManeuvers';
@@ -45,19 +50,22 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
-const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
+const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
 const THRESHOLD_REROUTING = 100;
-
 export default function TripPage() {
+  const colorscheme = useColorScheme();
+
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
+  const [showPopUp, setShowPopUp] = React.useState(false);
+  const [navigateBack, setNavigateBack] = React.useState(false);
+  const [showTripOverview, setShowTripOverview] = React.useState(true);
+
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const [shouldBeRerouted, setShouldBeRerouted] = useState(false);
-
   const calibration = useCalibrationStore((state) => state.calibration);
 
   const restructureTripData: LocationProps[] = [
@@ -66,6 +74,7 @@ export default function TripPage() {
   ];
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
+
   const rerouteHandler = () => {
     if (!currentLocation) return;
 
@@ -77,9 +86,8 @@ export default function TripPage() {
       destination: tripData.destination,
     };
 
-    setShouldBeRerouted(false);
-    // Evtl andere Lösung?
-    router.replace({ pathname: `/trip`, params });
+    // TODO: Evtl andere Lösung?
+    router.replace({ pathname: `/home/trip`, params });
   };
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
@@ -88,10 +96,13 @@ export default function TripPage() {
   };
 
   const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
-
   const currentLocationPoint =
     currentLocation &&
     point([currentLocation.coords.latitude, currentLocation.coords.longitude]);
+
+  const startPoint =
+    decodedShape &&
+    point([decodedShape.coordinates[0][0], decodedShape.coordinates[0][1]]);
 
   const line = decodedShape && lineString(decodedShape.coordinates);
 
@@ -103,19 +114,28 @@ export default function TripPage() {
   const calculatedManeuvers =
     data && nearestPoint && getMatchingManeuvers(data, nearestPoint);
 
-  let instruction =
+  const instruction =
     data &&
     calculatedManeuvers?.currentManeuver &&
     tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
-  if (
-    nearestPoint &&
-    nearestPoint.properties.dist &&
-    nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
-    instruction = 'Bitte gehe wieder auf die Route.';
-  }
 
+  const notOnRoute =
+    currentLocationPoint &&
+    startPoint &&
+    distance(currentLocationPoint, startPoint) * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS &&
+    !!nearestPoint &&
+    !!nearestPoint.properties.dist &&
+    nearestPoint.properties.dist * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS;
+
+  useEffect(() => {
+    if (instruction && !notOnRoute) {
+      Speech.speak(instruction, {
+        language: 'de',
+      });
+    }
+  }, [instruction, notOnRoute]);
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -132,18 +152,7 @@ export default function TripPage() {
     }
   };
 
-  const shouldReroute = useCallback(
-    () =>
-      nearestPoint &&
-      currentLocation &&
-      nearestPoint.properties.dist &&
-      nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING,
-    [nearestPoint, currentLocation]
-  );
-
-  useEffect(() => {
-    setShouldBeRerouted(!!shouldReroute());
-  }, [nearestPoint, currentLocation, tripData.destination, shouldReroute]);
+  const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
 
   if (isPending) {
     return (
@@ -158,11 +167,75 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  // TODO Gyroscope & Pedometer einbauen
+  // if (notOnRoute) {
+  //   return (
+  //     <NavigateToRoute
+  //       currentLocation={currentLocation}
+  //       distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+  //       nearestPoint={nearestPoint}
+  //       // TODO
+  //       isStart={false}
+  //     />
+  //   );
+  // }
+
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
-    <SafeAreaView className="flex-1 bg-background-light">
+    <SafeAreaView
+      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+    >
+      <RouteOverview
+        visible={showTripOverview}
+        onClick={() => {
+          setShowTripOverview(false);
+          setNavigateBack(true);
+        }}
+        onClickButtonText="Zurück"
+        onDismiss={() => {
+          if (navigateBack) {
+            router.back();
+          }
+        }}
+        onCloseButtonText="Weiter"
+        onCloseClick={() => setShowTripOverview(false)}
+      >
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          Route Übersicht
+        </Header>
+
+        <Text
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          Deine Route beträgt:
+        </Text>
+        <Text
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          {data.trip.summary.length} km
+        </Text>
+        <Text
+          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          {convertSecondsToMinutes(data.trip.summary.time)} Minuten
+        </Text>
+      </RouteOverview>
+      <PopUp
+        visible={showPopUp}
+        onClick={() => setShowPopUp(false)}
+        onClickButtonText="Beenden"
+        onCloseClick={() => setShowPopUp(false)}
+        onCloseButtonText="Schließen"
+        onDismiss={() => router.back()}
+      >
+        <Text
+          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+        >
+          Möchtest du die Navigation wirklich beenden?
+        </Text>
+      </PopUp>
       {pause ? (
         <Card iconKey="pause">Pause</Card>
       ) : (
@@ -171,21 +244,18 @@ export default function TripPage() {
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
           />
-          <View className="mx-auto my-3">
+          <View className="flex flex-row justify-end mx-5 my-5">
             <TouchableOpacity
-              accessibilityHint="Aktueller Standort"
+              accessibilityHint="Mein aktueller Standort"
               accessibilityRole="button"
-              className="flex flex-row items-center gap-x-4"
+              className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
               <Icon
-                color={stylings.colors['primary-color-dark']}
-                size={24}
-                icon="location"
+                color={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                size={50}
+                icon="currentLocation"
               />
-              <Text className="text-primary-color-dark opacity-50 text-2xl">
-                Aktueller Standort
-              </Text>
             </TouchableOpacity>
           </View>
 
@@ -202,21 +272,32 @@ export default function TripPage() {
               key="0"
             />
             <TripStep key="1">
-              {shouldBeRerouted && (
-                <View>
-                  <Text>
-                    Du befindest dich nicht auf der Route. Möchtest du die Route
-                    neu berechnen?
-                  </Text>
-                  <Button
-                    onPress={rerouteHandler}
-                    disabled={!currentLocation}
-                    buttonType="primary"
-                  >
-                    Reroute
-                  </Button>
-                </View>
-              )}
+              {nearestPoint &&
+                currentLocation &&
+                nearestPoint.properties.dist &&
+                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING && (
+                  <View>
+                    <Text>
+                      Du befindest dich nicht auf der Route. Möchtest du die
+                      Route neu berechnen?
+                    </Text>
+                    <Button
+                      onPress={rerouteHandler}
+                      disabled={!currentLocation}
+                      buttonType="primary"
+                    >
+                      Reroute
+                    </Button>
+                  </View>
+                )}
+              {/* <Map */}
+              {/*  origin={parseCoordinate(tripData.origin)} */}
+              {/*  destination={parseCoordinate(tripData.destination)} */}
+              {/*  nearestPoint={nearestPoint} */}
+              {/*  decodedShape={decodedShape} */}
+              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
+              {/* /> */}
               <Card
                 iconKey={matchIconType(
                   calculatedManeuvers?.currentManeuver.type
@@ -224,21 +305,12 @@ export default function TripPage() {
               >
                 {instruction}
               </Card>
-              {/* <Map */}
-              {/*  origin={parseCoordinate(tripData.origin)} */}
-              {/*  destination={parseCoordinate(tripData.destination)} */}
-              {/*  currentLocation={currentLocation} */}
-              {/*  nearestPoint={nearestPoint} */}
-              {/*  decodedShape={decodedShape} */}
-              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
-              {/* /> */}
             </TripStep>
           </PagerView>
         </>
       )}
 
-      <View className="mx-5">
+      <View className="mx-5 mb-5">
         <Button
           onPress={() => setPause(!pause)}
           buttonType="primaryOutline"
@@ -247,7 +319,7 @@ export default function TripPage() {
           {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
         <Button
-          onPress={() => router.replace('/home')}
+          onPress={() => setShowPopUp(true)}
           buttonType="primary"
           disabled={false}
         >

@@ -12,12 +12,6 @@ export const getMatchingManeuvers = (
     shapeIndex !== undefined &&
     maneuvers.findIndex((maneuver) => maneuver.begin_shape_index > shapeIndex);
 
-  // console.log(
-  //   shapeIndex,
-  //   currentManeuver,
-  //   typeof currentManeuver === 'number' && maneuvers[currentManeuver]
-  // );
-
   return {
     previousManeuver:
       typeof currentManeuver === 'number'

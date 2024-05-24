@@ -5,7 +5,7 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 
-export default function Page() {
+export default function ProfilePage() {
   const colorscheme = useColorScheme();
 
   return (
@@ -13,13 +13,17 @@ export default function Page() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <ScrollView className="px-8 my-8">
-        <Header>Profil</Header>
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+        >
+          Profil
+        </Header>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
         Profil
         </MenuButton> */}
         <MenuButton
           onPress={() => {
-            router.push('/profile/calibrationOverview');
+            router.push('/profile/calibration');
           }}
           icon="steplength"
         >

@@ -1,4 +1,7 @@
-import { PhotonFeatureCollection } from 'src/services/api-photon';
+import {
+  PhotonFeature,
+  PhotonFeatureCollection,
+} from 'src/services/api-photon';
 
 export interface LocationProps {
   lat: number;
@@ -47,3 +50,12 @@ export interface DecodedShapeProps {
   factor: number;
   lat: number;
 }
+
+export interface FavoriteProps {
+  title: string;
+  address: PhotonFeature;
+  id: string;
+}
+// export interface FavoriteProps {
+//  favorites: FavoriteItemProps[];
+// }

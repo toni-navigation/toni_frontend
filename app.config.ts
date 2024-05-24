@@ -26,6 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-router',
+    'expo-font',
     [
       'expo-screen-orientation',
       {
@@ -42,12 +43,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       resizeMode: 'contain',
       backgroundColor: '#0A585C',
     },
+    bundleIdentifier: 'io.toni.app',
   },
   android: {
     adaptiveIcon: {
       foregroundImage: './src/assets/images/adaptive-icon.png',
       backgroundColor: '#0A585C',
     },
+    package: 'io.toni.app',
   },
   web: {
     favicon: './src/assets/favicon.png',

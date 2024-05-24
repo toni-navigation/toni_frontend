@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { PhotonFeature } from './PhotonFeature';
 export type PhotonFeatureCollection = {
-    type: 'FeatureCollection';
-    features: Array<PhotonFeature>;
+  type: 'FeatureCollection';
+  features: Array<PhotonFeature>;
 };
-

@@ -1,17 +1,14 @@
 import React from 'react';
-import { Text, useColorScheme } from 'react-native';
+import { Text } from 'react-native';
 
 interface HeaderProps {
+  classes?: string;
   children: React.ReactNode;
 }
 
-export function Header({ children }: HeaderProps) {
-  const colorscheme = useColorScheme();
-
+export function Header({ classes, children }: HeaderProps) {
   return (
-    <Text
-      className={`text-4xl font-generalSansSemi h-24 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-    >
+    <Text className={`text-4xl font-generalSansSemi h-24 ${classes}`}>
       {children}
     </Text>
   );

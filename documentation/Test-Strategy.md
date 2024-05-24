@@ -1,9 +1,8 @@
-
 # Testing Strategy
 
 ## Overview
 
-"Toni" is a navigation app designed for blind people, 
+"Toni" is a navigation app designed for blind people,
 assisting them in navigating their surroundings using step-by-step instructions.
 It incorporates a unique feature allowing users to calibrate their steps for accurate distance measurement.
 It is a pure frontend application without its own backend.
@@ -11,32 +10,39 @@ It is a pure frontend application without its own backend.
 -- IMAGE --
 
 ## Testing Objectives
+
 - Ensure the app provides reliable and accurate navigation instructions.
 - Verify that step calibration accurately translates distance into steps.
 - Assess the app's accessibility and usability for blind users.
 - Validate the integration with external APIs (Photon for Geocoding, Valhalla for Routing).
 
 Accessibility and the smooth calibration of steps are the most important quality attributes of our app. Navigation is of course also important, but as the routing takes place via an external API (Valhalla), we only have limited influence on it.
+
 ## Testing Types
+
 - Unit Testing: Testing all pure functions in the functions folder using Jest.
 - Integration Testing: Testing integration with external APIs for geocoding (Photon) and routing (Valhalla) using Jest.
   <!--- Functional Testing: Ensure navigation features work correctly, including step-by-step directions and recalibration.-->
 - Usability Testing: Gather feedback from blind users to improve user experience.
- 
+
 ### Accessibility Testing
+
 Assess the app's usability for blind users:
-  - On iOS, we use the Accessibility Inspector. It ships with macOS and can be accessed easily via Xcode or the macOS Spotlight.
-  - On Android, we use Accessibility Scanner.
-  - Using the ESLint "a11y" plugin.
-  - https://medium.com/reactbrasil/introducing-react-native-accessibility-engine-fcf78f2a3805
+
+- On iOS, we use the Accessibility Inspector. It ships with macOS and can be accessed easily via Xcode or the macOS Spotlight.
+- On Android, we use Accessibility Scanner.
+- Using the ESLint "a11y" plugin.
+- https://medium.com/reactbrasil/introducing-react-native-accessibility-engine-fcf78f2a3805
 
 ### Calibration Testing
+
 - Integration Testing of the different APIs used there (Audio, Pedometer, CurrentLocation)
 - User Testing
   - Calibrating steps for different user profiles.
   - Verifying accuracy by comparing calculated steps with actual distance covered.
 
 ## CI/CD
+
 Set up a CI pipeline to run tests automatically when merged/pushed to main branch. This helps catch issues early and ensures that broken code is not merged into the main branch.
 
 <!--

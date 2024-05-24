@@ -1,5 +1,11 @@
 ## Update packages
 
-```npx expo install --fix```
+`npx expo install --fix`
 
-```npx expo start --clear```
+## Empty Expo cache and start project
+
+`npx expo start --clear`
+
+## Run Prettier in whole project
+
+`prettier . --write`
