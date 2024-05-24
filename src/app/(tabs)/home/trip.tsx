@@ -1,3 +1,4 @@
+import distance from '@turf/distance';
 import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -15,8 +16,6 @@ import {
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
-import { TripList } from '@/components/TripList';
-import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
@@ -25,6 +24,8 @@ import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
+import { TripList } from '@/components/trip/TripList';
+import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { getMatchingManeuvers } from '@/functions/getMatchingManeuvers';
@@ -49,9 +50,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
-const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 20;
+const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
 const THRESHOLD_REROUTING = 100;
-
 export default function TripPage() {
   const colorscheme = useColorScheme();
 
@@ -66,7 +66,6 @@ export default function TripPage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
   const calibration = useCalibrationStore((state) => state.calibration);
 
   const restructureTripData: LocationProps[] = [
@@ -75,6 +74,7 @@ export default function TripPage() {
   ];
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
+
   const rerouteHandler = () => {
     if (!currentLocation) return;
 
@@ -96,10 +96,13 @@ export default function TripPage() {
   };
 
   const decodedShape = data && decodePolyline(data.trip.legs[0].shape);
-
   const currentLocationPoint =
     currentLocation &&
     point([currentLocation.coords.latitude, currentLocation.coords.longitude]);
+
+  const startPoint =
+    decodedShape &&
+    point([decodedShape.coordinates[0][0], decodedShape.coordinates[0][1]]);
 
   const line = decodedShape && lineString(decodedShape.coordinates);
 
@@ -111,25 +114,28 @@ export default function TripPage() {
   const calculatedManeuvers =
     data && nearestPoint && getMatchingManeuvers(data, nearestPoint);
 
-  let instruction =
+  const instruction =
     data &&
     calculatedManeuvers?.currentManeuver &&
     tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
-  if (
-    nearestPoint &&
-    nearestPoint.properties.dist &&
+
+  const notOnRoute =
+    currentLocationPoint &&
+    startPoint &&
+    distance(currentLocationPoint, startPoint) * 1000 >
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS &&
+    !!nearestPoint &&
+    !!nearestPoint.properties.dist &&
     nearestPoint.properties.dist * 1000 >
-      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS
-  ) {
-    instruction = 'Bitte gehe wieder auf die Route.';
-  }
+      THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS;
+
   useEffect(() => {
-    if (instruction) {
+    if (instruction && !notOnRoute) {
       Speech.speak(instruction, {
         language: 'de',
       });
     }
-  }, [instruction]);
+  }, [instruction, notOnRoute]);
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -161,11 +167,24 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  // TODO Gyroscope & Pedometer einbauen
+  // if (notOnRoute) {
+  //   return (
+  //     <NavigateToRoute
+  //       currentLocation={currentLocation}
+  //       distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+  //       nearestPoint={nearestPoint}
+  //       // TODO
+  //       isStart={false}
+  //     />
+  //   );
+  // }
+
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
-    <SafeAreaView className="flex-1 bg-background-light">
+    <SafeAreaView
+      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+    >
       <RouteOverview
         visible={showTripOverview}
         onClick={() => {
@@ -205,20 +224,11 @@ export default function TripPage() {
       </RouteOverview>
       <PopUp
         visible={showPopUp}
-        onClick={() => {
-          setShowPopUp(false);
-          setNavigateBack(true);
-        }}
+        onClick={() => setShowPopUp(false)}
         onClickButtonText="Beenden"
-        onCloseClick={() => {
-          setShowPopUp(false);
-        }}
+        onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Schließen"
-        onDismiss={() => {
-          if (navigateBack) {
-            router.back();
-          }
-        }}
+        onDismiss={() => router.back()}
       >
         <Text
           className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
@@ -234,21 +244,18 @@ export default function TripPage() {
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
           />
-          <View className="mx-auto my-3">
+          <View className="flex flex-row justify-end mx-5 my-5">
             <TouchableOpacity
-              accessibilityHint="Aktueller Standort"
+              accessibilityHint="Mein aktueller Standort"
               accessibilityRole="button"
-              className="flex flex-row items-center gap-x-4"
+              className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
               <Icon
-                color={stylings.colors['primary-color-dark']}
-                size={24}
-                icon="location"
+                color={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                size={50}
+                icon="currentLocation"
               />
-              <Text className="text-primary-color-dark opacity-50 text-2xl">
-                Aktueller Standort
-              </Text>
             </TouchableOpacity>
           </View>
 

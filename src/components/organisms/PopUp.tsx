@@ -34,7 +34,9 @@ export function PopUp({
       onRequestClose={onCloseClick}
       onDismiss={onDismiss}
     >
-      <SafeAreaView>
+      <SafeAreaView
+        className={` ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+      >
         <View className="justify-center items-center h-full w-full p-4">
           <View
             className={`flex justify-between items-center w-full h-full rounded-[35px] p-4 ${colorscheme === 'light' ? ' bg-primary-color-dark' : ' bg-primary-color-light'}`}
