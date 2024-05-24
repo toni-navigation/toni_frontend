@@ -18,10 +18,12 @@ import PagerView from 'react-native-pager-view';
 import { TripList } from '@/components/TripList';
 import { TripStep } from '@/components/TripStep';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
+import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
@@ -59,6 +61,7 @@ export default function TripPage() {
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [navigateBack, setNavigateBack] = React.useState(false);
+  const [showTripOverview, setShowTripOverview] = React.useState(true);
 
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -83,7 +86,7 @@ export default function TripPage() {
       destination: tripData.destination,
     };
 
-    // Evtl andere Lösung?
+    // TODO: Evtl andere Lösung?
     router.replace({ pathname: `/home/trip`, params });
   };
   const handlePageSelected = (
@@ -142,6 +145,7 @@ export default function TripPage() {
       });
     }
   };
+
   if (isPending) {
     return (
       <View>
@@ -160,6 +164,33 @@ export default function TripPage() {
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
     <SafeAreaView className="flex-1 bg-background-light">
+      <RouteOverview
+        visible={showTripOverview}
+        onClick={() => {
+          setShowTripOverview(false);
+          setNavigateBack(true);
+        }}
+        onClickButtonText="Zurück"
+        onDismiss={() => {
+          if (navigateBack) {
+            router.back();
+          }
+        }}
+        onCloseButtonText="Weiter"
+        onCloseClick={() => setShowTripOverview(false)}
+      >
+        <Header
+          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          Route Übersicht
+        </Header>
+
+        <Text
+          className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+        >
+          {data.trip.summary.length}
+        </Text>
+      </RouteOverview>
       <PopUp
         visible={showPopUp}
         onClick={() => {
