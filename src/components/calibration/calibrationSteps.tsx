@@ -47,7 +47,7 @@ export const calibrationSteps = (
   },
   {
     forwardButtonText: 'Fertig',
-    text: `Deine kalibrierte Schrittlänge beträgt ${factors ? getCalibrationValue(factors) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
+    text: `Deine kalibrierte Schrittlänge beträgt ${factors ? getCalibrationValue(factors) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen Profil Einstellungen neu Kalibrieren!`,
     backButtonText: 'Zurück',
   },
 ];
