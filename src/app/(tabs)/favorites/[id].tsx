@@ -3,8 +3,8 @@ import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  useColorScheme,
   Text,
+  useColorScheme,
   View,
 } from 'react-native';
 
@@ -88,14 +88,13 @@ export default function FavoritePage() {
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">
-        <Button onPress={() => {}} disabled={false} buttonType="primaryOutline">
+        <Button onPress={() => {}} buttonType="primaryOutline">
           Bearbeiten
         </Button>
         <Button
           onPress={() => {
             setShowPopUp(true);
           }}
-          disabled={false}
           buttonType="primaryOutline"
         >
           Löschen

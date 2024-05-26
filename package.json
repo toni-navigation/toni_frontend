@@ -63,8 +63,13 @@
     "react-native-svg": "^15.2.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-uuid": "^2.0.2",
+    "react-test-renderer": "^18.2.0",
     "ts-node": "^10.9.2",
     "zustand": "^4.5.0"
+  },
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-native": "0.74.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

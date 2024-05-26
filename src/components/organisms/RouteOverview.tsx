@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Modal, SafeAreaView, ScrollView, View } from 'react-native';
 
 import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
@@ -44,19 +38,11 @@ export function RouteOverview({
 
           <View className="w-full">
             {onClick && onClickButtonText && (
-              <Button
-                onPress={onClick}
-                disabled={false}
-                buttonType="primaryOutline"
-              >
+              <Button onPress={onClick} buttonType="primaryOutline">
                 {onClickButtonText}
               </Button>
             )}
-            <Button
-              onPress={onCloseClick}
-              disabled={false}
-              buttonType="primary"
-            >
+            <Button onPress={onCloseClick} buttonType="primary">
               {onCloseButtonText}
             </Button>
           </View>

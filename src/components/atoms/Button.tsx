@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, useColorScheme } from 'react-native';
 interface ButtonProps {
   children: React.ReactNode;
   onPress: () => void;
-  disabled: true | false;
+  disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 
@@ -46,12 +46,17 @@ export function Button({
           : 'text-primary-color-light',
     },
   };
+  const handlePress = () => {
+    if (!disabled) {
+      onPress();
+    }
+  };
 
   return (
     <TouchableOpacity
       accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
       className={`h-20 flex justify-center py-2 px-4 rounded-[35px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
-      onPress={onPress}
+      onPress={handlePress}
       accessibilityRole="button"
       accessibilityLabel={
         disabled ? `${children} nicht nutzbar` : `${children}`

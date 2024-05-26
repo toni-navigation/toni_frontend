@@ -76,7 +76,6 @@ export function CalibrationNavigation({
 
       <Button
         buttonType="primaryOutline"
-        disabled={false}
         // TODO Last step delete newest calibration
         onPress={backButtonHandler}
       >
@@ -89,7 +88,6 @@ export function CalibrationNavigation({
       ) : (
         <Button
           buttonType={isFirstStep ? 'accent' : 'primary'}
-          disabled={false}
           onPress={nextButtonHandler}
         >
           {currentElement.forwardButtonText}

@@ -311,18 +311,10 @@ export default function TripPage() {
       )}
 
       <View className="mx-5 mb-5">
-        <Button
-          onPress={() => setPause(!pause)}
-          buttonType="primaryOutline"
-          disabled={false}
-        >
+        <Button onPress={() => setPause(!pause)} buttonType="primaryOutline">
           {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
-        <Button
-          onPress={() => setShowPopUp(true)}
-          buttonType="primary"
-          disabled={false}
-        >
+        <Button onPress={() => setShowPopUp(true)} buttonType="primary">
           Beenden
         </Button>
       </View>

@@ -146,11 +146,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
-        <Button
-          buttonType="primary"
-          onPress={() => stopPedometer()}
-          disabled={false}
-        >
+        <Button buttonType="primary" onPress={() => stopPedometer()}>
           Abbrechen
         </Button>
       );
@@ -161,7 +157,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
       fallback.current
     ) {
       return (
-        <Button buttonType="primary" onPress={fallbackStop} disabled={false}>
+        <Button buttonType="primary" onPress={fallbackStop}>
           Stopp
         </Button>
       );

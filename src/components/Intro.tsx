@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import {
   SafeAreaView,
+  StyleSheet,
   Text,
   useColorScheme,
   View,
-  StyleSheet,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
@@ -129,11 +129,7 @@ export function Intro() {
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
-          <Button
-            buttonType="primary"
-            disabled={false}
-            onPress={() => setShowCalibration(true)}
-          >
+          <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
             Los gehts
           </Button>
         </>

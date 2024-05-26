@@ -53,7 +53,6 @@ export default function FavoritesPage() {
       <View className="mx-5 mb-8">
         <Button
           onPress={() => router.push('/favorites/create')}
-          disabled={false}
           buttonType="accentOutline"
         >
           Favorit hinzufügen
