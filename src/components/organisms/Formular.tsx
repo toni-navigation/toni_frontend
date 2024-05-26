@@ -21,7 +21,7 @@ export function Formular() {
 
   const getAddressHandler = () => {
     if (photonData && title) {
-      const id = uuid.v4(); // Renamed 'uuid' to 'id'
+      const id = uuid.v4();
       addFavorite(id, title, photonData);
       router.back();
     }
@@ -34,7 +34,7 @@ export function Formular() {
           className="mb-4"
           accessibilityLabel="Titel *"
           accessibilityHint="Pflichtfeld: Geben Sie einen Titel für Ihren Favoriten ein"
-          placeholder="Name"
+          placeholder="Name eingeben"
           inputMode="text"
           maxLength={300}
           value={title}
@@ -46,17 +46,17 @@ export function Formular() {
         />
         <GeocoderAutocomplete
           value={photonData}
-          placeholder="Start eingeben"
-          label="Start"
+          placeholder="Adresse eingeben"
+          label="Adresse *"
           onChange={(value) => {
             setPhotonData(value);
           }}
         />
       </ScrollView>
-      <View className="mx-5 mb-8">
+      <View className="my-8">
         <Button
           onPress={getAddressHandler}
-          disabled={false}
+          disabled={!photonData || !title}
           buttonType="primary"
         >
           Speichern

@@ -10,9 +10,11 @@ import {
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
+import { PopUp } from '@/components/organisms/PopUp';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritePage() {
+  const [showPopUp, setShowPopUp] = React.useState(false);
   const favorites = useFavoriteStore((state) => state.favorites);
   const { deleteFavorite } = useFavoriteStore((state) => state.actions);
 
@@ -29,33 +31,77 @@ export default function FavoritePage() {
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>{favorite.title}</Header>
         <View>
-          <Text
-            className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-          >{`${favorite.address?.properties?.street} ${favorite.address?.properties?.housenumber}`}</Text>
-          <Text
-            className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-          >{`${favorite.address?.properties?.postcode} ${favorite.address?.properties?.city}`}</Text>
+          {favorite.address?.properties?.name && (
+            <Text
+              className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              {favorite.address?.properties?.name}
+            </Text>
+          )}
+          {favorite.address?.properties?.street && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Straße: {favorite.address?.properties?.street}
+            </Text>
+          )}
+          {favorite.address?.properties?.housenumber && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Hausnummer: {favorite.address?.properties?.housenumber}
+            </Text>
+          )}
+          {favorite.address?.properties?.street && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Postleitzahl: {favorite.address?.properties?.postcode}
+            </Text>
+          )}
+          {favorite.address?.properties?.housenumber && (
+            <Text
+              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+            >
+              Ort: {favorite.address?.properties?.city}
+            </Text>
+          )}
+
+          <PopUp
+            visible={showPopUp}
+            onClick={() => {
+              Promise.resolve(deleteFavorite(favorite.id)).then(() =>
+                router.back()
+              );
+            }}
+            onClickButtonText="Ja"
+            onCloseClick={() => setShowPopUp(false)}
+            onCloseButtonText="Nein"
+            onDismiss={() => setShowPopUp(false)}
+          >
+            <Text
+              className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+            >
+              Möchtest du den Favorit {favorite.title} wirklich löschen?
+            </Text>
+          </PopUp>
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">
+        <Button onPress={() => {}} disabled={false} buttonType="primaryOutline">
+          Bearbeiten
+        </Button>
         <Button
           onPress={() => {
-            router.back();
+            setShowPopUp(true);
           }}
           disabled={false}
           buttonType="primaryOutline"
         >
-          Zurück
-        </Button>
-        <Button
-          onPress={() => {
-            deleteFavorite(favorite.id);
-            router.back();
-          }}
-          disabled={false}
-          buttonType="primary"
-        >
           Löschen
+        </Button>
+        <Button onPress={() => {}} disabled buttonType="accent">
+          Route starten
         </Button>
       </View>
     </SafeAreaView>
