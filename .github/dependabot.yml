@@ -5,17 +5,17 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: 'npm' # See documentation for possible values
+    directory: '/' # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     groups:
       minor-and-patch:
         applies-to: version-updates
         update-types:
-        - "patch"
-        - "minor"
+          - 'patch'
+          - 'minor'
       major:
         applies-to: version-updates
         update-types:
-        - "major"
+          - 'major'

@@ -54,9 +54,9 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  if (!skipped && calibration.factors.length === 0) {
-    return <Intro />;
-  }
+  // if (!skipped && calibration.factors.length === 0) {
+  return <Intro />;
+  // }
 
-  return <Redirect href="/home/" />;
+  // return <Redirect href="/home/" />;
 }
