@@ -1,6 +1,5 @@
+import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { create } from 'react-test-renderer';
 
 import { Button } from '@/components/atoms/Button'; // Adjust the import according to your project structure
 
@@ -12,69 +11,73 @@ describe('Button component', () => {
   });
 
   it('renders correctly with primary buttonType', () => {
-    const tree = create(
-      <Button onPress={onPressMock} buttonType="primary">
+    const { toJSON } = render(
+      <Button onPress={onPressMock} disabled={false} buttonType="primary">
         Primary Button
       </Button>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders correctly with accent buttonType', () => {
-    const tree = create(
-      <Button onPress={onPressMock} buttonType="accent">
+    const { toJSON } = render(
+      <Button onPress={onPressMock} disabled={false} buttonType="accent">
         Accent Button
       </Button>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders correctly with primaryOutline buttonType', () => {
-    const tree = create(
-      <Button onPress={onPressMock} buttonType="primaryOutline">
+    const { toJSON } = render(
+      <Button
+        onPress={onPressMock}
+        disabled={false}
+        buttonType="primaryOutline"
+      >
         Primary Outline Button
       </Button>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders correctly with accentOutline buttonType', () => {
-    const tree = create(
-      <Button onPress={onPressMock} buttonType="accentOutline">
+    const { toJSON } = render(
+      <Button onPress={onPressMock} disabled={false} buttonType="accentOutline">
         Accent Outline Button
       </Button>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders correctly when disabled', () => {
-    const tree = create(
+    const { toJSON } = render(
       <Button onPress={onPressMock} disabled buttonType="primary">
         Disabled Button
       </Button>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('calls onPress when pressed and not disabled', () => {
-    const testRenderer = create(
-      <Button onPress={onPressMock} buttonType="primary">
+    const { getByRole } = render(
+      <Button onPress={onPressMock} disabled={false} buttonType="primary">
         Pressable Button
       </Button>
     );
-    const buttonInstance = testRenderer.root.findByType(TouchableOpacity);
-    buttonInstance.props.onPress();
+    const button = getByRole('button');
+    fireEvent.press(button);
     expect(onPressMock).toHaveBeenCalled();
   });
 
   it('does not call onPress when pressed and disabled', () => {
-    const testRenderer = create(
+    const { getByRole } = render(
       <Button onPress={onPressMock} disabled buttonType="primary">
         Disabled Button
       </Button>
     );
-    const buttonInstance = testRenderer.root.findByType(TouchableOpacity);
-    buttonInstance.props.onPress();
+    const button = getByRole('button');
+    fireEvent.press(button);
     expect(onPressMock).not.toHaveBeenCalled();
   });
 });

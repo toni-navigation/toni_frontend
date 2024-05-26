@@ -63,17 +63,20 @@
     "react-native-svg": "^15.2.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-uuid": "^2.0.2",
-    "react-test-renderer": "^18.2.0",
+    "react-test-renderer": "18.2.0",
     "ts-node": "^10.9.2",
     "zustand": "^4.5.0"
   },
   "peerDependencies": {
     "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react-native": "0.74.1",
+    "react-test-renderer": "18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@tanstack/eslint-plugin-query": "^5.18.1",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^12.5.1",
     "@types/jest": "^29.5.11",
     "@types/lodash.debounce": "^4.0.9",
     "@types/react": "~18.2.79",
