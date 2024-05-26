@@ -49,7 +49,7 @@ export default function Index() {
       return () => watchPosition.remove();
     })();
   }, [updateCurrentLocation]);
-
+  const test = 0;
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;
   }
