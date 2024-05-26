@@ -29,7 +29,6 @@ jobs:
       - name: Check code formatting with Prettier
         run: |
           npm install --save-dev --save-exact prettier
-          npm prettier --write .
           npx prettier --check .
 
       - name: Run Unit Tests
