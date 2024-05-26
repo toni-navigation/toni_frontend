@@ -7,6 +7,7 @@ export function calculateMedian(values: number[]): number {
   const sortedValues = [...values].sort((a, b) => a - b);
 
   const half = Math.floor(sortedValues.length / 2);
+  const test = 0;
 
   return sortedValues.length % 2
     ? sortedValues[half]
