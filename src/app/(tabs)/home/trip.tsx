@@ -17,13 +17,12 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
-import { PopUp } from '@/components/organisms/PopUp';
-import { RouteOverview } from '@/components/organisms/RouteOverview';
+import { PopUp, PopUpTypes } from '@/components/organisms/PopUp';
 import { TabBar } from '@/components/organisms/TabBar';
+import { NavigateToRoute } from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -59,9 +58,9 @@ export default function TripPage() {
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
-  const [showPopUp, setShowPopUp] = React.useState(false);
-  const [navigateBack, setNavigateBack] = React.useState(false);
-  const [showTripOverview, setShowTripOverview] = React.useState(true);
+  const [showPopUp, setShowPopUp] = React.useState<PopUpTypes | null>('info');
+  // const [navigateBack, setNavigateBack] = React.useState(false);
+  // const [showTripOverview, setShowTripOverview] = React.useState(true);
 
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -136,6 +135,7 @@ export default function TripPage() {
       });
     }
   }, [instruction, notOnRoute]);
+
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -167,17 +167,18 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  // if (notOnRoute) {
-  //   return (
-  //     <NavigateToRoute
-  //       currentLocation={currentLocation}
-  //       distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-  //       nearestPoint={nearestPoint}
-  //       // TODO
-  //       isStart={false}
-  //     />
-  //   );
-  // }
+  if (notOnRoute) {
+    return (
+      <NavigateToRoute
+        currentLocation={currentLocation}
+        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+        nearestPoint={nearestPoint}
+      />
+    );
+  }
+  const infoButtonText = data
+    ? `Deine Route beträgt: ${data.trip.summary.length}km und ${convertSecondsToMinutes(data.trip.summary.time)} Minuten`
+    : undefined;
 
   return data &&
     calculatedManeuvers?.currentManeuver &&
@@ -185,57 +186,27 @@ export default function TripPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <RouteOverview
-        visible={showTripOverview}
-        onClick={() => {
-          setShowTripOverview(false);
-          setNavigateBack(true);
-        }}
-        onClickButtonText="Zurück"
-        onDismiss={() => {
-          if (navigateBack) {
-            router.back();
-          }
-        }}
-        onCloseButtonText="Weiter"
-        onCloseClick={() => setShowTripOverview(false)}
-      >
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          Route Übersicht
-        </Header>
-
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          Deine Route beträgt:
-        </Text>
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          {data.trip.summary.length} km
-        </Text>
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          {convertSecondsToMinutes(data.trip.summary.time)} Minuten
-        </Text>
-      </RouteOverview>
       <PopUp
-        visible={showPopUp}
-        onClick={() => setShowPopUp(false)}
-        onClickButtonText="Beenden"
-        onCloseClick={() => setShowPopUp(false)}
-        onCloseButtonText="Schließen"
-        onDismiss={() => router.back()}
-      >
-        <Text
-          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
-          Möchtest du die Navigation wirklich beenden?
-        </Text>
-      </PopUp>
+        visible={!!showPopUp}
+        popupType="info"
+        onSadButtonClick={() => {
+          setShowPopUp(null);
+          // router.back();
+        }}
+        onClickHappyButton={() => setShowPopUp(null)}
+        flexibleText={infoButtonText}
+        onDismiss={() => {
+          // setShowPopUp(null);
+          // router.back();
+        }}
+      />
+      {/* <PopUp */}
+      {/*  visible={showPopUp === 'warning'} */}
+      {/*  popupType="warning" */}
+      {/*  onSadButtonClick={() => router.back()} */}
+      {/*  onClickHappyButton={() => setShowPopUp(null)} */}
+      {/* /> */}
+
       {pause ? (
         <Card iconKey="pause">Pause</Card>
       ) : (
@@ -271,41 +242,18 @@ export default function TripPage() {
               )}
               key="0"
             />
-            <TripStep key="1">
-              {nearestPoint &&
+            <TripStep
+              key="1"
+              notOnRoute={
+                !!nearestPoint &&
                 currentLocation &&
-                nearestPoint.properties.dist &&
-                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING && (
-                  <View>
-                    <Text>
-                      Du befindest dich nicht auf der Route. Möchtest du die
-                      Route neu berechnen?
-                    </Text>
-                    <Button
-                      onPress={rerouteHandler}
-                      disabled={!currentLocation}
-                      buttonType="primary"
-                    >
-                      Reroute
-                    </Button>
-                  </View>
-                )}
-              {/* <Map */}
-              {/*  origin={parseCoordinate(tripData.origin)} */}
-              {/*  destination={parseCoordinate(tripData.destination)} */}
-              {/*  nearestPoint={nearestPoint} */}
-              {/*  decodedShape={decodedShape} */}
-              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
-              {/* /> */}
-              <Card
-                iconKey={matchIconType(
-                  calculatedManeuvers?.currentManeuver.type
-                )}
-              >
-                {instruction}
-              </Card>
-            </TripStep>
+                !!nearestPoint.properties.dist &&
+                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
+              }
+              onReroute={rerouteHandler}
+              icon={matchIconType(calculatedManeuvers?.currentManeuver.type)}
+              instruction={instruction}
+            />
           </PagerView>
         </>
       )}
@@ -314,7 +262,7 @@ export default function TripPage() {
         <Button onPress={() => setPause(!pause)} buttonType="primaryOutline">
           {pause ? 'Fortsetzen' : 'Pause'}
         </Button>
-        <Button onPress={() => setShowPopUp(true)} buttonType="primary">
+        <Button onPress={() => setShowPopUp('warning')} buttonType="primary">
           Beenden
         </Button>
       </View>

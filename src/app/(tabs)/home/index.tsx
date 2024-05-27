@@ -1,18 +1,12 @@
 import { router } from 'expo-router';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { PopUp } from '@/components/organisms/PopUp';
+import { PopUp, PopUpTypes } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -27,7 +21,7 @@ export default function HomePage() {
 
   const colorscheme = useColorScheme();
 
-  const [showPopUp, setShowPopUp] = React.useState(false);
+  const [showPopUp, setShowPopUp] = React.useState<PopUpTypes | null>(null);
 
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
@@ -62,6 +56,7 @@ export default function HomePage() {
         destination: newDestination,
       };
 
+      setShowPopUp(null);
       navigateToTrip(params);
     }
   };
@@ -78,32 +73,33 @@ export default function HomePage() {
   // if (!skipped && calibration.factors.length === 0) {
   //   return <Calibration isFromIntro />;
   // }
+  console.log(showPopUp);
 
   return (
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       <PopUp
-        visible={showPopUp}
-        onCloseClick={() => {
-          setShowPopUp(false);
+        visible={!!showPopUp}
+        popupType="alert"
+        onClickHappyButton={() => {
+          // setShowPopUp(null);
           startNavigationHandler();
         }}
-        onCloseButtonText="Alles klar!"
-      >
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
-          Hinweis
-        </Header>
+        onSadButtonClick={() => setShowPopUp(null)}
+      />
+      {/* <Header */}
+      {/*  classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`} */}
+      {/* > */}
+      {/*  Hinweis */}
+      {/* </Header> */}
 
-        <Text
-          className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
-          Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
-          Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
-        </Text>
-      </PopUp>
+      {/* <Text */}
+      {/*  className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`} */}
+      {/* > */}
+      {/*  Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste */}
+      {/*  Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen. */}
+      {/* </Text> */}
 
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header
@@ -134,7 +130,7 @@ export default function HomePage() {
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button
-          onPress={() => setShowPopUp(true)}
+          onPress={() => setShowPopUp('alert')}
           disabled={origin === undefined || !destination}
           buttonType="accent"
         >

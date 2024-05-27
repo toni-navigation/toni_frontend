@@ -1,11 +1,16 @@
 import React from 'react';
 import { Text, TouchableOpacity, useColorScheme } from 'react-native';
 
+export type ButtonTypes =
+  | 'accent'
+  | 'accentOutline'
+  | 'primary'
+  | 'primaryOutline';
 interface ButtonProps {
   children: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
-  buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
+  buttonType: ButtonTypes;
 }
 
 export function Button({

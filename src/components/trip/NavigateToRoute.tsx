@@ -7,6 +7,7 @@ import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, Vibration, View } from 'react-native';
 
+import { Card } from '@/components/organisms/Card';
 import { Map } from '@/components/organisms/Map';
 import { calculateOrientation } from '@/functions/calculateOrientation';
 import { directionToMove } from '@/functions/directionToMove';
@@ -16,14 +17,12 @@ interface RouteToStartProps {
   distanceToStart: number;
   currentLocation: CurrentLocationProps;
   nearestPoint: NearestPointOnLine;
-  isStart: boolean;
 }
 
 export function NavigateToRoute({
   distanceToStart,
   currentLocation,
   nearestPoint,
-  isStart,
 }: RouteToStartProps) {
   const [{ x, y }, setData] = useState({
     x: 0,
@@ -80,17 +79,13 @@ export function NavigateToRoute({
     <SafeAreaView className="flex-1 bg-background-light">
       <View>
         <Text>Dein GPS Signal beträgt: {currentLocation.coords.accuracy}</Text>
-        {subscription && (
-          <View>
-            <Text>Die Route ist {distanceToStart} Meter entfernt.</Text>
-            <Text>
-              {direction
-                ? 'Die Route befindet sich in dieser Richtung.'
-                : 'Richte das Handy nach vorne und drehe dich, um die Route zu finden'}
-            </Text>
-          </View>
-        )}
       </View>
+      <Card iconKey={direction ? 'arrowStraight' : 'cross'}>
+        Die Route ist {distanceToStart.toFixed(2)} Meter entfernt.
+        {direction
+          ? '\nDie Route befindet sich in dieser Richtung.'
+          : '\nRichte das Handy nach vorne und drehe dich, um die Route zu finden'}
+      </Card>
       <Map
         origin={{
           lat: currentLocation.coords.latitude,
