@@ -17,13 +17,14 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { Icon } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
+import { Map } from '@/components/organisms/Map';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
+import { NavigateToRoute } from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -60,7 +61,6 @@ export default function TripPage() {
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
-  const [navigateBack, setNavigateBack] = React.useState(false);
   const [showTripOverview, setShowTripOverview] = React.useState(true);
 
   const currentLocation = useCurrentLocationStore(
@@ -152,8 +152,6 @@ export default function TripPage() {
     }
   };
 
-  const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
-
   if (isPending) {
     return (
       <View>
@@ -167,17 +165,24 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  // if (notOnRoute) {
-  //   return (
-  //     <NavigateToRoute
-  //       currentLocation={currentLocation}
-  //       distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-  //       nearestPoint={nearestPoint}
-  //       // TODO
-  //       isStart={false}
-  //     />
-  //   );
-  // }
+  if (notOnRoute) {
+    return (
+      <NavigateToRoute
+        currentLocation={currentLocation}
+        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+        nearestPoint={nearestPoint}
+      />
+    );
+  }
+
+  if (data && showTripOverview) {
+    return (
+      <RouteOverview
+        onCloseClick={() => setShowTripOverview(false)}
+        summary={data.trip.summary}
+      />
+    );
+  }
 
   return data &&
     calculatedManeuvers?.currentManeuver &&
@@ -185,43 +190,6 @@ export default function TripPage() {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
-      <RouteOverview
-        visible={showTripOverview}
-        onClick={() => {
-          setShowTripOverview(false);
-          setNavigateBack(true);
-        }}
-        onClickButtonText="Zurück"
-        onDismiss={() => {
-          if (navigateBack) {
-            router.back();
-          }
-        }}
-        onCloseButtonText="Weiter"
-        onCloseClick={() => setShowTripOverview(false)}
-      >
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          Route Übersicht
-        </Header>
-
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          Deine Route beträgt:
-        </Text>
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          {data.trip.summary.length} km
-        </Text>
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-        >
-          {convertSecondsToMinutes(data.trip.summary.time)} Minuten
-        </Text>
-      </RouteOverview>
       <PopUp
         visible={showPopUp}
         onClick={() => setShowPopUp(false)}
@@ -290,14 +258,14 @@ export default function TripPage() {
                     </Button>
                   </View>
                 )}
-              {/* <Map */}
-              {/*  origin={parseCoordinate(tripData.origin)} */}
-              {/*  destination={parseCoordinate(tripData.destination)} */}
-              {/*  nearestPoint={nearestPoint} */}
-              {/*  decodedShape={decodedShape} */}
-              {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-              {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
-              {/* /> */}
+              <Map
+                origin={parseCoordinate(tripData.origin)}
+                destination={parseCoordinate(tripData.destination)}
+                nearestPoint={nearestPoint}
+                decodedShape={decodedShape}
+                maneuvers={data.trip.legs[0].maneuvers}
+                currentManeuverIndex={calculatedManeuvers.maneuverIndex}
+              />
               <Card
                 iconKey={matchIconType(
                   calculatedManeuvers?.currentManeuver.type

@@ -12,19 +12,7 @@ export interface TripProps {
   }[];
 
   legs: ValhallaLegProps[];
-  summary: {
-    has_time_restrictions: boolean;
-    has_toll: boolean;
-    has_highway: boolean;
-    has_ferry: boolean;
-    min_lat: number;
-    min_lon: number;
-    max_lat: number;
-    max_lon: number;
-    time: number;
-    length: number;
-    cost: number;
-  };
+  summary: SummaryProps;
   status_message: string;
   status: number;
   units: string;
@@ -63,4 +51,18 @@ export interface ValhallaLegProps {
     cost: number;
   };
   shape: string;
+}
+
+export interface SummaryProps {
+  has_time_restrictions: boolean;
+  has_toll: boolean;
+  has_highway: boolean;
+  has_ferry: boolean;
+  min_lat: number;
+  min_lon: number;
+  max_lat: number;
+  max_lon: number;
+  time: number;
+  length: number;
+  cost: number;
 }

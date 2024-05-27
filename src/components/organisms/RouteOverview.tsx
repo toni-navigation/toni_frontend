@@ -1,53 +1,64 @@
+import { router } from 'expo-router';
 import React from 'react';
-import { Modal, SafeAreaView, ScrollView, View } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
+import { SummaryProps } from '@/types/Valhalla-Types';
 
 export type IconByKey = keyof typeof icons;
 
 interface RouteOverviewProps {
-  visible: boolean;
-  onClick?: () => void;
-  onClickButtonText?: string;
   onCloseClick: () => void;
-  onCloseButtonText: string;
-  children: React.ReactNode;
-  onDismiss?: () => void;
+  summary: SummaryProps;
 }
 
-export function RouteOverview({
-  visible,
-  children,
-  onClick,
-  onClickButtonText,
-  onCloseClick,
-  onCloseButtonText,
-  onDismiss,
-}: RouteOverviewProps) {
-  return (
-    <Modal
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onCloseClick}
-      onDismiss={onDismiss}
-    >
-      <SafeAreaView>
-        <View className="justify-center items-center h-full w-full p-6">
-          <ScrollView className="flex flex-col flex-1">{children}</ScrollView>
+export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
+  const colorscheme = useColorScheme();
+  const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
 
-          <View className="w-full">
-            {onClick && onClickButtonText && (
-              <Button onPress={onClick} buttonType="primaryOutline">
-                {onClickButtonText}
-              </Button>
-            )}
-            <Button onPress={onCloseClick} buttonType="primary">
-              {onCloseButtonText}
-            </Button>
-          </View>
+  return (
+    <SafeAreaView>
+      <View className="justify-center items-center h-full w-full p-6">
+        <ScrollView className="flex flex-col flex-1">
+          <Header
+            classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          >
+            Route Übersicht
+          </Header>
+          <Text
+            className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          >
+            Deine Route beträgt:
+          </Text>
+          <Text
+            className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          >
+            {summary.length} km
+          </Text>
+          <Text
+            className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          >
+            {convertSecondsToMinutes(summary.time)} Minuten
+          </Text>
+        </ScrollView>
+
+        <View className="w-full">
+          <Button onPress={() => router.back()} buttonType="primaryOutline">
+            Zurück
+          </Button>
+          <Button onPress={onCloseClick} buttonType="primary">
+            Weiter
+          </Button>
         </View>
-      </SafeAreaView>
-    </Modal>
+      </View>
+    </SafeAreaView>
   );
 }
