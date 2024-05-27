@@ -11,5 +11,14 @@ export interface IconProps {
 }
 
 export function Icon({ icon, size = 32, color }: IconProps) {
-  return <SvgXml xml={icons[icon]} width={size} height={size} color={color} />;
+  return (
+    <SvgXml
+      accessibilityLabel={icon}
+      accessibilityHint={`Icon ${icon}`}
+      xml={icons[icon]}
+      width={size}
+      height={size}
+      color={color}
+    />
+  );
 }

@@ -6,7 +6,7 @@ interface HeaderProps {
   children: React.ReactNode;
 }
 
-export function Header({ classes, children }: HeaderProps) {
+export function Header({ classes = '', children }: HeaderProps) {
   return (
     <Text className={`text-4xl font-generalSansSemi h-24 ${classes}`}>
       {children}
