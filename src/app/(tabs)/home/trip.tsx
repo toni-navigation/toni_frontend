@@ -18,13 +18,16 @@ import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { Icon } from '@/components/atoms/Icon';
+import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
-import { Map } from '@/components/organisms/Map';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
-import { NavigateToRoute } from '@/components/trip/NavigateToRoute';
+import {
+  ACCURACY_THRESHOLD,
+  NavigateToRoute,
+} from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -130,12 +133,12 @@ export default function TripPage() {
       THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS;
 
   useEffect(() => {
-    if (instruction && !notOnRoute) {
+    if (instruction && !notOnRoute && !showTripOverview) {
       Speech.speak(instruction, {
         language: 'de',
       });
     }
-  }, [instruction, notOnRoute]);
+  }, [instruction, notOnRoute, showTripOverview]);
   const reverseLocation = useReverseData();
   const createCurrentLocationMessage = async () => {
     Speech.speak('Berechne Standort', {
@@ -171,7 +174,19 @@ export default function TripPage() {
         currentLocation={currentLocation}
         distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
         nearestPoint={nearestPoint}
-      />
+      >
+        <View />
+        {/* <Map */}
+        {/*  origin={parseCoordinate(tripData.origin)} */}
+        {/*  destination={{ */}
+        {/*    lat: nearestPoint.geometry.coordinates[0], */}
+        {/*    lon: nearestPoint.geometry.coordinates[1], */}
+        {/*  }} */}
+        {/*  nearestPoint={nearestPoint} */}
+        {/*  decodedShape={decodedShape} */}
+        {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+        {/* /> */}
+      </NavigateToRoute>
     );
   }
 
@@ -208,6 +223,13 @@ export default function TripPage() {
         <Card iconKey="pause">Pause</Card>
       ) : (
         <>
+          {currentLocation &&
+            currentLocation.coords.accuracy &&
+            currentLocation.coords.accuracy > ACCURACY_THRESHOLD && (
+              <AlertBar
+                text={`Dein GPS Signal ist auf ${currentLocation?.coords?.accuracy?.toFixed(2) ?? 0} Meter ungenau.`}
+              />
+            )}
           <TabBar
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
@@ -226,7 +248,6 @@ export default function TripPage() {
               />
             </TouchableOpacity>
           </View>
-
           <PagerView
             onPageSelected={(event) => handlePageSelected(event)}
             initialPage={activePage}
@@ -239,41 +260,18 @@ export default function TripPage() {
               )}
               key="0"
             />
-            <TripStep key="1">
-              {nearestPoint &&
+            <TripStep
+              key="1"
+              notOnRoute={
+                !!nearestPoint &&
                 currentLocation &&
-                nearestPoint.properties.dist &&
-                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING && (
-                  <View>
-                    <Text>
-                      Du befindest dich nicht auf der Route. Möchtest du die
-                      Route neu berechnen?
-                    </Text>
-                    <Button
-                      onPress={rerouteHandler}
-                      disabled={!currentLocation}
-                      buttonType="primary"
-                    >
-                      Reroute
-                    </Button>
-                  </View>
-                )}
-              <Map
-                origin={parseCoordinate(tripData.origin)}
-                destination={parseCoordinate(tripData.destination)}
-                nearestPoint={nearestPoint}
-                decodedShape={decodedShape}
-                maneuvers={data.trip.legs[0].maneuvers}
-                currentManeuverIndex={calculatedManeuvers.maneuverIndex}
-              />
-              <Card
-                iconKey={matchIconType(
-                  calculatedManeuvers?.currentManeuver.type
-                )}
-              >
-                {instruction}
-              </Card>
-            </TripStep>
+                !!nearestPoint.properties.dist &&
+                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
+              }
+              onReroute={rerouteHandler}
+              icon={matchIconType(calculatedManeuvers?.currentManeuver.type)}
+              instruction={instruction}
+            />
           </PagerView>
         </>
       )}

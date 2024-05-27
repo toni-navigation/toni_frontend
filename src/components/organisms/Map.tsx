@@ -2,7 +2,7 @@ import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import React from 'react';
 import MapView, { Circle, Marker, Polygon, Polyline } from 'react-native-maps';
 
-import { CurrentLocationType, DecodedShapeProps } from '@/types/Types';
+import { DecodedShapeProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
 type CoordsType = { lat: number; lon: number };
@@ -34,7 +34,10 @@ export function Map({
         longitudeDelta: 0.0421,
       }}
       showsUserLocation
+      rotateEnabled
+      showsCompass
       followsUserLocation
+      userInterfaceStyle="dark"
     >
       {nearestPoint && (
         <Marker
