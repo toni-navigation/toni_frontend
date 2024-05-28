@@ -2,12 +2,7 @@ const styling = require('./src/stylings');
 
 module.exports = {
   important: true,
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './src/**/**/*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
-    './app/*.{js,jsx,ts,tsx}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './src/**/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
     colors: styling.colors,

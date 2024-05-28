@@ -11,9 +11,7 @@ export default function ProfilePage() {
   const colorscheme = useColorScheme();
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1">
       <ScrollView className="px-8 my-8">
         <Header
           classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
