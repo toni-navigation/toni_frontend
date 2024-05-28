@@ -10,7 +10,7 @@ interface StepLengthProps {
 export function StepLength({
   width = 24,
   height = 24,
-  viewBox = '0 0 20.48 20.68',
+  viewBox = '0 0 24 24',
   fill = 'currentColor',
 }: StepLengthProps) {
   return (
