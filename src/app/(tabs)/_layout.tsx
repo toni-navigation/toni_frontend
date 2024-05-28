@@ -1,5 +1,5 @@
 import { Tabs, usePathname } from 'expo-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useColorScheme } from 'react-native';
 
 import { Heart } from '@/components/atoms/icons/Heart';
@@ -21,21 +21,13 @@ const iconsArray = {
 export default function Layout() {
   const colorscheme = useColorScheme();
   const currentPath = usePathname();
-  const [isTripPath, setIsTripPath] = React.useState(false);
-  useEffect(() => {
-    if (currentPath.includes('trip')) {
-      setIsTripPath(true);
-    } else {
-      setIsTripPath(false);
-    }
-  }, [currentPath]);
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          display: isTripPath ? 'none' : undefined,
+          display: currentPath.includes('trip') ? 'none' : undefined,
           height: 110,
           borderTopWidth: 0,
           elevation: 0,
