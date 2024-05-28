@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, useColorScheme, View } from 'react-native';
 
-import { Icon, IconByKey } from '@/components/atoms/Icon';
+import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 import styling from '@/stylings';
 
 interface IconButtonProps {
-  icon: IconByKey;
+  icon: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
@@ -61,7 +61,11 @@ export function IconButton({
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
         disabled={disabled}
       >
-        <Icon icon={icon} size={40} color={`${variant[buttonType].fill}`} />
+        <SwitchArrow
+          fill={`${variant[buttonType].fill}`}
+          width={40}
+          height={40}
+        />
       </TouchableOpacity>
     </View>
   );

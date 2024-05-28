@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, useColorScheme, View } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/Logo';
+import { Logo } from '@/components/atoms/icons/Logo';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
 
 interface CalibrationHeaderProps {
@@ -15,10 +15,7 @@ export function CalibrationHeader({ currentStep }: CalibrationHeaderProps) {
   return (
     <>
       <View className="flex items-center pb-6">
-        <Logo
-          icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
-          size={85}
-        />
+        <Logo colorscheme={colorscheme} width={85} height={85} />
       </View>
       <Header
         classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}

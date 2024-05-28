@@ -8,12 +8,9 @@ import {
   View,
 } from 'react-native';
 
-import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { SummaryProps } from '@/types/Valhalla-Types';
-
-export type IconByKey = keyof typeof icons;
 
 interface RouteOverviewProps {
   onCloseClick: () => void;

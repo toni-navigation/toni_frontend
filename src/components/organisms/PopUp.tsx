@@ -1,10 +1,7 @@
 import React from 'react';
 import { Modal, SafeAreaView, useColorScheme, View } from 'react-native';
 
-import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
-
-export type IconByKey = keyof typeof icons;
 
 interface PopUpProps {
   visible: boolean;

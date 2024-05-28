@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
-import { ArrowLeft } from '@/components/atoms/icons/ArrowLeft';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -112,7 +111,6 @@ export default function HomePage() {
         >
           Hallo
         </Header>
-        <ArrowLeft />
         <GeocoderAutocomplete
           value={origin}
           placeholder="Start eingeben"

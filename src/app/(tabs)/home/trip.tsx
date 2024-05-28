@@ -18,6 +18,7 @@ import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
+import { Pause } from '@/components/atoms/icons/Pause';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
@@ -220,7 +221,17 @@ export default function TripPage() {
         </Text>
       </PopUp>
       {pause ? (
-        <Card iconKey="pause">Pause</Card>
+        <Card
+          icon={
+            <Pause
+              fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+              width={200}
+              height={200}
+            />
+          }
+        >
+          Pause
+        </Card>
       ) : (
         <>
           {currentLocation &&
@@ -269,7 +280,10 @@ export default function TripPage() {
                 nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
               }
               onReroute={rerouteHandler}
-              icon={matchIconType(calculatedManeuvers?.currentManeuver.type)}
+              icon={matchIconType(
+                calculatedManeuvers?.currentManeuver.type,
+                colorscheme
+              )}
               instruction={instruction}
             />
           </PagerView>

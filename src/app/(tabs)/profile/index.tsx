@@ -4,6 +4,8 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
+import { StepLength } from '@/components/atoms/icons/StepLength';
+import styling from '@/stylings';
 
 export default function ProfilePage() {
   const colorscheme = useColorScheme();
@@ -25,7 +27,17 @@ export default function ProfilePage() {
           onPress={() => {
             router.push('/profile/calibration');
           }}
-          icon="steplength"
+          icon={
+            <StepLength
+              fill={
+                colorscheme === 'light'
+                  ? styling.colors['primary-color-dark']
+                  : styling.colors['primary-color-light']
+              }
+              width={50}
+              height={50}
+            />
+          }
         >
           Schrittlänge
         </MenuButton>

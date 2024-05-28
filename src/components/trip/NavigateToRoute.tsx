@@ -4,12 +4,15 @@ import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import { Subscription } from 'expo-modules-core';
 import { Magnetometer } from 'expo-sensors';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Vibration } from 'react-native';
+import { SafeAreaView, useColorScheme, Vibration } from 'react-native';
 
+import { ArrowStraight } from '@/components/atoms/icons/ArrowStraight';
+import { Cross } from '@/components/atoms/icons/Cross';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { calculateOrientation } from '@/functions/calculateOrientation';
 import { directionToMove } from '@/functions/directionToMove';
+import stylings from '@/stylings';
 import { CurrentLocationProps } from '@/types/Types';
 
 export const ACCURACY_THRESHOLD = 10;
@@ -26,6 +29,8 @@ export function NavigateToRoute({
   nearestPoint,
   children,
 }: RouteToStartProps) {
+  const colorscheme = useColorScheme();
+
   const [{ x, y }, setData] = useState({
     x: 0,
     y: 0,
@@ -74,6 +79,19 @@ export function NavigateToRoute({
       Vibration.cancel();
     };
   }, [direction]);
+  const icon = direction ? (
+    <ArrowStraight
+      fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+      width={200}
+      height={200}
+    />
+  ) : (
+    <Cross
+      fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+      width={200}
+      height={200}
+    />
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-background-light">
@@ -83,7 +101,7 @@ export function NavigateToRoute({
             text={`Dein GPS Signal ist auf ${currentLocation?.coords?.accuracy?.toFixed(2) ?? 0} Meter ungenau.`}
           />
         )}
-      <Card iconKey={direction ? 'arrowStraight' : 'cross'}>
+      <Card icon={icon}>
         Die Route ist {distanceToStart.toFixed(2)} Meter entfernt.
         {direction
           ? '\nDie Route befindet sich in dieser Richtung.'

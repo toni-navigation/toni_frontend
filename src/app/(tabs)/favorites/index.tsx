@@ -11,7 +11,9 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
+import { Heart } from '@/components/atoms/icons/Heart';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
+import styling from '@/stylings';
 
 export default function FavoritesPage() {
   const colorscheme = useColorScheme();
@@ -33,8 +35,8 @@ export default function FavoritesPage() {
             </Text>
           ) : (
             favorites.map((favorite, index) => (
-              // eslint-disable-next-line react/no-array-index-key
               <MenuButton
+                // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 onPress={() => {
                   router.push({
@@ -42,7 +44,18 @@ export default function FavoritesPage() {
                     params: { id: favorite.id },
                   });
                 }}
-                icon="heart"
+                // icon="heart"
+                icon={
+                  <Heart
+                    fill={
+                      colorscheme === 'light'
+                        ? styling.colors['primary-color-dark']
+                        : styling.colors['primary-color-light']
+                    }
+                    width={50}
+                    height={50}
+                  />
+                }
               >
                 {favorite.title}
               </MenuButton>

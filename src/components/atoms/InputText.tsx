@@ -37,14 +37,14 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               accessibilityRole="button"
               accessibilityHint="Eingabe löschen"
               onPress={onClickDelete}
-              className="absolute top-2 right-3"
+              className={` absolute top-2 right-3`}
             >
               <Cross
-                fill={
+                fill={`${
                   colorscheme === 'light'
                     ? styling.colors['primary-color-dark']
                     : styling.colors['primary-color-light']
-                }
+                }`}
                 width={40}
                 height={40}
               />

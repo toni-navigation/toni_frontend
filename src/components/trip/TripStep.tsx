@@ -2,13 +2,12 @@ import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
-import { IconByKey } from '@/components/atoms/Icon';
 import { Card } from '@/components/organisms/Card';
 
 interface TripStepProps {
   notOnRoute: boolean;
   onReroute: () => void;
-  icon: IconByKey;
+  icon: React.ReactNode;
   instruction: string | null | undefined;
 }
 export function TripStep({
@@ -38,7 +37,7 @@ export function TripStep({
       {/*  maneuvers={data.trip.legs[0].maneuvers} */}
       {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
       {/* /> */}
-      {instruction && <Card iconKey={icon}>{instruction}</Card>}
+      {instruction && <Card icon={icon}>{instruction}</Card>}
     </SafeAreaView>
   );
 }

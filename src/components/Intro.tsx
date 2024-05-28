@@ -10,8 +10,7 @@ import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { LogoDark } from '@/components/atoms/icons/LogoDark';
-import { LogoLight } from '@/components/atoms/icons/LogoLight';
+import { Logo } from '@/components/atoms/icons/Logo';
 import { Calibration } from '@/components/calibration/Calibration';
 import styling from '@/stylings';
 
@@ -30,32 +29,17 @@ export function Intro() {
     {
       headline: 'Dein Weg',
       text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
-      icon:
-        colorscheme === 'light' ? (
-          <LogoLight height={115} width={115} />
-        ) : (
-          <LogoDark height={115} width={115} />
-        ),
+      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
     },
     {
       headline: 'Dein Klang',
       text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
-      icon:
-        colorscheme === 'light' ? (
-          <LogoLight height={115} width={115} />
-        ) : (
-          <LogoDark height={115} width={115} />
-        ),
+      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
     },
     {
       headline: 'Deine Freiheit',
       text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
-      icon:
-        colorscheme === 'light' ? (
-          <LogoLight height={115} width={115} />
-        ) : (
-          <LogoDark height={115} width={115} />
-        ),
+      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
     },
   ];
 
