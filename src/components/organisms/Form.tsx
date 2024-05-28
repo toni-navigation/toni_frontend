@@ -11,7 +11,7 @@ import {
   useFavoriteStore,
 } from '@/store/useFavoritesStore';
 
-export function Formular() {
+export function Form() {
   const [title, setTitle] = useState('');
   const [photonData, setPhotonData] =
     useState<OriginDestinationType>(undefined);

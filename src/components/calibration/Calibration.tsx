@@ -32,7 +32,7 @@ export const SPEECH_CONFIG = {
 interface CalibrationProps {
   isFromIntro?: boolean;
 }
-export function Calibration({ isFromIntro }: CalibrationProps) {
+export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
   const colorscheme = useColorScheme();
@@ -46,11 +46,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const calSteps = calibrationSteps(
-    calibration.factors,
-    calibration.meters,
-    colorscheme
-  );
+  const calSteps = calibrationSteps(calibration.factors, colorscheme);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
   const stopPedometer = async () => {
@@ -190,9 +186,12 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         {/*  onPress={resetCalibrationStore} */}
         {/*  buttonType="primary" */}
         {/* /> */}
-        <CalibrationHeader currentStep={currentStep} />
+        <CalibrationHeader
+          colorscheme={colorscheme}
+          currentStep={currentStep}
+        />
         {currentStep.forwardButtonText === undefined ? (
-          <CalibrationMode steps={steps} />
+          <CalibrationMode colorscheme={colorscheme} steps={steps} />
         ) : null}
         {(currentLocationMutation.isPending ||
           pedometerAvailableMutation.isPending ||
@@ -209,6 +208,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         currentElement={currentStep}
         isFirstStep={index === 0}
         stepText={`Schritt ${index + 1} / ${calSteps.length}`}
+        colorscheme={colorscheme}
       />
     </SafeAreaView>
   );

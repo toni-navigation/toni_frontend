@@ -18,7 +18,6 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
   ({ className, onClickDelete, ...props }, ref) => {
     const colorscheme = useColorScheme();
 
-    // TODO: add cross to delete value
     return (
       <>
         <Text
@@ -29,6 +28,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
         <View className="relative mb-2">
           <TextInput
             ref={ref}
+            testID="TextInput"
             className={`border-2 rounded-[25px] p-4 !pr-12 ${colorscheme === 'light' ? 'border-primary-color-dark' : 'border-primary-color-light text-background-light'} ${className}`}
             {...props}
           />

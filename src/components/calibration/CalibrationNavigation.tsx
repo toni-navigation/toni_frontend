@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { Dispatch, SetStateAction } from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
@@ -14,6 +14,7 @@ interface CalibrationNavigationProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   stepText: string;
+  colorscheme: ColorSchemeName;
 }
 export function CalibrationNavigation({
   setIndex,
@@ -23,9 +24,9 @@ export function CalibrationNavigation({
   isFirstStep,
   isLastStep,
   stepText,
+  colorscheme,
 }: CalibrationNavigationProps) {
   const { toggleSkipped } = useCalibrationStore((state) => state.actions);
-  const colorscheme = useColorScheme();
   const { resetCalibrationStore } = useCalibrationStore(
     (state) => state.actions
   );

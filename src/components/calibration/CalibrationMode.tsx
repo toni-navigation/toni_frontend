@@ -1,15 +1,14 @@
 import React from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, Text, View } from 'react-native';
 
 import { MusicNote } from '@/components/atoms/icons/MusicNote';
 import styling from '@/stylings';
 
 interface CalibrationModeProps {
   steps: number;
+  colorscheme: ColorSchemeName;
 }
-export function CalibrationMode({ steps }: CalibrationModeProps) {
-  const colorscheme = useColorScheme();
-
+export function CalibrationMode({ steps, colorscheme }: CalibrationModeProps) {
   return (
     <>
       <Text

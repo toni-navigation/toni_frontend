@@ -28,6 +28,7 @@ export function PopUp({
     <Modal
       animationType="slide"
       visible={visible}
+      testID="modal"
       onRequestClose={onCloseClick}
       onDismiss={onDismiss}
     >

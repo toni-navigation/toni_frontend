@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
-import { Formular } from '@/components/organisms/Formular';
+import { Form } from '@/components/organisms/Form';
 
 export default function CreatePage() {
   const colorscheme = useColorScheme();
@@ -14,7 +14,7 @@ export default function CreatePage() {
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>Favorit hinzufügen</Header>
-        <Formular />
+        <Form />
       </ScrollView>
     </SafeAreaView>
   );

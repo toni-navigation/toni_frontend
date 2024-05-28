@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "prettier:fix": "prettier --write .",
     "test": "jest",
-    "test:unit": "jest --config=jest.unit.config.js --coverage",
+    "test:unit": "jest --config=jest.unit.config.js",
     "test:integration": "jest --config=jest.integration.config.js",
     "lint": "npm run lint:tsc && npm run lint:eslint",
     "lint:tsc": "tsc --noemit",

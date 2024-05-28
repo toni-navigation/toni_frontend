@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, Text, View } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
@@ -7,9 +7,12 @@ import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps
 
 interface CalibrationHeaderProps {
   currentStep: CalibrationStepsProps;
+  colorscheme: ColorSchemeName;
 }
-export function CalibrationHeader({ currentStep }: CalibrationHeaderProps) {
-  const colorscheme = useColorScheme();
+export function CalibrationHeader({
+  currentStep,
+  colorscheme,
+}: CalibrationHeaderProps) {
   const { calibrationValueNode } = currentStep;
 
   return (

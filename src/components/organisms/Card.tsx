@@ -12,16 +12,7 @@ export function Card({ icon, children }: CardProps) {
 
   return (
     <View className="flex-1 justify-center items-center">
-      {
-        icon && icon
-        //     (
-        //   <Icon
-        //     color={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-        //     icon={iconKey}
-        //     size={200}
-        //   />
-        // )
-      }
+      {icon && icon}
 
       <Text
         className={`font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
