@@ -1,14 +1,14 @@
 import React, { forwardRef } from 'react';
 import {
+  Text,
   TextInput,
+  TouchableOpacity,
   useColorScheme,
   View,
-  Text,
-  TouchableOpacity,
 } from 'react-native';
 import { TextInputProps } from 'react-native/Libraries/Components/TextInput/TextInput';
 
-import { Icon } from '@/components/atoms/Icon';
+import { Cross } from '@/components/atoms/icons/Cross';
 import styling from '@/stylings';
 
 interface InputTextProps extends TextInputProps {
@@ -39,14 +39,14 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               onPress={onClickDelete}
               className="absolute top-2 right-3"
             >
-              <Icon
-                color={
+              <Cross
+                fill={
                   colorscheme === 'light'
                     ? styling.colors['primary-color-dark']
                     : styling.colors['primary-color-light']
                 }
-                icon="cross"
-                size={40}
+                width={40}
+                height={40}
               />
             </TouchableOpacity>
           )}

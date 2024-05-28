@@ -2,18 +2,20 @@ import { Tabs, usePathname } from 'expo-router';
 import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { Icon } from '@/components/atoms/Icon';
+import { Heart } from '@/components/atoms/icons/Heart';
+import { NavigationArrow } from '@/components/atoms/icons/NavigationArrow';
+import { Person } from '@/components/atoms/icons/Person';
 import styling from '@/stylings';
 
 const iconsArray = {
   heart: ({ color }: { color: string }) => (
-    <Icon color={color} icon="heart" size={48} />
+    <Heart fill={color} width={48} height={48} />
   ),
   navigationArrow: ({ color }: { color: string }) => (
-    <Icon color={color} icon="navigationArrow" size={41} />
+    <NavigationArrow fill={color} width={41} height={41} />
   ),
   person: ({ color }: { color: string }) => (
-    <Icon color={color} icon="person" size={48} />
+    <Person fill={color} width={48} height={48} />
   ),
 };
 export default function Layout() {

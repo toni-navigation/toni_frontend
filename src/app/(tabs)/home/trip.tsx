@@ -17,7 +17,7 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
-import { Icon } from '@/components/atoms/Icon';
+import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
@@ -241,10 +241,10 @@ export default function TripPage() {
               className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
-              <Icon
-                color={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-                size={50}
-                icon="currentLocation"
+              <CurrentLocation
+                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                width={50}
+                height={50}
               />
             </TouchableOpacity>
           </View>

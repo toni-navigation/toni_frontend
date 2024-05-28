@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, useColorScheme, View } from 'react-native';
 
-import { Icon } from '@/components/atoms/Icon';
+import { MusicNote } from '@/components/atoms/icons/MusicNote';
 import styling from '@/stylings';
 
 interface CalibrationModeProps {
@@ -18,14 +18,14 @@ export function CalibrationMode({ steps }: CalibrationModeProps) {
         Schritte: {steps}
       </Text>
       <View className="flex-1 items-center pb-6">
-        <Icon
-          icon="musicNote"
-          color={
+        <MusicNote
+          fill={
             colorscheme === 'light'
               ? styling.colors['primary-color-dark']
               : styling.colors['primary-color-light']
           }
-          size={83}
+          width={83}
+          height={83}
         />
       </View>
     </>

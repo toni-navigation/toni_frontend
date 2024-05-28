@@ -10,8 +10,8 @@ import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { IconByKey } from '@/components/atoms/Icon';
-import { Logo } from '@/components/atoms/Logo';
+import { LogoDark } from '@/components/atoms/icons/LogoDark';
+import { LogoLight } from '@/components/atoms/icons/LogoLight';
 import { Calibration } from '@/components/calibration/Calibration';
 import styling from '@/stylings';
 
@@ -22,21 +22,40 @@ export function Intro() {
 
   const colorscheme = useColorScheme();
 
-  const pagerViewData: { headline: string; text: string; icon: IconByKey }[] = [
+  const pagerViewData: {
+    headline: string;
+    text: string;
+    icon: React.ReactNode;
+  }[] = [
     {
       headline: 'Dein Weg',
       text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon:
+        colorscheme === 'light' ? (
+          <LogoLight height={115} width={115} />
+        ) : (
+          <LogoDark height={115} width={115} />
+        ),
     },
     {
       headline: 'Dein Klang',
       text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon:
+        colorscheme === 'light' ? (
+          <LogoLight height={115} width={115} />
+        ) : (
+          <LogoDark height={115} width={115} />
+        ),
     },
     {
       headline: 'Deine Freiheit',
       text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon:
+        colorscheme === 'light' ? (
+          <LogoLight height={115} width={115} />
+        ) : (
+          <LogoDark height={115} width={115} />
+        ),
     },
   ];
 
@@ -100,9 +119,7 @@ export function Intro() {
           {pagerViewData.map((data, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <View key={index} className="px-8 mt-8">
-              <View className="flex items-center pb-8">
-                <Logo icon={data.icon} size={115} />
-              </View>
+              <View className="flex items-center pb-8">{data.icon}</View>
               <View className="flex items-center">
                 <Header>{data.headline}</Header>
                 <Text
