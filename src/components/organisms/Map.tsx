@@ -115,17 +115,17 @@ export function Map({
       decodedShape &&
       maneuvers &&
       decodedShape.coordinates[
-        maneuvers[currentManeuverIndex].begin_shape_index
+        maneuvers[currentManeuverIndex].begin_shape_index || 0
       ] ? (
         <Circle
           center={{
             latitude:
               decodedShape.coordinates[
-                maneuvers[currentManeuverIndex].begin_shape_index
+                maneuvers[currentManeuverIndex].begin_shape_index || 0
               ][0],
             longitude:
               decodedShape.coordinates[
-                maneuvers[currentManeuverIndex].begin_shape_index
+                maneuvers[currentManeuverIndex].begin_shape_index || 0
               ][1],
           }}
           radius={2}

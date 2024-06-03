@@ -7,7 +7,7 @@ export const tripInstructionOutput = (
 ) => {
   if (factor) {
     const stepcount = calculateSteps(maneuver.length, factor);
-    if (stepcount > 1) {
+    if (stepcount && stepcount > 1) {
       if (
         maneuver.type === 9 ||
         maneuver.type === 10 ||
@@ -16,17 +16,17 @@ export const tripInstructionOutput = (
         maneuver.type === 15 ||
         maneuver.type === 16
       ) {
-        return `In ${stepcount} Schritten ${maneuver.instruction.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
+        return `In ${stepcount} Schritten ${maneuver.instruction?.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
       }
 
-      return `${stepcount} Schritte ${maneuver.instruction.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
+      return `${stepcount} Schritte ${maneuver.instruction?.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
     }
 
     return `${maneuver.instruction}`;
   }
 
-  if (maneuver.length * 1000 > 0) {
-    return `${maneuver.length * 1000} Meter ${maneuver.instruction.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
+  if (maneuver.length && maneuver.length * 1000 > 0) {
+    return `${maneuver.length * 1000} Meter ${maneuver.instruction?.replace(maneuver.instruction.charAt(0), maneuver.instruction.charAt(0).toLowerCase())}`;
   }
 
   return `${maneuver.instruction}`;

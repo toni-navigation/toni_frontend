@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, Text, TouchableOpacity, View } from 'react-native';
 
 interface TabBarProps {
   setPage: (page: number) => void;
   activePage: number;
+  colorscheme: ColorSchemeName;
 }
-export function TabBar({ setPage, activePage }: TabBarProps) {
-  const colorscheme = useColorScheme();
+export function TabBar({ setPage, activePage, colorscheme }: TabBarProps) {
   const activeButton =
     'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-orange-accent';
   const inactiveButton =
@@ -20,7 +20,6 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
       ? 'text-center text-base text-primary-color-dark'
       : 'text-center text-base text-primary-color-light';
 
-  // TODO: insert fontFamily via Nativewind
   return (
     <View className="flex flex-row justify-evenly mt-5">
       <TouchableOpacity
@@ -29,6 +28,7 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
         accessibilityHint="Übersicht über die komplette Route"
         onPress={() => setPage(0)}
         className={activePage === 0 ? activeButton : inactiveButton}
+        disabled={activePage === 0}
       >
         <Text
           style={{ fontFamily: 'generalSansSemi' }}
@@ -43,6 +43,7 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
         accessibilityHint="Aktuelles Manöver der Route"
         onPress={() => setPage(1)}
         className={activePage === 1 ? activeButton : inactiveButton}
+        disabled={activePage === 1}
       >
         <Text
           style={{ fontFamily: 'generalSansSemi' }}

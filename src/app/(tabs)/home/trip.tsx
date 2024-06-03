@@ -213,6 +213,7 @@ export default function TripPage() {
         onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Schließen"
         onDismiss={() => router.back()}
+        colorscheme={colorscheme}
       >
         <Text
           className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
@@ -244,6 +245,7 @@ export default function TripPage() {
           <TabBar
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
+            colorscheme={colorscheme}
           />
           <View className="flex flex-row justify-end mx-5 my-5">
             <TouchableOpacity
@@ -270,6 +272,8 @@ export default function TripPage() {
                 calculatedManeuvers.maneuverIndex
               )}
               key="0"
+              colorscheme={colorscheme}
+              calibration={calibration}
             />
             <TripStep
               key="1"

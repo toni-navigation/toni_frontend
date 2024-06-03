@@ -90,6 +90,7 @@ export default function HomePage() {
           startNavigationHandler();
         }}
         onCloseButtonText="Alles klar!"
+        colorscheme={colorscheme}
       >
         <Header
           classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}

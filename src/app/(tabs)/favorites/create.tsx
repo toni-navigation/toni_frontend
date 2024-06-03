@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
@@ -6,6 +7,7 @@ import { Form } from '@/components/organisms/Form';
 
 export default function CreatePage() {
   const colorscheme = useColorScheme();
+  const { id, title, address } = useLocalSearchParams();
 
   return (
     <SafeAreaView

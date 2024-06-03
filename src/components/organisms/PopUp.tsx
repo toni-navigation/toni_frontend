@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, SafeAreaView, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, Modal, SafeAreaView, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 
@@ -11,6 +11,7 @@ interface PopUpProps {
   onCloseButtonText: string;
   children: React.ReactNode;
   onDismiss?: () => void;
+  colorscheme: ColorSchemeName;
 }
 
 export function PopUp({
@@ -21,9 +22,8 @@ export function PopUp({
   onCloseClick,
   onCloseButtonText,
   onDismiss,
+  colorscheme,
 }: PopUpProps) {
-  const colorscheme = useColorScheme();
-
   return (
     <Modal
       animationType="slide"

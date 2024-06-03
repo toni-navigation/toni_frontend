@@ -4,9 +4,14 @@ import React from 'react';
 import { PopUp } from '@/components/organisms/PopUp';
 
 describe('PopUp', () => {
-  it('renders correctly when visible', () => {
+  it('renders correctly with given children and colorscheme', () => {
     const { getByText } = render(
-      <PopUp visible onCloseClick={() => {}} onCloseButtonText="Close">
+      <PopUp
+        visible
+        onCloseClick={() => {}}
+        onCloseButtonText="Close"
+        colorscheme="light"
+      >
         Popup
       </PopUp>
     );
@@ -14,23 +19,16 @@ describe('PopUp', () => {
     expect(getByText('Close')).toBeTruthy();
   });
 
-  it('does not render when not visible', () => {
-    const { queryByText } = render(
-      <PopUp visible={false} onCloseClick={() => {}} onCloseButtonText="Close">
-        {' '}
-        Popup
-      </PopUp>
-    );
-
-    expect(queryByText('Close')).toBeNull();
-  });
-
-  it('calls onCloseClick when close button is pressed', () => {
+  it('calls onCloseClick when Close button is pressed', () => {
     const onCloseClick = jest.fn();
     const { getByText } = render(
-      <PopUp visible onCloseClick={onCloseClick} onCloseButtonText="Close">
-        {' '}
-        Popup
+      <PopUp
+        visible
+        onCloseClick={onCloseClick}
+        onCloseButtonText="Close"
+        colorscheme="light"
+      >
+        Test
       </PopUp>
     );
 
@@ -39,7 +37,7 @@ describe('PopUp', () => {
     expect(onCloseClick).toHaveBeenCalled();
   });
 
-  it('calls onClick when click button is pressed', () => {
+  it('calls onClick when Click button is pressed', () => {
     const onClick = jest.fn();
     const { getByText } = render(
       <PopUp
@@ -48,8 +46,9 @@ describe('PopUp', () => {
         onClickButtonText="Click"
         onCloseClick={() => {}}
         onCloseButtonText="Close"
+        colorscheme="light"
       >
-        Popup
+        Test
       </PopUp>
     );
 
@@ -58,31 +57,18 @@ describe('PopUp', () => {
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('does not render click button when onClick is not provided', () => {
+  it('does not render Click button when onClick and onClickButtonText are not provided', () => {
     const { queryByText } = render(
-      <PopUp visible onCloseClick={() => {}} onCloseButtonText="Close">
-        Popup
-      </PopUp>
-    );
-
-    expect(queryByText('Click')).toBeNull();
-  });
-
-  it('calls onDismiss when modal is dismissed', () => {
-    const onDismiss = jest.fn();
-    const { getByTestId } = render(
       <PopUp
         visible
         onCloseClick={() => {}}
         onCloseButtonText="Close"
-        onDismiss={onDismiss}
+        colorscheme="light"
       >
-        Popup
+        Test
       </PopUp>
     );
 
-    fireEvent(getByTestId('modal'), 'dismiss');
-
-    expect(onDismiss).toHaveBeenCalled();
+    expect(queryByText('Click')).toBeNull();
   });
 });

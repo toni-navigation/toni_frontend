@@ -30,7 +30,7 @@ describe('CalibrationHeader', () => {
   it('renders correctly when calibrationValueNode is null', () => {
     const mockCurrentStepWithoutNode: CalibrationStepsProps = {
       text: 'Test Step',
-      calibrationValueNode: null,
+      calibrationValueNode: undefined,
     };
     const { getByText, queryByText } = render(
       <CalibrationHeader

@@ -1,20 +1,22 @@
 import React from 'react';
-import { FlatList, SafeAreaView, useColorScheme, View } from 'react-native';
+import { ColorSchemeName, FlatList, SafeAreaView, View } from 'react-native';
 
 import { ListItem } from '@/components/atoms/ListItem';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { CalibrationProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
+interface TripListProps {
+  maneuvers: ValhallaManeuverProps[];
+  calibration: CalibrationProps;
+  colorscheme: ColorSchemeName;
+}
 export function TripList({
   maneuvers,
-}: {
-  maneuvers: ValhallaManeuverProps[];
-}) {
-  const calibration = useCalibrationStore((state) => state.calibration);
-  const colorscheme = useColorScheme();
-
+  calibration,
+  colorscheme,
+}: TripListProps) {
   return (
     <SafeAreaView className="flex-1 mx-5">
       <FlatList

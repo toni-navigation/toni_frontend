@@ -19,20 +19,21 @@ export interface TripProps {
   language: string;
 }
 export interface ValhallaManeuverProps {
-  type: number;
-  instruction: string;
-  verbal_transition_alert_instruction: string;
-  verbal_succinct_transition_instruction: string;
-  verbal_pre_transition_instruction: string;
-  verbal_post_transition_instruction: string;
-  street_names: string[];
-  time: number;
-  length: number;
-  cost: number;
-  begin_shape_index: number;
-  end_shape_index: number;
-  travel_mode: string;
-  travel_type: string;
+  type?: number;
+  instruction?: string;
+  verbal_transition_alert_instruction?: string;
+  verbal_succinct_transition_instruction?: string;
+  verbal_pre_transition_instruction?: string;
+  verbal_post_transition_instruction?: string;
+  street_names?: string[];
+  time?: number;
+  length?: number;
+  cost?: number;
+  begin_shape_index?: number;
+  end_shape_index?: number;
+  travel_mode?: string;
+  travel_type?: string;
+  rough?: boolean;
 }
 
 export interface ValhallaLegProps {

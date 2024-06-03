@@ -7,7 +7,7 @@ import { ArrowStraight } from '@/components/atoms/icons/ArrowStraight';
 import stylings from '@/stylings';
 
 export const matchIconType = (
-  directionType: number,
+  directionType: number | undefined,
   colorscheme: ColorSchemeName
 ): React.ReactNode => {
   switch (directionType) {

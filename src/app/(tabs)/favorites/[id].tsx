@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { PopUp } from '@/components/organisms/PopUp';
+import { photonValue } from '@/functions/photonValue';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritePage() {
@@ -20,6 +21,7 @@ export default function FavoritePage() {
 
   const colorscheme = useColorScheme();
   const { id } = useLocalSearchParams();
+
   const favorite = favorites.find((favoriteItem) => favoriteItem.id === id);
   if (!favorite) return null;
 
@@ -70,17 +72,18 @@ export default function FavoritePage() {
           <PopUp
             visible={showPopUp}
             onClick={() => {
-              Promise.resolve(deleteFavorite(favorite.id)).then(() =>
-                router.back()
-              );
+              setShowPopUp(false);
+              deleteFavorite(favorite.id);
+              router.back();
             }}
             onClickButtonText="Ja"
             onCloseClick={() => setShowPopUp(false)}
             onCloseButtonText="Nein"
-            onDismiss={() => setShowPopUp(false)}
+            colorscheme={colorscheme}
+            // onDismiss={() => {}}
           >
             <Text
-              className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
+              className={`text-2xl text-text-col font-atkinsonRegular text-center text-text-color-${colorscheme}`}
             >
               Möchtest du den Favorit {favorite.title} wirklich löschen?
             </Text>
@@ -88,7 +91,19 @@ export default function FavoritePage() {
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">
-        <Button onPress={() => {}} buttonType="primaryOutline">
+        <Button
+          onPress={() => {
+            router.push({
+              pathname: '/favorites/create',
+              params: {
+                id: favorite.id,
+                title: favorite.title,
+                address: photonValue(favorite.address),
+              },
+            });
+          }}
+          buttonType="primaryOutline"
+        >
           Bearbeiten
         </Button>
         <Button
