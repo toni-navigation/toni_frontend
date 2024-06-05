@@ -20,7 +20,7 @@ type FavoriteState = {
     deleteFavorite: (id: string) => void;
     resetFavoritesStore: () => void;
     updateFavoriteItem: (
-      title: string,
+      id: string,
       newTitle: string,
       newAddress: OriginDestinationType
     ) => void;
@@ -51,14 +51,14 @@ export const useFavoriteStore = create<FavoriteState>()(
             }
           }),
         updateFavoriteItem: (
-          title: string,
+          id: string,
           newTitle: string,
           newAddress: OriginDestinationType
         ) =>
           set((state) => ({
             favorites: state.favorites.map((item) =>
-              item.title === title
-                ? { ...item, address: newAddress, title: newTitle }
+              item.id === id
+                ? { ...item, title: newTitle, address: newAddress }
                 : item
             ),
           })),

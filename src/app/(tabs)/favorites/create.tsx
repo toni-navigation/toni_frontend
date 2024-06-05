@@ -4,10 +4,21 @@ import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { Form } from '@/components/organisms/Form';
+import { OriginDestinationType } from '@/store/useTripStore';
+
+export type SearchParamType = {
+  id: string;
+  title: string;
+  address: string | undefined;
+};
 
 export default function CreatePage() {
   const colorscheme = useColorScheme();
-  const { id, title, address } = useLocalSearchParams();
+  const { id, title, address } = useLocalSearchParams() as SearchParamType;
+  let addressParam: OriginDestinationType;
+  if (address) {
+    addressParam = JSON.parse(address);
+  }
 
   return (
     <SafeAreaView
@@ -15,8 +26,11 @@ export default function CreatePage() {
     >
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header>Favorit hinzufügen</Header>
-        <Form />
+        <Header>
+          {id === undefined ? 'Favorit hinzufügen' : 'Favorit bearbeiten'}
+        </Header>
+
+        <Form idProp={id} titleProp={title} addressProp={addressParam} />
       </ScrollView>
     </SafeAreaView>
   );

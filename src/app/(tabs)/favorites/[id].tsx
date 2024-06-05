@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { PopUp } from '@/components/organisms/PopUp';
-import { photonValue } from '@/functions/photonValue';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritePage() {
@@ -83,7 +82,7 @@ export default function FavoritePage() {
             // onDismiss={() => {}}
           >
             <Text
-              className={`text-2xl text-text-col font-atkinsonRegular text-center text-text-color-${colorscheme}`}
+              className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
             >
               Möchtest du den Favorit {favorite.title} wirklich löschen?
             </Text>
@@ -98,7 +97,7 @@ export default function FavoritePage() {
               params: {
                 id: favorite.id,
                 title: favorite.title,
-                address: photonValue(favorite.address),
+                address: JSON.stringify(favorite.address),
               },
             });
           }}
