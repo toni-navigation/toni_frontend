@@ -88,7 +88,19 @@ export default function FavoritePage() {
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">
-        <Button onPress={() => {}} buttonType="primaryOutline">
+        <Button
+          onPress={() => {
+            router.push({
+              pathname: '/favorites/create',
+              params: {
+                id: favorite.id,
+                title: favorite.title,
+                address: JSON.stringify(favorite.address),
+              },
+            });
+          }}
+          buttonType="primaryOutline"
+        >
           Bearbeiten
         </Button>
         <Button

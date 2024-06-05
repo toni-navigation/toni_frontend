@@ -25,6 +25,8 @@ function FavoritesLayout() {
         options={{
           headerShown: true,
           headerTitle: '',
+          headerBackTitleStyle: {fontFamily: 'atkinsonRegular',
+          },
         }}
       />
     </Stack>

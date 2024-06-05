@@ -11,18 +11,29 @@ import {
   useFavoriteStore,
 } from '@/store/useFavoritesStore';
 
-export function Form() {
-  const [title, setTitle] = useState('');
+interface FormProps {
+  idProp: string | undefined;
+  titleProp: string | undefined;
+  addressProp: OriginDestinationType;
+}
+
+export function Form({ idProp, titleProp, addressProp }: FormProps) {
+  const [title, setTitle] = useState(titleProp);
   const [photonData, setPhotonData] =
-    useState<OriginDestinationType>(undefined);
+    useState<OriginDestinationType>(addressProp);
   const ref = useRef<TextInput>(null);
 
-  const { addFavorite } = useFavoriteStore((state) => state.actions);
+  const { addFavorite, updateFavoriteItem } = useFavoriteStore(
+    (state) => state.actions
+  );
 
   const getAddressHandler = () => {
-    if (photonData && title) {
-      const id = uuid.v4();
-      addFavorite(id, title, photonData);
+    if (idProp && photonData && title) {
+      updateFavoriteItem(idProp, title, photonData);
+      router.back();
+    } else if (photonData && title) {
+      const newid = uuid.v4();
+      addFavorite(newid, title, photonData);
       router.back();
     }
   };
