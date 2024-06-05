@@ -24,7 +24,7 @@ export default function FavoritesPage() {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
       {/* eslint-disable-next-line react/jsx-no-undef */}
-      <ScrollView className="px-8 my-8">
+      <ScrollView className="px-8 my-4">
         <Header>Meine Favoriten</Header>
         <View>
           {favorites.length === 0 ? (
