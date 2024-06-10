@@ -26,6 +26,7 @@ import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 30;
+const UNREALISTIC_CALIBRATION = 10;
 export const SPEECH_CONFIG = {
   language: 'de',
 };
@@ -71,7 +72,11 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       fallback.current || _start,
       currentPositionData
     );
-    if (distanceInMeter === null) {
+
+    if (
+      distanceInMeter === null ||
+      distanceInMeter <= UNREALISTIC_CALIBRATION
+    ) {
       Speech.speak(
         `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`,
         SPEECH_CONFIG
@@ -79,6 +84,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
 
       return;
     }
+
     setIndex(index + 1);
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,

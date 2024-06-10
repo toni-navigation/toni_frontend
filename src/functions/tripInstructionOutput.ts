@@ -3,7 +3,7 @@ import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
 export const tripInstructionOutput = (
   maneuver: ValhallaManeuverProps,
-  factor: number
+  factor: number | null
 ) => {
   if (factor) {
     const stepcount = calculateSteps(maneuver.length, factor);

@@ -22,7 +22,9 @@ export const calibrationSteps = (
         className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
         testID="calibrationValue"
       >
-        {factors ? getCalibrationValue(factors) : 0} m
+        {factors && getCalibrationValue(factors)
+          ? `${getCalibrationValue(factors)} m`
+          : '-'}
       </Text>
     ),
   },
@@ -47,7 +49,11 @@ export const calibrationSteps = (
   },
   {
     forwardButtonText: 'Fertig',
-    text: `Deine kalibrierte Schrittlänge beträgt ${factors ? getCalibrationValue(factors) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
+    text: `Deine kalibrierte Schrittlänge beträgt ${
+      factors && getCalibrationValue(factors)
+        ? `${getCalibrationValue(factors)} m`
+        : '-'
+    }.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
     backButtonText: 'Zurück',
   },
 ];

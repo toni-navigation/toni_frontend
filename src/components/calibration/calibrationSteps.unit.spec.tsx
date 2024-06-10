@@ -8,7 +8,7 @@ describe('calibrationSteps', () => {
     const steps = calibrationSteps([1, 2, 3], 'light');
     expect(steps.length).toBe(6);
     const { getByTestId } = render(
-      steps[0].calibrationValueNode ?? <Text>0 m</Text>
+      steps[0].calibrationValueNode ?? <Text>-</Text>
     );
     expect(getByTestId('calibrationValue')).toBeTruthy();
   });
@@ -17,7 +17,7 @@ describe('calibrationSteps', () => {
     const steps = calibrationSteps([1, 2, 3], 'dark');
     expect(steps.length).toBe(6);
     const { getByTestId } = render(
-      steps[0].calibrationValueNode ?? <Text>0 m</Text>
+      steps[0].calibrationValueNode ?? <Text>-</Text>
     );
     expect(getByTestId('calibrationValue')).toBeTruthy();
   });
@@ -26,6 +26,6 @@ describe('calibrationSteps', () => {
     const steps = calibrationSteps(undefined, 'light');
     expect(steps.length).toBe(6);
     const { getByText } = render(<Text>{steps[0].calibrationValueNode}</Text>);
-    expect(getByText('0 m')).toBeTruthy();
+    expect(getByText('-')).toBeTruthy();
   });
 });
