@@ -9,7 +9,7 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import Song from '@/assets/Testtrack.mp3';
+import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
