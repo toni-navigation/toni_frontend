@@ -36,7 +36,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       vars:
-        XCODE_WORKSPACE: 'toni.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_WORKSPACE: 'project.xcworkspace' # <-- Put the name of your Xcode workspace here
         XCODE_SCHEME: 'toni' # <-- Put the name of your Xcode scheme here
         BUNDLE_ID: 'io.toni.app' # <-- Put your Bundle Id here e.g com.domain.myapp
         APP_ID: 1616629701 # <-- Put the app id number here. This is found in App Store Connect > App > General > App Information
