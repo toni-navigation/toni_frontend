@@ -13,7 +13,7 @@ const INITIAL_CALIBRATION: CalibrationProps = {
 
 type CalibrationState = {
   calibration: CalibrationProps;
-  skipped: boolean;
+  showedIntro: boolean;
   actions: {
     addCalibration: (
       start: CurrentLocationType,
@@ -21,13 +21,13 @@ type CalibrationState = {
       steps: number
     ) => void;
     resetCalibrationStore: () => void;
-    toggleSkipped: () => void;
+    shownIntroHandler: () => void;
   };
 };
 
 const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
   calibration: INITIAL_CALIBRATION,
-  skipped: false,
+  showedIntro: false,
 };
 
 export const useCalibrationStore = create<CalibrationState>()(
@@ -42,8 +42,8 @@ export const useCalibrationStore = create<CalibrationState>()(
             state.calibration.meters.push(distanceInMeter);
             state.calibration.factors.push(distanceInMeter / steps);
           }),
-        toggleSkipped: () =>
-          set((state) => ({ ...state, skipped: !state.skipped })),
+        shownIntroHandler: () =>
+          set((state) => ({ ...state, showedIntro: true })),
         resetCalibrationStore: () =>
           set((state) => ({ ...state, ...defaultCalibrationState })),
       },

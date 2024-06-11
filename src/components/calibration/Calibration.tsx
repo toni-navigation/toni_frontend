@@ -67,7 +67,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       SPEECH_CONFIG
     );
     const currentPositionData = await currentLocationMutation.mutateAsync();
-    addCalibration(fallback.current || _start, currentPositionData, _steps);
     const distanceInMeter = getDistanceInMeter(
       fallback.current || _start,
       currentPositionData
@@ -85,7 +84,8 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       return;
     }
 
-    setIndex(index + 1);
+    addCalibration(fallback.current || _start, currentPositionData, _steps);
+    setIndex((prevState) => prevState + 1);
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG

@@ -15,7 +15,7 @@ export default function Index() {
     (state) => state.currentLocation
   );
   const calibration = useCalibrationStore((state) => state.calibration);
-  const skipped = useCalibrationStore((state) => state.skipped);
+  const showedIntro = useCalibrationStore((state) => state.showedIntro);
 
   useEffect(() => {
     (async () => {
@@ -54,7 +54,7 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  if (!skipped && calibration.factors.length === 0) {
+  if (!showedIntro) {
     return <Intro />;
   }
 

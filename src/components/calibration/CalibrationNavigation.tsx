@@ -26,14 +26,14 @@ export function CalibrationNavigation({
   stepText,
   colorscheme,
 }: CalibrationNavigationProps) {
-  const { toggleSkipped } = useCalibrationStore((state) => state.actions);
+  const { shownIntroHandler } = useCalibrationStore((state) => state.actions);
   const { resetCalibrationStore } = useCalibrationStore(
     (state) => state.actions
   );
   const backButtonHandler = () => {
     const skip = isFromIntro && isFirstStep;
     if (skip) {
-      toggleSkipped();
+      shownIntroHandler();
 
       return;
     }
@@ -53,7 +53,7 @@ export function CalibrationNavigation({
 
   const nextButtonHandler = () => {
     if (isFromIntro && isLastStep) {
-      router.setParams({});
+      shownIntroHandler();
       router.replace({ pathname: '/home/' });
 
       return;
