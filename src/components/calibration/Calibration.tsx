@@ -2,12 +2,7 @@ import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  useColorScheme,
-} from 'react-native';
+import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
@@ -15,7 +10,7 @@ import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
 import { calibrationSteps } from '@/components/calibration/calibrationSteps';
-import { ACCURACY_THRESHOLD } from '@/components/trip/NavigateToRoute';
+import { AlertBar } from '@/components/organisms/AlertBar';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -50,6 +45,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const calSteps = calibrationSteps(calibration.factors, colorscheme);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
+  const [showAlertBar, setShowAlertBar] = useState<number>();
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -84,7 +80,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       return;
     }
 
-    addCalibration(fallback.current || _start, currentPositionData, _steps);
+    addCalibration(distanceInMeter, _steps);
     setIndex((prevState) => prevState + 1);
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
@@ -110,23 +106,17 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     await speakMutation.mutateAsync(
       'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.'
     );
-    // Speech.speak(
-    //   'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
-    //   SPEECH_CONFIG
-    // );
+
     setSteps(0);
     const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     const currentPositionData = await currentLocationMutation.mutateAsync();
-    if (
-      currentPositionData?.coords.accuracy &&
-      currentPositionData.coords.accuracy > ACCURACY_THRESHOLD
-    ) {
-      await speakMutation.mutateAsync(
-        'Das GPS ist ungenau. Probiere es erneut oder versuche es an einem anderen Ort nochmal.'
-      );
-
-      return;
-    }
+    // TODO Accuracy
+    // if (
+    //   currentPositionData?.coords.accuracy &&
+    //   currentPositionData.coords.accuracy > ACCURACY_THRESHOLD
+    // ) {
+    //   setShowAlertBar(currentPositionData?.coords.accuracy);
+    // }
     if (!pedometerAvailable) {
       // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
       await speakMutation.mutateAsync(
@@ -166,15 +156,17 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       );
     }
 
+    const isLoading =
+      currentLocationMutation.isPending ||
+      pedometerAvailableMutation.isPending ||
+      speakMutation.isPending ||
+      startSoundMutation.isPending;
+
     return (
       <Button
         buttonType="primary"
-        disabled={
-          currentLocationMutation.isPending ||
-          pedometerAvailableMutation.isPending ||
-          speakMutation.isPending ||
-          startSoundMutation.isPending
-        }
+        disabled={isLoading}
+        isLoading={isLoading}
         onPress={startPedometer}
       >
         Start Kalibrierung
@@ -186,6 +178,11 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
     >
+      {showAlertBar && (
+        <AlertBar
+          text={`Dein GPS Signal ist auf ${showAlertBar ?? 0} Meter ungenau.`}
+        />
+      )}
       <ScrollView className="px-8 mt-8">
         {/* <IconButton */}
         {/*  icon="cross" */}
@@ -199,12 +196,12 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         {currentStep.forwardButtonText === undefined ? (
           <CalibrationMode colorscheme={colorscheme} steps={steps} />
         ) : null}
-        {(currentLocationMutation.isPending ||
-          pedometerAvailableMutation.isPending ||
-          speakMutation.isPending ||
-          startSoundMutation.isPending) && (
-          <ActivityIndicator className="mt-4 h-[100px]" size="large" />
-        )}
+        {/* {(currentLocationMutation.isPending || */}
+        {/*  pedometerAvailableMutation.isPending || */}
+        {/*  speakMutation.isPending || */}
+        {/*  startSoundMutation.isPending) && ( */}
+        {/*  <ActivityIndicator className="mt-4 h-[100px]" size="large" /> */}
+        {/* )} */}
       </ScrollView>
       <CalibrationNavigation
         setIndex={setIndex}

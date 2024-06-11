@@ -1,11 +1,17 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme } from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
 
 interface ButtonProps {
   children: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
+  isLoading?: boolean;
 }
 
 export function Button({
@@ -13,6 +19,7 @@ export function Button({
   disabled,
   onPress,
   buttonType,
+  isLoading,
 }: ButtonProps) {
   const colorscheme = useColorScheme();
   const variant = {
@@ -52,22 +59,38 @@ export function Button({
     }
   };
 
+  const accessibilityOutput = () => {
+    if (disabled && isLoading) {
+      return `${children} nicht nutzbar, wird geladen`;
+    }
+    if (disabled) {
+      return `${children} nicht nutzbar`;
+    }
+
+    return `${children}`;
+  };
+
   return (
     <TouchableOpacity
-      accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-      className={`h-20 flex justify-center py-2 px-4 rounded-[35px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+      accessibilityHint={accessibilityOutput()}
+      className={`h-20 flex justify-center py-2 px-4 rounded-[35px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-50'} items-center`}
       onPress={handlePress}
       accessibilityRole="button"
-      accessibilityLabel={
-        disabled ? `${children} nicht nutzbar` : `${children}`
-      }
+      accessibilityLabel={accessibilityOutput()}
       disabled={disabled}
     >
-      <Text
-        className={`text-center text-lg font-generalSansSemi ${variant[buttonType].text}`}
-      >
-        {children}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator
+          size="small"
+          color={colorscheme === 'light' ? 'black' : 'white'}
+        />
+      ) : (
+        <Text
+          className={`text-lg font-generalSansSemi ${variant[buttonType].text}`}
+        >
+          {children}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }
