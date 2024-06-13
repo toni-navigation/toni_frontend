@@ -17,7 +17,9 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
+import { Flag } from '@/components/atoms/icons/Flag';
 import { Pause } from '@/components/atoms/icons/Pause';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
@@ -156,6 +158,35 @@ export default function TripPage() {
     }
   };
 
+  const reverseDestination = useReverseData();
+
+  const createDestinationPhotonValue = async () => {
+    if (tripData.destination) {
+      const destinationCoordinates = parseCoordinate(tripData.destination);
+      const destinationPhotonFeatureCollection =
+        await reverseDestination.mutateAsync({
+          lat: destinationCoordinates.lat,
+          lon: destinationCoordinates.lon,
+        });
+      router.replace('/favorites');
+      router.push({
+        pathname: '/favorites/create',
+        params: {
+          address: JSON.stringify(
+            destinationPhotonFeatureCollection.features[0]
+          ),
+        },
+      });
+      // console.log(tripData.destination);
+      // console.log();
+    }
+  };
+
+  const isFinished =
+    data &&
+    calculatedManeuvers?.maneuverIndex ===
+      data.trip.legs[0].maneuvers.length - 1;
+
   if (isPending) {
     return (
       <View>
@@ -169,27 +200,27 @@ export default function TripPage() {
     return <Error error={error.message} />;
   }
 
-  if (notOnRoute) {
-    return (
-      <NavigateToRoute
-        currentLocation={currentLocation}
-        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-        nearestPoint={nearestPoint}
-      >
-        <View />
-        {/* <Map */}
-        {/*  origin={parseCoordinate(tripData.origin)} */}
-        {/*  destination={{ */}
-        {/*    lat: nearestPoint.geometry.coordinates[0], */}
-        {/*    lon: nearestPoint.geometry.coordinates[1], */}
-        {/*  }} */}
-        {/*  nearestPoint={nearestPoint} */}
-        {/*  decodedShape={decodedShape} */}
-        {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-        {/* /> */}
-      </NavigateToRoute>
-    );
-  }
+  // if (notOnRoute) {
+  // return (
+  //  <NavigateToRoute
+  //   currentLocation={currentLocation}
+  //  distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+  //  nearestPoint={nearestPoint}
+  // >
+  //  <View />
+  // {/* <Map */}
+  // {/*  origin={parseCoordinate(tripData.origin)} */}
+  // {/*  destination={{ */}
+  // {/*    lat: nearestPoint.geometry.coordinates[0], */}
+  //   {/*    lon: nearestPoint.geometry.coordinates[1], */}
+  //  {/*  }} */}
+  //   {/*  nearestPoint={nearestPoint} */}
+  //  {/*  decodedShape={decodedShape} */}
+  // {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+  // {/* /> */}
+  // </NavigateToRoute>
+  // );
+  // }
 
   if (data && showTripOverview) {
     return (
@@ -197,6 +228,46 @@ export default function TripPage() {
         onCloseClick={() => setShowTripOverview(false)}
         summary={data.trip.summary}
       />
+    );
+  }
+
+  if (isFinished) {
+    return (
+      <SafeAreaView
+        className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+      >
+        <View className="flex-1 px-8 my-8">
+          <Header
+            classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
+          >
+            Geschafft !
+          </Header>
+
+          <Card
+            icon={
+              <Flag
+                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                width={150}
+                height={150}
+              />
+            }
+          >
+            Ziel erreicht !
+          </Card>
+        </View>
+
+        <View className="mx-5 mb-5">
+          <Button
+            onPress={createDestinationPhotonValue}
+            buttonType="accentOutline"
+          >
+            Zu Favoriten hinzufügen
+          </Button>
+          <Button onPress={() => router.back()} buttonType="accent">
+            Fertig!
+          </Button>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -221,17 +292,18 @@ export default function TripPage() {
           Möchtest du die Navigation wirklich beenden?
         </Text>
       </PopUp>
+
       {pause ? (
         <Card
           icon={
             <Pause
               fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-              width={200}
-              height={200}
+              width={150}
+              height={150}
             />
           }
         >
-          Pause
+          Pause !
         </Card>
       ) : (
         <>

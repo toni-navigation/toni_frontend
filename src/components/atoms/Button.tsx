@@ -64,7 +64,7 @@ export function Button({
       disabled={disabled}
     >
       <Text
-        className={`text-center text-lg font-generalSansSemi ${variant[buttonType].text}`}
+        className={`text-center text-2xl font-generalSansSemi ${variant[buttonType].text}`}
       >
         {children}
       </Text>
