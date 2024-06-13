@@ -25,7 +25,7 @@ export default function ProfilePage() {
         </MenuButton> */}
         <MenuButton
           onPress={() => {
-            router.push('/profile/calibration');
+            router.push('/profile/calibration/0');
           }}
           icon={
             <StepLength

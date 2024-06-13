@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { ColorSchemeName, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
@@ -7,21 +7,19 @@ import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 interface CalibrationNavigationProps {
-  setIndex: Dispatch<SetStateAction<number>>;
   calibrationModeButtons: () => React.ReactNode;
   isFromIntro?: boolean;
   currentElement: CalibrationStepsProps;
-  isFirstStep: boolean;
+  id: number;
   isLastStep: boolean;
   stepText: string;
   colorscheme: ColorSchemeName;
 }
 export function CalibrationNavigation({
-  setIndex,
   calibrationModeButtons,
   isFromIntro,
   currentElement,
-  isFirstStep,
+  id,
   isLastStep,
   stepText,
   colorscheme,
@@ -30,6 +28,7 @@ export function CalibrationNavigation({
   const { resetCalibrationStore } = useCalibrationStore(
     (state) => state.actions
   );
+  const isFirstStep = id === 0;
   const backButtonHandler = () => {
     const skip = isFromIntro && isFirstStep;
     if (skip) {
@@ -43,12 +42,13 @@ export function CalibrationNavigation({
       return;
     }
     if (isFirstStep) {
-      router.back();
+      router.replace('/');
 
       return;
     }
 
-    setIndex((prevIndex) => prevIndex - 1);
+    router.back();
+    // setIndex((prevIndex) => prevIndex - 1);
   };
 
   const nextButtonHandler = () => {
@@ -64,7 +64,9 @@ export function CalibrationNavigation({
       return;
     }
 
-    setIndex((prevIndex) => prevIndex + 1);
+    // setIndex((prevIndex) => prevIndex + 1);
+
+    router.push({ pathname: `/profile/calibration/${id + 1}` });
   };
 
   return (

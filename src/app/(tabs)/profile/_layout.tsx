@@ -11,12 +11,6 @@ function ProfileLayout() {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="calibration"
-        options={{
-          headerTitle: 'Kalibrierung',
-        }}
-      />
     </Stack>
   );
 }

@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useRef } from 'react';
 import {
   SafeAreaView,
@@ -11,11 +12,10 @@ import PagerView from 'react-native-pager-view';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
-import { Calibration } from '@/components/calibration/Calibration';
 import styling from '@/stylings';
 
 export function Intro() {
-  const [showCalibration, setShowCalibration] = React.useState(false);
+  // const [showCalibration, setShowCalibration] = React.useState(false);
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
 
@@ -83,9 +83,9 @@ export function Intro() {
     return () => clearInterval(toggle);
   }, [currentPage]); */
 
-  if (showCalibration) {
-    return <Calibration isFromIntro />;
-  }
+  // if (showCalibration) {
+  //   return <Calibration isFromIntro />;
+  // }
 
   return (
     <SafeAreaView
@@ -130,7 +130,10 @@ export function Intro() {
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
-          <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
+          <Button
+            buttonType="primary"
+            onPress={() => router.replace('profile/calibration/0')}
+          >
             Los gehts
           </Button>
         </>
