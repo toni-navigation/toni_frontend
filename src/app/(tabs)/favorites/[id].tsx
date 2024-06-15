@@ -11,17 +11,58 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { PopUp } from '@/components/organisms/PopUp';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
+import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function FavoritePage() {
   const [showPopUp, setShowPopUp] = React.useState(false);
   const favorites = useFavoriteStore((state) => state.favorites);
   const { deleteFavorite } = useFavoriteStore((state) => state.actions);
+  const origin = useTripStore((state) => state.origin);
 
   const colorscheme = useColorScheme();
   const { id } = useLocalSearchParams();
 
   const favorite = favorites.find((favoriteItem) => favoriteItem.id === id);
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+  const getCoordinates = (location: OriginDestinationType) => {
+    if (location) {
+      return location.geometry.coordinates;
+    }
+    if (location === null && currentLocation) {
+      return [
+        currentLocation.coords.longitude,
+        currentLocation.coords.latitude,
+      ];
+    }
+
+    return undefined;
+  };
+  const navigateToTrip = (params: {
+    origin: number[];
+    destination: number[];
+  }) => {
+    // Assuming router.push handles navigation to the trip page
+    router.push({ pathname: `/home/trip`, params });
+  };
+
+  const startNavigationHandler = () => {
+    const newOrigin = getCoordinates(origin);
+    const newDestination = getCoordinates(favorite?.address);
+
+    if (newOrigin && newDestination) {
+      const params = {
+        origin: newOrigin,
+        destination: newDestination,
+      };
+
+      navigateToTrip(params);
+    }
+  };
+
   if (!favorite) return null;
 
   return (
@@ -113,7 +154,11 @@ export default function FavoritePage() {
         >
           Löschen
         </Button>
-        <Button onPress={() => {}} disabled buttonType="accent">
+        <Button
+          onPress={() => startNavigationHandler()}
+          disabled={favorite.address === undefined}
+          buttonType="accent"
+        >
           Route starten
         </Button>
       </View>

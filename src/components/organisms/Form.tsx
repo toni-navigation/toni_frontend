@@ -12,15 +12,14 @@ import {
 } from '@/store/useFavoritesStore';
 
 interface FormProps {
-  idProp: string | undefined;
-  titleProp: string | undefined;
-  addressProp: OriginDestinationType;
+  id: string | undefined;
+  title: string | undefined;
+  address: OriginDestinationType;
 }
 
-export function Form({ idProp, titleProp, addressProp }: FormProps) {
-  const [title, setTitle] = useState(titleProp);
-  const [photonData, setPhotonData] =
-    useState<OriginDestinationType>(addressProp);
+export function Form({ id, title, address }: FormProps) {
+  const [titleValue, setTitleValue] = useState(title ?? '');
+  const [photonData, setPhotonData] = useState<OriginDestinationType>(address);
   const ref = useRef<TextInput>(null);
 
   const { addFavorite, updateFavoriteItem } = useFavoriteStore(
@@ -28,14 +27,13 @@ export function Form({ idProp, titleProp, addressProp }: FormProps) {
   );
 
   const getAddressHandler = () => {
-    if (idProp && photonData && title) {
-      updateFavoriteItem(idProp, title, photonData);
-      router.back();
-    } else if (photonData && title) {
-      const newid = uuid.v4();
-      addFavorite(newid, title, photonData);
-      router.back();
+    if (!id) {
+      addFavorite(uuid.v4(), titleValue, photonData);
+    } else {
+      updateFavoriteItem(id, titleValue, photonData);
     }
+
+    router.back();
   };
 
   return (
@@ -48,10 +46,10 @@ export function Form({ idProp, titleProp, addressProp }: FormProps) {
           placeholder="Name eingeben"
           inputMode="text"
           maxLength={300}
-          value={title}
-          onChange={(event) => setTitle(event.nativeEvent.text)}
+          value={titleValue}
+          onChange={(event) => setTitleValue(event.nativeEvent.text)}
           onClickDelete={() => {
-            setTitle('');
+            setTitleValue('');
             ref.current?.focus();
           }}
         />
@@ -67,7 +65,7 @@ export function Form({ idProp, titleProp, addressProp }: FormProps) {
       <View className="my-8">
         <Button
           onPress={getAddressHandler}
-          disabled={!photonData || !title}
+          disabled={!photonData || !titleValue}
           buttonType="primary"
         >
           Speichern

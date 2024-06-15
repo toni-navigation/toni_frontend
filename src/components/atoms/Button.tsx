@@ -12,6 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
   isLoading?: boolean;
+
 }
 
 export function Button({
@@ -86,7 +87,7 @@ export function Button({
         />
       ) : (
         <Text
-          className={`text-lg font-generalSansSemi ${variant[buttonType].text}`}
+          className={`text-2xl font-generalSansSemi ${variant[buttonType].text}`}
         >
           {children}
         </Text>
