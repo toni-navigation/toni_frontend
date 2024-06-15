@@ -107,8 +107,10 @@ export function Intro() {
               <View className="flex items-center">
                 <Header>{data.headline}</Header>
                 <Text
-                  className={`mx-auto text-center font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+                  // className={`mx-auto text-center font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
+                  style={{ color: '#ffffff' }}
                 >
+                  TEST
                   {data.text}
                 </Text>
               </View>
@@ -127,6 +129,8 @@ export function Intro() {
               />
             ))}
           </View>
+
+          <View style={{ width: 400, height: 400 }} className="bg-primary" />
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>
