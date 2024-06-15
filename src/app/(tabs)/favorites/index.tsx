@@ -73,7 +73,7 @@ export default function FavoritesPage() {
         </Button>
         <Button
           onPress={() => router.push('/favorites/create')}
-          buttonType="accentOutline"
+          buttonType="accent"
         >
           Favorit hinzufügen
         </Button>
