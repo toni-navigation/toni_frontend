@@ -61,11 +61,7 @@ export function IconButton({
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
         disabled={disabled}
       >
-        <SwitchArrow
-          fill={`${variant[buttonType].fill}`}
-          width={40}
-          height={40}
-        />
+        <View>{icon}</View>
       </TouchableOpacity>
     </View>
   );

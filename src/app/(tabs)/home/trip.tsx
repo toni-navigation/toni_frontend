@@ -17,8 +17,11 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
+import { IconButton } from '@/components/atoms/IconButton';
+import { Cross } from '@/components/atoms/icons/Cross';
 import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
 import { Pause } from '@/components/atoms/icons/Pause';
+import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
@@ -43,6 +46,7 @@ import { useTrip } from '@/queries/useTrip';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import stylings from '@/stylings';
+import styling from '@/stylings';
 import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
@@ -170,25 +174,25 @@ export default function TripPage() {
   }
 
   if (notOnRoute) {
-    return (
-      <NavigateToRoute
-        currentLocation={currentLocation}
-        distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-        nearestPoint={nearestPoint}
-      >
-        <View />
-        {/* <Map */}
-        {/*  origin={parseCoordinate(tripData.origin)} */}
-        {/*  destination={{ */}
-        {/*    lat: nearestPoint.geometry.coordinates[0], */}
-        {/*    lon: nearestPoint.geometry.coordinates[1], */}
-        {/*  }} */}
-        {/*  nearestPoint={nearestPoint} */}
-        {/*  decodedShape={decodedShape} */}
-        {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-        {/* /> */}
-      </NavigateToRoute>
-    );
+    // return (
+    // <NavigateToRoute
+    //  currentLocation={currentLocation}
+    // distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
+    //  nearestPoint={nearestPoint}
+    // >
+    //  <View />
+    //  {/* <Map */}
+    //  {/*  origin={parseCoordinate(tripData.origin)} */}
+    //  {/*  destination={{ */}
+    // {/*    lat: nearestPoint.geometry.coordinates[0], */}
+    //  {/*    lon: nearestPoint.geometry.coordinates[1], */}
+    // {/*  }} */}
+    // {/*  nearestPoint={nearestPoint} */}
+    //  {/*  decodedShape={decodedShape} */}
+    // {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+    //  {/* /> */}
+    //  </NavigateToRoute>
+    // );
   }
 
   if (data && showTripOverview) {
@@ -247,20 +251,6 @@ export default function TripPage() {
             activePage={activePage}
             colorscheme={colorscheme}
           />
-          <View className="flex flex-row justify-end mx-5 my-5">
-            <TouchableOpacity
-              accessibilityHint="Mein aktueller Standort"
-              accessibilityRole="button"
-              className="flex flex-row items-end gap-x-8"
-              onPress={createCurrentLocationMessage}
-            >
-              <CurrentLocation
-                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-                width={50}
-                height={50}
-              />
-            </TouchableOpacity>
-          </View>
           <PagerView
             onPageSelected={(event) => handlePageSelected(event)}
             initialPage={activePage}
@@ -294,13 +284,55 @@ export default function TripPage() {
         </>
       )}
 
-      <View className="mx-5 mb-5">
-        <Button onPress={() => setPause(!pause)} buttonType="primaryOutline">
-          {pause ? 'Fortsetzen' : 'Pause'}
-        </Button>
-        <Button onPress={() => setShowPopUp(true)} buttonType="primary">
-          Beenden
-        </Button>
+      <View className="mx-5 mb-5 flex flex-row justify-evenly">
+        <IconButton
+          onPress={() => setPause(!pause)}
+          buttonType="primary"
+          icon={
+            <Pause
+              fill={
+                colorscheme === 'light'
+                  ? styling.colors['primary-color-light']
+                  : styling.colors['primary-color-dark']
+              }
+              width={80}
+              height={80}
+            />
+          }
+          classes="m-0"
+        />
+        <IconButton
+          onPress={createCurrentLocationMessage}
+          buttonType="primary"
+          icon={
+            <CurrentLocation
+              fill={
+                colorscheme === 'light'
+                  ? styling.colors['primary-color-light']
+                  : styling.colors['primary-color-dark']
+              }
+              width={80}
+              height={80}
+            />
+          }
+          classes="m-0"
+        />
+        <IconButton
+          onPress={() => setShowPopUp(true)}
+          buttonType="primary"
+          icon={
+            <Cross
+              fill={
+                colorscheme === 'light'
+                  ? styling.colors['primary-color-light']
+                  : styling.colors['primary-color-dark']
+              }
+              width={80}
+              height={80}
+            />
+          }
+          classes="m-0"
+        />
       </View>
     </SafeAreaView>
   ) : (
