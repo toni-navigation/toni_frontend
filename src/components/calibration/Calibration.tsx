@@ -10,7 +10,6 @@ import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
 import { calibrationSteps } from '@/components/calibration/calibrationSteps';
-import { AlertBar } from '@/components/organisms/AlertBar';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -45,7 +44,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const calSteps = calibrationSteps(calibration.factors, colorscheme);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
-  const [showAlertBar, setShowAlertBar] = useState<number>();
+  // const [showAlertBar, setShowAlertBar] = useState<number>();
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -177,12 +176,13 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   return (
     <SafeAreaView
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
+      testID="calibrationID"
     >
-      {showAlertBar && (
-        <AlertBar
-          text={`Dein GPS Signal ist auf ${showAlertBar ?? 0} Meter ungenau.`}
-        />
-      )}
+      {/* {showAlertBar && ( */}
+      {/*  <AlertBar */}
+      {/*    text={`Dein GPS Signal ist auf ${showAlertBar ?? 0} Meter ungenau.`} */}
+      {/*  /> */}
+      {/* )} */}
       <ScrollView className="px-8 mt-8">
         {/* <IconButton */}
         {/*  icon="cross" */}
