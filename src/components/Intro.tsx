@@ -124,6 +124,7 @@ export function Intro() {
                 style={index === currentPage ? styles.activeDot : styles.dot}
                 /* eslint-disable-next-line react/no-array-index-key */
                 key={index}
+                testID="dot"
               />
             ))}
           </View>
