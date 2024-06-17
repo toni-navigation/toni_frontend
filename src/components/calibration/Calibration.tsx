@@ -135,6 +135,14 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     }
     audioSound.current = sound;
   };
+
+  const isInCalibrationMode =
+    !!(pedometerSubscription.current && audioSound.current) ||
+    !!(
+      pedometerSubscription.current === undefined &&
+      audioSound.current &&
+      fallback.current
+    );
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
@@ -209,6 +217,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         isFromIntro={isFromIntro}
         isLastStep={isLastStep}
         currentElement={currentStep}
+        isInCalibrationMode={isInCalibrationMode}
         isFirstStep={index === 0}
         stepText={`Schritt ${index + 1} / ${calSteps.length}`}
         colorscheme={colorscheme}
