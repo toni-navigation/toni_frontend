@@ -12,7 +12,6 @@ interface ButtonProps {
   disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
   isLoading?: boolean;
-
 }
 
 export function Button({

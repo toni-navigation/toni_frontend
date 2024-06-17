@@ -36,7 +36,6 @@ Assess the app's usability for blind users:
 
 ### Calibration Testing
 
-- Integration Testing of the different APIs used there (Audio, Pedometer, CurrentLocation)
 - User Testing
   - Calibrating steps for different user profiles.
   - Verifying accuracy by comparing calculated steps with actual distance covered.
