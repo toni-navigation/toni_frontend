@@ -46,14 +46,14 @@ Assess the app's usability for blind users:
 
 ## Continuous Integration
 
-The Continuous Integration (CI) pipelines for your project are designed to automate the testing process and ensure that broken code is not merged into the main branch. When code is pushed or merged into the main branch, the CI pipeline is triggered. 
+The Continuous Integration (CI) pipelines for your project are designed to automate the testing process and ensure that broken code is not merged into the main branch. When code is pushed or merged into the main branch, the CI pipeline is triggered.
 
 It runs a series of automated tests to verify the integrity and quality of the code. These tests include:
-- Unit tests
-  - Functions Testing: All pure functions in the /functions folder are tested using Jest. This ensures that individual units of code work as expected.  
-  - Component Testing: Components are tested using Jest and React Testing Library. This verifies that the components render and behave correctly.  
-- Integration Testing: The integration with external APIs for geocoding (Photon) and routing (Valhalla) is tested using Jest. This ensures that the app works correctly with these external services.
 
+- Unit tests
+  - Functions Testing: All pure functions in the /functions folder are tested using Jest. This ensures that individual units of code work as expected.
+  - Component Testing: Components are tested using Jest and React Testing Library. This verifies that the components render and behave correctly.
+- Integration Testing: The integration with external APIs for geocoding (Photon) and routing (Valhalla) is tested using Jest. This ensures that the app works correctly with these external services.
 
 <!--
 Testing Tools:
