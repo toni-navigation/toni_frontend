@@ -4,17 +4,10 @@ export default {
   darkMode: 'media',
   theme: {
     colors: {
-      primary: {
-        DEFAULT: 'var(--color-primary-default)',
-        light: 'var(--color-primary-light)',
-      },
-      'orange-accent': '#fc7d22',
-      'primary-color-light': '#DAFBDE',
-      'primary-color-dark': '#0A585C',
-      'background-light': '#fff',
-      'background-dark': '#172621',
-      'text-color-light': '#000',
-      'text-color-dark': '#fff',
+      primary: 'var(--color-primary)',
+      accent: 'var(--color-accent)',
+      background: 'var(--color-background)',
+      text: 'var(--color-text)',
     },
     extend: {
       fontFamily: {

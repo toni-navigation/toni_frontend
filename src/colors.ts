@@ -1,13 +1,16 @@
-// src/utils/color-theme.ts
 import { vars } from 'nativewind';
 
 export const themes = {
   light: vars({
-    '--color-primary-default': '#ff0000',
-    '--color-primary-light': '#DAFBDE',
+    '--color-primary': '#0A585C',
+    '--color-accent': '#fc7d22',
+    '--color-background': '#fff',
+    '--color-text': '#000',
   }),
   dark: vars({
-    '--color-primary-default': '#00ff00',
-    '--color-primary-light': '#0A585C',
+    '--color-primary': '#DAFBDE',
+    '--color-accent': '#fc7d22',
+    '--color-background': '#172621',
+    '--color-text': '#fff',
   }),
 };

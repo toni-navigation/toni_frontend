@@ -1,5 +1,5 @@
 import { useColorScheme } from 'nativewind';
-import React, { createContext } from 'react';
+import React, { createContext, useMemo } from 'react';
 import { View } from 'react-native';
 
 import { themes } from '@/colors';
@@ -15,9 +15,14 @@ export const ThemeContext = createContext<{
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const { colorScheme } = useColorScheme();
 
+  const value = useMemo(
+    () => ({ theme: colorScheme ?? 'light' }),
+    [colorScheme]
+  );
+
   return (
-    <ThemeContext.Provider value={{ theme: colorScheme || 'light' }}>
-      <View style={themes[colorScheme || 'light']} className="flex-1">
+    <ThemeContext.Provider value={value}>
+      <View style={themes[colorScheme ?? 'light']} className="flex-1">
         {children}
       </View>
     </ThemeContext.Provider>
