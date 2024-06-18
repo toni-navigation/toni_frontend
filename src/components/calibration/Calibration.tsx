@@ -135,14 +135,19 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     }
     audioSound.current = sound;
   };
-
+  const isLoading =
+    currentLocationMutation.isPending ||
+    pedometerAvailableMutation.isPending ||
+    speakMutation.isPending ||
+    startSoundMutation.isPending;
   const isInCalibrationMode =
     !!(pedometerSubscription.current && audioSound.current) ||
     !!(
       pedometerSubscription.current === undefined &&
       audioSound.current &&
       fallback.current
-    );
+    ) ||
+    isLoading;
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
@@ -162,12 +167,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         </Button>
       );
     }
-
-    const isLoading =
-      currentLocationMutation.isPending ||
-      pedometerAvailableMutation.isPending ||
-      speakMutation.isPending ||
-      startSoundMutation.isPending;
 
     return (
       <Button
