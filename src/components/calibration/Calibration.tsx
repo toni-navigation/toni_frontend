@@ -44,7 +44,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const calSteps = calibrationSteps(calibration.factors, colorscheme);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
-  // const [showAlertBar, setShowAlertBar] = useState<number>();
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -110,12 +109,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     const currentPositionData = await currentLocationMutation.mutateAsync();
     // TODO Accuracy
-    // if (
-    //   currentPositionData?.coords.accuracy &&
-    //   currentPositionData.coords.accuracy > ACCURACY_THRESHOLD
-    // ) {
-    //   setShowAlertBar(currentPositionData?.coords.accuracy);
-    // }
     if (!pedometerAvailable) {
       // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
       await speakMutation.mutateAsync(
@@ -185,17 +178,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
       testID="calibrationID"
     >
-      {/* {showAlertBar && ( */}
-      {/*  <AlertBar */}
-      {/*    text={`Dein GPS Signal ist auf ${showAlertBar ?? 0} Meter ungenau.`} */}
-      {/*  /> */}
-      {/* )} */}
       <ScrollView className="px-8 mt-8">
-        {/* <IconButton */}
-        {/*  icon="cross" */}
-        {/*  onPress={resetCalibrationStore} */}
-        {/*  buttonType="primary" */}
-        {/* /> */}
         <CalibrationHeader
           colorscheme={colorscheme}
           currentStep={currentStep}
@@ -203,12 +186,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         {currentStep.forwardButtonText === undefined ? (
           <CalibrationMode colorscheme={colorscheme} steps={steps} />
         ) : null}
-        {/* {(currentLocationMutation.isPending || */}
-        {/*  pedometerAvailableMutation.isPending || */}
-        {/*  speakMutation.isPending || */}
-        {/*  startSoundMutation.isPending) && ( */}
-        {/*  <ActivityIndicator className="mt-4 h-[100px]" size="large" /> */}
-        {/* )} */}
       </ScrollView>
       <CalibrationNavigation
         setIndex={setIndex}
