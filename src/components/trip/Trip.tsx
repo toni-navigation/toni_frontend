@@ -77,20 +77,21 @@ export function Trip() {
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
 
-  const rerouteHandler = () => {
-    if (!currentLocation) return;
+  // TODO Do Rerouting
 
-    const params = {
-      origin: [
-        currentLocation.coords.longitude,
-        currentLocation.coords.latitude,
-      ],
-      destination: tripData.destination,
-    };
-
-    // TODO: Evtl andere Lösung?
-    router.replace({ pathname: `/home/trip`, params });
-  };
+  // const rerouteHandler = () => {
+  //   if (!currentLocation) return;
+  //
+  //   const params = {
+  //     origin: [
+  //       currentLocation.coords.longitude,
+  //       currentLocation.coords.latitude,
+  //     ],
+  //     destination: tripData.destination,
+  //   };
+  //
+  //   router.replace({ pathname: `/home/trip`, params });
+  // };
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
   ) => {
@@ -120,24 +121,6 @@ export function Trip() {
     data &&
     calculatedManeuvers?.currentManeuver &&
     tripInstructionOutput(calculatedManeuvers.currentManeuver, factor);
-
-  // const isStartPoint =
-  //   nearestPoint &&
-  //   startPoint &&
-  //   nearestPoint.geometry.coordinates[0] ===
-  //     startPoint.geometry.coordinates[0] &&
-  //   nearestPoint.geometry.coordinates[1] === startPoint.geometry.coordinates[1];
-
-  // const notOnRoute =
-  //   currentLocationPoint &&
-  //   !isStartPoint &&
-  //   !!currentLocation.coords.accuracy &&
-  //   currentLocation.coords.accuracy < ACCURACY_THRESHOLD &&
-  //   !!nearestPoint &&
-  //   !!nearestPoint.properties.dist &&
-  //   nearestPoint.properties.dist * 1000 >
-  //     THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS;
-  //
 
   useEffect(() => {
     if (instruction && !showTripOverview) {
@@ -369,7 +352,6 @@ export function Trip() {
                 !!nearestPoint.properties.dist &&
                 nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
               }
-              onReroute={rerouteHandler}
               icon={matchIconType(
                 calculatedManeuvers?.currentManeuver.type,
                 colorscheme
