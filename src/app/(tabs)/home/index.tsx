@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
-import { Heart } from '@/components/atoms/icons/Heart';
 import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { PopUp } from '@/components/organisms/PopUp';
@@ -133,11 +132,10 @@ export default function HomePage() {
                   ? styling.colors['primary-color-light']
                   : styling.colors['primary-color-dark']
               }
-              width={50}
-              height={50}
+              width={25}
+              height={25}
             />
           }
-          classes="m-0"
         />
         <GeocoderAutocomplete
           value={destination}

@@ -15,7 +15,7 @@ export function Card({ icon, children }: CardProps) {
       {icon && icon}
 
       <Text
-        className={`font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
+        className={`font-atkinsonRegular text-2xl text-center ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
       >
         {children}
       </Text>

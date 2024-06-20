@@ -10,28 +10,23 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
-import { Button } from '@/components/atoms/Button';
 import { IconButton } from '@/components/atoms/IconButton';
-import { Cross } from '@/components/atoms/icons/Cross';
-import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
+import { Close } from '@/components/atoms/icons/Close';
+import { Location } from '@/components/atoms/icons/Location';
 import { Pause } from '@/components/atoms/icons/Pause';
-import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
+import { Play } from '@/components/atoms/icons/Play';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
-import {
-  ACCURACY_THRESHOLD,
-  NavigateToRoute,
-} from '@/components/trip/NavigateToRoute';
+import { ACCURACY_THRESHOLD } from '@/components/trip/NavigateToRoute';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
@@ -159,6 +154,12 @@ export default function TripPage() {
       });
     }
   };
+  const summary = data && data.trip.summary;
+  const convertSecondsToMinutes = (seconds: number | undefined) => {
+    if (!seconds) return 0;
+
+    return Math.floor(seconds / 60);
+  };
 
   if (isPending) {
     return (
@@ -171,28 +172,6 @@ export default function TripPage() {
 
   if (isError) {
     return <Error error={error.message} />;
-  }
-
-  if (notOnRoute) {
-    // return (
-    // <NavigateToRoute
-    //  currentLocation={currentLocation}
-    // distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-    //  nearestPoint={nearestPoint}
-    // >
-    //  <View />
-    //  {/* <Map */}
-    //  {/*  origin={parseCoordinate(tripData.origin)} */}
-    //  {/*  destination={{ */}
-    // {/*    lat: nearestPoint.geometry.coordinates[0], */}
-    //  {/*    lon: nearestPoint.geometry.coordinates[1], */}
-    // {/*  }} */}
-    // {/*  nearestPoint={nearestPoint} */}
-    //  {/*  decodedShape={decodedShape} */}
-    // {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-    //  {/* /> */}
-    //  </NavigateToRoute>
-    // );
   }
 
   if (data && showTripOverview) {
@@ -256,6 +235,7 @@ export default function TripPage() {
             initialPage={activePage}
             style={styles.pager}
             ref={ref}
+            className="my-4"
           >
             <TripList
               maneuvers={data.trip.legs[0].maneuvers.slice(
@@ -283,37 +263,53 @@ export default function TripPage() {
           </PagerView>
         </>
       )}
-
-      <View className="mx-5 mb-5 flex flex-row justify-evenly">
+      <View className="m-auto py-4">
+        <Text className="text-orange-accent text-2xl font-generalSansSemi">
+          {summary?.length} km, {convertSecondsToMinutes(summary?.time)} Minuten
+        </Text>
+      </View>
+      <View className="flex flex-row justify-evenly">
         <IconButton
-          onPress={() => setPause(!pause)}
-          buttonType="primary"
+          onPress={createCurrentLocationMessage}
+          buttonType="primaryOutline"
           icon={
-            <Pause
+            <Location
               fill={
                 colorscheme === 'light'
-                  ? styling.colors['primary-color-light']
-                  : styling.colors['primary-color-dark']
+                  ? styling.colors['primary-color-dark']
+                  : styling.colors['primary-color-light']
               }
-              width={80}
-              height={80}
+              width={50}
+              height={50}
             />
           }
           classes="m-0"
         />
         <IconButton
-          onPress={createCurrentLocationMessage}
+          onPress={() => setPause(!pause)}
           buttonType="primary"
           icon={
-            <CurrentLocation
-              fill={
-                colorscheme === 'light'
-                  ? styling.colors['primary-color-light']
-                  : styling.colors['primary-color-dark']
-              }
-              width={80}
-              height={80}
-            />
+            pause ? (
+              <Play
+                fill={
+                  colorscheme === 'light'
+                    ? styling.colors['primary-color-light']
+                    : styling.colors['primary-color-dark']
+                }
+                width={50}
+                height={50}
+              />
+            ) : (
+              <Pause
+                fill={
+                  colorscheme === 'light'
+                    ? styling.colors['primary-color-light']
+                    : styling.colors['primary-color-dark']
+                }
+                width={50}
+                height={50}
+              />
+            )
           }
           classes="m-0"
         />
@@ -321,14 +317,14 @@ export default function TripPage() {
           onPress={() => setShowPopUp(true)}
           buttonType="primary"
           icon={
-            <Cross
+            <Close
               fill={
                 colorscheme === 'light'
                   ? styling.colors['primary-color-light']
                   : styling.colors['primary-color-dark']
               }
-              width={80}
-              height={80}
+              width={50}
+              height={50}
             />
           }
           classes="m-0"

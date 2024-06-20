@@ -1,9 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, useColorScheme, View } from 'react-native';
 
-import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
-import styling from '@/stylings';
-
 interface IconButtonProps {
   icon: React.ReactNode;
   onPress: () => void;
@@ -21,33 +18,23 @@ export function IconButton({
   const colorscheme = useColorScheme();
   const variant = {
     accent: {
-      button: 'bg-orange-accent',
-      fill: 'fill-background-light',
+      button: 'bg-orange-accent border border-4 border-orange-accent',
     },
     accentOutline: {
       button:
-        'bg-transparent border border-2 border-solid border-orange-accent',
-      fill: 'fill-orange-accent',
+        'bg-transparent border border-4 border-solid border-orange-accent',
     },
     primary: {
       button:
         colorscheme === 'light'
-          ? 'bg-primary-color-dark'
-          : 'bg-primary-color-light',
-      fill:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-light']
-          : styling.colors['background-dark'],
+          ? 'bg-primary-color-dark border border-4 border-primary-color-dark'
+          : 'bg-primary-color-light border border-4 border-primary-color-light',
     },
     primaryOutline: {
       button:
         colorscheme === 'light'
-          ? 'bg-transparent border border-2 border-solid border-primary-color-dark'
-          : 'bg-transparent border border-2 border-solid border-primary-color-light',
-      fill:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-dark']
-          : styling.colors['primary-color-light'],
+          ? 'bg-transparent border border-solid border-primary-color-dark border-4'
+          : 'bg-transparent border border-5 border-solid border-primary-color-light',
     },
   };
 
@@ -55,7 +42,7 @@ export function IconButton({
     <View className={`flex justify-center items-center ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`p-3 flex justify-center items-center rounded-[100px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`p-5 flex justify-center items-center rounded-[35px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
