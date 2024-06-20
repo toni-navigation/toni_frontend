@@ -1,9 +1,9 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 
+import { themes } from '@/colors';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { Cross } from '@/components/atoms/icons/Cross';
-import stylings from '@/stylings';
 
 describe('MenuButton', () => {
   const mockOnPress = jest.fn();
@@ -42,7 +42,7 @@ describe('MenuButton', () => {
     );
 
     expect(getByRole('button').props.style.borderTopColor).toContain(
-      stylings.colors['primary-color-dark']
+      themes.light['--color-primary']
     );
 
     rerender(
@@ -51,7 +51,7 @@ describe('MenuButton', () => {
       </MenuButton>
     );
     expect(getByRole('button').props.style.borderTopColor).toContain(
-      stylings.colors['primary-color-dark']
+      themes.light['--color-primary']
     );
   });
 });

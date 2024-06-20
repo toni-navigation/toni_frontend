@@ -1,7 +1,13 @@
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
+import { useContext } from 'react';
+
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 function ProfileLayout() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Stack>
       <Stack.Screen
@@ -15,6 +21,10 @@ function ProfileLayout() {
         name="calibration"
         options={{
           headerTitle: 'Kalibrierung',
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
+          headerTintColor: '#fff',
         }}
       />
     </Stack>

@@ -1,12 +1,6 @@
 import { router } from 'expo-router';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -24,8 +18,6 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
-  const colorscheme = useColorScheme();
 
   const [showPopUp, setShowPopUp] = React.useState(false);
 
@@ -80,9 +72,7 @@ export default function HomePage() {
   // }
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <PopUp
         visible={showPopUp}
         onCloseClick={() => {
@@ -90,28 +80,17 @@ export default function HomePage() {
           startNavigationHandler();
         }}
         onCloseButtonText="Alles klar!"
-        colorscheme={colorscheme}
       >
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
-          Hinweis
-        </Header>
+        <Header classes="text-textColor">Hinweis</Header>
 
-        <Text
-          className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
+        <Text className="text-2xl font-atkinsonRegular text-center text-textColor">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
       </PopUp>
 
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-        >
-          Hallo
-        </Header>
+        <Header classes="text-textColor">Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
           placeholder="Start eingeben"

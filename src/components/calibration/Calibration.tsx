@@ -2,7 +2,7 @@ import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
@@ -31,7 +31,6 @@ interface CalibrationProps {
 export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
-  const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
@@ -42,7 +41,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const calSteps = calibrationSteps(calibration.factors, colorscheme);
+  const calSteps = calibrationSteps(calibration.factors);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
   const [showAlertBar, setShowAlertBar] = useState<number>();
@@ -175,9 +174,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   };
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       {showAlertBar && (
         <AlertBar
           text={`Dein GPS Signal ist auf ${showAlertBar ?? 0} Meter ungenau.`}
@@ -189,12 +186,9 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         {/*  onPress={resetCalibrationStore} */}
         {/*  buttonType="primary" */}
         {/* /> */}
-        <CalibrationHeader
-          colorscheme={colorscheme}
-          currentStep={currentStep}
-        />
+        <CalibrationHeader currentStep={currentStep} />
         {currentStep.forwardButtonText === undefined ? (
-          <CalibrationMode colorscheme={colorscheme} steps={steps} />
+          <CalibrationMode steps={steps} />
         ) : null}
         {/* {(currentLocationMutation.isPending || */}
         {/*  pedometerAvailableMutation.isPending || */}
@@ -211,7 +205,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         currentElement={currentStep}
         isFirstStep={index === 0}
         stepText={`Schritt ${index + 1} / ${calSteps.length}`}
-        colorscheme={colorscheme}
       />
     </SafeAreaView>
   );

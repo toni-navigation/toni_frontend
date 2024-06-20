@@ -3,16 +3,17 @@ import { point } from '@turf/helpers';
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import { Subscription } from 'expo-modules-core';
 import { Magnetometer } from 'expo-sensors';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, useColorScheme, Vibration } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { SafeAreaView, Vibration } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { ArrowStraight } from '@/components/atoms/icons/ArrowStraight';
 import { Cross } from '@/components/atoms/icons/Cross';
 import { AlertBar } from '@/components/organisms/AlertBar';
 import { Card } from '@/components/organisms/Card';
 import { calculateOrientation } from '@/functions/calculateOrientation';
 import { directionToMove } from '@/functions/directionToMove';
-import stylings from '@/stylings';
 import { CurrentLocationProps } from '@/types/Types';
 
 export const ACCURACY_THRESHOLD = 10;
@@ -29,8 +30,6 @@ export function NavigateToRoute({
   nearestPoint,
   children,
 }: RouteToStartProps) {
-  const colorscheme = useColorScheme();
-
   const [{ x, y }, setData] = useState({
     x: 0,
     y: 0,
@@ -79,15 +78,13 @@ export function NavigateToRoute({
       Vibration.cancel();
     };
   }, [direction]);
+  const { theme } = useContext(ThemeContext);
+
   const icon = direction ? (
-    <ArrowStraight
-      fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-      width={200}
-      height={200}
-    />
+    <ArrowStraight fill="primary" width={200} height={200} />
   ) : (
     <Cross
-      fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+      fill={themes.external[`--${theme}-mode-primary`]}
       width={200}
       height={200}
     />

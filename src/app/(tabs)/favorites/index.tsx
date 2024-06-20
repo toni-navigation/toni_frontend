@@ -1,37 +1,28 @@
 import { router } from 'expo-router';
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useContext } from 'react';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { Heart } from '@/components/atoms/icons/Heart';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
-import styling from '@/stylings';
 
 export default function FavoritesPage() {
-  const colorscheme = useColorScheme();
   const favorites = useFavoriteStore((state) => state.favorites);
   const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       {/* eslint-disable-next-line react/jsx-no-undef */}
-      <ScrollView className="px-8 my-4">
-        <Header>Meine Favoriten</Header>
+      <ScrollView className="px-8 my-8">
+        <Header classes="text-textColor">Meine Favoriten</Header>
         <View>
           {favorites.length === 0 ? (
-            <Text
-              className={`font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="font-atkinsonRegular text-2xl text-textColor">
               Noch keine Favoriten vorhanden
             </Text>
           ) : (
@@ -48,11 +39,7 @@ export default function FavoritesPage() {
                 // icon="heart"
                 icon={
                   <Heart
-                    fill={
-                      colorscheme === 'light'
-                        ? styling.colors['primary-color-dark']
-                        : styling.colors['primary-color-light']
-                    }
+                    fill={themes.external[`--${theme}-mode-primary`]}
                     width={50}
                     height={50}
                   />

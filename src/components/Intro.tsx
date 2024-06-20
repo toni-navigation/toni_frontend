@@ -1,25 +1,16 @@
 import React, { useRef } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
 import { Calibration } from '@/components/calibration/Calibration';
-import styling from '@/stylings';
 
 export function Intro() {
   const [showCalibration, setShowCalibration] = React.useState(false);
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
-
-  const colorscheme = useColorScheme();
 
   const pagerViewData: {
     headline: string;
@@ -29,26 +20,23 @@ export function Intro() {
     {
       headline: 'Dein Weg',
       text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
-      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
+      icon: <Logo height={115} width={115} />,
     },
     {
       headline: 'Dein Klang',
       text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
-      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
+      icon: <Logo height={115} width={115} />,
     },
     {
       headline: 'Deine Freiheit',
       text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
-      icon: <Logo height={115} width={115} colorscheme={colorscheme} />,
+      icon: <Logo height={115} width={115} />,
     },
   ];
 
   const styles = StyleSheet.create({
     activeDot: {
-      backgroundColor:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-dark']
-          : styling.colors['primary-color-light'],
+      backgroundColor: 'primary',
       width: 20,
       height: 20,
       borderRadius: 25,
@@ -57,10 +45,7 @@ export function Intro() {
     },
     dot: {
       backgroundColor: 'transparent',
-      borderColor:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-dark']
-          : styling.colors['primary-color-light'],
+      borderColor: 'primary',
       borderWidth: 3,
       width: 20,
       height: 20,
@@ -88,9 +73,7 @@ export function Intro() {
   }
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-accent">
       <View className="flex-1">
         <PagerView
           className="flex-1"
@@ -106,11 +89,7 @@ export function Intro() {
               <View className="flex items-center pb-8">{data.icon}</View>
               <View className="flex items-center">
                 <Header>{data.headline}</Header>
-                <Text
-                  // className={`mx-auto text-center font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-                  style={{ color: '#ffffff' }}
-                >
-                  TEST
+                <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
                   {data.text}
                 </Text>
               </View>
@@ -130,7 +109,7 @@ export function Intro() {
             ))}
           </View>
 
-          <View style={{ width: 400, height: 400 }} className="bg-primary" />
+          <View style={{ width: 400, height: 400 }} className="bg-background" />
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>

@@ -17,7 +17,7 @@ export function Suggestions({
     <ScrollView
       accessibilityHint="Liste der Vorschläge"
       keyboardShouldPersistTaps="always"
-      className="-mt-10 mb-4 border-solid border-x-2 border-b-2 p-4 rounded-b-[25px] border-primary-color-dark"
+      className="-mt-10 mb-4 border-solid border-x-2 border-b-2 p-4 rounded-b-[25px] border-primary text-textColor"
       accessibilityLabel="Liste der Vorschläge"
       accessibilityRole="list"
     >
@@ -29,7 +29,7 @@ export function Suggestions({
           }}
           classes={
             index !== suggestions.length - 1
-              ? 'border-solid border-b-2 border-primary-color-dark'
+              ? 'text-textColor border-solid border-b-2 border-primary '
               : ''
           }
         >

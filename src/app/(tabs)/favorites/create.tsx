@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
 import { Form } from '@/components/organisms/Form';
@@ -12,16 +12,13 @@ export type SearchParamType = {
 };
 
 export default function CreatePage() {
-  const colorscheme = useColorScheme();
   const { id, title, address } = useLocalSearchParams() as SearchParamType;
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header>
+        <Header classes="text-textColor">
           {id === undefined ? 'Favorit hinzufügen' : 'Favorit bearbeiten'}
         </Header>
 

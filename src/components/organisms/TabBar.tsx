@@ -1,24 +1,18 @@
 import React from 'react';
-import { ColorSchemeName, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface TabBarProps {
   setPage: (page: number) => void;
   activePage: number;
-  colorscheme: ColorSchemeName;
 }
-export function TabBar({ setPage, activePage, colorscheme }: TabBarProps) {
+export function TabBar({ setPage, activePage }: TabBarProps) {
   const activeButton =
-    'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-orange-accent';
+    'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-accent';
   const inactiveButton =
-    colorscheme === 'light'
-      ? 'h-12 w-40  justify-center py-2 px-4 rounded-[35px] bg-transparent border border-2 border-solid border-primary-color-dark'
-      : 'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-transparent border border-2 border-solid border-primary-color-light';
+    'h-12 w-40  justify-center py-2 px-4 rounded-[35px] bg-transparent border border-2 border-solid border-primary';
   const activeText = 'text-center text-base text-background-light';
 
-  const inactiveText =
-    colorscheme === 'light'
-      ? 'text-center text-base text-primary-color-dark'
-      : 'text-center text-base text-primary-color-light';
+  const inactiveText = 'text-center text-base text-primary';
 
   return (
     <View className="flex flex-row justify-evenly mt-5">

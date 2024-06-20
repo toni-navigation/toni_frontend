@@ -18,10 +18,10 @@ export function AlertBar({ text }: AlertBarProps) {
       accessibilityLabel="Alert Bar"
       accessibilityRole="alert"
       accessibilityHint={text}
-      className="bg-orange-accent flex flex-row items-center justify-center p-2"
+      className="bg-accent flex flex-row items-center justify-center p-2"
     >
       {/* <Icon color="white" icon="cross" /> */}
-      <Text className="mx-auto text-center font-atkinsonRegular text-xl text-text-color-dark">
+      <Text className="mx-auto text-center font-atkinsonRegular text-xl text-white">
         {text}
       </Text>
     </View>

@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { Dispatch, SetStateAction } from 'react';
-import { ColorSchemeName, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
@@ -14,7 +14,6 @@ interface CalibrationNavigationProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   stepText: string;
-  colorscheme: ColorSchemeName;
 }
 export function CalibrationNavigation({
   setIndex,
@@ -24,7 +23,6 @@ export function CalibrationNavigation({
   isFirstStep,
   isLastStep,
   stepText,
-  colorscheme,
 }: CalibrationNavigationProps) {
   const { shownIntroHandler } = useCalibrationStore((state) => state.actions);
   const { resetCalibrationStore } = useCalibrationStore(
@@ -69,9 +67,7 @@ export function CalibrationNavigation({
 
   return (
     <View className="mx-8 mb-3">
-      <Text
-        className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-      >
+      <Text className="mx-auto font-atkinsonRegular text-xl text-textColor">
         {stepText}
       </Text>
 

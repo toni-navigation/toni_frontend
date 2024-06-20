@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface ListItemProps {
   children: React.ReactNode;
@@ -9,7 +9,6 @@ interface ListItemProps {
 
 // TODO: Add accessibilityLabel and accessibilityRole
 export function ListItem({ children, onPress, classes }: ListItemProps) {
-  const colorscheme = useColorScheme();
   if (onPress) {
     return (
       <TouchableOpacity
@@ -25,9 +24,7 @@ export function ListItem({ children, onPress, classes }: ListItemProps) {
 
   return (
     <View className={`py-3 px-2 ${classes}`} testID="listitem">
-      <Text
-        className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-      >
+      <Text className="text-2xl font-atkinsonRegular text-textColor">
         {children}
       </Text>
     </View>

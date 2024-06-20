@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { ColorSchemeName, Text } from 'react-native';
+import { Text } from 'react-native';
 
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 
@@ -10,8 +10,7 @@ export interface CalibrationStepsProps {
   calibrationValueNode?: ReactElement;
 }
 export const calibrationSteps = (
-  factors: number[] | undefined,
-  colorscheme?: ColorSchemeName
+  factors: number[] | undefined
 ): CalibrationStepsProps[] => [
   {
     forwardButtonText: 'Kalibrieren',
@@ -19,7 +18,7 @@ export const calibrationSteps = (
     backButtonText: 'Zurücksetzen',
     calibrationValueNode: (
       <Text
-        className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
+        className="text-4xl font-generalSansSemi pt-4 text-primary"
         testID="calibrationValue"
       >
         {factors && getCalibrationValue(factors)

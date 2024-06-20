@@ -1,12 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -21,7 +15,6 @@ export default function FavoritePage() {
   const { deleteFavorite } = useFavoriteStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
 
-  const colorscheme = useColorScheme();
   const { id } = useLocalSearchParams();
 
   const favorite = favorites.find((favoriteItem) => favoriteItem.id === id);
@@ -66,45 +59,33 @@ export default function FavoritePage() {
   if (!favorite) return null;
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header>{favorite.title}</Header>
         <View>
           {favorite.address?.properties?.name && (
-            <Text
-              className={`text-2xl font-atkinsonRegular flex-1 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               {favorite.address?.properties?.name}
             </Text>
           )}
           {favorite.address?.properties?.street && (
-            <Text
-              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Straße: {favorite.address?.properties?.street}
             </Text>
           )}
           {favorite.address?.properties?.housenumber && (
-            <Text
-              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Hausnummer: {favorite.address?.properties?.housenumber}
             </Text>
           )}
           {favorite.address?.properties?.street && (
-            <Text
-              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Postleitzahl: {favorite.address?.properties?.postcode}
             </Text>
           )}
           {favorite.address?.properties?.housenumber && (
-            <Text
-              className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-            >
+            <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Ort: {favorite.address?.properties?.city}
             </Text>
           )}
@@ -119,12 +100,9 @@ export default function FavoritePage() {
             onClickButtonText="Ja"
             onCloseClick={() => setShowPopUp(false)}
             onCloseButtonText="Nein"
-            colorscheme={colorscheme}
             // onDismiss={() => {}}
           >
-            <Text
-              className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-            >
+            <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-textColor">
               Möchtest du den Favorit {favorite.title} wirklich löschen?
             </Text>
           </PopUp>

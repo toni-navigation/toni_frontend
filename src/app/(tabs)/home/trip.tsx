@@ -3,7 +3,7 @@ import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -11,11 +11,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
@@ -44,7 +45,6 @@ import { useReverseData } from '@/mutations/useReverseData';
 import { useTrip } from '@/queries/useTrip';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import stylings from '@/stylings';
 import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
@@ -60,15 +60,15 @@ const styles = StyleSheet.create({
 const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
 const THRESHOLD_REROUTING = 100;
 export default function TripPage() {
-  const colorscheme = useColorScheme();
-
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0);
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [showTripOverview, setShowTripOverview] = React.useState(true);
+  const { theme } = useContext(ThemeContext);
 
+  const cardIconColor = themes.external[`--${theme}-mode-primary`];
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -233,25 +233,11 @@ export default function TripPage() {
 
   if (isFinished) {
     return (
-      <SafeAreaView
-        className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-      >
+      <SafeAreaView className="flex-1 bg-background">
         <View className="flex-1 px-8 my-8">
-          <Header
-            classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-          >
-            Geschafft !
-          </Header>
+          <Header classes="text-textColor">Geschafft !</Header>
 
-          <Card
-            icon={
-              <Flag
-                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-                width={150}
-                height={150}
-              />
-            }
-          >
+          <Card icon={<Flag fill={cardIconColor} width={150} height={150} />}>
             Ziel erreicht !
           </Card>
         </View>
@@ -274,9 +260,7 @@ export default function TripPage() {
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <PopUp
         visible={showPopUp}
         onClick={() => setShowPopUp(false)}
@@ -284,25 +268,14 @@ export default function TripPage() {
         onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Schließen"
         onDismiss={() => router.back()}
-        colorscheme={colorscheme}
       >
-        <Text
-          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
+        <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-textColor">
           Möchtest du die Navigation wirklich beenden?
         </Text>
       </PopUp>
 
       {pause ? (
-        <Card
-          icon={
-            <Pause
-              fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-              width={150}
-              height={150}
-            />
-          }
-        >
+        <Card icon={<Pause fill={cardIconColor} width={150} height={150} />}>
           Pause !
         </Card>
       ) : (
@@ -317,7 +290,6 @@ export default function TripPage() {
           <TabBar
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
-            colorscheme={colorscheme}
           />
           <View className="flex flex-row justify-end mx-5 my-5">
             <TouchableOpacity
@@ -326,11 +298,7 @@ export default function TripPage() {
               className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
-              <CurrentLocation
-                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
-                width={50}
-                height={50}
-              />
+              <CurrentLocation fill="primary" width={50} height={50} />
             </TouchableOpacity>
           </View>
           <PagerView
@@ -344,7 +312,6 @@ export default function TripPage() {
                 calculatedManeuvers.maneuverIndex
               )}
               key="0"
-              colorscheme={colorscheme}
               calibration={calibration}
             />
             <TripStep
@@ -356,10 +323,7 @@ export default function TripPage() {
                 nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
               }
               onReroute={rerouteHandler}
-              icon={matchIconType(
-                calculatedManeuvers?.currentManeuver.type,
-                colorscheme
-              )}
+              icon={matchIconType(calculatedManeuvers?.currentManeuver.type)}
               instruction={instruction}
             />
           </PagerView>

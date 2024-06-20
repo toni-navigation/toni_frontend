@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColorSchemeName, Modal, SafeAreaView, View } from 'react-native';
+import { Modal, SafeAreaView, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 
@@ -11,7 +11,6 @@ interface PopUpProps {
   onCloseButtonText: string;
   children: React.ReactNode;
   onDismiss?: () => void;
-  colorscheme: ColorSchemeName;
 }
 
 export function PopUp({
@@ -22,7 +21,6 @@ export function PopUp({
   onCloseClick,
   onCloseButtonText,
   onDismiss,
-  colorscheme,
 }: PopUpProps) {
   return (
     <Modal
@@ -32,13 +30,9 @@ export function PopUp({
       onRequestClose={onCloseClick}
       onDismiss={onDismiss}
     >
-      <SafeAreaView
-        className={` ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-      >
+      <SafeAreaView className="bg-background">
         <View className="justify-center items-center h-full w-full p-4">
-          <View
-            className={`flex justify-between items-center w-full h-full rounded-[35px] p-4 ${colorscheme === 'light' ? ' bg-primary-color-dark' : ' bg-primary-color-light'}`}
-          >
+          <View className="flex justify-between items-center w-full h-full rounded-[35px] p-4 bg-primary">
             <View className="flex flex-col items-center justify-center flex-1">
               {children}
             </View>

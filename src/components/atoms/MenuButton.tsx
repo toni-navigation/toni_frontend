@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface MenuButtonProps {
   children: React.ReactNode;
@@ -8,8 +8,6 @@ interface MenuButtonProps {
 }
 
 export function MenuButton({ children, onPress, icon }: MenuButtonProps) {
-  const colorscheme = useColorScheme();
-
   if (onPress) {
     return (
       <TouchableOpacity
@@ -17,14 +15,11 @@ export function MenuButton({ children, onPress, icon }: MenuButtonProps) {
         accessibilityHint=""
         accessibilityLabel={`${children} `}
         onPress={onPress}
-        className={` flex flex-row items-center
-            border-[3px] rounded-[25px] h-36 mb-5 py-3 px-2 ${colorscheme === 'light' ? 'border-primary-color-dark' : 'border-primary-color-light'}`}
+        className="flex flex-row items-center
+            border-[3px] rounded-[25px] h-36 mb-5 py-3 px-2 border-primary"
       >
         <View className="pl-2">{icon}</View>
-        <Text
-          className={` font-generalSansSemi text-2xl pl-4
-            ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
-        >
+        <Text className="font-generalSansSemi text-2xl pl-4 text-primary">
           {children}
         </Text>
       </TouchableOpacity>

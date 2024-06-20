@@ -5,9 +5,12 @@ export default {
   theme: {
     colors: {
       primary: 'var(--color-primary)',
+      invertedPrimary: 'var(--color-inverted-primary)',
       accent: 'var(--color-accent)',
       background: 'var(--color-background)',
-      text: 'var(--color-text)',
+      textColor: 'var(--color-text-color)',
+      white: 'var(--color-white)',
+      black: 'var(--color-black)',
     },
     extend: {
       fontFamily: {
