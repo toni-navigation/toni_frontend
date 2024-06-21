@@ -11,6 +11,7 @@ interface CalibrationNavigationProps {
   calibrationModeButtons: () => React.ReactNode;
   isFromIntro?: boolean;
   currentElement: CalibrationStepsProps;
+  isInCalibrationMode: boolean;
   isFirstStep: boolean;
   isLastStep: boolean;
   stepText: string;
@@ -22,6 +23,7 @@ export function CalibrationNavigation({
   isFromIntro,
   currentElement,
   isFirstStep,
+  isInCalibrationMode,
   isLastStep,
   stepText,
   colorscheme,
@@ -79,6 +81,7 @@ export function CalibrationNavigation({
         buttonType="primaryOutline"
         // TODO Last step delete newest calibration
         onPress={backButtonHandler}
+        disabled={isInCalibrationMode}
       >
         {isFromIntro && isFirstStep
           ? 'Überspringen'

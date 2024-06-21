@@ -14,7 +14,6 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const calibration = useCalibrationStore((state) => state.calibration);
   const showedIntro = useCalibrationStore((state) => state.showedIntro);
 
   useEffect(() => {

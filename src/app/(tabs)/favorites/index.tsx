@@ -18,6 +18,7 @@ import styling from '@/stylings';
 export default function FavoritesPage() {
   const colorscheme = useColorScheme();
   const favorites = useFavoriteStore((state) => state.favorites);
+  const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
 
   return (
     <SafeAreaView
@@ -65,8 +66,14 @@ export default function FavoritesPage() {
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button
-          onPress={() => router.push('/favorites/create')}
+          onPress={() => resetFavoritesStore()}
           buttonType="accentOutline"
+        >
+          Alle löschen
+        </Button>
+        <Button
+          onPress={() => router.push('/favorites/create')}
+          buttonType="accent"
         >
           Favorit hinzufügen
         </Button>

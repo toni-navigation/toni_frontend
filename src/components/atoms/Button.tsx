@@ -86,7 +86,7 @@ export function Button({
         />
       ) : (
         <Text
-          className={`text-lg font-generalSansSemi ${variant[buttonType].text}`}
+          className={`text-2xl font-generalSansSemi ${variant[buttonType].text}`}
         >
           {children}
         </Text>
