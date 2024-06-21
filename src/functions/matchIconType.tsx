@@ -1,16 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { ThemeContext } from '@/components/ThemeProvider';
 import { ArrowLeft } from '@/components/atoms/icons/ArrowLeft';
 import { ArrowRight } from '@/components/atoms/icons/ArrowRight';
 import { ArrowStraight } from '@/components/atoms/icons/ArrowStraight';
 
 export const matchIconType = (
-  directionType: number | undefined
+  directionType: number | undefined,
+  fill: string
 ): React.ReactNode => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { theme } = useContext(ThemeContext);
-  const fill = theme === 'light' ? '#0A585C' : '#DAFBDE';
   switch (directionType) {
     case 9:
       return <ArrowRight fill={fill} width={200} height={200} />;

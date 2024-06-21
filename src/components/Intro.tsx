@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
@@ -10,7 +12,8 @@ import { Calibration } from '@/components/calibration/Calibration';
 export function Intro() {
   const [showCalibration, setShowCalibration] = React.useState(false);
   const pagerRef = useRef<any>(null);
-  const [currentPage, setCurrentPage] = React.useState(0); // Add this line
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const { theme } = useContext(ThemeContext);
 
   const pagerViewData: {
     headline: string;
@@ -36,7 +39,7 @@ export function Intro() {
 
   const styles = StyleSheet.create({
     activeDot: {
-      backgroundColor: 'primary',
+      backgroundColor: themes.external[`--${theme}-mode-primary`],
       width: 20,
       height: 20,
       borderRadius: 25,
@@ -45,7 +48,7 @@ export function Intro() {
     },
     dot: {
       backgroundColor: 'transparent',
-      borderColor: 'primary',
+      borderColor: themes.external[`--${theme}-mode-primary`],
       borderWidth: 3,
       width: 20,
       height: 20,
@@ -73,8 +76,8 @@ export function Intro() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-accent">
-      <View className="flex-1">
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 bg-background">
         <PagerView
           className="flex-1"
           initialPage={0}
@@ -105,11 +108,10 @@ export function Intro() {
                 style={index === currentPage ? styles.activeDot : styles.dot}
                 /* eslint-disable-next-line react/no-array-index-key */
                 key={index}
+                testID="dot"
               />
             ))}
           </View>
-
-          <View style={{ width: 400, height: 400 }} className="bg-background" />
           <Button buttonType="accent" disabled onPress={() => {}}>
             Registrieren
           </Button>

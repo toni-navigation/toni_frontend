@@ -10,7 +10,7 @@ export function TabBar({ setPage, activePage }: TabBarProps) {
     'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-accent';
   const inactiveButton =
     'h-12 w-40  justify-center py-2 px-4 rounded-[35px] bg-transparent border border-2 border-solid border-primary';
-  const activeText = 'text-center text-base text-background-light';
+  const activeText = 'text-center text-base text-white';
 
   const inactiveText = 'text-center text-base text-primary';
 

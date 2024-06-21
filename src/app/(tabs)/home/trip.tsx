@@ -66,13 +66,11 @@ export default function TripPage() {
   const [pause, setPause] = React.useState(false);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [showTripOverview, setShowTripOverview] = React.useState(true);
-  const { theme } = useContext(ThemeContext);
-
-  const cardIconColor = themes.external[`--${theme}-mode-primary`];
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
   const calibration = useCalibrationStore((state) => state.calibration);
+  const { theme } = useContext(ThemeContext);
 
   const restructureTripData: LocationProps[] = [
     parseCoordinate(tripData.origin),
@@ -237,7 +235,15 @@ export default function TripPage() {
         <View className="flex-1 px-8 my-8">
           <Header classes="text-textColor">Geschafft !</Header>
 
-          <Card icon={<Flag fill={cardIconColor} width={150} height={150} />}>
+          <Card
+            icon={
+              <Flag
+                fill={themes.external[`--${theme}-mode-primary`]}
+                width={150}
+                height={150}
+              />
+            }
+          >
             Ziel erreicht !
           </Card>
         </View>
@@ -269,13 +275,21 @@ export default function TripPage() {
         onCloseButtonText="Schließen"
         onDismiss={() => router.back()}
       >
-        <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-textColor">
+        <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-background">
           Möchtest du die Navigation wirklich beenden?
         </Text>
       </PopUp>
 
       {pause ? (
-        <Card icon={<Pause fill={cardIconColor} width={150} height={150} />}>
+        <Card
+          icon={
+            <Pause
+              fill={themes.external[`--${theme}-mode-primary`]}
+              width={150}
+              height={150}
+            />
+          }
+        >
           Pause !
         </Card>
       ) : (
@@ -298,7 +312,11 @@ export default function TripPage() {
               className="flex flex-row items-end gap-x-8"
               onPress={createCurrentLocationMessage}
             >
-              <CurrentLocation fill="primary" width={50} height={50} />
+              <CurrentLocation
+                fill={themes.external[`--${theme}-mode-primary`]}
+                width={50}
+                height={50}
+              />
             </TouchableOpacity>
           </View>
           <PagerView
@@ -323,7 +341,10 @@ export default function TripPage() {
                 nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
               }
               onReroute={rerouteHandler}
-              icon={matchIconType(calculatedManeuvers?.currentManeuver.type)}
+              icon={matchIconType(
+                calculatedManeuvers?.currentManeuver.type,
+                themes.external[`--${theme}-mode-primary`]
+              )}
               instruction={instruction}
             />
           </PagerView>

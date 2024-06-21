@@ -15,29 +15,27 @@ export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
   const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
 
   return (
-    <SafeAreaView>
-      <View className="justify-center items-center h-full w-full p-6">
-        <ScrollView className="flex flex-col flex-1">
-          <Header classes="text-textColor">Route Übersicht</Header>
-          <Text className="text-2xl font-atkinsonRegular text-textColor">
-            Deine Route beträgt:
-          </Text>
-          <Text className="text-2xl font-atkinsonRegular text-textColor">
-            {summary.length} km
-          </Text>
-          <Text className="text-2xl font-atkinsonRegular text-textColor">
-            {convertSecondsToMinutes(summary.time)} Minuten
-          </Text>
-        </ScrollView>
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView className="flex flex-col flex-1 px-8 my-8">
+        <Header classes="text-textColor pt-4">Route Übersicht</Header>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          Deine Route beträgt:
+        </Text>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          {summary.length} km
+        </Text>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          {convertSecondsToMinutes(summary.time)} Minuten
+        </Text>
+      </ScrollView>
 
-        <View className="w-full">
-          <Button onPress={() => router.back()} buttonType="primaryOutline">
-            Zurück
-          </Button>
-          <Button onPress={onCloseClick} buttonType="primary">
-            Weiter
-          </Button>
-        </View>
+      <View className="px-8 my-8">
+        <Button onPress={() => router.back()} buttonType="primaryOutline">
+          Zurück
+        </Button>
+        <Button onPress={onCloseClick} buttonType="primary">
+          Weiter
+        </Button>
       </View>
     </SafeAreaView>
   );

@@ -24,7 +24,7 @@ function ProfileLayout() {
           headerStyle: {
             backgroundColor: themes.external[`--${theme}-mode-background`],
           },
-          headerTintColor: '#fff',
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
     </Stack>

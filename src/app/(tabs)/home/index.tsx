@@ -81,9 +81,9 @@ export default function HomePage() {
         }}
         onCloseButtonText="Alles klar!"
       >
-        <Header classes="text-textColor">Hinweis</Header>
+        <Header classes="text-background">Hinweis</Header>
 
-        <Text className="text-2xl font-atkinsonRegular text-center text-textColor">
+        <Text className="text-2xl font-atkinsonRegular text-center text-background">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
