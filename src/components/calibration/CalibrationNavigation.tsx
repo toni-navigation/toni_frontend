@@ -34,6 +34,7 @@ export function CalibrationNavigation({
     const skip = isFromIntro && isFirstStep;
     if (skip) {
       shownIntroHandler();
+      router.push('/home/');
 
       return;
     }

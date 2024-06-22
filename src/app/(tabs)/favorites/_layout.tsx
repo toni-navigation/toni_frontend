@@ -1,8 +1,13 @@
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
-import React from 'react';
+import React, { useContext } from 'react';
+
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 function FavoritesLayout() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Stack>
       <Stack.Screen
@@ -10,6 +15,7 @@ function FavoritesLayout() {
         options={{
           headerTitle: 'Meine Favoriten',
           headerShown: false,
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
       <Stack.Screen
@@ -25,7 +31,9 @@ function FavoritesLayout() {
         options={{
           headerShown: true,
           headerTitle: '',
+          headerBackTitle: 'Zurück',
           headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
     </Stack>

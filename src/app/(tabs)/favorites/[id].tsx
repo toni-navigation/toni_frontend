@@ -92,17 +92,17 @@ export default function FavoritePage() {
 
           <PopUp
             visible={showPopUp}
-            onClick={() => {
-              setShowPopUp(false);
-              deleteFavorite(favorite.id);
-              router.back();
-            }}
             onClickButtonText="Ja"
             onCloseClick={() => setShowPopUp(false)}
             onCloseButtonText="Nein"
-            // onDismiss={() => {}}
+            onDismiss={() => {}}
+            onClick={() => {
+              setShowPopUp(false);
+              deleteFavorite(favorite.id);
+              router.push('/favorites');
+            }}
           >
-            <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-textColor">
+            <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-background">
               Möchtest du den Favorit {favorite.title} wirklich löschen?
             </Text>
           </PopUp>
