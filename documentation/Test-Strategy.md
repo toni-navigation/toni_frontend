@@ -21,9 +21,13 @@ Accessibility and the smooth calibration of steps are the most important quality
 ## Testing Types
 
 - Unit Testing: Testing all pure functions in the functions folder using Jest.
+- Component Tests: Test Components using Jest and React Testing Library.
 - Integration Testing: Testing integration with external APIs for geocoding (Photon) and routing (Valhalla) using Jest.
   <!--- Functional Testing: Ensure navigation features work correctly, including step-by-step directions and recalibration.-->
 - Usability Testing: Gather feedback from blind users to improve user experience.
+
+For our Tests we concentrate on the /functions and the /components folder, as this is where the core of the app is located.
+The integration tests are important to ensure that the app works correctly with the external APIs.
 
 ### Accessibility Testing
 
@@ -36,14 +40,20 @@ Assess the app's usability for blind users:
 
 ### Calibration Testing
 
-- Integration Testing of the different APIs used there (Audio, Pedometer, CurrentLocation)
 - User Testing
   - Calibrating steps for different user profiles.
   - Verifying accuracy by comparing calculated steps with actual distance covered.
 
-## CI/CD
+## Continuous Integration
 
-Set up a CI pipeline to run tests automatically when merged/pushed to main branch. This helps catch issues early and ensures that broken code is not merged into the main branch.
+The Continuous Integration (CI) pipelines for your project are designed to automate the testing process and ensure that broken code is not merged into the main branch. When code is pushed or merged into the main branch, the CI pipeline is triggered.
+
+It runs a series of automated tests to verify the integrity and quality of the code. These tests include:
+
+- Unit tests
+  - Functions Testing: All pure functions in the /functions folder are tested using Jest. This ensures that individual units of code work as expected.
+  - Component Testing: Components are tested using Jest and React Testing Library. This verifies that the components render and behave correctly.
+- Integration Testing: The integration with external APIs for geocoding (Photon) and routing (Valhalla) is tested using Jest. This ensures that the app works correctly with these external services.
 
 <!--
 Testing Tools:

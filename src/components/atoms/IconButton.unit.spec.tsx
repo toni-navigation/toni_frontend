@@ -46,7 +46,7 @@ describe('IconButton', () => {
   });
 
   it('should render the button with correct styles for each buttonType', () => {
-    const { getByRole, rerender } = render(
+    const { getByRole } = render(
       <IconButton icon={<Cross />} onPress={mockOnPress} buttonType="primary" />
     );
     expect(getByRole('button').props.style.backgroundColor).toContain(

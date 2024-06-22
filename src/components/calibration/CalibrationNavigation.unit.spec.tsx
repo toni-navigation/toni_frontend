@@ -36,6 +36,7 @@ describe('CalibrationNavigation', () => {
     const mockPress = jest.fn();
     const { getByText } = render(
       <CalibrationNavigation
+        isInCalibrationMode={false}
         setIndex={setIndex}
         calibrationModeButtons={() => (
           <Button buttonType="primary" onPress={mockPress}>
@@ -59,6 +60,7 @@ describe('CalibrationNavigation', () => {
 
     const { getByText } = render(
       <CalibrationNavigation
+        isInCalibrationMode
         setIndex={setIndex}
         calibrationModeButtons={() => (
           <Button buttonType="primary" onPress={mockPress}>

@@ -23,20 +23,20 @@ export function IconButton({
 
   const variant = {
     accent: {
-      button: 'bg-orange-accent',
       fill: themes.external['--pure-white'],
+      button: 'bg-accent border border-4 border-orange-accent',
     },
     accentOutline: {
       button:
-        'bg-transparent border border-2 border-solid border-orange-accent',
+        'bg-transparent border border-2 border-solid border-accent',
       fill: themes.external['--accent'],
     },
     primary: {
-      button: 'bg-primary',
+      button: 'bg-primary border border-4 border-primary',
       fill: themes.external[`--${theme}-mode-primary-inverted`],
     },
     primaryOutline: {
-      button: 'bg-transparent border border-2 border-solid border-primary',
+      button: 'bg-transparent border border-4 border-solid border-primary',
       fill: themes.external[`--${theme}-mode-primary`],
     },
   };
@@ -45,17 +45,13 @@ export function IconButton({
     <View className={`flex justify-center items-center ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`p-3 flex justify-center items-center rounded-[100px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`p-5 flex justify-center items-center rounded-[35px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
         disabled={disabled}
       >
-        <SwitchArrow
-          fill={`${variant[buttonType].fill}`}
-          width={40}
-          height={40}
-        />
+        <View>{icon}</View>
       </TouchableOpacity>
     </View>
   );

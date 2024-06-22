@@ -1,21 +1,14 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
-import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/organisms/Card';
 
 interface TripStepProps {
   notOnRoute: boolean;
-  onReroute: () => void;
   icon: React.ReactNode;
   instruction: string | null | undefined;
 }
-export function TripStep({
-  notOnRoute,
-  onReroute,
-  icon,
-  instruction,
-}: TripStepProps) {
+export function TripStep({ notOnRoute, icon, instruction }: TripStepProps) {
   return (
     <SafeAreaView className="flex-1 m-5">
       {notOnRoute && (
@@ -24,9 +17,9 @@ export function TripStep({
             Du befindest dich nicht auf der Route. Möchtest du die Route neu
             berechnen?
           </Text>
-          <Button onPress={onReroute} buttonType="primary">
-            Reroute
-          </Button>
+          {/* <Button onPress={onReroute} buttonType="primary"> */}
+          {/*  Reroute */}
+          {/* </Button> */}
         </View>
       )}
       {/* <Map */}
