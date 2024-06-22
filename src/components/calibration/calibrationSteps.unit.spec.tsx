@@ -5,7 +5,7 @@ import { calibrationSteps } from '@/components/calibration/calibrationSteps';
 
 describe('calibrationSteps', () => {
   it('returns correct steps with factors and light color scheme', () => {
-    const steps = calibrationSteps([1, 2, 3], 'light');
+    const steps = calibrationSteps([1, 2, 3]);
     expect(steps.length).toBe(6);
     const { getByTestId } = render(
       steps[0].calibrationValueNode ?? <Text>-</Text>
@@ -14,7 +14,7 @@ describe('calibrationSteps', () => {
   });
 
   it('returns correct steps with factors and dark color scheme', () => {
-    const steps = calibrationSteps([1, 2, 3], 'dark');
+    const steps = calibrationSteps([1, 2, 3]);
     expect(steps.length).toBe(6);
     const { getByTestId } = render(
       steps[0].calibrationValueNode ?? <Text>-</Text>
@@ -23,7 +23,7 @@ describe('calibrationSteps', () => {
   });
 
   it('returns correct steps without factors', () => {
-    const steps = calibrationSteps(undefined, 'light');
+    const steps = calibrationSteps(undefined);
     expect(steps.length).toBe(6);
     const { getByText } = render(<Text>{steps[0].calibrationValueNode}</Text>);
     expect(getByText('-')).toBeTruthy();

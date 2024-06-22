@@ -47,7 +47,6 @@ describe('CalibrationNavigation', () => {
         isFirstStep={false}
         isLastStep={false}
         stepText="Step 1"
-        colorscheme="light"
       />
     );
     fireEvent.press(getByText('Back'));
@@ -71,7 +70,6 @@ describe('CalibrationNavigation', () => {
         isFirstStep={false}
         isLastStep={false}
         stepText="Step 1"
-        colorscheme="light"
       />
     );
     fireEvent.press(getByText('Next'));

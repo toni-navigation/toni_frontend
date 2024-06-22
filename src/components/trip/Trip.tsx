@@ -2,18 +2,19 @@ import { lineString, point } from '@turf/helpers';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
@@ -41,7 +42,6 @@ import { useReverseData } from '@/mutations/useReverseData';
 import { useTrip } from '@/queries/useTrip';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import stylings from '@/stylings';
 import { LocationProps } from '@/types/Types';
 
 export type SearchParamType = {
@@ -58,8 +58,7 @@ const ACCURACY_THRESHOLD = 10;
 // const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
 const THRESHOLD_REROUTING = 100;
 export function Trip() {
-  const colorscheme = useColorScheme();
-
+  const { theme } = useContext(ThemeContext);
   const ref = React.useRef<PagerView>(null);
   const tripData = useLocalSearchParams() as SearchParamType;
   const [activePage, setActivePage] = React.useState(0);
@@ -227,20 +226,14 @@ export function Trip() {
 
   if (isFinished) {
     return (
-      <SafeAreaView
-        className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-      >
+      <SafeAreaView className="flex-1 bg-background">
         <View className="flex-1 px-8 my-8">
-          <Header
-            classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-          >
-            Geschafft !
-          </Header>
+          <Header classes="text-textColor">Geschafft !</Header>
 
           <Card
             icon={
               <Flag
-                fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+                fill={themes.external[`--${theme}-mode-primary`]}
                 width={150}
                 height={150}
               />
@@ -268,9 +261,7 @@ export function Trip() {
   return data &&
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       {/* {nearestPoint && ( */}
       {/*  <Map */}
       {/*    origin={parseCoordinate(tripData.origin)} */}
@@ -290,11 +281,8 @@ export function Trip() {
         onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Schließen"
         onDismiss={() => router.back()}
-        colorscheme={colorscheme}
       >
-        <Text
-          className={`text-2xl text-text-col font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
+        <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-background">
           Möchtest du die Navigation wirklich beenden?
         </Text>
       </PopUp>
@@ -303,7 +291,7 @@ export function Trip() {
         <Card
           icon={
             <Pause
-              fill={`${colorscheme === 'light' ? stylings.colors['primary-color-dark'] : stylings.colors['primary-color-light']}`}
+              fill={themes.external[`--${theme}-mode-primary`]}
               width={150}
               height={150}
             />
@@ -323,21 +311,18 @@ export function Trip() {
           <TabBar
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
-            colorscheme={colorscheme}
           />
           <PagerView
             onPageSelected={(event) => handlePageSelected(event)}
             initialPage={activePage}
             style={styles.pager}
             ref={ref}
-            className="my-4"
           >
             <TripList
               maneuvers={data.trip.legs[0].maneuvers.slice(
                 calculatedManeuvers.maneuverIndex
               )}
               key="0"
-              colorscheme={colorscheme}
               calibration={calibration}
             />
             <TripStep
@@ -350,7 +335,7 @@ export function Trip() {
               }
               icon={matchIconType(
                 calculatedManeuvers?.currentManeuver.type,
-                colorscheme
+                themes.external[`--${theme}-mode-primary`]
               )}
               instruction={instruction}
             />
@@ -358,8 +343,8 @@ export function Trip() {
         </>
       )}
 
-      <View className="m-auto py-4">
-        <Text className="text-orange-accent text-2xl font-generalSansSemi">
+      <View className="m-auto">
+        <Text className="py-8 text-accent text-2xl font-generalSansSemi">
           {summary?.length} km, {convertSecondsToMinutes(summary?.time)} Minuten
         </Text>
       </View>
@@ -369,11 +354,7 @@ export function Trip() {
           buttonType="primaryOutline"
           icon={
             <Location
-              fill={
-                colorscheme === 'light'
-                  ? stylings.colors['primary-color-dark']
-                  : stylings.colors['primary-color-light']
-              }
+              fill={themes.external[`--${theme}-mode-primary`]}
               width={50}
               height={50}
             />
@@ -386,21 +367,13 @@ export function Trip() {
           icon={
             pause ? (
               <Play
-                fill={
-                  colorscheme === 'light'
-                    ? stylings.colors['primary-color-light']
-                    : stylings.colors['primary-color-dark']
-                }
+                fill={themes.external[`--${theme}-mode-icon-button`]}
                 width={50}
                 height={50}
               />
             ) : (
               <Pause
-                fill={
-                  colorscheme === 'light'
-                    ? stylings.colors['primary-color-light']
-                    : stylings.colors['primary-color-dark']
-                }
+                fill={themes.external[`--${theme}-mode-icon-button`]}
                 width={50}
                 height={50}
               />
@@ -413,11 +386,7 @@ export function Trip() {
           buttonType="primary"
           icon={
             <Close
-              fill={
-                colorscheme === 'light'
-                  ? stylings.colors['primary-color-light']
-                  : stylings.colors['primary-color-dark']
-              }
+              fill={themes.external[`--${theme}-mode-icon-button`]}
               width={50}
               height={50}
             />

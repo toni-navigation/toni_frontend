@@ -15,7 +15,6 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   // TODO add Theme Provider
-  // const colorScheme = useColorScheme();
 
   return (
     <React.StrictMode>
@@ -34,6 +33,12 @@ function RootLayoutNav() {
           >
             <Stack.Screen
               name="(tabs)"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="index"
               options={{
                 headerShown: false,
               }}

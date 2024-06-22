@@ -13,7 +13,7 @@ interface TripListProps {
 }
 export function TripList({ maneuvers, calibration }: TripListProps) {
   return (
-    <SafeAreaView className="flex-1 mx-5">
+    <SafeAreaView className="flex-1 mx-5 mt-5">
       <FlatList
         data={maneuvers}
         renderItem={({ item, index }) => (

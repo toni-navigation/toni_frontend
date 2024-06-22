@@ -178,11 +178,7 @@ describe('TripList', () => {
 
   it('renders correctly with given maneuvers, calibration, and colorscheme', () => {
     const { getByText } = render(
-      <TripList
-        maneuvers={mockManeuvers}
-        calibration={mockCalibration}
-        colorscheme="light"
-      />
+      <TripList maneuvers={mockManeuvers} calibration={mockCalibration} />
     );
 
     expect(getByText('1. Richtung Süden laufen.')).toBeTruthy();
@@ -191,11 +187,7 @@ describe('TripList', () => {
 
   it('renders correctly with empty maneuvers', () => {
     const { queryByText } = render(
-      <TripList
-        maneuvers={[]}
-        calibration={mockCalibration}
-        colorscheme="light"
-      />
+      <TripList maneuvers={[]} calibration={mockCalibration} />
     );
 
     expect(queryByText('1.')).toBeNull();
@@ -204,11 +196,7 @@ describe('TripList', () => {
 
   it('renders correctly with different colorscheme', () => {
     const { getByText } = render(
-      <TripList
-        maneuvers={mockManeuvers}
-        calibration={mockCalibration}
-        colorscheme="dark"
-      />
+      <TripList maneuvers={mockManeuvers} calibration={mockCalibration} />
     );
     expect(getByText('1. Richtung Süden laufen.')).toBeTruthy();
     expect(getByText('4. Rechts auf the stairs abbiegen.')).toBeTruthy();

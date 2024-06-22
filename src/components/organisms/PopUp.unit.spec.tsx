@@ -6,12 +6,7 @@ import { PopUp } from '@/components/organisms/PopUp';
 describe('PopUp', () => {
   it('renders correctly with given children and colorscheme', () => {
     const { getByText } = render(
-      <PopUp
-        visible
-        onCloseClick={() => {}}
-        onCloseButtonText="Close"
-        colorscheme="light"
-      >
+      <PopUp visible onCloseClick={() => {}} onCloseButtonText="Close">
         Popup
       </PopUp>
     );
@@ -22,12 +17,7 @@ describe('PopUp', () => {
   it('calls onCloseClick when Close button is pressed', () => {
     const onCloseClick = jest.fn();
     const { getByText } = render(
-      <PopUp
-        visible
-        onCloseClick={onCloseClick}
-        onCloseButtonText="Close"
-        colorscheme="light"
-      >
+      <PopUp visible onCloseClick={onCloseClick} onCloseButtonText="Close">
         Test
       </PopUp>
     );
@@ -46,7 +36,6 @@ describe('PopUp', () => {
         onClickButtonText="Click"
         onCloseClick={() => {}}
         onCloseButtonText="Close"
-        colorscheme="light"
       >
         Test
       </PopUp>
@@ -59,12 +48,7 @@ describe('PopUp', () => {
 
   it('does not render Click button when onClick and onClickButtonText are not provided', () => {
     const { queryByText } = render(
-      <PopUp
-        visible
-        onCloseClick={() => {}}
-        onCloseButtonText="Close"
-        colorscheme="light"
-      >
+      <PopUp visible onCloseClick={() => {}} onCloseButtonText="Close">
         Test
       </PopUp>
     );

@@ -1,18 +1,17 @@
-import React from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Text, View } from 'react-native';
 
 import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { MusicNote } from '@/components/atoms/icons/MusicNote';
 
 interface CalibrationModeProps {
   steps: number;
 }
 export function CalibrationMode({ steps }: CalibrationModeProps) {
-  const colorscheme = useColorScheme();
-  const iconColor =
-    colorscheme === 'light'
-      ? themes.light['--color-primary']
-      : themes.dark['--color-primary'];
+  const { theme } = useContext(ThemeContext);
+
+  const iconColor = themes.external[`--${theme}-mode-primary`];
 
   return (
     <>

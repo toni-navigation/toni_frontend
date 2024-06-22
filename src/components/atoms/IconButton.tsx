@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 
 interface IconButtonProps {
   icon: React.ReactNode;
@@ -24,19 +23,19 @@ export function IconButton({
   const variant = {
     accent: {
       fill: themes.external['--pure-white'],
-      button: 'bg-accent border border-4 border-orange-accent',
+      button: 'bg-accent border border-8 border-orange-accent',
     },
     accentOutline: {
-      button:
-        'bg-transparent border border-2 border-solid border-accent',
+      button: 'bg-transparent border border-8 border-solid border-accent',
       fill: themes.external['--accent'],
     },
     primary: {
-      button: 'bg-primary border border-4 border-primary',
+      button: 'bg-primary border border-8 border-primary',
       fill: themes.external[`--${theme}-mode-primary-inverted`],
     },
     primaryOutline: {
-      button: 'bg-transparent border border-4 border-solid border-primary',
+      button:
+        'bg-transparent border border-solid border-solid border-primary border-8',
       fill: themes.external[`--${theme}-mode-primary`],
     },
   };
@@ -45,7 +44,7 @@ export function IconButton({
     <View className={`flex justify-center items-center ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`p-5 flex justify-center items-center rounded-[35px]  ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`p-4 flex b justify-center items-center rounded-[35px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}

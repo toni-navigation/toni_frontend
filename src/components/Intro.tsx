@@ -12,7 +12,8 @@ import { Calibration } from '@/components/calibration/Calibration';
 export function Intro() {
   const [showCalibration, setShowCalibration] = React.useState(false);
   const pagerRef = useRef<any>(null);
-  const [currentPage, setCurrentPage] = React.useState(0);
+  const [currentPage, setCurrentPage] = React.useState(0); // Add this line
+
   const { theme } = useContext(ThemeContext);
 
   const pagerViewData: {
@@ -76,8 +77,8 @@ export function Intro() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-background-light">
+      <View className="flex-1">
         <PagerView
           className="flex-1"
           initialPage={0}
@@ -101,24 +102,22 @@ export function Intro() {
         </PagerView>
       </View>
       <View className="mx-8 mb-3">
-        <>
-          <View className="flex justify-center flex-row mb-14">
-            {pagerViewData.map((data, index) => (
-              <View
-                style={index === currentPage ? styles.activeDot : styles.dot}
-                /* eslint-disable-next-line react/no-array-index-key */
-                key={index}
-                testID="dot"
-              />
-            ))}
-          </View>
-          <Button buttonType="accent" disabled onPress={() => {}}>
-            Registrieren
-          </Button>
-          <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
-            Los gehts
-          </Button>
-        </>
+        <View className="flex justify-center flex-row mb-14">
+          {pagerViewData.map((data, index) => (
+            <View
+              style={index === currentPage ? styles.activeDot : styles.dot}
+              /* eslint-disable-next-line react/no-array-index-key */
+              key={index}
+              testID="dot"
+            />
+          ))}
+        </View>
+        <Button buttonType="accent" disabled onPress={() => {}}>
+          Registrieren
+        </Button>
+        <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
+          Los gehts
+        </Button>
       </View>
     </SafeAreaView>
   );

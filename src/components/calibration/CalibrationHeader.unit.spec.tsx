@@ -13,7 +13,7 @@ describe('CalibrationHeader', () => {
 
   it('renders correctly with light color scheme', () => {
     const { getByText } = render(
-      <CalibrationHeader colorscheme="light" currentStep={mockCurrentStep} />
+      <CalibrationHeader currentStep={mockCurrentStep} />
     );
     expect(getByText('Test Step')).toBeTruthy();
     expect(getByText('Test Node')).toBeTruthy();
@@ -21,7 +21,7 @@ describe('CalibrationHeader', () => {
 
   it('renders correctly with dark color scheme', () => {
     const { getByText } = render(
-      <CalibrationHeader colorscheme="dark" currentStep={mockCurrentStep} />
+      <CalibrationHeader currentStep={mockCurrentStep} />
     );
     expect(getByText('Test Step')).toBeTruthy();
     expect(getByText('Test Node')).toBeTruthy();
@@ -33,10 +33,7 @@ describe('CalibrationHeader', () => {
       calibrationValueNode: undefined,
     };
     const { getByText, queryByText } = render(
-      <CalibrationHeader
-        colorscheme="light"
-        currentStep={mockCurrentStepWithoutNode}
-      />
+      <CalibrationHeader currentStep={mockCurrentStepWithoutNode} />
     );
     expect(getByText('Test Step')).toBeTruthy();
     expect(queryByText('Test Node')).toBeNull();

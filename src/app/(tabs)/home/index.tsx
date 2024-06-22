@@ -1,7 +1,9 @@
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
@@ -10,7 +12,6 @@ import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplet
 import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
-import styling from '@/stylings';
 
 export default function HomePage() {
   const { changeOrigin, changeDestination, switchOriginDestination } =
@@ -20,6 +21,7 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);
 
@@ -106,13 +108,9 @@ export default function HomePage() {
           disabled={origin === undefined && destination === undefined}
           icon={
             <SwitchArrow
-              fill={
-                colorscheme === 'light'
-                  ? styling.colors['primary-color-light']
-                  : styling.colors['primary-color-dark']
-              }
-              width={25}
-              height={25}
+              fill={themes.external[`--${theme}-mode-icon-button`]}
+              width={35}
+              height={35}
             />
           }
         />
