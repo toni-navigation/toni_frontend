@@ -3,7 +3,6 @@ import React from 'react';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import { Cross } from '@/components/atoms/icons/Cross';
-import styling from '@/stylings';
 
 describe('IconButton', () => {
   const mockOnPress = jest.fn();
@@ -14,15 +13,24 @@ describe('IconButton', () => {
 
   it('should render the icon button correctly', () => {
     const { getByRole } = render(
-      <IconButton icon={<Cross />} onPress={mockOnPress} buttonType="primary" />
+      <IconButton
+        iconName="Cross"
+        icon={<Cross />}
+        onPress={mockOnPress}
+        buttonType="primary"
+      />
     );
-
     expect(getByRole('button')).toBeTruthy();
   });
 
   it('should call onPress when the button is pressed', () => {
     const { getByRole } = render(
-      <IconButton icon={<Cross />} onPress={mockOnPress} buttonType="primary" />
+      <IconButton
+        iconName="Cross"
+        icon={<Cross />}
+        onPress={mockOnPress}
+        buttonType="primary"
+      />
     );
 
     fireEvent.press(getByRole('button'));
@@ -37,6 +45,7 @@ describe('IconButton', () => {
         onPress={mockOnPress}
         buttonType="primary"
         disabled
+        iconName="Cross"
       />
     );
 
@@ -45,42 +54,37 @@ describe('IconButton', () => {
     expect(mockOnPress).not.toHaveBeenCalled();
   });
 
-  it('should render the button with correct styles for each buttonType', () => {
-    const { getByRole } = render(
-      <IconButton icon={<Cross />} onPress={mockOnPress} buttonType="primary" />
+  it('renders correctly with given props', async () => {
+    const { getByTestId, rerender } = render(
+      <IconButton
+        icon={<Cross />}
+        onPress={mockOnPress}
+        buttonType="primary"
+        disabled={false}
+        classes="test-class"
+        iconName="Cross"
+      />
     );
-    expect(getByRole('button').props.style.backgroundColor).toContain(
-      styling.colors['primary-color-dark']
+
+    let button = getByTestId('IconButton-primary');
+    expect(button).toBeDefined();
+    expect(button.props.accessibilityHint).toEqual('');
+    expect(button.props.accessibilityLabel).toEqual('Cross');
+    expect(button.props.accessibilityRole).toEqual('button');
+
+    rerender(
+      <IconButton
+        icon={<Cross />}
+        onPress={mockOnPress}
+        buttonType="primary"
+        disabled
+        classes="test-class"
+        iconName="Cross"
+      />
     );
-    //
-    // rerender(
-    //   <IconButton icon={<Cross />} onPress={mockOnPress} buttonType="accent" />
-    // );
-    //
-    // expect(getByRole('button').props.style.backgroundColor).toContain(
-    //   styling.colors['orange-accent']
-    // );
-    //
-    // rerender(
-    //   <IconButton
-    //     icon={<Cross />}
-    //     onPress={mockOnPress}
-    //     buttonType="accentOutline"
-    //   />
-    // );
-    // expect(getByRole('button').props.style.borderTopColor).toContain(
-    //   styling.colors['orange-accent']
-    // );
-    //
-    // rerender(
-    //   <IconButton
-    //     icon={<Cross />}
-    //     onPress={mockOnPress}
-    //     buttonType="primaryOutline"
-    //   />
-    // );
-    // expect(getByRole('button').props.style.borderTopColor).toContain(
-    //   styling.colors['primary-color-dark']
-    // );
+
+    button = getByTestId('IconButton-primary');
+    expect(button.props.accessibilityHint).toEqual('Nicht nutzbar');
+    expect(button.props.accessibilityLabel).toEqual('Cross nicht nutzbar');
   });
 });

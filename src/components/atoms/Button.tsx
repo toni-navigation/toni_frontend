@@ -59,9 +59,14 @@ export function Button({
       accessibilityRole="button"
       accessibilityLabel={accessibilityOutput()}
       disabled={disabled}
+      testID={`Button-${buttonType}`}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="textColor" />
+        <ActivityIndicator
+          size="small"
+          color="textColor"
+          testID="ActivityIndicator"
+        />
       ) : (
         <Text
           className={`text-2xl font-generalSansSemi ${variant[buttonType].text}`}

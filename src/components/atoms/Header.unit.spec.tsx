@@ -2,7 +2,7 @@ import { render } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from 'react-native';
 
-import { Header } from '@/components/atoms/Header'; // Adjust the import according to your project structure
+import { Header } from '@/components/atoms/Header';
 
 describe('Header component', () => {
   it('renders correctly with default styles', () => {
@@ -17,11 +17,10 @@ describe('Header component', () => {
     );
     const header = getByText('Test Header with Classes');
 
-    expect(header).toBeTruthy();
-    expect(header.props.style[0].fontSize).toBeTruthy();
-    expect(header.props.style[1].fontFamily).toBeTruthy();
-    expect(header.props.style[2].height).toBeTruthy();
-    expect(header.props.style[3].textAlign).toBeTruthy();
+    expect(header.props.children).toEqual('Test Header with Classes');
+    expect(header.props.className).toEqual(
+      'text-4xl font-generalSansSemi h-24 text-center'
+    );
   });
 
   it('renders children correctly', () => {

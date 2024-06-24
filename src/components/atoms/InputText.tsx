@@ -32,6 +32,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               accessibilityHint="Eingabe löschen"
               onPress={onClickDelete}
               className={` absolute top-2 right-3`}
+              testID="DeleteButton"
             >
               <Cross
                 fill={themes.external[`--${theme}-mode-primary`]}

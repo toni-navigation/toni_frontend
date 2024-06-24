@@ -352,6 +352,7 @@ export function Trip() {
         <IconButton
           onPress={createCurrentLocationMessage}
           buttonType="primaryOutline"
+          iconName="Akuteller Standort"
           icon={
             <Location
               fill={themes.external[`--${theme}-mode-primary`]}
@@ -364,6 +365,7 @@ export function Trip() {
         <IconButton
           onPress={() => setPause(!pause)}
           buttonType="primary"
+          iconName={pause ? 'Weiter' : 'Pause'}
           icon={
             pause ? (
               <Play
@@ -384,6 +386,7 @@ export function Trip() {
         <IconButton
           onPress={() => setShowPopUp(true)}
           buttonType="primary"
+          iconName="Beenden"
           icon={
             <Close
               fill={themes.external[`--${theme}-mode-icon-button`]}

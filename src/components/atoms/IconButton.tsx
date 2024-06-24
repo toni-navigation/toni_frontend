@@ -6,6 +6,7 @@ import { ThemeContext } from '@/components/ThemeProvider';
 
 interface IconButtonProps {
   icon: React.ReactNode;
+  iconName: string;
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
@@ -17,6 +18,7 @@ export function IconButton({
   onPress,
   classes,
   buttonType,
+  iconName,
 }: IconButtonProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -47,8 +49,11 @@ export function IconButton({
         className={`p-4 flex b justify-center items-center rounded-[35px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel={disabled ? `${icon} nicht nutzbar` : `${icon}`}
+        accessibilityLabel={
+          disabled ? `${iconName} nicht nutzbar` : `${iconName}`
+        }
         disabled={disabled}
+        testID={`IconButton-${buttonType}`}
       >
         <View>{icon}</View>
       </TouchableOpacity>

@@ -106,6 +106,7 @@ export default function HomePage() {
           onPress={switchOriginDestination}
           buttonType="primary"
           disabled={origin === undefined && destination === undefined}
+          iconName="Start und Ziel tauschen"
           icon={
             <SwitchArrow
               fill={themes.external[`--${theme}-mode-icon-button`]}

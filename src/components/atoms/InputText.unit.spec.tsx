@@ -62,4 +62,36 @@ describe('InputText', () => {
 
     expect(getByRole('button')).toBeTruthy();
   });
+
+  it('renders correctly with given props', async () => {
+    const { getByTestId } = render(
+      <InputText
+        onClickDelete={mockOnClickDelete}
+        accessibilityLabel="Test Input"
+        accessibilityHint="Test Input"
+        value="Test Value"
+      />
+    );
+
+    const input = getByTestId('TextInput');
+    expect(input).toBeDefined();
+    expect(input.props.accessibilityHint).toEqual('Test Input');
+    expect(input.props.accessibilityLabel).toEqual('Test Input');
+  });
+
+  it('renders correctly with given props', async () => {
+    const { getByTestId } = render(
+      <InputText
+        onClickDelete={mockOnClickDelete}
+        accessibilityLabel="Test Input"
+        accessibilityHint="Test Input"
+        value="Test Value"
+      />
+    );
+
+    const deleteButton = getByTestId('DeleteButton');
+    expect(deleteButton).toBeDefined();
+    expect(deleteButton.props.accessibilityHint).toEqual('Eingabe löschen');
+    expect(deleteButton.props.accessibilityRole).toEqual('button');
+  });
 });

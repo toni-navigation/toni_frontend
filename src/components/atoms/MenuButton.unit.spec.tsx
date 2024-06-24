@@ -1,7 +1,6 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 
-import { themes } from '@/colors';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { Cross } from '@/components/atoms/icons/Cross';
 
@@ -34,24 +33,28 @@ describe('MenuButton', () => {
     expect(mockOnPress).toHaveBeenCalled();
   });
 
-  it('should render the button with correct styles for each color scheme', () => {
-    const { getByRole, rerender } = render(
+  it('should render the button with correct accessibility props', () => {
+    const { getByTestId } = render(
       <MenuButton onPress={mockOnPress} icon={<Cross />}>
         Test Button
       </MenuButton>
     );
-
-    expect(getByRole('button').props.style.borderTopColor).toContain(
-      themes.light['--color-primary']
+    expect(getByTestId('MenuButton').props.accessibilityLabel).toEqual(
+      'Test Button'
     );
+    expect(getByTestId('MenuButton').props.accessibilityHint).toEqual('');
+    expect(getByTestId('MenuButton').props.accessibilityRole).toEqual('button');
+  });
 
-    rerender(
+  it('should render the button with correct styles of Icon and Text', () => {
+    const { getByTestId } = render(
       <MenuButton onPress={mockOnPress} icon={<Cross />}>
         Test Button
       </MenuButton>
     );
-    expect(getByRole('button').props.style.borderTopColor).toContain(
-      themes.light['--color-primary']
+    expect(getByTestId('MenuButtonIcon').props.className).toEqual('pl-2');
+    expect(getByTestId('MenuButtonText').props.className).toEqual(
+      'font-generalSansSemi text-2xl pl-4 text-primary'
     );
   });
 });
