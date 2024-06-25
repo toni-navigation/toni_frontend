@@ -132,6 +132,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     pedometerAvailableMutation.isPending ||
     speakMutation.isPending ||
     startSoundMutation.isPending;
+
   const isInCalibrationMode =
     !!(pedometerSubscription.current && audioSound.current) ||
     !!(
@@ -173,9 +174,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   };
 
   return (
-    <SafeAreaView
-        className="flex-1 bg-background"      testID="calibrationID"
-    >
+    <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
       <ScrollView className="px-8 mt-8">
         <CalibrationHeader currentStep={currentStep} />
         {currentStep.forwardButtonText === undefined ? (
