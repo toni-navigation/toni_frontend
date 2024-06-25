@@ -1,14 +1,15 @@
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { View } from 'react-native';
 
 import { TripStep } from '@/components/trip/TripStep';
 
 describe('TripStep', () => {
-  const mockIcon = <div />;
+  const mockIcon = <View />;
 
   it('renders correctly with notOnRoute false', () => {
     const { getByText, queryByText } = render(
-      <TripStep notOnRoute={false} icon={mockIcon} instruction="Turn right" />
+      <TripStep icon={mockIcon} instruction="Turn right" />
     );
 
     expect(
@@ -22,7 +23,7 @@ describe('TripStep', () => {
 
   it('renders correctly with null instruction', () => {
     const { queryByText } = render(
-      <TripStep notOnRoute icon={mockIcon} instruction={null} />
+      <TripStep icon={mockIcon} instruction={null} />
     );
 
     expect(queryByText('Turn right')).toBeNull();
@@ -30,7 +31,7 @@ describe('TripStep', () => {
 
   it('renders correctly with undefined instruction', () => {
     const { queryByText } = render(
-      <TripStep notOnRoute icon={mockIcon} instruction={undefined} />
+      <TripStep icon={mockIcon} instruction={undefined} />
     );
 
     expect(queryByText('Turn right')).toBeNull();

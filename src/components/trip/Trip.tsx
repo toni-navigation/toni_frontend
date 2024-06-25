@@ -193,28 +193,6 @@ export function Trip() {
     return <Error error={error.message} />;
   }
 
-  // if (notOnRoute) {
-  // return (
-  //  <NavigateToRoute
-  //   currentLocation={currentLocation}
-  //  distanceToStart={distance(currentLocationPoint, nearestPoint) * 1000}
-  //  nearestPoint={nearestPoint}
-  // >
-  //  <View />
-  // {/* <Map */}
-  // {/*  origin={parseCoordinate(tripData.origin)} */}
-  // {/*  destination={{ */}
-  // {/*    lat: nearestPoint.geometry.coordinates[0], */}
-  //   {/*    lon: nearestPoint.geometry.coordinates[1], */}
-  //  {/*  }} */}
-  //   {/*  nearestPoint={nearestPoint} */}
-  //  {/*  decodedShape={decodedShape} */}
-  // {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-  // {/* /> */}
-  // </NavigateToRoute>
-  // );
-  // }
-
   if (data && showTripOverview) {
     return (
       <RouteOverview
@@ -327,12 +305,6 @@ export function Trip() {
             />
             <TripStep
               key="1"
-              notOnRoute={
-                !!nearestPoint &&
-                currentLocation &&
-                !!nearestPoint.properties.dist &&
-                nearestPoint.properties.dist * 1000 > THRESHOLD_REROUTING
-              }
               icon={matchIconType(
                 calculatedManeuvers?.currentManeuver.type,
                 themes.external[`--${theme}-mode-primary`]
