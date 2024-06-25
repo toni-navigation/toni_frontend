@@ -4,7 +4,7 @@ import React from 'react';
 import { PopUp } from '@/components/organisms/PopUp';
 
 describe('PopUp', () => {
-  it('renders correctly with given children and colorscheme', () => {
+  it('renders correctly with given children', () => {
     const { getByText } = render(
       <PopUp visible onCloseClick={() => {}} onCloseButtonText="Close">
         Popup

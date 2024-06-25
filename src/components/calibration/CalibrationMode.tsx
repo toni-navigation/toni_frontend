@@ -15,7 +15,10 @@ export function CalibrationMode({ steps }: CalibrationModeProps) {
 
   return (
     <>
-      <Text className="text-lg font-atkinsonRegular mt-4 text-textColor">
+      <Text
+        testID="Mode"
+        className="text-lg font-atkinsonRegular mt-4 text-textColor"
+      >
         Schritte: {steps}
       </Text>
       <View className="flex-1 items-center pb-6">

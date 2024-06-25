@@ -20,10 +20,12 @@ describe('RouteOverview', () => {
         summary={summary}
       />
     );
-
-    expect(getByText('Deine Route beträgt:')).toBeTruthy();
-    expect(getByText('10 km')).toBeTruthy();
-    expect(getByText('10 Minuten')).toBeTruthy();
+    console.log(getByText('Deine Route beträgt:').children[0]);
+    expect(getByText('Deine Route beträgt:').children[0]).toEqual(
+      'Deine Route beträgt:'
+    );
+    expect(getByText('10 km').children[0]).toEqual('10');
+    expect(getByText('10 Minuten').children[0]).toEqual('10');
   });
 
   it('calls onCloseClick when Weiter button is pressed', () => {

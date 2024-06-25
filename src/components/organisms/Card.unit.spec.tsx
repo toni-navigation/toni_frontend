@@ -5,16 +5,7 @@ import { Text } from 'react-native';
 import { Card } from '@/components/organisms/Card';
 
 describe('Card', () => {
-  it('renders correctly with light color scheme', () => {
-    const { getByText } = render(
-      <Card>
-        <Text>Test Content</Text>
-      </Card>
-    );
-    expect(getByText('Test Content')).toBeTruthy();
-  });
-
-  it('renders correctly with dark color scheme', () => {
+  it('renders correctly', () => {
     const { getByText } = render(
       <Card>
         <Text>Test Content</Text>

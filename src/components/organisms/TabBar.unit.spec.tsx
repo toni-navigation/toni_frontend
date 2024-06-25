@@ -4,11 +4,11 @@ import React from 'react';
 import { TabBar } from '@/components/organisms/TabBar';
 
 describe('TabBar', () => {
-  it('renders correctly with given activePage and colorscheme', () => {
+  it('renders correctly with given activePage', () => {
     const { getByText } = render(<TabBar setPage={() => {}} activePage={0} />);
 
-    expect(getByText('Übersicht')).toBeTruthy();
-    expect(getByText('Navigation')).toBeTruthy();
+    expect(getByText('Übersicht').children[0]).toEqual('Übersicht');
+    expect(getByText('Navigation').children[0]).toEqual('Navigation');
   });
 
   it('calls setPage when Übersicht button is pressed and not active', () => {

@@ -8,6 +8,7 @@ export interface CalibrationStepsProps {
   forwardButtonText?: string;
   backButtonText?: string | false;
   calibrationValueNode?: ReactElement;
+  testID?: string;
 }
 export const calibrationSteps = (
   factors: number[] | undefined

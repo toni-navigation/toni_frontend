@@ -11,20 +11,12 @@ describe('CalibrationHeader', () => {
     calibrationValueNode: <Text>Test Node</Text>,
   };
 
-  it('renders correctly with light color scheme', () => {
+  it('renders correctly', () => {
     const { getByText } = render(
       <CalibrationHeader currentStep={mockCurrentStep} />
     );
-    expect(getByText('Test Step')).toBeTruthy();
-    expect(getByText('Test Node')).toBeTruthy();
-  });
-
-  it('renders correctly with dark color scheme', () => {
-    const { getByText } = render(
-      <CalibrationHeader currentStep={mockCurrentStep} />
-    );
-    expect(getByText('Test Step')).toBeTruthy();
-    expect(getByText('Test Node')).toBeTruthy();
+    expect(getByText('Test Step').children).toEqual(['Test Step']);
+    expect(getByText('Test Node').children).toEqual(['Test Node']);
   });
 
   it('renders correctly when calibrationValueNode is null', () => {

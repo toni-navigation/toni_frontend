@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, View } from 'react-native';
 
 interface ErrorProps {
@@ -6,9 +7,9 @@ interface ErrorProps {
 
 export function Error({ error }: ErrorProps) {
   return (
-    <View>
-      <Text>Error</Text>
-      <Text>{error}</Text>
+    <View testID="ErrorView">
+      <Text testID="Error">Error</Text>
+      <Text testID="AnotherError">{error}</Text>
     </View>
   );
 }
