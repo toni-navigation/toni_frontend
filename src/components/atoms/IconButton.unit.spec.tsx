@@ -52,8 +52,9 @@ describe('IconButton', () => {
       />
     );
 
-    fireEvent.press(getByRole('button'));
-
+    act(() => {
+      fireEvent.press(getByRole('button'));
+    });
     expect(mockOnPress).not.toHaveBeenCalled();
   });
 
