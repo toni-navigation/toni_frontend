@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
+import { act } from 'react-test-renderer';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import { Cross } from '@/components/atoms/icons/Cross';
@@ -33,7 +34,9 @@ describe('IconButton', () => {
       />
     );
 
-    fireEvent.press(getByRole('button'));
+    act(() => {
+      fireEvent.press(getByRole('button'));
+    });
 
     expect(mockOnPress).toHaveBeenCalled();
   });
