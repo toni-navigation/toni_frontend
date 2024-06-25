@@ -20,7 +20,6 @@ describe('RouteOverview', () => {
         summary={summary}
       />
     );
-    console.log(getByText('Deine Route beträgt:').children[0]);
     expect(getByText('Deine Route beträgt:').children[0]).toEqual(
       'Deine Route beträgt:'
     );

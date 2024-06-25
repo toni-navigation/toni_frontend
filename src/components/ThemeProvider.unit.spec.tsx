@@ -5,7 +5,6 @@ import { View, Text } from 'react-native';
 
 import { ThemeProvider, ThemeContext } from '@/components/ThemeProvider';
 
-// Initial mock setup
 jest.mock('nativewind', () => ({
   useColorScheme: jest.fn(),
   vars: jest.fn().mockReturnValue({}),
@@ -19,7 +18,6 @@ describe('ThemeProvider', () => {
   });
 
   it('renders without crashing', () => {
-    // Ensure useColorScheme mock returns a valid structure
     mockedUseColorScheme.mockReturnValue({ colorScheme: 'light' });
 
     const { getByTestId } = render(
@@ -31,7 +29,6 @@ describe('ThemeProvider', () => {
   });
 
   it('provides the correct theme context value for dark mode', async () => {
-    // Mock the useColorScheme to return dark mode
     mockedUseColorScheme.mockReturnValue({ colorScheme: 'dark' });
 
     function TestComponent() {
@@ -69,7 +66,6 @@ describe('ThemeProvider', () => {
   });
 
   it('falls back to the default theme when colorScheme is undefined', async () => {
-    // Mock the useColorScheme to return undefined
     mockedUseColorScheme.mockReturnValue({ colorScheme: undefined });
 
     function TestComponent() {
