@@ -7,7 +7,11 @@ assisting them in navigating their surroundings using step-by-step instructions.
 It incorporates a unique feature allowing users to calibrate their steps for accurate distance measurement.
 It is a pure frontend application without its own backend.
 
--- IMAGE --
+## Test Diagram
+
+![TestDiagram](Testdiagram.png)
+
+https://miro.com/app/board/uXjVNld2iJQ=/?moveToWidget=3458764593378193867&cot=14
 
 ## Testing Objectives
 
