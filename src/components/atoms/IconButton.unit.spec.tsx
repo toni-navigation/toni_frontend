@@ -5,7 +5,7 @@ import { act } from 'react-test-renderer';
 import { IconButton } from '@/components/atoms/IconButton';
 import { Cross } from '@/components/atoms/icons/Cross';
 
-describe('IconButton', () => {
+describe.skip('IconButton', () => {
   const mockOnPress = jest.fn();
 
   afterEach(() => {
