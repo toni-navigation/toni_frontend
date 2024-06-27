@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
+import React, { useContext } from 'react';
 import 'react-native-reanimated';
-import { useContext } from 'react';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';

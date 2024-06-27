@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';

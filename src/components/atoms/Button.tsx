@@ -64,7 +64,7 @@ export function Button({
       {isLoading ? (
         <ActivityIndicator
           size="small"
-          color="textColor"
+          color="white"
           testID="ActivityIndicator"
         />
       ) : (

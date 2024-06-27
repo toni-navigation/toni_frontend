@@ -53,7 +53,7 @@ export const calibrationSteps = (
       factors && getCalibrationValue(factors)
         ? `${getCalibrationValue(factors)} m`
         : '-'
-    }.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!`,
+    }.\nDu kannst deine Schrittlänge jederzeit unter deinen Profileinstellungen neu Kalibrieren!`,
     backButtonText: 'Zurück',
   },
 ];
