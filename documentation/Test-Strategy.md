@@ -55,8 +55,8 @@ It runs a series of automated tests to verify the integrity and quality of the c
   - Component Testing: Components are tested using Jest and React Testing Library. This verifies that the components render and behave correctly.
 - Integration Testing: The integration with external APIs for geocoding (Photon) and routing (Valhalla) is tested using Jest. This ensures that the app works correctly with these external services.
 
-
 ## Learnings & Reflection
+
 The key learning in the project was: As soon as it becomes complicated to write tests, you should rethink the production code and restructure it if necessary. Based on the tests, we often realized whether a component is well/usefully structured or whether it should be rethought.
 Another thing we learned was to keep the components as atomic as possible. Because the smaller the components, the easier it often is to write tests. This was particularly noticeable in our <Trip/> & <Calibration/> components. Because the components are so large, we found it very difficult to write working tests. However, some functions from the /functions folder are used in these components, which have been extensively tested.
 
