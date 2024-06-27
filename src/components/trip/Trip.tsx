@@ -55,8 +55,6 @@ const styles = StyleSheet.create({
   },
 });
 const ACCURACY_THRESHOLD = 10;
-// const THRESHOLD_MAXDISTANCE_FALLBACK_IN_METERS = 10;
-const THRESHOLD_REROUTING = 100;
 export function Trip() {
   const { theme } = useContext(ThemeContext);
   const ref = React.useRef<PagerView>(null);
@@ -78,21 +76,6 @@ export function Trip() {
 
   const { data, isPending, isError, error } = useTrip(restructureTripData);
 
-  // TODO Do Rerouting
-
-  // const rerouteHandler = () => {
-  //   if (!currentLocation) return;
-  //
-  //   const params = {
-  //     origin: [
-  //       currentLocation.coords.longitude,
-  //       currentLocation.coords.latitude,
-  //     ],
-  //     destination: tripData.destination,
-  //   };
-  //
-  //   router.replace({ pathname: `/home/trip`, params });
-  // };
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
   ) => {
@@ -104,16 +87,13 @@ export function Trip() {
     currentLocation &&
     point([currentLocation.coords.latitude, currentLocation.coords.longitude]);
 
-  // const startPoint =
-  //   decodedShape &&
-  //   point([decodedShape.coordinates[0][0], decodedShape.coordinates[0][1]]);
-
   const line = decodedShape && lineString(decodedShape.coordinates);
 
   const nearestPoint =
     line &&
     currentLocationPoint &&
     nearestPointOnLine(line, currentLocationPoint);
+
   const factor = getCalibrationValue(calibration.factors);
   const calculatedManeuvers =
     data && nearestPoint && getMatchingManeuvers(data, nearestPoint);
@@ -240,18 +220,6 @@ export function Trip() {
     calculatedManeuvers?.currentManeuver &&
     calculatedManeuvers.maneuverIndex ? (
     <SafeAreaView className="flex-1 bg-background">
-      {/* {nearestPoint && ( */}
-      {/*  <Map */}
-      {/*    origin={parseCoordinate(tripData.origin)} */}
-      {/*    destination={{ */}
-      {/*      lat: nearestPoint.geometry.coordinates[0], */}
-      {/*      lon: nearestPoint.geometry.coordinates[1], */}
-      {/*    }} */}
-      {/*    nearestPoint={nearestPoint} */}
-      {/*    decodedShape={decodedShape} */}
-      {/*    maneuvers={data.trip.legs[0].maneuvers} */}
-      {/*  /> */}
-      {/* )} */}
       <PopUp
         visible={showPopUp}
         onClick={() => setShowPopUp(false)}

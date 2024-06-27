@@ -6,7 +6,7 @@ import { act } from 'react-test-renderer';
 
 import { Button } from '@/components/atoms/Button';
 
-describe.skip('Button', () => {
+describe('Button', () => {
   const onPressMock = jest.fn();
 
   beforeEach(() => {
