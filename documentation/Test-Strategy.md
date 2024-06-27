@@ -13,7 +13,6 @@ It is a pure frontend application without its own backend.
 
 https://miro.com/app/board/uXjVNld2iJQ=/?moveToWidget=3458764593378193867&cot=14
 
-
 ## Testing Objectives
 
 - Ensure the app provides reliable and accurate navigation instructions.

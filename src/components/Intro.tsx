@@ -78,7 +78,11 @@ export function Intro() {
   // TODO PagerView with current version not working
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1">
+      <View
+        className="flex-1"
+        accessibilityLabel="Swiper"
+        accessibilityHint="Swipe nach links oder rechts um weitere Informationen zu bekommen"
+      >
         {/* <PagerView */}
         {/*  className="flex-1" */}
         {/*  initialPage={0} */}
@@ -93,7 +97,12 @@ export function Intro() {
         {/*  ))} */}
         {/* </PagerView> */}
         <View className="px-8 mt-8">
-          <View className="flex items-center pb-8">
+          <View
+            className="flex items-center pb-8"
+            accessibilityLabel="Icon"
+            accessibilityRole="image"
+            accessibilityHint="Toni Logo"
+          >
             {pagerViewData[0].icon}
           </View>
           <View className="flex items-center">
@@ -105,13 +114,19 @@ export function Intro() {
         </View>
       </View>
       <View className="mx-8 mb-3">
-        <View className="flex justify-center flex-row mb-14">
+        <View
+          className="flex justify-center flex-row mb-14"
+          accessibilityLabel="Progressbar Swiper"
+          accessibilityHint="Swipe um für weitere Seiten"
+        >
           {pagerViewData.map((data, index) => (
             <View
               style={index === currentPage ? styles.activeDot : styles.dot}
               /* eslint-disable-next-line react/no-array-index-key */
               key={index}
               testID="dot"
+              accessibilityLabel={`Punkt-${index}`}
+              accessibilityHint={`Seite ${index + 1}`}
             />
           ))}
         </View>
