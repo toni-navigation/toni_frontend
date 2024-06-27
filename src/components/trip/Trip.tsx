@@ -258,6 +258,14 @@ export function Trip() {
             setPage={(page) => ref.current?.setPage(page)}
             activePage={activePage}
           />
+          {/* <Map */}
+          {/*  origin={parseCoordinate(tripData.origin)} */}
+          {/*  destination={parseCoordinate(tripData.destination)} */}
+          {/*  nearestPoint={nearestPoint} */}
+          {/*  decodedShape={decodedShape} */}
+          {/*  maneuvers={data.trip.legs[0].maneuvers} */}
+          {/*  currentManeuverIndex={Number(calculatedManeuvers.maneuverIndex)} */}
+          {/* /> */}
           <PagerView
             onPageSelected={(event) => handlePageSelected(event)}
             initialPage={activePage}

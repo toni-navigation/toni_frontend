@@ -10,14 +10,6 @@ interface TripStepProps {
 export function TripStep({ icon, instruction }: TripStepProps) {
   return (
     <SafeAreaView className="flex-1 m-5">
-      {/* <Map */}
-      {/*  origin={parseCoordinate(tripData.origin)} */}
-      {/*  destination={parseCoordinate(tripData.destination)} */}
-      {/*  nearestPoint={nearestPoint} */}
-      {/*  decodedShape={decodedShape} */}
-      {/*  maneuvers={data.trip.legs[0].maneuvers} */}
-      {/*  currentManeuverIndex={calculatedManeuvers.maneuverIndex} */}
-      {/* /> */}
       {instruction && <Card icon={icon}>{instruction}</Card>}
     </SafeAreaView>
   );

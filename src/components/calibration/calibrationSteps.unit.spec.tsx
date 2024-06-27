@@ -75,7 +75,7 @@ describe('calibrationSteps', () => {
     expect(steps[5].forwardButtonText).toBe('Fertig');
     expect(steps[5].backButtonText).toBe('Zurück');
     expect(steps[5].text).toBe(
-      'Deine kalibrierte Schrittlänge beträgt 3 m.\nDu kannst deine Schrittlänge jederzeit unter deinen ProfilEinstellungen neu Kalibrieren!'
+      'Deine kalibrierte Schrittlänge beträgt 3 m.\nDu kannst deine Schrittlänge jederzeit unter deinen Profileinstellungen neu Kalibrieren!'
     );
   });
 });

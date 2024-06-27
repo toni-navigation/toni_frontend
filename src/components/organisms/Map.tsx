@@ -37,7 +37,6 @@ export function Map({
       rotateEnabled
       showsCompass
       followsUserLocation
-      userInterfaceStyle="dark"
     >
       {nearestPoint && (
         <Marker
