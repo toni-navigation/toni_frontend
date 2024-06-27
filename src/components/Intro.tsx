@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -76,30 +75,34 @@ export function Intro() {
     return <Calibration isFromIntro />;
   }
 
+  // TODO PagerView with current version not working
   return (
-    <SafeAreaView className="flex-1 bg-background-light">
+    <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
-        <PagerView
-          className="flex-1"
-          initialPage={0}
-          ref={pagerRef}
-          onPageSelected={(event) =>
-            handlePageChange(event.nativeEvent.position)
-          }
-        >
-          {pagerViewData.map((data, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <View key={index} className="px-8 mt-8">
-              <View className="flex items-center pb-8">{data.icon}</View>
-              <View className="flex items-center">
-                <Header>{data.headline}</Header>
-                <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
-                  {data.text}
-                </Text>
-              </View>
-            </View>
-          ))}
-        </PagerView>
+        {/* <PagerView */}
+        {/*  className="flex-1" */}
+        {/*  initialPage={0} */}
+        {/*  ref={pagerRef} */}
+        {/*  onPageSelected={(event) => */}
+        {/*    handlePageChange(event.nativeEvent.position) */}
+        {/*  } */}
+        {/* > */}
+        {/*  {pagerViewData.map((data, index) => ( */}
+        {/*    // eslint-disable-next-line react/no-array-index-key */}
+        {/*    */}
+        {/*  ))} */}
+        {/* </PagerView> */}
+        <View className="px-8 mt-8">
+          <View className="flex items-center pb-8">
+            {pagerViewData[0].icon}
+          </View>
+          <View className="flex items-center">
+            <Header classes="text-primary">{pagerViewData[0].headline}</Header>
+            <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
+              {pagerViewData[0].text}
+            </Text>
+          </View>
+        </View>
       </View>
       <View className="mx-8 mb-3">
         <View className="flex justify-center flex-row mb-14">
