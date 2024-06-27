@@ -1,35 +1,29 @@
-import React, { forwardRef } from 'react';
-import {
-  TextInput,
-  useColorScheme,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import React, { forwardRef, useContext } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { TextInputProps } from 'react-native/Libraries/Components/TextInput/TextInput';
 
-import { Icon } from '@/components/atoms/Icon';
-import styling from '@/stylings';
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
+import { Cross } from '@/components/atoms/icons/Cross';
 
 interface InputTextProps extends TextInputProps {
   onClickDelete: () => void;
 }
+
 export const InputText = forwardRef<TextInput, InputTextProps>(
   ({ className, onClickDelete, ...props }, ref) => {
-    const colorscheme = useColorScheme();
+    const { theme } = useContext(ThemeContext);
 
-    // TODO: add cross to delete value
     return (
       <>
-        <Text
-          className={`font-atkinsonRegular mb-3 ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-        >
+        <Text className="font-atkinsonRegular mb-3 text-textColor">
           {props.accessibilityLabel}
         </Text>
         <View className="relative mb-2">
           <TextInput
             ref={ref}
-            className={`border-2 rounded-[25px] p-4 !pr-12 ${colorscheme === 'light' ? 'border-primary-color-dark' : 'border-primary-color-light text-background-light'} ${className}`}
+            testID="TextInput"
+            className={`border-2 border-primary rounded-[25px] text-textColor p-4 !pr-12' ${className}`}
             {...props}
           />
           {props.value && (
@@ -37,16 +31,13 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               accessibilityRole="button"
               accessibilityHint="Eingabe löschen"
               onPress={onClickDelete}
-              className="absolute top-2 right-3"
+              className={` absolute top-2 right-3`}
+              testID="DeleteButton"
             >
-              <Icon
-                color={
-                  colorscheme === 'light'
-                    ? styling.colors['primary-color-dark']
-                    : styling.colors['primary-color-light']
-                }
-                icon="cross"
-                size={40}
+              <Cross
+                fill={themes.external[`--${theme}-mode-primary`]}
+                width={40}
+                height={40}
               />
             </TouchableOpacity>
           )}

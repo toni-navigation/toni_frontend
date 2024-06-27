@@ -15,11 +15,16 @@ export type PhotonFeature = {
     country?: string;
     osm_key?: string;
     city?: string;
+    countrycode?: string;
     osm_value?: string;
     postcode?: string;
     name?: string;
     state?: string;
     street?: string;
     housenumber?: string;
+    type?: string;
+    locality?: string;
+    county?: string;
+    district?: string;
   };
 };

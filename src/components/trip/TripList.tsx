@@ -1,45 +1,32 @@
 import React from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { FlatList, SafeAreaView, View } from 'react-native';
 
 import { ListItem } from '@/components/atoms/ListItem';
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { CalibrationProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
-export function TripList({
-  maneuvers,
-}: {
+interface TripListProps {
   maneuvers: ValhallaManeuverProps[];
-}) {
-  const calibration = useCalibrationStore((state) => state.calibration);
-  const colorscheme = useColorScheme();
-
+  calibration: CalibrationProps;
+}
+export function TripList({ maneuvers, calibration }: TripListProps) {
   return (
-    <SafeAreaView className="flex-1 mx-5">
+    <SafeAreaView className="flex-1 mx-5 mt-5">
       <FlatList
         data={maneuvers}
         renderItem={({ item, index }) => (
           <View
-            className={`px-2 py-1 ${index === 0 ? `border-solid border-2 rounded-[25px] ${colorscheme === 'light' ? 'border-primary-color-dark' : 'border-primary-color-light'}` : ''}`}
+            className={`px-2 py-1 ${index === 0 ? 'border-solid border-2 rounded-[25px] border-primary' : ''}`}
           >
             <ListItem>
-              <Text
-                className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-text-color-dark'}`}
-              >
-                {index + 1}
-                {'. '}
-                {tripInstructionOutput(
-                  item,
-                  getCalibrationValue(calibration.factors)
-                )}
-              </Text>
+              {index + 1}
+              {'. '}
+              {tripInstructionOutput(
+                item,
+                getCalibrationValue(calibration.factors)
+              )}
             </ListItem>
           </View>
         )}

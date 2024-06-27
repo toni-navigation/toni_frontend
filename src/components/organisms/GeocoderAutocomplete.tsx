@@ -56,7 +56,7 @@ export function GeocoderAutocomplete({
         onBlur={() => setFocused(false)}
         className={
           data && data.features.length > 0 && focused
-            ? '!border-b-0 !rounded-b-[0px]'
+            ? '!border-b-0 !rounded-b-[0px] border-primary'
             : ''
         }
       />

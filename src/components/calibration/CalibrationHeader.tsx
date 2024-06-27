@@ -1,34 +1,24 @@
 import React from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/Logo';
+import { Logo } from '@/components/atoms/icons/Logo';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
 
 interface CalibrationHeaderProps {
   currentStep: CalibrationStepsProps;
 }
 export function CalibrationHeader({ currentStep }: CalibrationHeaderProps) {
-  const colorscheme = useColorScheme();
   const { calibrationValueNode } = currentStep;
 
   return (
     <>
       <View className="flex items-center pb-6">
-        <Logo
-          icon={`${colorscheme === 'light' ? 'logoLight' : 'logoDark'}`}
-          size={85}
-        />
+        <Logo width={85} height={85} />
       </View>
-      <Header
-        classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-      >
-        Schrittlänge konfigurieren
-      </Header>
+      <Header classes="text-textColor">Schrittlänge konfigurieren</Header>
       <View>
-        <Text
-          className={`text-2xl font-atkinsonRegular ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-        >
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
           {currentStep.text}
         </Text>
         {calibrationValueNode && calibrationValueNode}

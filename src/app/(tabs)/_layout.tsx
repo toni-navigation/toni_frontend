@@ -1,57 +1,43 @@
 import { Tabs, usePathname } from 'expo-router';
-import React, { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import React, { useContext } from 'react';
 
-import { Icon } from '@/components/atoms/Icon';
-import styling from '@/stylings';
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
+import { Heart } from '@/components/atoms/icons/Heart';
+import { NavigationArrow } from '@/components/atoms/icons/NavigationArrow';
+import { Person } from '@/components/atoms/icons/Person';
 
 const iconsArray = {
   heart: ({ color }: { color: string }) => (
-    <Icon color={color} icon="heart" size={48} />
+    <Heart classes={color} fill={color} width={48} height={48} />
   ),
   navigationArrow: ({ color }: { color: string }) => (
-    <Icon color={color} icon="navigationArrow" size={41} />
+    <NavigationArrow fill={color} width={41} height={41} />
   ),
   person: ({ color }: { color: string }) => (
-    <Icon color={color} icon="person" size={48} />
+    <Person fill={color} width={48} height={48} />
   ),
 };
 export default function Layout() {
-  const colorscheme = useColorScheme();
   const currentPath = usePathname();
-  const [isTripPath, setIsTripPath] = React.useState(false);
-  useEffect(() => {
-    if (currentPath.includes('trip')) {
-      setIsTripPath(true);
-    } else {
-      setIsTripPath(false);
-    }
-  }, [currentPath]);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          display: isTripPath ? 'none' : undefined,
+          display: currentPath.includes('trip') ? 'none' : undefined,
           height: 110,
           borderTopWidth: 0,
           elevation: 0,
-          backgroundColor:
-            colorscheme === 'light'
-              ? styling.colors['background-light']
-              : styling.colors['background-dark'],
+          backgroundColor: themes.external[`--${theme}-mode-background`],
         },
 
         tabBarShowLabel: false,
-        tabBarActiveTintColor:
-          colorscheme === 'light'
-            ? styling.colors['orange-accent']
-            : styling.colors['orange-accent'],
+        tabBarActiveTintColor: themes.external['--accent'],
         tabBarInactiveTintColor:
-          colorscheme === 'light'
-            ? styling.colors['primary-color-light']
-            : styling.colors['background-dark'],
+          themes.external[`--${theme}-mode-primary-inverted`],
         tabBarIconStyle: {
           justifyContent: 'center',
           alignContent: 'center',
@@ -65,12 +51,9 @@ export default function Layout() {
           headerTitle: 'Meine Favoriten',
           tabBarLabel: 'Favoriten',
           tabBarIcon: ({ color }) => iconsArray.heart({ color }),
-          tabBarAccessibilityLabel: 'Navigation',
+          tabBarAccessibilityLabel: 'Favoriten',
           tabBarItemStyle: {
-            backgroundColor:
-              colorscheme === 'light'
-                ? styling.colors['primary-color-dark']
-                : styling.colors['primary-color-light'],
+            backgroundColor: themes.external[`--${theme}-mode-primary`],
             borderTopLeftRadius: 40,
             height: 110,
           },
@@ -84,12 +67,9 @@ export default function Layout() {
           tabBarLabel: 'Navigation',
           tabBarIcon: ({ color }) => iconsArray.navigationArrow({ color }),
           href: '/home',
-          tabBarAccessibilityLabel: 'Favoriten',
+          tabBarAccessibilityLabel: 'Navigation',
           tabBarItemStyle: {
-            backgroundColor:
-              colorscheme === 'light'
-                ? styling.colors['primary-color-dark']
-                : styling.colors['primary-color-light'],
+            backgroundColor: themes.external[`--${theme}-mode-primary`],
             height: 110,
           },
           headerShown: false,
@@ -104,10 +84,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => iconsArray.person({ color }),
           tabBarAccessibilityLabel: 'Profil',
           tabBarItemStyle: {
-            backgroundColor:
-              colorscheme === 'light'
-                ? styling.colors['primary-color-dark']
-                : styling.colors['primary-color-light'],
+            backgroundColor: themes.external[`--${theme}-mode-primary`],
             borderTopRightRadius: 40,
             height: 110,
           },

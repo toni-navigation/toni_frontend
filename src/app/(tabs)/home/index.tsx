@@ -1,16 +1,13 @@
 import { router } from 'expo-router';
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useContext } from 'react';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
+import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -24,8 +21,7 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
-  const colorscheme = useColorScheme();
+  const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);
 
@@ -80,9 +76,7 @@ export default function HomePage() {
   // }
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <PopUp
         visible={showPopUp}
         onCloseClick={() => {
@@ -91,26 +85,16 @@ export default function HomePage() {
         }}
         onCloseButtonText="Alles klar!"
       >
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
-          Hinweis
-        </Header>
+        <Header classes="text-background">Hinweis</Header>
 
-        <Text
-          className={`text-2xl font-atkinsonRegular text-center ${colorscheme === 'light' ? 'text-text-color-dark' : 'text-text-color-light'}`}
-        >
+        <Text className="text-2xl font-atkinsonRegular text-center text-background">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
       </PopUp>
 
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-        >
-          Hallo
-        </Header>
+        <Header classes="text-textColor">Hallo</Header>
         <GeocoderAutocomplete
           value={origin}
           placeholder="Start eingeben"
@@ -122,8 +106,14 @@ export default function HomePage() {
           onPress={switchOriginDestination}
           buttonType="primary"
           disabled={origin === undefined && destination === undefined}
-          icon="switchArrow"
-          classes="m-0"
+          iconName="Start und Ziel tauschen"
+          icon={
+            <SwitchArrow
+              fill={themes.external[`--${theme}-mode-icon-button`]}
+              width={35}
+              height={35}
+            />
+          }
         />
         <GeocoderAutocomplete
           value={destination}

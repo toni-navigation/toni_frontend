@@ -56,6 +56,3 @@ export interface FavoriteProps {
   address: PhotonFeature;
   id: string;
 }
-// export interface FavoriteProps {
-//  favorites: FavoriteItemProps[];
-// }

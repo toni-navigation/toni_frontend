@@ -6,6 +6,7 @@ jest.mock('expo-av', () => ({
   Audio: {
     Sound: jest.fn().mockImplementation(() => ({
       loadAsync: jest.fn(),
+      setIsLoopingAsync: jest.fn(),
       playAsync: jest.fn(),
     })),
     setAudioModeAsync: jest.fn(),
@@ -18,6 +19,7 @@ describe('playSound', () => {
     const playedSound = await playSound(source);
     expect(Audio.Sound).toHaveBeenCalledTimes(1);
     expect(playedSound.loadAsync).toHaveBeenCalledWith(source);
+    expect(playedSound.setIsLoopingAsync).toHaveBeenCalledWith(true);
     expect(playedSound.playAsync).toHaveBeenCalledTimes(1);
   });
 

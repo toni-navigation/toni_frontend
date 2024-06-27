@@ -3,17 +3,17 @@ import { getCalibrationValue } from '@/functions/getCalibrationValue';
 describe('getCalibrationValue', () => {
   it('returns zero for undefined input', () => {
     const result = getCalibrationValue(undefined!);
-    expect(result).toBe(0);
+    expect(result).toBe(null);
   });
 
   it('returns zero for null input', () => {
     const result = getCalibrationValue(null!);
-    expect(result).toBe(0);
+    expect(result).toBe(null);
   });
 
   it('returns zero for empty array', () => {
     const result = getCalibrationValue([]);
-    expect(result).toBe(0);
+    expect(result).toBe(null);
   });
 
   it('returns median for array length greater than 5', () => {

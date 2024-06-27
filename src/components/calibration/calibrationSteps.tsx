@@ -1,5 +1,5 @@
-import React from 'react';
-import { ColorSchemeName, Text } from 'react-native';
+import React, { ReactElement } from 'react';
+import { Text } from 'react-native';
 
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 
@@ -7,12 +7,11 @@ export interface CalibrationStepsProps {
   text: string;
   forwardButtonText?: string;
   backButtonText?: string | false;
-  calibrationValueNode?: React.ReactNode;
+  calibrationValueNode?: ReactElement;
+  testID?: string;
 }
 export const calibrationSteps = (
-  factors: number[] | undefined,
-  meters: number[] | undefined,
-  colorscheme?: ColorSchemeName
+  factors: number[] | undefined
 ): CalibrationStepsProps[] => [
   {
     forwardButtonText: 'Kalibrieren',
@@ -20,9 +19,12 @@ export const calibrationSteps = (
     backButtonText: 'Zurücksetzen',
     calibrationValueNode: (
       <Text
-        className={`text-4xl font-generalSansSemi pt-4 ${colorscheme === 'light' ? 'text-primary-color-dark' : 'text-primary-color-light'}`}
+        className="text-4xl font-generalSansSemi pt-4 text-primary"
+        testID="calibrationValue"
       >
-        {factors ? getCalibrationValue(factors) : 0} m
+        {factors && getCalibrationValue(factors)
+          ? `${getCalibrationValue(factors)} m`
+          : '-'}
       </Text>
     ),
   },
@@ -47,7 +49,11 @@ export const calibrationSteps = (
   },
   {
     forwardButtonText: 'Fertig',
-    text: `Deine kalibrierte Schrittlänge beträgt ${factors ? getCalibrationValue(factors) : 0}m.\nDu kannst deine Schrittlänge jederzeit unter deinen Profil Einstellungen neu Kalibrieren!`,
+    text: `Deine kalibrierte Schrittlänge beträgt ${
+      factors && getCalibrationValue(factors)
+        ? `${getCalibrationValue(factors)} m`
+        : '-'
+    }.\nDu kannst deine Schrittlänge jederzeit unter deinen Profileinstellungen neu Kalibrieren!`,
     backButtonText: 'Zurück',
   },
 ];

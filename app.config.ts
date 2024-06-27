@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'toni',
   version: '1.0.0',
   icon: './src/assets/images/icon.png',
-  userInterfaceStyle: 'light', // 'automatic' | 'light' | 'dark'
+  userInterfaceStyle: 'automatic', // 'automatic' | 'light' | 'dark'
   splash: {
     image: './src/assets/images/splash.png',
     resizeMode: 'contain',

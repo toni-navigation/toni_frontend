@@ -1,67 +1,42 @@
+import { router } from 'expo-router';
 import React from 'react';
-import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import * as icons from '@/assets/icons/icons';
 import { Button } from '@/components/atoms/Button';
-
-export type IconByKey = keyof typeof icons;
+import { Header } from '@/components/atoms/Header';
+import { SummaryProps } from '@/types/Valhalla-Types';
 
 interface RouteOverviewProps {
-  visible: boolean;
-  onClick?: () => void;
-  onClickButtonText?: string;
   onCloseClick: () => void;
-  onCloseButtonText: string;
-  children: React.ReactNode;
-  onDismiss?: () => void;
+  summary: SummaryProps;
 }
 
-export function RouteOverview({
-  visible,
-  children,
-  onClick,
-  onClickButtonText,
-  onCloseClick,
-  onCloseButtonText,
-  onDismiss,
-}: RouteOverviewProps) {
-  return (
-    <Modal
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onCloseClick}
-      onDismiss={onDismiss}
-    >
-      <SafeAreaView>
-        <View className="justify-center items-center h-full w-full p-6">
-          <ScrollView className="flex flex-col flex-1">{children}</ScrollView>
+export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
+  const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
 
-          <View className="w-full">
-            {onClick && onClickButtonText && (
-              <Button
-                onPress={onClick}
-                disabled={false}
-                buttonType="primaryOutline"
-              >
-                {onClickButtonText}
-              </Button>
-            )}
-            <Button
-              onPress={onCloseClick}
-              disabled={false}
-              buttonType="primary"
-            >
-              {onCloseButtonText}
-            </Button>
-          </View>
-        </View>
-      </SafeAreaView>
-    </Modal>
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView className="flex flex-col flex-1 px-8 my-8">
+        <Header classes="text-textColor pt-4">Route Übersicht</Header>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          Deine Route beträgt:
+        </Text>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          {summary.length} km
+        </Text>
+        <Text className="text-2xl font-atkinsonRegular text-textColor">
+          {convertSecondsToMinutes(summary.time)} Minuten
+        </Text>
+      </ScrollView>
+
+      <View className="px-8 my-8">
+        <Button onPress={() => router.back()} buttonType="primaryOutline">
+          Zurück
+        </Button>
+        <Button onPress={onCloseClick} buttonType="primary">
+          Weiter
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 }

@@ -3,8 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
-import { CalibrationProps, CurrentLocationType } from '@/types/Types';
+import { CalibrationProps } from '@/types/Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
   factors: [],
@@ -13,21 +12,17 @@ const INITIAL_CALIBRATION: CalibrationProps = {
 
 type CalibrationState = {
   calibration: CalibrationProps;
-  skipped: boolean;
+  showedIntro: boolean;
   actions: {
-    addCalibration: (
-      start: CurrentLocationType,
-      end: CurrentLocationType,
-      steps: number
-    ) => void;
+    addCalibration: (distanceInMeter: number, steps: number) => void;
     resetCalibrationStore: () => void;
-    toggleSkipped: () => void;
+    shownIntroHandler: () => void;
   };
 };
 
 const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
   calibration: INITIAL_CALIBRATION,
-  skipped: false,
+  showedIntro: false,
 };
 
 export const useCalibrationStore = create<CalibrationState>()(
@@ -35,15 +30,13 @@ export const useCalibrationStore = create<CalibrationState>()(
     immer((set) => ({
       ...defaultCalibrationState,
       actions: {
-        addCalibration: (start, end, steps) =>
+        addCalibration: (distanceInMeter, steps) =>
           set((state) => {
-            const distanceInMeter = getDistanceInMeter(start, end);
-            if (!distanceInMeter) return;
             state.calibration.meters.push(distanceInMeter);
             state.calibration.factors.push(distanceInMeter / steps);
           }),
-        toggleSkipped: () =>
-          set((state) => ({ ...state, skipped: !state.skipped })),
+        shownIntroHandler: () =>
+          set((state) => ({ ...state, showedIntro: true })),
         resetCalibrationStore: () =>
           set((state) => ({ ...state, ...defaultCalibrationState })),
       },

@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { Dispatch, SetStateAction } from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
@@ -11,6 +11,7 @@ interface CalibrationNavigationProps {
   calibrationModeButtons: () => React.ReactNode;
   isFromIntro?: boolean;
   currentElement: CalibrationStepsProps;
+  isInCalibrationMode: boolean;
   isFirstStep: boolean;
   isLastStep: boolean;
   stepText: string;
@@ -21,18 +22,19 @@ export function CalibrationNavigation({
   isFromIntro,
   currentElement,
   isFirstStep,
+  isInCalibrationMode,
   isLastStep,
   stepText,
 }: CalibrationNavigationProps) {
-  const { toggleSkipped } = useCalibrationStore((state) => state.actions);
-  const colorscheme = useColorScheme();
+  const { shownIntroHandler } = useCalibrationStore((state) => state.actions);
   const { resetCalibrationStore } = useCalibrationStore(
     (state) => state.actions
   );
   const backButtonHandler = () => {
     const skip = isFromIntro && isFirstStep;
     if (skip) {
-      toggleSkipped();
+      shownIntroHandler();
+      router.push('/home/');
 
       return;
     }
@@ -52,7 +54,7 @@ export function CalibrationNavigation({
 
   const nextButtonHandler = () => {
     if (isFromIntro && isLastStep) {
-      router.setParams({});
+      shownIntroHandler();
       router.replace({ pathname: '/home/' });
 
       return;
@@ -68,17 +70,15 @@ export function CalibrationNavigation({
 
   return (
     <View className="mx-8 mb-3">
-      <Text
-        className={`mx-auto font-atkinsonRegular text-xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-      >
+      <Text className="mx-auto font-atkinsonRegular text-xl text-textColor">
         {stepText}
       </Text>
 
       <Button
         buttonType="primaryOutline"
-        disabled={false}
         // TODO Last step delete newest calibration
         onPress={backButtonHandler}
+        disabled={isInCalibrationMode}
       >
         {isFromIntro && isFirstStep
           ? 'Überspringen'
@@ -89,7 +89,6 @@ export function CalibrationNavigation({
       ) : (
         <Button
           buttonType={isFirstStep ? 'accent' : 'primary'}
-          disabled={false}
           onPress={nextButtonHandler}
         >
           {currentElement.forwardButtonText}

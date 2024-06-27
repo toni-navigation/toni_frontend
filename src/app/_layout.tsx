@@ -5,38 +5,46 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 import 'react-native-reanimated';
+import '@/global.css';
 
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   // TODO add Theme Provider
-  // const colorScheme = useColorScheme();
 
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <Stack
-          screenOptions={{
-            headerTitleStyle: {
-              fontFamily: 'generalSansSemi',
-              fontWeight: 'bold',
-            },
+        <ThemeProvider>
+          <Stack
+            screenOptions={{
+              headerTitleStyle: {
+                fontFamily: 'generalSansSemi',
+                fontWeight: 'bold',
+              },
 
-            headerShown: false,
-            // eslint-disable-next-line react/jsx-no-undef
-            // headerBackVisible: false, // TODO: set to false when back button is implemented
-          }}
-        >
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
+              // eslint-disable-next-line react/jsx-no-undef
+              // headerBackVisible: false, // TODO: set to false when back button is implemented
             }}
-          />
-        </Stack>
+          >
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </ThemeProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

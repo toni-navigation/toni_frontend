@@ -2,14 +2,9 @@ import { Audio } from 'expo-av';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  useColorScheme,
-} from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
-import Song from '@/assets/Testtrack.mp3';
+import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
@@ -25,16 +20,16 @@ import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 30;
+const UNREALISTIC_CALIBRATION = 10;
 export const SPEECH_CONFIG = {
   language: 'de',
 };
 interface CalibrationProps {
   isFromIntro?: boolean;
 }
-export function Calibration({ isFromIntro }: CalibrationProps) {
+export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
-  const colorscheme = useColorScheme();
   const [index, setIndex] = React.useState(0);
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
@@ -45,23 +40,9 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const calSteps = calibrationSteps(
-    calibration.factors,
-    calibration.meters,
-    colorscheme
-  );
+  const calSteps = calibrationSteps(calibration.factors);
   const currentStep = calSteps[index];
   const isLastStep = calSteps.length - 1 === index;
-
-  // console.log(speakMutation.isPending);
-  // const speakAsync = (text: string, options: Speech.SpeechOptions) =>
-  //   new Promise((resolve: any, reject) => {
-  //     Speech.speak(text, {
-  //       ...options,
-  //       onDone: () => resolve(),
-  //       onError: () => reject(),
-  //     });
-  //   });
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -79,12 +60,15 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
       SPEECH_CONFIG
     );
     const currentPositionData = await currentLocationMutation.mutateAsync();
-    addCalibration(fallback.current || _start, currentPositionData, _steps);
     const distanceInMeter = getDistanceInMeter(
       fallback.current || _start,
       currentPositionData
     );
-    if (distanceInMeter === null) {
+
+    if (
+      distanceInMeter === null ||
+      distanceInMeter <= UNREALISTIC_CALIBRATION
+    ) {
       Speech.speak(
         `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`,
         SPEECH_CONFIG
@@ -92,7 +76,9 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
 
       return;
     }
-    setIndex(index + 1);
+
+    addCalibration(distanceInMeter, _steps);
+    setIndex((prevState) => prevState + 1);
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG
@@ -117,13 +103,11 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     await speakMutation.mutateAsync(
       'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.'
     );
-    // Speech.speak(
-    //   'Kalibrierung gestartet. Warte einen Moment bis die Musik startet.',
-    //   SPEECH_CONFIG
-    // );
+
     setSteps(0);
     const pedometerAvailable = await pedometerAvailableMutation.mutateAsync();
     const currentPositionData = await currentLocationMutation.mutateAsync();
+    // TODO Accuracy
     if (!pedometerAvailable) {
       // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
       await speakMutation.mutateAsync(
@@ -143,14 +127,24 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     }
     audioSound.current = sound;
   };
+  const isLoading =
+    currentLocationMutation.isPending ||
+    pedometerAvailableMutation.isPending ||
+    speakMutation.isPending ||
+    startSoundMutation.isPending;
+
+  const isInCalibrationMode =
+    !!(pedometerSubscription.current && audioSound.current) ||
+    !!(
+      pedometerSubscription.current === undefined &&
+      audioSound.current &&
+      fallback.current
+    ) ||
+    isLoading;
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
-        <Button
-          buttonType="primary"
-          onPress={() => stopPedometer()}
-          disabled={false}
-        >
+        <Button buttonType="primary" onPress={() => stopPedometer()}>
           Abbrechen
         </Button>
       );
@@ -161,7 +155,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
       fallback.current
     ) {
       return (
-        <Button buttonType="primary" onPress={fallbackStop} disabled={false}>
+        <Button buttonType="primary" onPress={fallbackStop}>
           Stopp
         </Button>
       );
@@ -170,12 +164,8 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
     return (
       <Button
         buttonType="primary"
-        disabled={
-          currentLocationMutation.isPending ||
-          pedometerAvailableMutation.isPending ||
-          speakMutation.isPending ||
-          startSoundMutation.isPending
-        }
+        disabled={isLoading}
+        isLoading={isLoading}
         onPress={startPedometer}
       >
         Start Kalibrierung
@@ -184,25 +174,12 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
   };
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
       <ScrollView className="px-8 mt-8">
-        {/* <IconButton */}
-        {/*  icon="cross" */}
-        {/*  onPress={resetCalibrationStore} */}
-        {/*  buttonType="primary" */}
-        {/* /> */}
         <CalibrationHeader currentStep={currentStep} />
         {currentStep.forwardButtonText === undefined ? (
           <CalibrationMode steps={steps} />
         ) : null}
-        {(currentLocationMutation.isPending ||
-          pedometerAvailableMutation.isPending ||
-          speakMutation.isPending ||
-          startSoundMutation.isPending) && (
-          <ActivityIndicator className="mt-4 h-[100px]" size="large" />
-        )}
       </ScrollView>
       <CalibrationNavigation
         setIndex={setIndex}
@@ -210,6 +187,7 @@ export function Calibration({ isFromIntro }: CalibrationProps) {
         isFromIntro={isFromIntro}
         isLastStep={isLastStep}
         currentElement={currentStep}
+        isInCalibrationMode={isInCalibrationMode}
         isFirstStep={index === 0}
         stepText={`Schritt ${index + 1} / ${calSteps.length}`}
       />

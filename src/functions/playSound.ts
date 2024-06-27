@@ -5,6 +5,7 @@ export async function playSound(source: AVPlaybackSource) {
   sound = new Audio.Sound();
 
   await sound.loadAsync(source);
+  await sound.setIsLoopingAsync(true);
   await sound.playAsync();
   await Audio.setAudioModeAsync({
     playsInSilentModeIOS: true,

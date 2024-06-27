@@ -14,8 +14,7 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const calibration = useCalibrationStore((state) => state.calibration);
-  const skipped = useCalibrationStore((state) => state.skipped);
+  const showedIntro = useCalibrationStore((state) => state.showedIntro);
 
   useEffect(() => {
     (async () => {
@@ -49,12 +48,12 @@ export default function Index() {
       return () => watchPosition.remove();
     })();
   }, [updateCurrentLocation]);
-  const test = 0;
+
   if (currentLocation === null || currentLocation === undefined) {
     return <Text>Loading</Text>;
   }
 
-  if (!skipped && calibration.factors.length === 0) {
+  if (!showedIntro) {
     return <Intro />;
   }
 

@@ -12,6 +12,7 @@ export function ListItem({ children, onPress, classes }: ListItemProps) {
   if (onPress) {
     return (
       <TouchableOpacity
+        testID="listbutton"
         accessibilityRole="button"
         onPress={onPress}
         className={`py-3 px-2 ${classes}`}
@@ -21,5 +22,11 @@ export function ListItem({ children, onPress, classes }: ListItemProps) {
     );
   }
 
-  return <View className={`py-3 px-2 ${classes}`}>{children}</View>;
+  return (
+    <View className={`py-3 px-2 ${classes}`} testID="listitem">
+      <Text className="text-2xl font-atkinsonRegular text-textColor">
+        {children}
+      </Text>
+    </View>
+  );
 }

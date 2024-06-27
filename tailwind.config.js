@@ -1,16 +1,17 @@
-const styling = require('./src/stylings');
-
-module.exports = {
+export default {
   important: true,
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './src/**/**/*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
-    './app/*.{js,jsx,ts,tsx}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
-    colors: styling.colors,
+    colors: {
+      primary: 'var(--color-primary)',
+      invertedPrimary: 'var(--color-inverted-primary)',
+      accent: 'var(--color-accent)',
+      background: 'var(--color-background)',
+      textColor: 'var(--color-text-color)',
+      white: 'var(--color-white)',
+      black: 'var(--color-black)',
+    },
     extend: {
       fontFamily: {
         atkinsonRegular: ['atkinsonRegular'],

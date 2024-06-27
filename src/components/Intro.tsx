@@ -1,51 +1,45 @@
-import React, { useRef } from 'react';
-import {
-  SafeAreaView,
-  Text,
-  useColorScheme,
-  View,
-  StyleSheet,
-} from 'react-native';
-import PagerView from 'react-native-pager-view';
+import React, { useContext, useRef } from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { IconByKey } from '@/components/atoms/Icon';
-import { Logo } from '@/components/atoms/Logo';
+import { Logo } from '@/components/atoms/icons/Logo';
 import { Calibration } from '@/components/calibration/Calibration';
-import styling from '@/stylings';
 
 export function Intro() {
   const [showCalibration, setShowCalibration] = React.useState(false);
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
 
-  const colorscheme = useColorScheme();
+  const { theme } = useContext(ThemeContext);
 
-  const pagerViewData: { headline: string; text: string; icon: IconByKey }[] = [
+  const pagerViewData: {
+    headline: string;
+    text: string;
+    icon: React.ReactNode;
+  }[] = [
     {
       headline: 'Dein Weg',
       text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon: <Logo height={115} width={115} />,
     },
     {
       headline: 'Dein Klang',
       text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon: <Logo height={115} width={115} />,
     },
     {
       headline: 'Deine Freiheit',
       text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
-      icon: colorscheme === 'light' ? 'logoLight' : 'logoDark',
+      icon: <Logo height={115} width={115} />,
     },
   ];
 
   const styles = StyleSheet.create({
     activeDot: {
-      backgroundColor:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-dark']
-          : styling.colors['primary-color-light'],
+      backgroundColor: themes.external[`--${theme}-mode-primary`],
       width: 20,
       height: 20,
       borderRadius: 25,
@@ -54,10 +48,7 @@ export function Intro() {
     },
     dot: {
       backgroundColor: 'transparent',
-      borderColor:
-        colorscheme === 'light'
-          ? styling.colors['primary-color-dark']
-          : styling.colors['primary-color-light'],
+      borderColor: themes.external[`--${theme}-mode-primary`],
       borderWidth: 3,
       width: 20,
       height: 20,
@@ -84,59 +75,52 @@ export function Intro() {
     return <Calibration isFromIntro />;
   }
 
+  // TODO PagerView with current version not working
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
-        <PagerView
-          className="flex-1"
-          initialPage={0}
-          ref={pagerRef}
-          onPageSelected={(event) =>
-            handlePageChange(event.nativeEvent.position)
-          }
-        >
-          {pagerViewData.map((data, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <View key={index} className="px-8 mt-8">
-              <View className="flex items-center pb-8">
-                <Logo icon={data.icon} size={115} />
-              </View>
-              <View className="flex items-center">
-                <Header>{data.headline}</Header>
-                <Text
-                  className={`mx-auto text-center font-atkinsonRegular text-2xl ${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-                >
-                  {data.text}
-                </Text>
-              </View>
-            </View>
-          ))}
-        </PagerView>
+        {/* <PagerView */}
+        {/*  className="flex-1" */}
+        {/*  initialPage={0} */}
+        {/*  ref={pagerRef} */}
+        {/*  onPageSelected={(event) => */}
+        {/*    handlePageChange(event.nativeEvent.position) */}
+        {/*  } */}
+        {/* > */}
+        {/*  {pagerViewData.map((data, index) => ( */}
+        {/*    // eslint-disable-next-line react/no-array-index-key */}
+        {/*    */}
+        {/*  ))} */}
+        {/* </PagerView> */}
+        <View className="px-8 mt-8">
+          <View className="flex items-center pb-8">
+            {pagerViewData[0].icon}
+          </View>
+          <View className="flex items-center">
+            <Header classes="text-primary">{pagerViewData[0].headline}</Header>
+            <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
+              {pagerViewData[0].text}
+            </Text>
+          </View>
+        </View>
       </View>
       <View className="mx-8 mb-3">
-        <>
-          <View className="flex justify-center flex-row mb-14">
-            {pagerViewData.map((data, index) => (
-              <View
-                style={index === currentPage ? styles.activeDot : styles.dot}
-                /* eslint-disable-next-line react/no-array-index-key */
-                key={index}
-              />
-            ))}
-          </View>
-          <Button buttonType="accent" disabled onPress={() => {}}>
-            Registrieren
-          </Button>
-          <Button
-            buttonType="primary"
-            disabled={false}
-            onPress={() => setShowCalibration(true)}
-          >
-            Los gehts
-          </Button>
-        </>
+        <View className="flex justify-center flex-row mb-14">
+          {pagerViewData.map((data, index) => (
+            <View
+              style={index === currentPage ? styles.activeDot : styles.dot}
+              /* eslint-disable-next-line react/no-array-index-key */
+              key={index}
+              testID="dot"
+            />
+          ))}
+        </View>
+        <Button buttonType="accent" disabled onPress={() => {}}>
+          Registrieren
+        </Button>
+        <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
+          Los gehts
+        </Button>
       </View>
     </SafeAreaView>
   );

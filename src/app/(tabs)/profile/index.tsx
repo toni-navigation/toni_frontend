@@ -1,23 +1,20 @@
 import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView, ScrollView, useColorScheme } from 'react-native';
+import React, { useContext } from 'react';
+import { SafeAreaView, ScrollView } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
+import { StepLength } from '@/components/atoms/icons/StepLength';
 
 export default function ProfilePage() {
-  const colorscheme = useColorScheme();
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <SafeAreaView
-      className={`flex-1 ${colorscheme === 'light' ? 'bg-background-light' : 'bg-background-dark'}`}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 my-8">
-        <Header
-          classes={`${colorscheme === 'light' ? 'text-text-color-light' : 'text-background-light'}`}
-        >
-          Profil
-        </Header>
+        <Header classes="text-textColor">Profil</Header>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
         Profil
         </MenuButton> */}
@@ -25,7 +22,13 @@ export default function ProfilePage() {
           onPress={() => {
             router.push('/profile/calibration');
           }}
-          icon="steplength"
+          icon={
+            <StepLength
+              fill={themes.external[`--${theme}-mode-primary`]}
+              width={50}
+              height={50}
+            />
+          }
         >
           Schrittlänge
         </MenuButton>
