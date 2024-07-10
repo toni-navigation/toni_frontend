@@ -22,7 +22,7 @@ export function Intro() {
   }[] = [
     {
       headline: 'Dein Weg',
-      text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
+      text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel! ',
       icon: <Logo height={115} width={115} />,
     },
     {
@@ -114,22 +114,6 @@ export function Intro() {
         </View>
       </View>
       <View className="mx-8 mb-3">
-        <View
-          className="flex justify-center flex-row mb-14"
-          accessibilityLabel="Progressbar Swiper"
-          accessibilityHint="Swipe um für weitere Seiten"
-        >
-          {pagerViewData.map((data, index) => (
-            <View
-              style={index === currentPage ? styles.activeDot : styles.dot}
-              /* eslint-disable-next-line react/no-array-index-key */
-              key={index}
-              testID="dot"
-              accessibilityLabel={`Punkt-${index}`}
-              accessibilityHint={`Seite ${index + 1}`}
-            />
-          ))}
-        </View>
         <Button buttonType="accent" disabled onPress={() => {}}>
           Registrieren
         </Button>
