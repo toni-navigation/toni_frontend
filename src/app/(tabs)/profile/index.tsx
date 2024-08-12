@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Header } from '@/components/atoms/Header';
+import { BigHeader } from '@/components/atoms/BigHeader';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { StepLength } from '@/components/atoms/icons/StepLength';
 
@@ -13,8 +13,8 @@ export default function ProfilePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
+      <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
       <ScrollView className="px-8 my-8">
-        <Header classes="text-textColor">Profil</Header>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="person">
         Profil
         </MenuButton> */}

@@ -4,8 +4,8 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { Heart } from '@/components/atoms/icons/Heart';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
@@ -18,8 +18,8 @@ export default function FavoritesPage() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       {/* eslint-disable-next-line react/jsx-no-undef */}
-      <ScrollView className="px-8 my-8">
-        <Header classes="text-textColor">Meine Favoriten</Header>
+      <BigHeader classes="text-invertedPrimary">Meine Favoriten</BigHeader>
+      <ScrollView className="px-8 py-8">
         <View>
           {favorites.length === 0 ? (
             <Text className="font-atkinsonRegular text-2xl text-textColor">

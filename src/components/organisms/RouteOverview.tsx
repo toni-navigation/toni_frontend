@@ -2,8 +2,8 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { SummaryProps } from '@/types/Valhalla-Types';
 
 interface RouteOverviewProps {
@@ -16,8 +16,8 @@ export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
+      <BigHeader classes="text-invertedPrimary">Deine Route</BigHeader>
       <ScrollView className="flex flex-col flex-1 px-8 my-8">
-        <Header classes="text-textColor pt-4">Route Übersicht</Header>
         <Text className="text-2xl font-atkinsonRegular text-textColor">
           Deine Route beträgt:
         </Text>

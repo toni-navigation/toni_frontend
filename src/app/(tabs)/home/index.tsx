@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
@@ -93,8 +94,9 @@ export default function HomePage() {
         </Text>
       </PopUp>
 
-      <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header classes="text-textColor">Hallo</Header>
+      <BigHeader classes="text-invertedPrimary">Hallo Max</BigHeader>
+
+      <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
         <GeocoderAutocomplete
           value={origin}
           placeholder="Start eingeben"

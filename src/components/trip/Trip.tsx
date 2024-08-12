@@ -15,8 +15,8 @@ import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { Close } from '@/components/atoms/icons/Close';
 import { Flag } from '@/components/atoms/icons/Flag';
@@ -185,9 +185,8 @@ export function Trip() {
   if (isFinished) {
     return (
       <SafeAreaView className="flex-1 bg-background">
+        <BigHeader classes="text-invertedPrimary">Geschafft</BigHeader>
         <View className="flex-1 px-8 my-8">
-          <Header classes="text-textColor">Geschafft !</Header>
-
           <Card
             icon={
               <Flag
