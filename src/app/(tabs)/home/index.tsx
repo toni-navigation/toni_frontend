@@ -103,20 +103,21 @@ export default function HomePage() {
           label="Start"
           onChange={(value) => changeOrigin(value)}
         />
-        <View className="pt-8" />
-        <IconButton
-          onPress={switchOriginDestination}
-          buttonType="primary"
-          disabled={origin === undefined && destination === undefined}
-          iconName="Start und Ziel tauschen"
-          icon={
-            <SwitchArrow
-              fill={themes.external[`--${theme}-mode-icon-button`]}
-              width={35}
-              height={35}
-            />
-          }
-        />
+        <View className="pt-4 pb-4 mb-2">
+          <IconButton
+            onPress={switchOriginDestination}
+            buttonType="primary"
+            disabled={origin === undefined && destination === undefined}
+            iconName="Start und Ziel tauschen"
+            icon={
+              <SwitchArrow
+                fill={themes.external[`--${theme}-mode-icon-button`]}
+                width={30}
+                height={30}
+              />
+            }
+          />
+        </View>
         <GeocoderAutocomplete
           value={destination}
           placeholder="Ziel eingeben"
