@@ -79,12 +79,12 @@ export default function FavoritePage() {
               Hausnummer: {favorite.address?.properties?.housenumber}
             </Text>
           )}
-          {favorite.address?.properties?.street && (
+          {favorite.address?.properties?.postcode && (
             <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Postleitzahl: {favorite.address?.properties?.postcode}
             </Text>
           )}
-          {favorite.address?.properties?.housenumber && (
+          {favorite.address?.properties?.city && (
             <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               Ort: {favorite.address?.properties?.city}
             </Text>

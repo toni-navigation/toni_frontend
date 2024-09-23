@@ -1,7 +1,14 @@
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 
+import background from '@/assets/images/background10.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { BigHeader } from '@/components/atoms/BigHeader';
@@ -93,46 +100,47 @@ export default function HomePage() {
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
       </PopUp>
+      <ImageBackground source={background} className="flex-1">
+        <BigHeader classes="text-invertedPrimary">Hallo Max</BigHeader>
 
-      <BigHeader classes="text-invertedPrimary">Hallo Max</BigHeader>
-
-      <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
-        <GeocoderAutocomplete
-          value={origin}
-          placeholder="Start eingeben"
-          label="Start"
-          onChange={(value) => changeOrigin(value)}
-        />
-        <View className="pt-8" />
-        <IconButton
-          onPress={switchOriginDestination}
-          buttonType="primary"
-          disabled={origin === undefined && destination === undefined}
-          iconName="Start und Ziel tauschen"
-          icon={
-            <SwitchArrow
-              fill={themes.external[`--${theme}-mode-icon-button`]}
-              width={35}
-              height={35}
-            />
-          }
-        />
-        <GeocoderAutocomplete
-          value={destination}
-          placeholder="Ziel eingeben"
-          label="Ziel"
-          onChange={(value) => changeDestination(value)}
-        />
-      </ScrollView>
-      <View className="mx-5 mb-8">
-        <Button
-          onPress={() => setShowPopUp(true)}
-          disabled={origin === undefined || !destination}
-          buttonType="accent"
-        >
-          Route starten
-        </Button>
-      </View>
+        <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
+          <GeocoderAutocomplete
+            value={origin}
+            placeholder="Start eingeben"
+            label="Start"
+            onChange={(value) => changeOrigin(value)}
+          />
+          <View className="pt-8" />
+          <IconButton
+            onPress={switchOriginDestination}
+            buttonType="primary"
+            disabled={origin === undefined && destination === undefined}
+            iconName="Start und Ziel tauschen"
+            icon={
+              <SwitchArrow
+                fill={themes.external[`--${theme}-mode-icon-button`]}
+                width={35}
+                height={35}
+              />
+            }
+          />
+          <GeocoderAutocomplete
+            value={destination}
+            placeholder="Ziel eingeben"
+            label="Ziel"
+            onChange={(value) => changeDestination(value)}
+          />
+        </ScrollView>
+        <View className="mx-5 mb-8">
+          <Button
+            onPress={() => setShowPopUp(true)}
+            disabled={origin === undefined || !destination}
+            buttonType="accent"
+          >
+            Route starten
+          </Button>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
