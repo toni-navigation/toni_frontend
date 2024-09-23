@@ -10,6 +10,7 @@ interface IconButtonProps {
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
+  size?: number;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 export function IconButton({
@@ -19,6 +20,7 @@ export function IconButton({
   classes,
   buttonType,
   iconName,
+  size,
 }: IconButtonProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -43,10 +45,10 @@ export function IconButton({
   };
 
   return (
-    <View className={`flex justify-center items-center ${classes}`}>
+    <View className={`flex justify-center items-start ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`p-4 flex b justify-center items-center rounded-[35px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`flex b p-${size || '0'} justify-center items-center rounded-[35px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={

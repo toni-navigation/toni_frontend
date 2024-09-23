@@ -103,14 +103,14 @@ export default function HomePage() {
       <ImageBackground source={background} className="flex-1">
         <BigHeader classes="text-invertedPrimary">Hallo Max</BigHeader>
 
-        <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
-          <GeocoderAutocomplete
-            value={origin}
-            placeholder="Start eingeben"
-            label="Start"
-            onChange={(value) => changeOrigin(value)}
-          />
-          <View className="pt-8" />
+      <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
+        <GeocoderAutocomplete
+          value={origin}
+          placeholder="Start eingeben"
+          label="Start"
+          onChange={(value) => changeOrigin(value)}
+        />
+        <View className="pt-4 pb-4 mb-2">
           <IconButton
             onPress={switchOriginDestination}
             buttonType="primary"
@@ -119,27 +119,28 @@ export default function HomePage() {
             icon={
               <SwitchArrow
                 fill={themes.external[`--${theme}-mode-icon-button`]}
-                width={35}
-                height={35}
+                width={30}
+                height={30}
               />
             }
           />
-          <GeocoderAutocomplete
-            value={destination}
-            placeholder="Ziel eingeben"
-            label="Ziel"
-            onChange={(value) => changeDestination(value)}
-          />
-        </ScrollView>
-        <View className="mx-5 mb-8">
-          <Button
-            onPress={() => setShowPopUp(true)}
-            disabled={origin === undefined || !destination}
-            buttonType="accent"
-          >
-            Route starten
-          </Button>
         </View>
+        <GeocoderAutocomplete
+          value={destination}
+          placeholder="Ziel eingeben"
+          label="Ziel"
+          onChange={(value) => changeDestination(value)}
+        />
+      </ScrollView>
+      <View className="mx-5 mb-8">
+        <Button
+          onPress={() => setShowPopUp(true)}
+          disabled={origin === undefined || !destination}
+          buttonType="accent"
+        >
+          Route starten
+        </Button>
+      </View>
       </ImageBackground>
     </SafeAreaView>
   );
