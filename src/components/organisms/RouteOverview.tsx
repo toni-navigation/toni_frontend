@@ -29,7 +29,7 @@ export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
     <SafeAreaView className="flex-1 bg-background">
       <ImageBackground source={background} className="flex-1">
         <BigHeader classes="text-invertedPrimary">Deine Route</BigHeader>
-        <ScrollView className="flex flex-col flex-1 px-8 my-8">
+        <ScrollView className="flex flex-col flex-1 px-8 mt-8">
           <Text className="text-2xl font-generalSansSemi text-primary">
             Von
           </Text>
@@ -123,7 +123,7 @@ export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
           </Text>
         </ScrollView>
 
-        <View className="px-8 my-8">
+        <View className="px-8 mb-8">
           <Button onPress={() => router.back()} buttonType="primaryOutline">
             Zurück
           </Button>
