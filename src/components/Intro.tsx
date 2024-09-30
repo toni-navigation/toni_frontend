@@ -3,13 +3,13 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { Welcome } from '@/components/Welcome';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
-import { Calibration } from '@/components/calibration/Calibration';
 
 export function Intro() {
-  const [showCalibration, setShowCalibration] = React.useState(false);
+  const [showWelcome, setShowWelcome] = React.useState(false);
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
 
@@ -71,8 +71,8 @@ export function Intro() {
     return () => clearInterval(toggle);
   }, [currentPage]); */
 
-  if (showCalibration) {
-    return <Calibration isFromIntro />;
+  if (showWelcome) {
+    return <Welcome />;
   }
 
   // TODO PagerView with current version not working
@@ -130,10 +130,8 @@ export function Intro() {
             />
           ))}
         </View>
-        <Button buttonType="accent" disabled onPress={() => {}}>
-          Registrieren
-        </Button>
-        <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
+
+        <Button buttonType="primary" onPress={() => setShowWelcome(true)}>
           Los gehts
         </Button>
       </View>

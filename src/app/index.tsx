@@ -53,7 +53,7 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  if (!showedIntro) {
+  if (true) {
     return <Intro />;
   }
 
