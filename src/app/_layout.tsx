@@ -43,6 +43,12 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="agbs"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>

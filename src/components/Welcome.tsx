@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
@@ -29,7 +30,7 @@ export function Welcome() {
       </ScrollView>
 
       <View className="mx-8 mb-3">
-        <Button buttonType="accent" onPress={() => {}}>
+        <Button buttonType="accent" onPress={() => router.push('/agbs')}>
           Registrieren
         </Button>
         <Button buttonType="primary" onPress={() => setShowCalibration(true)}>

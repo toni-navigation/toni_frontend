@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useContext, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
@@ -130,8 +131,7 @@ export function Intro() {
             />
           ))}
         </View>
-
-        <Button buttonType="primary" onPress={() => setShowWelcome(true)}>
+        <Button buttonType="primary" onPress={() => router.push('/agbs')}>
           Los gehts
         </Button>
       </View>
