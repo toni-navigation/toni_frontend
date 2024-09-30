@@ -4,13 +4,11 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Welcome } from '@/components/Welcome';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
 
 export function Intro() {
-  const [showWelcome, setShowWelcome] = React.useState(false);
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
 
@@ -71,10 +69,6 @@ export function Intro() {
 
     return () => clearInterval(toggle);
   }, [currentPage]); */
-
-  if (showWelcome) {
-    return <Welcome />;
-  }
 
   // TODO PagerView with current version not working
   return (

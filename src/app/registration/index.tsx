@@ -7,7 +7,7 @@ import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
 import { Calibration } from '@/components/calibration/Calibration';
 
-export function Welcome() {
+export default function Registration() {
   const [showCalibration, setShowCalibration] = React.useState(false);
 
   if (showCalibration) {
@@ -30,7 +30,10 @@ export function Welcome() {
       </ScrollView>
 
       <View className="mx-8 mb-3">
-        <Button buttonType="accent" onPress={() => router.push('/agbs')}>
+        <Button
+          buttonType="accent"
+          onPress={() => router.push('/registration/registrationPage')}
+        >
           Registrieren
         </Button>
         <Button buttonType="primary" onPress={() => setShowCalibration(true)}>

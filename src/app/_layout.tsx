@@ -49,6 +49,12 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="registration"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>

@@ -5,7 +5,6 @@ import { Linking, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Welcome } from '@/components/Welcome';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
@@ -15,12 +14,7 @@ export default function Agbs() {
   const [isCheckedNutzungsbedingungen, setCheckedNutzungsbedingungen] =
     useState(false);
   const [isCheckedDatenschutz, setCheckedDatenschutz] = useState(false);
-  const [showWelcome, setShowWelcome] = React.useState(false);
   const { theme } = useContext(ThemeContext);
-
-  if (showWelcome) {
-    return <Welcome />;
-  }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -118,7 +112,7 @@ export default function Agbs() {
             !isCheckedDatenschutz
           }
           buttonType="accent"
-          onPress={() => setShowWelcome(true)}
+          onPress={() => router.push('/registration')}
         >
           Weiter
         </Button>
