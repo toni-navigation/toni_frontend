@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, TextInput, Text, View } from 'react-native';
 
@@ -91,6 +92,19 @@ export default function RegistrationPage() {
             buttonType="primaryOutline"
           >
             Nochmal senden
+          </Button>
+          <Button
+            buttonType="primary"
+            onPress={() => {
+              router.replace({
+                pathname: '/(tabs)/profile/calibration',
+                params: {
+                  fromIntro: 1,
+                },
+              });
+            }}
+          >
+            Fertig
           </Button>
         </View>
       </SafeAreaView>
