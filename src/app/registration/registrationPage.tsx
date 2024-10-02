@@ -96,12 +96,7 @@ export default function RegistrationPage() {
           <Button
             buttonType="primary"
             onPress={() => {
-              router.replace({
-                pathname: '/(tabs)/profile/calibration',
-                params: {
-                  fromIntro: 1,
-                },
-              });
+              router.push('/profile/calibration/1');
             }}
           >
             Fertig

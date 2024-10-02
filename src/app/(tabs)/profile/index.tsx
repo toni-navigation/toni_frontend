@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -12,6 +12,7 @@ export default function ProfilePage() {
   const { theme } = useContext(ThemeContext);
 
   return (
+    // <Text>Profil</Text>
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
       <ScrollView className="px-8 my-8">
@@ -20,7 +21,7 @@ export default function ProfilePage() {
         </MenuButton> */}
         <MenuButton
           onPress={() => {
-            router.push('/profile/calibration');
+            router.push('/profile/calibration/0');
           }}
           icon={
             <StepLength
@@ -33,8 +34,8 @@ export default function ProfilePage() {
           Schrittlänge
         </MenuButton>
         {/* <MenuButton onPress={() => router.push('/profile')} icon="audio">
-        Audio
-        </MenuButton> */}
+          Audio
+          </MenuButton> */}
       </ScrollView>
     </SafeAreaView>
   );

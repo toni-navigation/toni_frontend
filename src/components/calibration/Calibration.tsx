@@ -1,8 +1,9 @@
 import { Audio } from 'expo-av';
+import { router } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
@@ -25,12 +26,12 @@ export const SPEECH_CONFIG = {
   language: 'de',
 };
 interface CalibrationProps {
-  isFromIntro?: boolean;
+  id: number;
 }
-export function Calibration({ isFromIntro = false }: CalibrationProps) {
+export function Calibration({ id }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
-  const [index, setIndex] = React.useState(0);
+  // const [index, setIndex] = React.useState(0);
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
@@ -40,9 +41,18 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const calSteps = calibrationSteps(calibration.factors);
-  const currentStep = calSteps[index];
-  const isLastStep = calSteps.length - 1 === index;
+  const { shownIntroHandler } = useCalibrationStore((state) => state.actions);
+  const { resetCalibrationStore } = useCalibrationStore(
+    (state) => state.actions
+  );
+  const calSteps = calibrationSteps(
+    calibration.factors,
+    resetCalibrationStore,
+    shownIntroHandler,
+    id
+  );
+  const currentStep = calSteps[id];
+
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -78,7 +88,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     }
 
     addCalibration(distanceInMeter, _steps);
-    setIndex((prevState) => prevState + 1);
+    router.push('/profile/calibration/4');
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG
@@ -156,7 +166,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     ) {
       return (
         <Button buttonType="primary" onPress={fallbackStop}>
-          Stopp
+          Stop
         </Button>
       );
     }
@@ -182,14 +192,11 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         ) : null}
       </ScrollView>
       <CalibrationNavigation
-        setIndex={setIndex}
+        index={id}
         calibrationModeButtons={buttonOutput}
-        isFromIntro={isFromIntro}
-        isLastStep={isLastStep}
         currentElement={currentStep}
         isInCalibrationMode={isInCalibrationMode}
-        isFirstStep={index === 0}
-        stepText={`Schritt ${index + 1} / ${calSteps.length}`}
+        stepText={`Schritt ${id} / ${calSteps.length - 1}`}
       />
     </SafeAreaView>
   );

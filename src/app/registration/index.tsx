@@ -5,15 +5,8 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
-import { Calibration } from '@/components/calibration/Calibration';
 
 export default function Registration() {
-  const [showCalibration, setShowCalibration] = React.useState(false);
-
-  if (showCalibration) {
-    return <Calibration isFromIntro />;
-  }
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 py-8">
@@ -36,7 +29,12 @@ export default function Registration() {
         >
           Registrieren
         </Button>
-        <Button buttonType="primary" onPress={() => setShowCalibration(true)}>
+        <Button
+          buttonType="primary"
+          onPress={() => {
+            router.replace('/profile/calibration/1');
+          }}
+        >
           Probeabo starten
         </Button>
       </View>

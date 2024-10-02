@@ -53,9 +53,8 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  if (true) {
-    return <Intro />;
-  }
+  // if (!showedIntro) {
+  return <Intro />;
 
-  return <Redirect href="/home/" />;
+  // return <Redirect href="/home/" />;
 }

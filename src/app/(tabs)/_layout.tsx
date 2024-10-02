@@ -1,4 +1,4 @@
-import { Tabs, usePathname } from 'expo-router';
+import { router, Tabs, usePathname } from 'expo-router';
 import React, { useContext } from 'react';
 
 import { themes } from '@/colors';
@@ -27,7 +27,10 @@ export default function Layout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          display: currentPath.includes('trip') ? 'none' : undefined,
+          display:
+            currentPath.includes('trip') || currentPath.includes('calibration')
+              ? 'none'
+              : undefined,
           height: 110,
           borderTopWidth: 0,
           elevation: 0,
@@ -59,6 +62,12 @@ export default function Layout() {
           },
           headerShown: false,
         }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            router.push('/favorites/');
+          },
+        }}
       />
       <Tabs.Screen
         name="home"
@@ -74,13 +83,18 @@ export default function Layout() {
           },
           headerShown: false,
         }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            router.push('/home/');
+          },
+        }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           headerTitle: 'Mein Profil',
           tabBarLabel: 'Profil',
-
           tabBarIcon: ({ color }) => iconsArray.person({ color }),
           tabBarAccessibilityLabel: 'Profil',
           tabBarItemStyle: {
@@ -89,6 +103,12 @@ export default function Layout() {
             height: 110,
           },
           headerShown: false,
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            router.push('/profile/');
+          },
         }}
       />
     </Tabs>

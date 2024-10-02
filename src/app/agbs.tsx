@@ -106,11 +106,11 @@ export default function Agbs() {
 
       <View className="mx-8 mb-3">
         <Button
-          disabled={
+          /* disabled={
             !isCheckedAgbs ||
             !isCheckedNutzungsbedingungen ||
             !isCheckedDatenschutz
-          }
+          } */
           buttonType="accent"
           onPress={() => router.push('/registration')}
         >
