@@ -5,7 +5,7 @@ import { Card } from '@/components/organisms/Card';
 
 interface TripStepProps {
   icon: React.ReactNode;
-  instruction: string | null | undefined;
+  instruction: string | null | false | undefined;
 }
 export function TripStep({ icon, instruction }: TripStepProps) {
   return (
