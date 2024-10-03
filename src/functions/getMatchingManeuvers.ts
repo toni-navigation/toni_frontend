@@ -1,12 +1,12 @@
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 
-import { ValhallaProps } from '@/types/Valhalla-Types';
+import { TripProps } from '@/types/Valhalla-Types';
 
 export const getMatchingManeuverIndex = (
-  data: ValhallaProps,
+  trip: TripProps,
   nearestPoint: NearestPointOnLine
 ) => {
-  const { maneuvers } = data.trip.legs[0];
+  const { maneuvers } = trip.legs[0];
   const shapeIndex = nearestPoint.properties.index;
   const currentManeuver =
     shapeIndex !== undefined &&

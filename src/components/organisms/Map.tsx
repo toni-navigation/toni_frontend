@@ -5,10 +5,9 @@ import MapView, { Circle, Marker, Polygon, Polyline } from 'react-native-maps';
 import { DecodedShapeProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
-type CoordsType = { lat: number; lon: number };
 interface MapProps {
-  origin?: CoordsType;
-  destination?: CoordsType;
+  origin?: [number, number];
+  destination?: [number, number];
   nearestPoint?: NearestPointOnLine | null | undefined;
   decodedShape?: DecodedShapeProps | null;
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
@@ -28,8 +27,8 @@ export function Map({
     <MapView
       style={{ height: 300 }}
       initialRegion={{
-        latitude: origin?.lat || 0,
-        longitude: origin?.lon || 0,
+        latitude: origin ? origin[0] : 0,
+        longitude: origin ? origin[1] : 0,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
@@ -51,8 +50,8 @@ export function Map({
       {origin && (
         <Marker
           coordinate={{
-            latitude: origin.lat,
-            longitude: origin.lon,
+            latitude: origin[0],
+            longitude: origin[1],
           }}
           title="Current Location"
           description="You are here"
@@ -61,8 +60,8 @@ export function Map({
       {destination && (
         <Marker
           coordinate={{
-            latitude: destination.lat,
-            longitude: destination.lon,
+            latitude: destination[0],
+            longitude: destination[1],
           }}
           title="Current Location"
           description="You are here"
