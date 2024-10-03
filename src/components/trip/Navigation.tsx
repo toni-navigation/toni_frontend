@@ -63,32 +63,47 @@ export const Navigation = forwardRef(
       currentLocationPoint && nearestPointOnLine(line, currentLocationPoint);
 
     const { maneuvers } = trip.legs[0];
+
     const currentManeuverIndex =
       nearestPoint && getMatchingManeuverIndex(trip, nearestPoint);
     const isFinished =
       currentManeuverIndex === trip.legs[0].maneuvers.length - 1;
+
+    console.log('currentManeuverIndex', currentManeuverIndex);
     if (
       maneuvers &&
       currentManeuverIndex !== undefined &&
       currentManeuverIndex !== null &&
-      nearestPoint?.properties.location &&
+      nearestPoint?.properties.location !== undefined &&
       decodedShape
     ) {
-      const endShapeCoordinate =
-        maneuvers[currentManeuverIndex].begin_shape_index;
-      const distanceLocationAndEndShape =
-        endShapeCoordinate &&
-        distance(
-          nearestPoint.geometry.coordinates,
-          decodedShape?.coordinates[endShapeCoordinate]
-        ) * 1000;
-
       const verbalTransitionAlertInstruction =
         maneuvers[currentManeuverIndex]?.verbal_transition_alert_instruction;
       const verbalPreTransitionInstruction =
         maneuvers[currentManeuverIndex]?.verbal_pre_transition_instruction;
       const verbalPostTransitionInstruction =
         maneuvers[currentManeuverIndex]?.verbal_post_transition_instruction;
+      if (currentManeuverIndex === 1 && readRef.current === undefined) {
+        Speech.speak(`${maneuvers[0]?.instruction ?? ''}`, {
+          language: 'de',
+        });
+        readRef.current = {};
+        readRef.current[currentManeuverIndex] = {
+          ...readRef.current[currentManeuverIndex],
+          verbal_pre_transition_instruction: verbalPreTransitionInstruction,
+          verbal_post_transition_instruction: verbalPostTransitionInstruction,
+        };
+      }
+      const endShapeCoordinate =
+        maneuvers[currentManeuverIndex].begin_shape_index;
+
+      // TODO New Calculation
+      const distanceLocationAndEndShape =
+        endShapeCoordinate &&
+        distance(
+          nearestPoint.geometry.coordinates,
+          decodedShape?.coordinates[endShapeCoordinate]
+        ) * 1000;
 
       if (
         distanceLocationAndEndShape !== undefined &&
