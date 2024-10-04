@@ -1,5 +1,5 @@
-import { router, Tabs, usePathname } from 'expo-router';
-import React, { useContext } from 'react';
+import { router, Tabs, usePathname, useSegments } from 'expo-router';
+import React, { useContext, useEffect } from 'react';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -21,6 +21,7 @@ const iconsArray = {
 export default function Layout() {
   const currentPath = usePathname();
   const { theme } = useContext(ThemeContext);
+  console.log('currentPath', currentPath);
 
   return (
     <Tabs
@@ -62,12 +63,6 @@ export default function Layout() {
           },
           headerShown: false,
         }}
-        listeners={{
-          tabPress: (event) => {
-            event.preventDefault();
-            router.push('/favorites/');
-          },
-        }}
       />
       <Tabs.Screen
         name="home"
@@ -83,12 +78,6 @@ export default function Layout() {
           },
           headerShown: false,
         }}
-        listeners={{
-          tabPress: (event) => {
-            event.preventDefault();
-            router.push('/home/');
-          },
-        }}
       />
       <Tabs.Screen
         name="profile"
@@ -103,12 +92,6 @@ export default function Layout() {
             height: 110,
           },
           headerShown: false,
-        }}
-        listeners={{
-          tabPress: (event) => {
-            event.preventDefault();
-            router.push('/profile/');
-          },
         }}
       />
     </Tabs>

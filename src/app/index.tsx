@@ -1,5 +1,4 @@
 import * as Location from 'expo-location';
-import { Redirect } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 

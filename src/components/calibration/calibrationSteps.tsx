@@ -56,6 +56,7 @@ export const calibrationSteps = (
         return;
       }
       // shownIntroHandler();
+      router.dismissAll();
       router.replace('/home');
     },
   },
