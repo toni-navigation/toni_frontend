@@ -45,7 +45,11 @@ export default function Agbs() {
               accessibilityRole="link"
               accessibilityHint="Link zu den Nutzungsbedingungen"
               className="text-accent"
-              onPress={() => Linking.openURL('https://example.com')}
+              onPress={() =>
+                Linking.openURL(
+                  'https://toni-navigation.at/nutzungsbedingungen'
+                )
+              }
             >
               Nutzungsbedingungen
             </Text>
@@ -70,7 +74,7 @@ export default function Agbs() {
               accessibilityRole="link"
               accessibilityHint="Link zu den AGBs"
               className="text-accent"
-              onPress={() => Linking.openURL('https://example.com')}
+              onPress={() => Linking.openURL('https://toni-navigation.at/agbs')}
             >
               AGBs
             </Text>
@@ -95,7 +99,9 @@ export default function Agbs() {
               accessibilityRole="link"
               accessibilityHint="Link zu den Datenschutz Richtlinien"
               className="text-accent"
-              onPress={() => Linking.openURL('https://example.com')}
+              onPress={() =>
+                Linking.openURL('https://toni-navigation.at/datenschutz')
+              }
             >
               Datenschutz Richtlinien
             </Text>
@@ -106,11 +112,11 @@ export default function Agbs() {
 
       <View className="mx-8 mb-3">
         <Button
-          /* disabled={
+          disabled={
             !isCheckedAgbs ||
             !isCheckedNutzungsbedingungen ||
             !isCheckedDatenschutz
-          } */
+          }
           buttonType="accent"
           onPress={() => router.push('/registration')}
         >

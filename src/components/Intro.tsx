@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -36,7 +37,23 @@ export function Intro() {
     },
   ];
 
+  const handlePageChange = (pageNumber: number) => {
+    pagerRef.current?.setPage(pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    const toggle = setInterval(() => {
+      handlePageChange(pagerRef.current === 2 ? 0 : pagerRef.current + 1);
+    }, 4000);
+
+    return () => clearInterval(toggle);
+  }, [currentPage]);
+
   const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
     activeDot: {
       backgroundColor: themes.external[`--${theme}-mode-primary`],
       width: 20,
@@ -55,76 +72,46 @@ export function Intro() {
       marginLeft: 8,
       marginRight: 8,
     },
+    page: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
 
-  const handlePageChange = (pageNumber: number) => {
-    pagerRef.current?.setPage(pageNumber);
-    setCurrentPage(pageNumber);
-  };
-
-  /*  useEffect(() => {
-    const toggle = setInterval(() => {
-      handlePageChange(currentPage === 2 ? 0 : currentPage + 1);
-    }, 3000);
-
-    return () => clearInterval(toggle);
-  }, [currentPage]); */
-
-  // TODO PagerView with current version not working
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View
-        className="flex-1"
-        accessibilityLabel="Swiper"
-        accessibilityHint="Swipe nach links oder rechts um weitere Informationen zu bekommen"
-      >
-        {/* <PagerView */}
-        {/*  className="flex-1" */}
-        {/*  initialPage={0} */}
-        {/*  ref={pagerRef} */}
-        {/*  onPageSelected={(event) => */}
-        {/*    handlePageChange(event.nativeEvent.position) */}
-        {/*  } */}
-        {/* > */}
-        {/*  {pagerViewData.map((data, index) => ( */}
-        {/*    // eslint-disable-next-line react/no-array-index-key */}
-        {/*    */}
-        {/*  ))} */}
-        {/* </PagerView> */}
-        <View className="px-8 mt-8">
-          <View
-            className="flex items-center pb-8"
-            accessibilityLabel="Icon"
-            accessibilityRole="image"
-            accessibilityHint="Toni Logo"
-          >
-            {pagerViewData[0].icon}
-          </View>
-          <View className="flex items-center">
-            <Header classes="text-primary">{pagerViewData[0].headline}</Header>
-            <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
-              {pagerViewData[0].text}
-            </Text>
-          </View>
-        </View>
-      </View>
-      <View className="mx-8 mb-3">
-        <View
-          className="flex justify-center flex-row mb-14"
-          accessibilityLabel="Progressbar Swiper"
-          accessibilityHint="Swipe um für weitere Seiten"
+      <View className="flex-1 mx-8 mb-3">
+        <PagerView
+          style={styles.container}
+          initialPage={0}
+          ref={pagerRef}
+          onPageSelected={(event) =>
+            handlePageChange(event.nativeEvent.position)
+          }
         >
+          {pagerViewData.map((data, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <View key={index} className="px-8 mt-8">
+              <View className="flex items-center pb-8">{data.icon}</View>
+              <View className="flex items-center">
+                <Header classes="text-textColor">{data.headline}</Header>
+                <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
+                  {data.text}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </PagerView>
+        <View className="flex justify-center flex-row mb-14">
           {pagerViewData.map((data, index) => (
             <View
               style={index === currentPage ? styles.activeDot : styles.dot}
               /* eslint-disable-next-line react/no-array-index-key */
               key={index}
-              testID="dot"
-              accessibilityLabel={`Punkt-${index}`}
-              accessibilityHint={`Seite ${index + 1}`}
             />
           ))}
         </View>
+
         <Button buttonType="primary" onPress={() => router.push('/agbs')}>
           Los gehts
         </Button>
