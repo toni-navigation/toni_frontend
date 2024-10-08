@@ -1,10 +1,9 @@
 import bbox from '@turf/bbox';
 import circle from '@turf/circle';
 import { point } from '@turf/helpers';
+import { LocationObject } from 'expo-location';
 
-import { CurrentLocationProps } from '@/types/Types';
-
-export const getBbox = (currentPosition: CurrentLocationProps, radius = 10) => {
+export const getBbox = (currentPosition: LocationObject, radius = 10) => {
   if (!currentPosition) return undefined;
 
   const center = point([

@@ -1,4 +1,5 @@
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
+import { Feature, GeoJsonProperties, LineString } from 'geojson';
 import React from 'react';
 import MapView, { Circle, Marker, Polygon, Polyline } from 'react-native-maps';
 
@@ -8,20 +9,22 @@ import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 interface MapProps {
   origin?: [number, number];
   destination?: [number, number];
-  nearestPoint?: NearestPointOnLine | null | undefined;
+  snapshot?: NearestPointOnLine | null | undefined;
   decodedShape?: DecodedShapeProps | null;
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
   maneuvers?: ValhallaManeuverProps[];
   currentManeuverIndex?: number;
+  sliced?: false | Feature<LineString, GeoJsonProperties> | undefined;
 }
 export function Map({
   origin,
-  nearestPoint,
+  snapshot,
   destination,
   decodedShape,
   bbox,
   maneuvers,
   currentManeuverIndex,
+  sliced,
 }: MapProps) {
   return (
     <MapView
@@ -37,14 +40,24 @@ export function Map({
       showsCompass
       followsUserLocation
     >
-      {nearestPoint && (
+      {snapshot && (
         <Marker
           coordinate={{
-            latitude: nearestPoint.geometry.coordinates[0],
-            longitude: nearestPoint.geometry.coordinates[1],
+            latitude: snapshot.geometry.coordinates[0],
+            longitude: snapshot.geometry.coordinates[1],
           }}
           title="Nearest Point"
           description="You are here"
+        />
+      )}
+      {sliced && (
+        <Polyline
+          coordinates={sliced.geometry.coordinates.map((coord) => ({
+            latitude: coord[0],
+            longitude: coord[1],
+          }))}
+          strokeColor="red"
+          strokeWidth={2}
         />
       )}
       {origin && (

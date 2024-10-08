@@ -1,5 +1,6 @@
-import distance from '@turf/distance';
 import { lineString, point } from '@turf/helpers';
+import length from '@turf/length';
+import lineSlice from '@turf/line-slice';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import * as Speech from 'expo-speech';
 import React, { forwardRef, useContext, useRef } from 'react';
@@ -8,7 +9,6 @@ import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Map } from '@/components/organisms/Map';
 import { IsFinished } from '@/components/trip/IsFinished';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
@@ -34,6 +34,7 @@ interface NavigationProps {
 }
 interface ReadRefProps {
   [key: number]: {
+    instruction?: string;
     verbal_transition_alert_instruction?: string;
     verbal_pre_transition_instruction?: string;
     verbal_post_transition_instruction?: string;
@@ -45,7 +46,7 @@ export const Navigation = forwardRef(
     ref: React.ForwardedRef<PagerView>
   ) => {
     const { theme } = useContext(ThemeContext);
-    const readRef = useRef<ReadRefProps>();
+    const readRef = useRef<ReadRefProps>({});
     const decodedShape = decodePolyline(trip.legs[0].shape);
     const line = lineString(decodedShape.coordinates);
     const currentLocation = useCurrentLocationStore(
@@ -59,125 +60,108 @@ export const Navigation = forwardRef(
         currentLocation.coords.longitude,
       ]);
 
-    const nearestPoint =
+    const snapshot =
       currentLocationPoint && nearestPointOnLine(line, currentLocationPoint);
 
     const { maneuvers } = trip.legs[0];
 
     const currentManeuverIndex =
-      nearestPoint && getMatchingManeuverIndex(trip, nearestPoint);
+      snapshot && getMatchingManeuverIndex(trip, snapshot);
     const isFinished =
       currentManeuverIndex === trip.legs[0].maneuvers.length - 1;
-
-    console.log('currentManeuverIndex', currentManeuverIndex);
-    if (
-      maneuvers &&
-      currentManeuverIndex !== undefined &&
-      currentManeuverIndex !== null &&
-      nearestPoint?.properties.location !== undefined &&
-      decodedShape
-    ) {
-      const verbalTransitionAlertInstruction =
-        maneuvers[currentManeuverIndex]?.verbal_transition_alert_instruction;
-      const verbalPreTransitionInstruction =
-        maneuvers[currentManeuverIndex]?.verbal_pre_transition_instruction;
-      const verbalPostTransitionInstruction =
-        maneuvers[currentManeuverIndex]?.verbal_post_transition_instruction;
-      if (currentManeuverIndex === 1 && readRef.current === undefined) {
+    if (snapshot !== undefined && currentManeuverIndex !== undefined) {
+      const {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        verbal_pre_transition_instruction,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        verbal_transition_alert_instruction,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        verbal_post_transition_instruction,
+      } = maneuvers[currentManeuverIndex];
+      if (currentManeuverIndex === 1 && readRef.current[0] === undefined) {
         Speech.speak(`${maneuvers[0]?.instruction ?? ''}`, {
           language: 'de',
         });
-        readRef.current = {};
-        readRef.current[currentManeuverIndex] = {
-          ...readRef.current[currentManeuverIndex],
-          verbal_pre_transition_instruction: verbalPreTransitionInstruction,
-          verbal_post_transition_instruction: verbalPostTransitionInstruction,
+        readRef.current[0] = {
+          instruction: maneuvers[0].instruction,
         };
       }
-      const endShapeCoordinate =
-        maneuvers[currentManeuverIndex].begin_shape_index;
-
-      // TODO New Calculation
-      const distanceLocationAndEndShape =
-        endShapeCoordinate &&
-        distance(
-          nearestPoint.geometry.coordinates,
-          decodedShape?.coordinates[endShapeCoordinate]
-        ) * 1000;
+      const sliced = lineSlice(
+        snapshot,
+        decodedShape.coordinates[
+          maneuvers[currentManeuverIndex - 1].end_shape_index
+        ],
+        line
+      );
+      const lengthFromCurrentPositionToNextManeuver = length(sliced) * 1000;
+      const maneuverLength = maneuvers[currentManeuverIndex - 1].length * 1000;
+      const nextManeuverThreshold = maneuverLength / 3;
 
       if (
-        distanceLocationAndEndShape !== undefined &&
-        distanceLocationAndEndShape < 20
+        lengthFromCurrentPositionToNextManeuver < nextManeuverThreshold &&
+        readRef.current[currentManeuverIndex]
+          ?.verbal_transition_alert_instruction === undefined &&
+        verbal_transition_alert_instruction !== undefined
       ) {
-        if (
-          readRef.current === undefined ||
-          readRef.current[currentManeuverIndex] === undefined ||
-          readRef.current[currentManeuverIndex]
-            ?.verbal_transition_alert_instruction === undefined
-        ) {
-          if (verbalTransitionAlertInstruction !== undefined) {
-            Speech.speak(`In 20 Metern ${verbalTransitionAlertInstruction}`, {
-              language: 'de',
-            });
+        Speech.speak(
+          `In ${lengthFromCurrentPositionToNextManeuver.toFixed(2)} Metern ${verbal_transition_alert_instruction}`,
+          {
+            language: 'de',
           }
-          if (readRef.current === undefined) {
-            readRef.current = {};
-          }
-          readRef.current[currentManeuverIndex] = {
-            verbal_transition_alert_instruction:
-              verbalTransitionAlertInstruction,
-          };
-        }
-        if (
-          distanceLocationAndEndShape < 5 &&
-          readRef.current[currentManeuverIndex]
-            ?.verbal_pre_transition_instruction === undefined &&
-          readRef.current[currentManeuverIndex]
-            ?.verbal_post_transition_instruction === undefined
-        ) {
-          if (
-            verbalPreTransitionInstruction !== undefined ||
-            verbalPostTransitionInstruction !== undefined
-          ) {
-            Speech.speak(
-              `${verbalPreTransitionInstruction ?? ''} und ${verbalPostTransitionInstruction ?? ''}` ??
-                '',
-              {
-                language: 'de',
-              }
-            );
-          }
-          readRef.current[currentManeuverIndex] = {
-            ...readRef.current[currentManeuverIndex],
-            verbal_pre_transition_instruction: verbalPreTransitionInstruction,
-            verbal_post_transition_instruction: verbalPostTransitionInstruction,
-          };
-        }
+        );
+        readRef.current[currentManeuverIndex] = {
+          verbal_transition_alert_instruction,
+        };
+      }
+      if (
+        lengthFromCurrentPositionToNextManeuver < 5 &&
+        verbal_pre_transition_instruction !== undefined &&
+        readRef.current[currentManeuverIndex]
+          ?.verbal_pre_transition_instruction === undefined
+      ) {
+        Speech.speak(`${verbal_pre_transition_instruction ?? ''}`, {
+          language: 'de',
+        });
 
-        // const verbalPreTransitionInstruction =
-        //   maneuvers[currentManeuverIndex]?.verbal_pre_transition_instruction ??
-        //   '';
-        // const verbalPostTransitionInstruction =
-        //   maneuvers[currentManeuverIndex]?.verbal_post_transition_instruction ??
-        //   '';
+        readRef.current[currentManeuverIndex] = {
+          ...readRef.current[currentManeuverIndex],
+          verbal_pre_transition_instruction,
+        };
+      }
+      if (
+        lengthFromCurrentPositionToNextManeuver < 5 &&
+        verbal_post_transition_instruction !== undefined &&
+        readRef.current[currentManeuverIndex]
+          ?.verbal_post_transition_instruction === undefined
+      ) {
+        Speech.speak(`${verbal_post_transition_instruction ?? ''}`, {
+          language: 'de',
+        });
+
+        readRef.current[currentManeuverIndex] = {
+          ...readRef.current[currentManeuverIndex],
+          verbal_post_transition_instruction,
+        };
       }
     }
+
     if (isFinished) {
       return <IsFinished />;
     }
 
     return (
       <>
-        <Map
-          origin={decodedShape.coordinates[0]}
-          destination={
-            decodedShape.coordinates[decodedShape.coordinates.length - 1]
-          }
-          nearestPoint={nearestPoint}
-          decodedShape={decodedShape}
-          maneuvers={trip.legs[0].maneuvers}
-          currentManeuverIndex={currentManeuverIndex}
-        />
+        {/* <Map */}
+        {/*  // sliced={sliced} */}
+        {/*  origin={decodedShape.coordinates[0]} */}
+        {/*  destination={ */}
+        {/*    decodedShape.coordinates[decodedShape.coordinates.length - 1] */}
+        {/*  } */}
+        {/*  snapshot={snapshot} */}
+        {/*  decodedShape={decodedShape} */}
+        {/*  maneuvers={trip.legs[0].maneuvers} */}
+        {/*  currentManeuverIndex={currentManeuverIndex} */}
+        {/* /> */}
         <PagerView
           onPageSelected={(event) => handlePageSelected(event)}
           initialPage={activePage}
@@ -185,14 +169,21 @@ export const Navigation = forwardRef(
           ref={ref}
         >
           <TripList
-            maneuvers={trip.legs[0].maneuvers.slice(currentManeuverIndex)}
+            maneuvers={trip.legs[0].maneuvers.slice(
+              !currentManeuverIndex ? 0 : currentManeuverIndex - 1
+            )}
             key="0"
             calibration={calibration}
           />
           <TripStep
             key="1"
+            instruction={
+              currentManeuverIndex !== undefined
+                ? maneuvers[currentManeuverIndex]?.instruction
+                : undefined
+            }
             icon={
-              currentManeuverIndex &&
+              currentManeuverIndex !== undefined &&
               matchIconType(
                 maneuvers[currentManeuverIndex].type,
                 themes.external[`--${theme}-mode-primary`]
