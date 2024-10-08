@@ -69,7 +69,11 @@ export const Navigation = forwardRef(
       snapshot && getMatchingManeuverIndex(trip, snapshot);
     const isFinished =
       currentManeuverIndex === trip.legs[0].maneuvers.length - 1;
-    if (snapshot !== undefined && currentManeuverIndex !== undefined) {
+    if (
+      snapshot !== undefined &&
+      currentManeuverIndex !== undefined &&
+      maneuvers[currentManeuverIndex] !== undefined
+    ) {
       const {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         verbal_pre_transition_instruction,
