@@ -27,10 +27,10 @@ export interface ValhallaManeuverProps {
   verbal_post_transition_instruction?: string;
   street_names?: string[];
   time?: number;
-  length?: number;
+  length: number;
   cost?: number;
-  begin_shape_index?: number;
-  end_shape_index?: number;
+  begin_shape_index: number;
+  end_shape_index: number;
   travel_mode?: string;
   travel_type?: string;
   rough?: boolean;

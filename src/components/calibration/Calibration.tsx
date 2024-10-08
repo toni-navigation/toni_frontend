@@ -1,4 +1,5 @@
 import { Audio } from 'expo-av';
+import { LocationObject } from 'expo-location';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
@@ -17,7 +18,6 @@ import { useSpeak } from '@/mutations/useSpeak';
 import { useStartSound } from '@/mutations/useStartSound';
 import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
-import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 30;
 const UNREALISTIC_CALIBRATION = 10;
@@ -34,7 +34,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
-  const fallback = useRef<CurrentLocationType>();
+  const fallback = useRef<any>();
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound();
@@ -53,7 +53,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     }
   };
 
-  const fallbackStop = async (_start?: CurrentLocationType, _steps = 30) => {
+  const fallbackStop = async (_start?: LocationObject, _steps = 30) => {
     await stopPedometer();
     Speech.speak(
       'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor',
@@ -90,7 +90,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   };
 
   const handlePedometerUpdate = async (
-    start: CurrentLocationType,
+    start: LocationObject | undefined,
     result: Pedometer.PedometerResult
   ) => {
     setSteps(result.steps);
