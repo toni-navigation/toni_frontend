@@ -44,7 +44,7 @@ export function Intro() {
 
   useEffect(() => {
     const toggle = setInterval(() => {
-      handlePageChange(pagerRef.current === 2 ? 0 : pagerRef.current + 1);
+      handlePageChange(currentPage === 2 ? 0 : currentPage + 1);
     }, 4000);
 
     return () => clearInterval(toggle);

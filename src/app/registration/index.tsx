@@ -32,7 +32,7 @@ export default function Registration() {
         <Button
           buttonType="primary"
           onPress={() => {
-            router.replace('/profile/calibration/1');
+            router.replace('../calibration/0?fromIntro=true');
           }}
         >
           Probeabo starten

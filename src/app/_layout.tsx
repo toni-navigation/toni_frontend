@@ -7,6 +7,8 @@ import React, { useEffect } from 'react';
 import 'react-native-reanimated';
 import '@/global.css';
 
+import * as trace_events from 'trace_events';
+
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
@@ -37,6 +39,13 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="calibration"
+              options={{
+                headerShown: false,
+              }}
+            />
+
             <Stack.Screen
               name="index"
               options={{

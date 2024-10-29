@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, Text } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
@@ -20,15 +20,16 @@ import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { CurrentLocationType } from '@/types/Types';
 
-const STOP_CALIBRATION_COUNT = 30;
-const UNREALISTIC_CALIBRATION = 10;
+const STOP_CALIBRATION_COUNT = 10;
+const UNREALISTIC_CALIBRATION = 0;
 export const SPEECH_CONFIG = {
   language: 'de',
 };
 interface CalibrationProps {
   id: number;
+  fromIntro: boolean;
 }
-export function Calibration({ id }: CalibrationProps) {
+export function Calibration({ id, fromIntro }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
   // const [index, setIndex] = React.useState(0);
@@ -49,7 +50,8 @@ export function Calibration({ id }: CalibrationProps) {
     calibration.factors,
     resetCalibrationStore,
     shownIntroHandler,
-    id
+    id,
+    fromIntro
   );
   const currentStep = calSteps[id];
 
@@ -196,7 +198,7 @@ export function Calibration({ id }: CalibrationProps) {
         calibrationModeButtons={buttonOutput}
         currentElement={currentStep}
         isInCalibrationMode={isInCalibrationMode}
-        stepText={`Schritt ${id} / ${calSteps.length - 1}`}
+        stepText={`Schritt ${id + 1} / ${calSteps.length}`}
       />
     </SafeAreaView>
   );

@@ -36,7 +36,6 @@ export default function FavoritesPage() {
                     params: { id: favorite.id },
                   });
                 }}
-                // icon="heart"
                 icon={
                   <Heart
                     fill={themes.external[`--${theme}-mode-primary`]}

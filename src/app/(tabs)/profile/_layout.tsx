@@ -12,13 +12,6 @@ function ProfileLayout() {
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen */}
-      {/*  name="calibration/[id]" */}
-      {/*  options={{ */}
-      {/*    headerTitle: 'Kalibration', */}
-      {/*    // headerShown: false, */}
-      {/*  }} */}
-      {/* /> */}
     </Stack>
   );
 }

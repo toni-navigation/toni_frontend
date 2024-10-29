@@ -96,7 +96,7 @@ export default function RegistrationPage() {
           <Button
             buttonType="primary"
             onPress={() => {
-              router.push('/profile/calibration/1');
+              router.push('../calibration/0?fromIntro=true');
             }}
           >
             Fertig

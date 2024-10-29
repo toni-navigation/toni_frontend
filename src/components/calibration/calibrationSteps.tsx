@@ -1,6 +1,5 @@
 import { router } from 'expo-router';
-import React, { ReactElement } from 'react';
-import { Text } from 'react-native';
+import { ReactElement } from 'react';
 
 import { getCalibrationValue } from '@/functions/getCalibrationValue';
 
@@ -18,68 +17,25 @@ export const calibrationSteps = (
   factors: number[] | undefined,
   resetCalibrationStore: () => void,
   shownIntroHandler: () => void,
-  id: number
+  id: number,
+  fromIntro: boolean
 ): CalibrationStepsProps[] => [
-  {
-    forwardButtonText: 'Kalibrieren',
-    forwardButtonHandler: () => {
-      router.push(`/profile/calibration/${id + 1}`);
-    },
-    text: `Deine kalibrierte Schrittlänge beträgt`,
-    backButtonText: 'Zurücksetzen',
-    backButtonHandler: () => {
-      resetCalibrationStore();
-    },
-    calibrationValueNode: (
-      <Text
-        className="text-4xl font-generalSansSemi pt-4 text-primary"
-        testID="calibrationValue"
-      >
-        {factors && getCalibrationValue(factors)
-          ? `${getCalibrationValue(factors)} m`
-          : '-'}
-      </Text>
-    ),
-  },
   {
     forwardButtonText: 'Weiter',
     forwardButtonHandler: () => {
-      router.push(`/profile/calibration/${id + 1}`);
+      router.push(`../calibration/${id + 1}`);
     },
     text: 'Nun kalibrieren wir gemeinsam deine Schrittlänge, damit wir dich so genau wie möglich an dein Ziel bringen können.',
-    backButtonText:
-      factors && getCalibrationValue(factors) ? 'Zurück' : 'Überspringen',
+    backButtonText: fromIntro ? 'Überspringen' : 'Zurück',
     backButtonHandler: () => {
-      if (factors && getCalibrationValue(factors)) {
-        router.back();
+      if (fromIntro) {
+        router.dismissAll();
+        router.replace('/home');
 
         return;
       }
-      // shownIntroHandler();
-      router.dismissAll();
-      router.replace('/home');
-    },
-  },
-  {
-    forwardButtonText: 'Weiter',
-    forwardButtonHandler: () => {
-      router.push(`/profile/calibration/${id + 1}`);
-    },
-    text: 'Bitte stelle sicher, dass du deine Schritte auf einer möglichst geraden Strecke ohne Hindernisse kalibriert.\nSolltest du dir unsicher sein, bitte eine vertraute Person um Hilfe.',
-    backButtonText: 'Zurück',
-    backButtonHandler: () => {
       router.back();
-    },
-  },
-  {
-    forwardButtonText: 'Weiter',
-    forwardButtonHandler: () => {
-      router.push(`/profile/calibration/${id + 1}`);
-    },
-    text: 'Wenn du dir sicher bist deine Schritte konfigurieren zu können, können wir starten!',
-    backButtonText: 'Zurück',
-    backButtonHandler: () => {
-      router.back();
+      // router.replace('/profile');
     },
   },
   {
