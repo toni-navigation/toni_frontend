@@ -90,7 +90,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     }
 
     addCalibration(distanceInMeter, _steps);
-    router.push('/profile/calibration/4');
+    router.push('../calibration/2');
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG
