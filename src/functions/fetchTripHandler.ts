@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import { LocationProps } from '@/types/Types';
+import { SearchParamType } from '@/components/trip/Trip';
+import { parseCoordinate } from '@/functions/parseCoordinate';
 import { ValhallaProps } from '@/types/Valhalla-Types';
 import { VALHALLA_CONFIG } from '@/valhallaConfig';
 
@@ -9,15 +10,18 @@ const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/';
 const axiosValhallaInstance = axios.create({ baseURL: VALHALLA_URL });
 
 export const fetchTripHandler = async (
-  points?: LocationProps[] | null,
+  tripData: SearchParamType,
   _axios = axiosValhallaInstance
-): Promise<ValhallaProps | null> => {
-  if (!points || points?.length === 0) {
-    return null;
-  }
+): Promise<ValhallaProps> => {
+  const origin = parseCoordinate(tripData.origin);
+  const destination = parseCoordinate(tripData.destination);
+
   const searchJson = {
     ...VALHALLA_CONFIG,
-    locations: points.map((point) => ({ ...point, type: 'break' })),
+    locations: [
+      { ...origin, type: 'break' },
+      { ...destination, type: 'break' },
+    ],
   };
 
   return (

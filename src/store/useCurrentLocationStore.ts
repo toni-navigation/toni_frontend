@@ -1,14 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LocationObject } from 'expo-location';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { CurrentLocationType } from '@/types/Types';
-
 type CurrentLocationState = {
-  currentLocation: CurrentLocationType;
+  currentLocation: LocationObject | undefined;
   actions: {
-    updateCurrentLocation: (currentLocation: CurrentLocationType) => void;
+    updateCurrentLocation: (currentLocation: LocationObject) => void;
     resetCurrentLocationStore: () => void;
   };
 };

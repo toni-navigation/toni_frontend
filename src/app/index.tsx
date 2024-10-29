@@ -28,19 +28,7 @@ export default function Index() {
           distanceInterval: 1,
         },
         (locationObject) => {
-          const position = {
-            coords: {
-              speed: locationObject.coords.speed,
-              heading: locationObject.coords.heading,
-              accuracy: locationObject.coords.accuracy,
-              altitudeAccuracy: locationObject.coords.altitudeAccuracy,
-              altitude: locationObject.coords.altitude,
-              longitude: locationObject.coords.longitude,
-              latitude: locationObject.coords.latitude,
-            },
-            timestamp: locationObject.timestamp,
-          };
-          updateCurrentLocation(position);
+          updateCurrentLocation(locationObject);
         }
       );
 

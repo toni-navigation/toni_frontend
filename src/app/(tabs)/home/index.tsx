@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+// @ts-ignore
 import background from '@/assets/images/background10.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';

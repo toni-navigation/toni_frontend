@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { SearchParamType } from '@/components/trip/Trip';
 import { fetchTripHandler } from '@/functions/fetchTripHandler';
-import { LocationProps } from '@/types/Types';
 
-export function useTrip(restructureTripData: LocationProps[]) {
-  return useQuery({
-    queryKey: ['valhalla', restructureTripData],
-    queryFn: () => fetchTripHandler(restructureTripData),
+export function useTrip(tripData: SearchParamType) {
+  return useSuspenseQuery({
+    queryKey: ['valhalla', tripData],
+    queryFn: () => fetchTripHandler(tripData),
   });
 }

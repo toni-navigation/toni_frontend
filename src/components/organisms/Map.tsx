@@ -1,35 +1,37 @@
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
+import { Feature, GeoJsonProperties, LineString } from 'geojson';
 import React from 'react';
 import MapView, { Circle, Marker, Polygon, Polyline } from 'react-native-maps';
 
 import { DecodedShapeProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
-type CoordsType = { lat: number; lon: number };
 interface MapProps {
-  origin?: CoordsType;
-  destination?: CoordsType;
-  nearestPoint?: NearestPointOnLine | null | undefined;
+  origin?: [number, number];
+  destination?: [number, number];
+  snapshot?: NearestPointOnLine | null | undefined;
   decodedShape?: DecodedShapeProps | null;
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
   maneuvers?: ValhallaManeuverProps[];
   currentManeuverIndex?: number;
+  sliced?: false | Feature<LineString, GeoJsonProperties> | undefined;
 }
 export function Map({
   origin,
-  nearestPoint,
+  snapshot,
   destination,
   decodedShape,
   bbox,
   maneuvers,
   currentManeuverIndex,
+  sliced,
 }: MapProps) {
   return (
     <MapView
       style={{ height: 300 }}
       initialRegion={{
-        latitude: origin?.lat || 0,
-        longitude: origin?.lon || 0,
+        latitude: origin ? origin[0] : 0,
+        longitude: origin ? origin[1] : 0,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
@@ -38,21 +40,31 @@ export function Map({
       showsCompass
       followsUserLocation
     >
-      {nearestPoint && (
+      {snapshot && (
         <Marker
           coordinate={{
-            latitude: nearestPoint.geometry.coordinates[0],
-            longitude: nearestPoint.geometry.coordinates[1],
+            latitude: snapshot.geometry.coordinates[0],
+            longitude: snapshot.geometry.coordinates[1],
           }}
           title="Nearest Point"
           description="You are here"
         />
       )}
+      {sliced && (
+        <Polyline
+          coordinates={sliced.geometry.coordinates.map((coord) => ({
+            latitude: coord[0],
+            longitude: coord[1],
+          }))}
+          strokeColor="red"
+          strokeWidth={2}
+        />
+      )}
       {origin && (
         <Marker
           coordinate={{
-            latitude: origin.lat,
-            longitude: origin.lon,
+            latitude: origin[0],
+            longitude: origin[1],
           }}
           title="Current Location"
           description="You are here"
@@ -61,8 +73,8 @@ export function Map({
       {destination && (
         <Marker
           coordinate={{
-            latitude: destination.lat,
-            longitude: destination.lon,
+            latitude: destination[0],
+            longitude: destination[1],
           }}
           title="Current Location"
           description="You are here"

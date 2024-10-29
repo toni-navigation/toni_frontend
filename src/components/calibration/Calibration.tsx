@@ -1,5 +1,6 @@
 import { Audio } from 'expo-av';
-import { router } from 'expo-router';
+import { LocationObject } from 'expo-location';
+import {router} from "expo-router";
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
@@ -18,7 +19,6 @@ import { useSpeak } from '@/mutations/useSpeak';
 import { useStartSound } from '@/mutations/useStartSound';
 import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
-import { CurrentLocationType } from '@/types/Types';
 
 const STOP_CALIBRATION_COUNT = 10;
 const UNREALISTIC_CALIBRATION = 0;
@@ -36,7 +36,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
   const [steps, setSteps] = useState(0);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
-  const fallback = useRef<CurrentLocationType>();
+  const fallback = useRef<any>();
   const currentLocationMutation = useCurrentLocation();
   const pedometerAvailableMutation = usePedometerAvailable();
   const startSoundMutation = useStartSound();
@@ -65,7 +65,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     }
   };
 
-  const fallbackStop = async (_start?: CurrentLocationType, _steps = 30) => {
+  const fallbackStop = async (_start?: LocationObject, _steps = 30) => {
     await stopPedometer();
     Speech.speak(
       'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor',
@@ -102,7 +102,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
   };
 
   const handlePedometerUpdate = async (
-    start: CurrentLocationType,
+    start: LocationObject | undefined,
     result: Pedometer.PedometerResult
   ) => {
     setSteps(result.steps);
@@ -168,7 +168,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     ) {
       return (
         <Button buttonType="primary" onPress={fallbackStop}>
-          Stop
+          Stopp
         </Button>
       );
     }
