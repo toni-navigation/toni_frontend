@@ -1,18 +1,11 @@
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
+import React from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 
-import { themes } from '@/colors';
-import { ThemeContext } from '@/components/ThemeProvider';
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { MenuButton } from '@/components/atoms/MenuButton';
-import { Person } from '@/components/atoms/icons/Person';
-import { StepLength } from '@/components/atoms/icons/StepLength';
 
 export default function ProfilePage() {
-  const { theme } = useContext(ThemeContext);
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>

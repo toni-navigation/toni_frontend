@@ -4,11 +4,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
+
 import 'react-native-reanimated';
 import '@/global.css';
-
-import * as trace_events from 'trace_events';
-
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
