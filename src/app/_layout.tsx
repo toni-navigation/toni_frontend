@@ -62,6 +62,13 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="trip"
+              options={{
+                headerShown: false,
+                headerBackTitle: 'Home',
+              }}
+            />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>

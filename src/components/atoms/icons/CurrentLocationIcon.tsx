@@ -7,7 +7,7 @@ interface CurrentLocationProps {
   viewBox?: string;
   fill?: string;
 }
-export function CurrentLocation({
+export function CurrentLocationIcon({
   width = 24,
   height = 24,
   viewBox = '0 0 24 24',
@@ -19,7 +19,7 @@ export function CurrentLocation({
       height={height}
       viewBox={viewBox}
       width={width}
-      testID="CurrentLocation"
+      testID="CurrentLocationIcon"
     >
       <Path
         d="M9.00091 2.72523C9.02809 2.3119 9.38519 1.99888 9.79851 2.02606C15.7912 2.42016 20.5815 7.21147 20.974 13.2046C21.001 13.6179 20.6879 13.9749 20.2746 14.002C19.8613 14.0291 19.5042 13.7159 19.4772 13.3026C19.1339 8.06056 14.9417 3.86754 9.70008 3.52283C9.28676 3.49564 8.97373 3.13855 9.00091 2.72523Z"

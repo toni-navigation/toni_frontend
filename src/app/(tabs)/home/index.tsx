@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
+  Dimensions,
   ImageBackground,
   SafeAreaView,
   ScrollView,
@@ -9,17 +10,19 @@ import {
 } from 'react-native';
 
 // @ts-ignore
-import background from '@/assets/images/background10.png';
+import background from '@/assets/images/background100.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
+import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
+import { InputText } from '@/components/atoms/InputText';
 import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function HomePage() {
@@ -30,9 +33,13 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+  const favorites = useFavoriteStore((state) => state.favorites);
+
   const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);
+
+  const [startValue, setstartValue] = useState('Mein Standort');
 
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
@@ -54,13 +61,12 @@ export default function HomePage() {
     destination: number[];
   }) => {
     // Assuming router.push handles navigation to the trip page
-    router.push({ pathname: `/home/trip`, params });
+    router.push({ pathname: `/trip`, params });
   };
 
   const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
     const newDestination = getCoordinates(destination);
-
     if (newOrigin && newDestination) {
       const params = {
         origin: newOrigin,
@@ -71,18 +77,21 @@ export default function HomePage() {
     }
   };
 
-  // const bbox = currentLocation && getBbox(currentLocation);
-  // const bboxCoordinates = bbox && [
-  //   { latitude: bbox[1], longitude: bbox[0] }, // southwest corner
-  //   { latitude: bbox[1], longitude: bbox[2] }, // northwest corner
-  //   { latitude: bbox[3], longitude: bbox[2] }, // northeast corner
-  //   { latitude: bbox[3], longitude: bbox[0] }, // southeast corner
-  //   { latitude: bbox[1], longitude: bbox[0] }, // closing the polygon - southwest corner
-  // ];
+  const startNavigationFromFavorite = (favorite: number) => {
+    changeDestination(favorites[favorite].address);
+    if (currentLocation) {
+      navigateToTrip({
+        origin: [
+          currentLocation.coords.longitude,
+          currentLocation.coords.latitude,
+        ],
+        destination: favorites[favorite].address.geometry.coordinates,
+      });
+    }
+  };
 
-  // if (!skipped && calibration.factors.length === 0) {
-  //   return <Calibration isFromIntro />;
-  // }
+  const screenHeight = Dimensions.get('window').height;
+  const viewHeight = 0.5 * screenHeight;
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -102,36 +111,85 @@ export default function HomePage() {
         </Text>
       </PopUp>
       <ImageBackground source={background} className="flex-1">
-        <BigHeader classes="text-invertedPrimary">Hallo Max</BigHeader>
-
-        <ScrollView className="px-8 py-8" keyboardShouldPersistTaps="always">
-          <GeocoderAutocomplete
-            value={origin}
-            placeholder="Start eingeben"
-            label="Start"
-            onChange={(value) => changeOrigin(value)}
-          />
-          <View className="pt-4 pb-4 mb-2">
-            <IconButton
-              onPress={switchOriginDestination}
-              buttonType="primary"
-              disabled={origin === undefined && destination === undefined}
-              iconName="Start und Ziel tauschen"
-              icon={
-                <SwitchArrow
-                  fill={themes.external[`--${theme}-mode-icon-button`]}
-                  width={30}
-                  height={30}
+        <ScrollView keyboardShouldPersistTaps="always">
+          <View
+            style={{ height: viewHeight }}
+            className="px-8 py-8 bg-background rounded-b-[70]"
+          >
+            <View>
+              <View className="my-6 flex flex-row justify-between">
+                <Header>Neue Route</Header>
+                <IconButton
+                  onPress={switchOriginDestination}
+                  buttonType="primaryOutline"
+                  disabled={origin === undefined && destination === undefined}
+                  iconName="Start und Ziel tauschen"
+                  icon={
+                    <SwitchArrow
+                      fill={themes.external[`--${theme}-mode-icon-button`]}
+                      width={30}
+                      height={30}
+                    />
+                  }
                 />
-              }
-            />
+              </View>
+
+              <InputText
+                className="mb-4"
+                accessibilityLabel="Start"
+                accessibilityHint="Bitte geben Sie einen Startpunkt ein"
+                placeholder="Start eingeben"
+                value={startValue}
+                onChange={(event) => {
+                  setstartValue(event.nativeEvent.text);
+                }}
+              />
+
+              <GeocoderAutocomplete
+                value={origin}
+                placeholder="Start eingeben"
+                label="Start"
+                onChange={(value) => changeOrigin(value)}
+              />
+
+              <GeocoderAutocomplete
+                value={destination}
+                placeholder="Ziel eingeben"
+                label="Ziel"
+                onChange={(value) => changeDestination(value)}
+              />
+
+              <ScrollView
+                className="my-8 rounded-full"
+                horizontal
+                showsHorizontalScrollIndicator={false}
+              >
+                <View className="flex flex-row">
+                  <Chip
+                    onPress={() => {
+                      startNavigationFromFavorite(0);
+                    }}
+                  >
+                    {favorites[0].title}
+                  </Chip>
+                  <Chip
+                    onPress={() => {
+                      startNavigationFromFavorite(1);
+                    }}
+                  >
+                    {favorites[1].title}
+                  </Chip>
+                  <Chip
+                    onPress={() => {
+                      startNavigationFromFavorite(2);
+                    }}
+                  >
+                    {favorites[2].title}
+                  </Chip>
+                </View>
+              </ScrollView>
+            </View>
           </View>
-          <GeocoderAutocomplete
-            value={destination}
-            placeholder="Ziel eingeben"
-            label="Ziel"
-            onChange={(value) => changeDestination(value)}
-          />
         </ScrollView>
 
         <View className="mx-5 mb-8">

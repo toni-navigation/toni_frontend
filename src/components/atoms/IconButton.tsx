@@ -27,19 +27,19 @@ export function IconButton({
   const variant = {
     accent: {
       fill: themes.external['--pure-white'],
-      button: 'bg-accent border border-8 border-orange-accent',
+      button: 'bg-accent border border-2 border-orange-accent',
     },
     accentOutline: {
-      button: 'bg-transparent border border-8 border-solid border-accent',
+      button: 'bg-transparent border border-2 border-solid border-accent',
       fill: themes.external['--accent'],
     },
     primary: {
-      button: 'bg-primary border border-8 border-primary',
+      button: 'bg-primary border border-2 border-primary',
       fill: themes.external[`--${theme}-mode-primary-inverted`],
     },
     primaryOutline: {
       button:
-        'bg-transparent border border-solid border-solid border-primary border-8',
+        'bg-transparent border border-solid border-solid border-primary border-2',
       fill: themes.external[`--${theme}-mode-primary`],
     },
   };
@@ -48,7 +48,7 @@ export function IconButton({
     <View className={`flex justify-center items-start ${classes}`}>
       <TouchableOpacity
         accessibilityHint={disabled ? 'Nicht nutzbar' : ''}
-        className={`flex b p-${size || '0'} justify-center items-center rounded-[35px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
+        className={`flex h-12 w-16 justify-center items-center rounded-[25px] ${variant[buttonType].button} ${disabled && 'opacity-50'}`}
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={

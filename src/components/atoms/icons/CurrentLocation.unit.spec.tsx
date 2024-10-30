@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react-native';
 import React from 'react';
 
-import { CurrentLocation } from '@/components/atoms/icons/CurrentLocation';
+import { CurrentLocationIcon } from '@/components/atoms/icons/CurrentLocationIcon';
 
-describe('CurrentLocation component', () => {
+describe('CurrentLocationIcon component', () => {
   it('renders correctly with default props', async () => {
-    const { getByTestId, getAllByTestId } = render(<CurrentLocation />);
+    const { getByTestId, getAllByTestId } = render(<CurrentLocationIcon />);
 
     const svg = getByTestId('CurrentLocation');
     expect(svg.props.width).toBe(24);
@@ -30,7 +30,7 @@ describe('CurrentLocation component', () => {
 
   it('renders correctly with custom props', async () => {
     const { getByTestId, getAllByTestId } = render(
-      <CurrentLocation
+      <CurrentLocationIcon
         width={32}
         height={32}
         viewBox="0 0 32 32"

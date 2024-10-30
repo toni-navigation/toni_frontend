@@ -1,3 +1,4 @@
+import { LocationObject } from 'expo-location';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -8,22 +9,42 @@ import {
   View,
 } from 'react-native';
 
+// @ts-ignore
 import background from '@/assets/images/background10.png';
+import { CurrentLocation } from '@/components/CurrentLocation';
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 import { Route } from '@/components/atoms/icons/Route';
+import { useReverseData } from '@/queries/useReverseData';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
 import { SummaryProps } from '@/types/Valhalla-Types';
 
 interface RouteOverviewProps {
   onCloseClick: () => void;
   summary: SummaryProps;
+  currentLocation: LocationObject;
 }
 
-export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
+export function RouteOverview({
+  onCloseClick,
+  summary,
+  currentLocation,
+}: RouteOverviewProps) {
   const convertSecondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
+
+  const { changeOrigin } = useTripStore((state) => state.actions);
+
+  const { data, error, isPending } = useReverseData(
+    currentLocation.coords.latitude,
+    currentLocation.coords.longitude
+  );
+
+  // if (!origin) {
+  //   changeOrigin(data?.features[0]);
+  // }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -101,7 +122,7 @@ export function RouteOverview({ onCloseClick, summary }: RouteOverviewProps) {
               </>
             ) : (
               <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
-                Mein Standort
+                Kein Ziel eingegeben
               </Text>
             )}
           </Text>

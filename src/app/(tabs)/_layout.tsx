@@ -1,27 +1,26 @@
-import { router, Tabs, usePathname, useSegments } from 'expo-router';
-import React, { useContext, useEffect } from 'react';
+import { Tabs, usePathname } from 'expo-router';
+import React, { useContext } from 'react';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Heart } from '@/components/atoms/icons/Heart';
 import { NavigationArrow } from '@/components/atoms/icons/NavigationArrow';
 import { Person } from '@/components/atoms/icons/Person';
+import { Star } from '@/components/atoms/icons/Star';
 
 const iconsArray = {
-  heart: ({ color }: { color: string }) => (
-    <Heart classes={color} fill={color} width={48} height={48} />
+  star: ({ color }: { color: string }) => (
+    <Star classes={color} fill={color} width={36} height={36} />
   ),
   navigationArrow: ({ color }: { color: string }) => (
-    <NavigationArrow fill={color} width={41} height={41} />
+    <NavigationArrow fill={color} width={32} height={32} />
   ),
   person: ({ color }: { color: string }) => (
-    <Person fill={color} width={48} height={48} />
+    <Person fill={color} width={36} height={36} />
   ),
 };
 export default function Layout() {
   const currentPath = usePathname();
   const { theme } = useContext(ThemeContext);
-  console.log('currentPath', currentPath);
 
   return (
     <Tabs
@@ -33,12 +32,16 @@ export default function Layout() {
               ? 'none'
               : undefined,
           height: 110,
-          borderTopWidth: 0,
-          elevation: 0,
           backgroundColor: themes.external[`--${theme}-mode-background`],
         },
-
-        tabBarShowLabel: false,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontFamily: 'generalSans-semibold',
+          height: 40,
+          justifyContent: 'center',
+          alignContent: 'center',
+        },
+        // tabBarLabelPosition: 'beside-icon',
         tabBarActiveTintColor: themes.external['--accent'],
         tabBarInactiveTintColor:
           themes.external[`--${theme}-mode-primary-inverted`],
@@ -54,7 +57,7 @@ export default function Layout() {
         options={{
           headerTitle: 'Meine Favoriten',
           tabBarLabel: 'Favoriten',
-          tabBarIcon: ({ color }) => iconsArray.heart({ color }),
+          tabBarIcon: ({ color }) => iconsArray.star({ color }),
           tabBarAccessibilityLabel: 'Favoriten',
           tabBarItemStyle: {
             backgroundColor: themes.external[`--${theme}-mode-primary`],

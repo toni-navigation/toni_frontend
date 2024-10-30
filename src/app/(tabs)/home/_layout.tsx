@@ -13,9 +13,11 @@ function HomeLayout() {
         }}
       />
       <Stack.Screen
-        name="trip"
+        name="start"
         options={{
           headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
         }}
       />
     </Stack>

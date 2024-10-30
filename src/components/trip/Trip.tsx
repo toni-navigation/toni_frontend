@@ -56,11 +56,12 @@ export function Trip() {
     return <Error error={error.message} />;
   }
 
-  if (showTripOverview) {
+  if (showTripOverview && currentLocation) {
     return (
       <RouteOverview
         onCloseClick={() => setShowTripOverview(false)}
         summary={data.trip.summary}
+        currentLocation={currentLocation}
       />
     );
   }

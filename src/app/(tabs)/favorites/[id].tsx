@@ -7,13 +7,13 @@ import { Header } from '@/components/atoms/Header';
 import { PopUp } from '@/components/organisms/PopUp';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
-import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
+import { useTripStore } from '@/store/useTripStore';
 
 export default function FavoritePage() {
+  const { changeDestination } = useTripStore((state) => state.actions);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const favorites = useFavoriteStore((state) => state.favorites);
   const { deleteFavorite } = useFavoriteStore((state) => state.actions);
-  const origin = useTripStore((state) => state.origin);
 
   const { id } = useLocalSearchParams();
 
@@ -21,38 +21,24 @@ export default function FavoritePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const getCoordinates = (location: OriginDestinationType) => {
-    if (location) {
-      return location.geometry.coordinates;
-    }
-    if (location === null && currentLocation) {
-      return [
-        currentLocation.coords.longitude,
-        currentLocation.coords.latitude,
-      ];
-    }
 
-    return undefined;
-  };
   const navigateToTrip = (params: {
     origin: number[];
     destination: number[];
   }) => {
-    // Assuming router.push handles navigation to the trip page
-    router.push({ pathname: `/home/trip`, params });
+    router.push({ pathname: `/trip`, params });
   };
 
-  const startNavigationHandler = () => {
-    const newOrigin = getCoordinates(origin);
-    const newDestination = getCoordinates(favorite?.address);
-
-    if (newOrigin && newDestination) {
-      const params = {
-        origin: newOrigin,
-        destination: newDestination,
-      };
-
-      navigateToTrip(params);
+  const startNavigationFromFavorite = async () => {
+    if (currentLocation && favorite?.address) {
+      changeDestination(favorite.address);
+      navigateToTrip({
+        origin: [
+          currentLocation.coords.longitude,
+          currentLocation.coords.latitude,
+        ],
+        destination: favorite.address.geometry.coordinates,
+      });
     }
   };
 
@@ -133,7 +119,7 @@ export default function FavoritePage() {
           Löschen
         </Button>
         <Button
-          onPress={() => startNavigationHandler()}
+          onPress={() => startNavigationFromFavorite()}
           disabled={favorite.address === undefined}
           buttonType="accent"
         >

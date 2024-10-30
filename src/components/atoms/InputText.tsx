@@ -7,7 +7,7 @@ import { ThemeContext } from '@/components/ThemeProvider';
 import { Cross } from '@/components/atoms/icons/Cross';
 
 interface InputTextProps extends TextInputProps {
-  onClickDelete: () => void;
+  onClickDelete?: () => void;
 }
 
 export const InputText = forwardRef<TextInput, InputTextProps>(
@@ -16,14 +16,14 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
 
     return (
       <>
-        <Text className="font-atkinsonRegular mb-3 text-textColor">
+        <Text className="font-atkinsonRegular text-lg mb-3 text-textColor">
           {props.accessibilityLabel}
         </Text>
         <View className="relative mb-2">
           <TextInput
             ref={ref}
             testID="TextInput"
-            className={`border-2 border-primary rounded-[25px] text-textColor p-4 !pr-12' ${className}`}
+            className={`font-atkinsonRegular text border-2 border-primary rounded-[25px] text-textColor p-4 !pr-12' ${className}`}
             {...props}
           />
           {props.value && (
