@@ -112,6 +112,7 @@ export default function Agbs() {
 
       <View className="mx-8 mb-3">
         <Button
+          width="full"
           disabled={
             !isCheckedAgbs ||
             !isCheckedNutzungsbedingungen ||

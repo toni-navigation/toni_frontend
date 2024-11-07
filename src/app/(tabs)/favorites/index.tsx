@@ -52,12 +52,14 @@ export default function FavoritesPage() {
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button
+          width="full"
           onPress={() => resetFavoritesStore()}
           buttonType="accentOutline"
         >
           Alle löschen
         </Button>
         <Button
+          width="full"
           onPress={() => router.push('/favorites/create')}
           buttonType="accent"
         >

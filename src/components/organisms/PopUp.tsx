@@ -39,11 +39,12 @@ export function PopUp({
 
             <View className="mx-5 w-full">
               {onClick && onClickButtonText && (
-                <Button onPress={onClick} buttonType="accent">
+                <Button width="full" onPress={onClick} buttonType="accent">
                   {onClickButtonText}
                 </Button>
               )}
               <Button
+                width="full"
                 onPress={onCloseClick}
                 buttonType={onClick ? 'accentOutline' : 'accent'}
               >

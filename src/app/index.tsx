@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 
 import { Intro } from '@/components/Intro';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
@@ -13,7 +12,6 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const showedIntro = useCalibrationStore((state) => state.showedIntro);
 
   useEffect(() => {
     (async () => {

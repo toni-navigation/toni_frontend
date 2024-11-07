@@ -98,7 +98,11 @@ export function Intro() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 mx-8 mb-3">
-        <Button onPress={createCurrentLocationMessage} buttonType="primary">
+        <Button
+          width="full"
+          onPress={createCurrentLocationMessage}
+          buttonType="primary"
+        >
           Test
         </Button>
         <PagerView
@@ -132,7 +136,11 @@ export function Intro() {
           ))}
         </View>
 
-        <Button buttonType="primary" onPress={() => router.push('/agbs')}>
+        <Button
+          width="full"
+          buttonType="primary"
+          onPress={() => router.push('/agbs')}
+        >
           Los gehts
         </Button>
       </View>

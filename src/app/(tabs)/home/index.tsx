@@ -95,7 +95,7 @@ export default function HomePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <Button onPress={cleanLastDestinations} buttonType="primary">
+      <Button width="full" onPress={cleanLastDestinations} buttonType="primary">
         Letzte Ziele löschen
       </Button>
       <PopUp
@@ -203,6 +203,7 @@ export default function HomePage() {
 
         <View className="mx-5 mb-8">
           <Button
+            width="full"
             onPress={() => setShowPopUp(true)}
             disabled={origin === undefined || !destination}
             buttonType="accent"

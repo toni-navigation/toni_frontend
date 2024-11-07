@@ -14,6 +14,7 @@ export default function ProfilePage() {
           Schrittlänge:
         </Text>
         <Button
+          width="full"
           onPress={() => {
             router.push('../calibration/0?fromIntro=false');
           }}

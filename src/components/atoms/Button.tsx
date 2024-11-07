@@ -7,6 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
   isLoading?: boolean;
+  width: 'full' | 'half' | 'third';
 }
 
 export function Button({
@@ -15,6 +16,7 @@ export function Button({
   onPress,
   buttonType,
   isLoading,
+  width,
 }: ButtonProps) {
   const variant = {
     accent: {
@@ -32,6 +34,17 @@ export function Button({
     primaryOutline: {
       button: 'bg-transparent border border-2 border-solid border-primary',
       text: 'text-primary',
+    },
+  };
+  const specificWidth = {
+    full: {
+      width: 'w-full',
+    },
+    half: {
+      width: 'w-1/2',
+    },
+    third: {
+      width: 'w-1/3',
     },
   };
   const handlePress = () => {
@@ -54,7 +67,7 @@ export function Button({
   return (
     <TouchableOpacity
       accessibilityHint={accessibilityOutput()}
-      className={`h-20 flex justify-center py-2 px-4 rounded-[35px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
+      className={`h-16 ${specificWidth[width].width} flex justify-center py-2 px-4 rounded-[30px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
       onPress={handlePress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityOutput()}
@@ -69,7 +82,7 @@ export function Button({
         />
       ) : (
         <Text
-          className={`text-2xl font-generalSansSemi ${variant[buttonType].text}`}
+          className={`text-button font-generalSansSemi ${variant[buttonType].text}`}
         >
           {children}
         </Text>

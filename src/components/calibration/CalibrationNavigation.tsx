@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { CalibrationStepsProps } from '@/components/calibration/calibrationSteps';
@@ -9,38 +9,38 @@ interface CalibrationNavigationProps {
   calibrationModeButtons: () => React.ReactNode;
   currentElement: CalibrationStepsProps;
   isInCalibrationMode: boolean;
-  stepText: string;
 }
 export function CalibrationNavigation({
   index,
   calibrationModeButtons,
   currentElement,
   isInCalibrationMode,
-  stepText,
 }: CalibrationNavigationProps) {
   return (
-    <View className="mx-8 mb-3">
-      <Text className="mx-auto font-atkinsonRegular text-xl text-textColor">
-        {stepText}
-      </Text>
-
-      <Button
-        buttonType="primaryOutline"
-        onPress={currentElement.backButtonHandler}
-        disabled={isInCalibrationMode}
-      >
-        {currentElement.backButtonText}
-      </Button>
-      {currentElement.forwardButtonText === undefined ? (
-        calibrationModeButtons()
-      ) : (
+    <View className="flex flex-row mx-8 mb-3">
+      <View className="pe-2 w-1/2">
         <Button
-          buttonType={index === 0 ? 'accent' : 'primary'}
-          onPress={currentElement.forwardButtonHandler}
+          width="full"
+          buttonType="primaryOutline"
+          onPress={currentElement.backButtonHandler}
+          disabled={isInCalibrationMode}
         >
-          {currentElement.forwardButtonText}
+          {currentElement.backButtonText}
         </Button>
-      )}
+      </View>
+      <View className="ps-2 w-1/2">
+        {currentElement.forwardButtonText === undefined ? (
+          calibrationModeButtons()
+        ) : (
+          <Button
+            width="full"
+            buttonType={index === 0 ? 'accent' : 'primary'}
+            onPress={currentElement.forwardButtonHandler}
+          >
+            {currentElement.forwardButtonText}
+          </Button>
+        )}
+      </View>
     </View>
   );
 }
