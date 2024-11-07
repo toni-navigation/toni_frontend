@@ -8,8 +8,9 @@ import { Destination } from '@/components/atoms/Destination';
 import { Header } from '@/components/atoms/Header';
 import { ListItem } from '@/components/atoms/ListItem';
 import { Location } from '@/components/atoms/icons/Location';
+import { getPhotonKey } from '@/functions/getPhotonKey';
 import { photonValue } from '@/functions/photonValue';
-import { useDestinationsStore } from '@/store/useDestinationsStore';
+import { useTripStore } from '@/store/useTripStore';
 
 interface SuggestionProps {
   suggestions: PhotonFeature[];
@@ -22,8 +23,7 @@ export function Suggestions({
   currentLocation,
 }: SuggestionProps) {
   const { theme } = useContext(ThemeContext);
-  const destinations = useDestinationsStore((state) => state.destinations);
-  const { addDestination } = useDestinationsStore((state) => state.actions);
+  const lastDestinations = useTripStore((state) => state.lastDestinations);
 
   return (
     <View
@@ -49,40 +49,35 @@ export function Suggestions({
           </ListItem>
         </View>
       )}
-      {suggestions.map((suggestion, index) => {
-        const listItemKey = `${suggestion.properties.osm_id}-${suggestion.properties.osm_type}-${suggestion.properties.osm_key}`;
-
-        return (
-          <ListItem
-            key={listItemKey}
-            onPress={() => {
-              addDestination(listItemKey, suggestion);
-              onLocationSuggestionClick(suggestion);
-            }}
-            classes={index !== suggestions.length - 1 ? 'text-textColor' : ''}
-          >
-            {index + 1}. {photonValue(suggestion)}
-          </ListItem>
-        );
-      })}
+      {suggestions.map((suggestion, index) => (
+        <ListItem
+          key={getPhotonKey(suggestion)}
+          onPress={() => {
+            // addDestination(listItemKey, suggestion);
+            onLocationSuggestionClick(suggestion);
+          }}
+          classes={index !== suggestions.length - 1 ? 'text-textColor' : ''}
+        >
+          {index + 1}. {photonValue(suggestion)}
+        </ListItem>
+      ))}
       <Header classes="text-xl mt-12">Letzte Ziele</Header>
       <View>
-        {destinations.length === 0 ? (
+        {lastDestinations.length === 0 ? (
           <Text className="font-atkinsonRegular text-2xl text-textColor">
             keine Ziele vorhanden
           </Text>
         ) : (
-          (console.log('des ', destinations),
-          destinations.map((destination, index) => (
+          lastDestinations.map((destination) => (
             <Destination
-              key={index}
+              key={getPhotonKey(destination)}
               onPress={() => {
-                onLocationSuggestionClick(destination.address);
+                onLocationSuggestionClick(destination);
               }}
             >
-              {photonValue(destination.address)}
+              {photonValue(destination)}
             </Destination>
-          )))
+          ))
         )}
       </View>
     </View>

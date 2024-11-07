@@ -8,11 +8,15 @@ import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
+import { useReverseData } from '@/mutations/useReverseData';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export function Intro() {
   const pagerRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = React.useState(0); // Add this line
-
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
   const { theme } = useContext(ThemeContext);
 
   const pagerViewData: {
@@ -77,10 +81,26 @@ export function Intro() {
       alignItems: 'center',
     },
   });
+  const reverseLocation = useReverseData();
+  const createCurrentLocationMessage = async () => {
+    if (currentLocation) {
+      const currentLocationData = await reverseLocation.mutateAsync({
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+      });
+      console.log(
+        'currentLocationData',
+        currentLocationData.features[0].properties
+      );
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 mx-8 mb-3">
+        <Button onPress={createCurrentLocationMessage} buttonType="primary">
+          Test
+        </Button>
         <PagerView
           style={styles.container}
           initialPage={0}

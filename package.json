@@ -14,7 +14,8 @@
     "lint": "npm run lint:tsc && npm run lint:eslint",
     "lint:tsc": "tsc --noemit",
     "lint:eslint": "eslint './src/**/*.{ts,tsx}' --fix",
-    "openapi": "openapi --input openapi.photon.json --output src/services/api-photon --useOptions"
+    "openapi": "openapi --input openapi.photon.json --output src/services/api-photon --useOptions",
+    "openapi:backend": "openapi --input http://localhost:3000/api/docs-json --output src/services/api-backend --useOptions"
   },
   "jest": {
     "preset": "jest-expo"

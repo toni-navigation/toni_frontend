@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -14,7 +14,6 @@ import background from '@/assets/images/background100.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
-import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { InputButton } from '@/components/atoms/InputButton';
@@ -28,10 +27,10 @@ import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function HomePage() {
-  const { changeDestination, switchOriginDestination } = useTripStore(
-    (state) => state.actions
-  );
+  const { changeDestination, switchOriginDestination, cleanLastDestinations } =
+    useTripStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
+  const lastDestinations = useTripStore((state) => state.lastDestinations);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -41,27 +40,6 @@ export default function HomePage() {
   const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);
-
-  const [startValue, setStartValue] = useState('Mein Standort');
-  const [destinationValue, setDestinationValue] = useState('');
-
-  React.useEffect(() => {
-    if (origin) {
-      setStartValue(photonValue(origin));
-    }
-    if (origin === undefined) {
-      setStartValue('');
-    }
-  }, [origin]);
-
-  React.useEffect(() => {
-    if (destination) {
-      setDestinationValue(photonValue(destination));
-    }
-    if (destination === undefined) {
-      setDestinationValue('');
-    }
-  }, [destination]);
 
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
@@ -117,6 +95,9 @@ export default function HomePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
+      <Button onPress={cleanLastDestinations} buttonType="primary">
+        Letzte Ziele löschen
+      </Button>
       <PopUp
         visible={showPopUp}
         onCloseClick={() => {
@@ -168,7 +149,7 @@ export default function HomePage() {
                     router.push('/home/start');
                   }}
                 >
-                  {startValue}
+                  {origin ? photonValue(origin) : 'Mein Standort'}
                 </InputButton>
               </View>
               <View className="flex flex-row items-center pb-8">
@@ -184,7 +165,7 @@ export default function HomePage() {
                     router.push('/home/destination');
                   }}
                 >
-                  {destinationValue}
+                  {destination ? photonValue(destination) : ''}
                 </InputButton>
               </View>
               <ScrollView
@@ -192,29 +173,29 @@ export default function HomePage() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >
-                <View className="flex flex-row">
-                  <Chip
-                    onPress={() => {
-                      startNavigationFromFavorite(0);
-                    }}
-                  >
-                    {favorites[0].title}
-                  </Chip>
-                  <Chip
-                    onPress={() => {
-                      startNavigationFromFavorite(1);
-                    }}
-                  >
-                    {favorites[1].title}
-                  </Chip>
-                  <Chip
-                    onPress={() => {
-                      startNavigationFromFavorite(2);
-                    }}
-                  >
-                    {favorites[2].title}
-                  </Chip>
-                </View>
+                {/* <View className="flex flex-row"> */}
+                {/*  <Chip */}
+                {/*    onPress={() => { */}
+                {/*      startNavigationFromFavorite(0); */}
+                {/*    }} */}
+                {/*  > */}
+                {/*    {favorites[0].title} */}
+                {/*  </Chip> */}
+                {/*  <Chip */}
+                {/*    onPress={() => { */}
+                {/*      startNavigationFromFavorite(1); */}
+                {/*    }} */}
+                {/*  > */}
+                {/*    {favorites[1].title} */}
+                {/*  </Chip> */}
+                {/*  <Chip */}
+                {/*    onPress={() => { */}
+                {/*      startNavigationFromFavorite(2); */}
+                {/*    }} */}
+                {/*  > */}
+                {/*    {favorites[2]?.title && favorites[2].title} */}
+                {/*  </Chip> */}
+                {/* </View> */}
               </ScrollView>
             </View>
           </View>

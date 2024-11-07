@@ -35,6 +35,7 @@ export function Form({ id, title, address }: FormProps) {
 
     router.back();
   };
+  console.log(photonData);
 
   return (
     <>
