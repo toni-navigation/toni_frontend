@@ -1,17 +1,19 @@
 import { useDebounce } from '@uidotdev/usehooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { TextInput } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ScrollView, TextInput, View } from 'react-native';
 
 import { InputText } from '@/components/atoms/InputText';
 import { Suggestions } from '@/components/organisms/Suggestions';
 import { photonValue } from '@/functions/photonValue';
+import { useReverseData } from '@/mutations/useReverseData';
 import { useGeocoding } from '@/queries/useGeocoding';
-import { PhotonFeature } from '@/services/api-photon';
+import { PhotonFeature, PhotonFeatureCollection } from '@/services/api-photon';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType } from '@/store/useTripStore';
 
 type GeocoderAutocompleteProps = {
   value?: OriginDestinationType;
-  label: string;
+  label?: string;
   placeholder: string;
   onChange: (newValue: PhotonFeature | undefined) => void;
 };
@@ -26,6 +28,33 @@ export function GeocoderAutocomplete({
   const [inputValue, setInputValue] = useState('');
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
+  const currentLocation = useCurrentLocationStore(
+    (state) => state.currentLocation
+  );
+
+  const reverseLocation = useReverseData();
+  const [currentLocationData, setCurrentLocationData] = useState<
+    PhotonFeatureCollection | undefined
+  >(undefined);
+
+  const createCurrentLocation = useCallback(async () => {
+    if (currentLocation) {
+      const data = await reverseLocation.mutateAsync({
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+      });
+      setCurrentLocationData(data);
+    }
+  }, [currentLocation, reverseLocation]);
+
+  const hasCalledCreateCurrentLocation = useRef(false);
+
+  useEffect(() => {
+    if (!hasCalledCreateCurrentLocation.current) {
+      createCurrentLocation();
+      hasCalledCreateCurrentLocation.current = true;
+    }
+  }, [createCurrentLocation]);
 
   const { data } = useGeocoding(debouncedInputValue, focused);
   useEffect(() => {
@@ -39,37 +68,37 @@ export function GeocoderAutocomplete({
   }, [value]);
 
   return (
-    <>
-      <InputText
-        accessibilityHint={label}
-        ref={ref}
-        value={inputValue}
-        accessibilityLabel={label}
-        placeholder={placeholder}
-        onClickDelete={() => {
-          setInputValue('');
-          ref.current?.focus();
-          onChange(undefined);
-        }}
-        onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        className={
-          data && data.features.length > 0 && focused
-            ? '!border-b-0 !rounded-b-[0px] border-primary'
-            : ''
-        }
-      />
-      {data && data.features.length > 0 && focused && (
-        <Suggestions
-          suggestions={data.features}
-          onLocationSuggestionClick={(suggestion: PhotonFeature) => {
-            setFocused(false);
-            onChange(suggestion);
-            ref.current?.blur();
+    <View>
+      <View>
+        <InputText
+          accessibilityHint={label}
+          ref={ref}
+          value={inputValue}
+          accessibilityLabel={label}
+          placeholder={placeholder}
+          onClickDelete={() => {
+            setInputValue('');
+            ref.current?.focus();
+            onChange(undefined);
           }}
+          onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
-      )}
-    </>
+      </View>
+      <ScrollView>
+        {data && data.features.length >= 0 && (
+          <Suggestions
+            currentLocation={currentLocationData?.features[0]}
+            suggestions={data.features}
+            onLocationSuggestionClick={(suggestion: PhotonFeature) => {
+              setFocused(false);
+              onChange(suggestion);
+              ref.current?.blur();
+            }}
+          />
+        )}
+      </ScrollView>
+    </View>
   );
 }

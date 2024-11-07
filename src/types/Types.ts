@@ -41,3 +41,8 @@ export interface FavoriteProps {
   address: PhotonFeature;
   id: string;
 }
+
+export interface DestinationProps {
+  address: PhotonFeature;
+  key: string;
+}

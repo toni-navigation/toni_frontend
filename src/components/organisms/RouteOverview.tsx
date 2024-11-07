@@ -11,12 +11,10 @@ import {
 
 // @ts-ignore
 import background from '@/assets/images/background10.png';
-import { CurrentLocation } from '@/components/CurrentLocation';
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 import { Route } from '@/components/atoms/icons/Route';
 import { useReverseData } from '@/queries/useReverseData';
-import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useTripStore } from '@/store/useTripStore';
 import { SummaryProps } from '@/types/Valhalla-Types';
 

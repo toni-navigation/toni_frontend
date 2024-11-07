@@ -20,6 +20,14 @@ function HomeLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="destination"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

@@ -17,10 +17,12 @@ import { Button } from '@/components/atoms/Button';
 import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
-import { InputText } from '@/components/atoms/InputText';
+import { InputButton } from '@/components/atoms/InputButton';
+import { CurrentLocationIcon } from '@/components/atoms/icons/CurrentLocationIcon';
+import { Location } from '@/components/atoms/icons/Location';
 import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
-import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { PopUp } from '@/components/organisms/PopUp';
+import { photonValue } from '@/functions/photonValue';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
@@ -39,7 +41,26 @@ export default function HomePage() {
 
   const [showPopUp, setShowPopUp] = React.useState(false);
 
-  const [startValue, setstartValue] = useState('Mein Standort');
+  const [startValue, setStartValue] = useState('Mein Standort');
+  const [destinationValue, setDestinationValue] = useState('');
+
+  React.useEffect(() => {
+    if (origin) {
+      setStartValue(photonValue(origin));
+    }
+    if (origin === undefined) {
+      setStartValue('');
+    }
+  }, [origin]);
+
+  React.useEffect(() => {
+    if (destination) {
+      setDestinationValue(photonValue(destination));
+    }
+    if (destination === undefined) {
+      setDestinationValue('');
+    }
+  }, [destination]);
 
   const getCoordinates = (location: OriginDestinationType) => {
     if (location) {
@@ -121,12 +142,12 @@ export default function HomePage() {
                 <Header>Neue Route</Header>
                 <IconButton
                   onPress={switchOriginDestination}
-                  buttonType="primaryOutline"
+                  buttonType="accentOutline"
                   disabled={origin === undefined && destination === undefined}
                   iconName="Start und Ziel tauschen"
                   icon={
                     <SwitchArrow
-                      fill={themes.external[`--${theme}-mode-icon-button`]}
+                      fill={themes.external[`--accent`]}
                       width={30}
                       height={30}
                     />
@@ -134,31 +155,37 @@ export default function HomePage() {
                 />
               </View>
 
-              <InputText
-                className="mb-4"
-                accessibilityLabel="Start"
-                accessibilityHint="Bitte geben Sie einen Startpunkt ein"
-                placeholder="Start eingeben"
-                value={startValue}
-                onChange={(event) => {
-                  setstartValue(event.nativeEvent.text);
-                }}
-              />
-
-              <GeocoderAutocomplete
-                value={origin}
-                placeholder="Start eingeben"
-                label="Start"
-                onChange={(value) => changeOrigin(value)}
-              />
-
-              <GeocoderAutocomplete
-                value={destination}
-                placeholder="Ziel eingeben"
-                label="Ziel"
-                onChange={(value) => changeDestination(value)}
-              />
-
+              <View className="flex flex-row items-center pb-8">
+                <Location
+                  width={30}
+                  height={30}
+                  fill={themes.external[`--${theme}-mode-icon-button`]}
+                />
+                <InputButton
+                  classes="ml-4 flex-1"
+                  onPress={() => {
+                    router.push('/home/start');
+                  }}
+                >
+                  {startValue}
+                </InputButton>
+              </View>
+              <View className="flex flex-row items-center pb-8">
+                <CurrentLocationIcon
+                  width={35}
+                  height={35}
+                  fill={themes.external[`--accent`]}
+                />
+                <InputButton
+                  classes="ml-3 flex-1"
+                  onPress={() => {
+                    // @ts-ignore
+                    router.push('/home/destination');
+                  }}
+                >
+                  {destinationValue}
+                </InputButton>
+              </View>
               <ScrollView
                 className="my-8 rounded-full"
                 horizontal

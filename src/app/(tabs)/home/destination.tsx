@@ -6,24 +6,24 @@ import { Header } from '@/components/atoms/Header';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
 import { useTripStore } from '@/store/useTripStore';
 
-export default function StartPage() {
-  const { changeOrigin } = useTripStore((state) => state.actions);
-  const origin = useTripStore((state) => state.origin);
+export default function DestinationPage() {
+  const { changeDestination } = useTripStore((state) => state.actions);
+  const destination = useTripStore((state) => state.destination);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* eslint-disable-next-line react/jsx-no-undef */}
       <View className="px-8 my-8">
-        <Header classes="text-textColor pb-8">Startpunkt suchen</Header>
+        <Header classes="text-textColor pb-8">Ziel suchen</Header>
 
         <GeocoderAutocomplete
-          value={origin}
-          placeholder="Start eingeben"
+          value={destination}
+          placeholder="Ziel eingeben"
+          label="Ziel"
           onChange={(value) => {
             if (value === undefined) {
-              changeOrigin(undefined);
+              changeDestination(undefined);
             } else {
-              changeOrigin(value);
+              changeDestination(value);
               router.back();
             }
           }}
