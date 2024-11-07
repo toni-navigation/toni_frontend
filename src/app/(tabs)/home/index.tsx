@@ -28,8 +28,9 @@ import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function HomePage() {
-  const { changeOrigin, changeDestination, switchOriginDestination } =
-    useTripStore((state) => state.actions);
+  const { changeDestination, switchOriginDestination } = useTripStore(
+    (state) => state.actions
+  );
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(

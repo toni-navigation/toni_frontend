@@ -1,5 +1,4 @@
 import React from 'react';
-import { Circle } from 'react-native-maps';
 import Svg, { Path } from 'react-native-svg';
 
 interface CurrentLocationProps {

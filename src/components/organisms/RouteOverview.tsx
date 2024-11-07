@@ -33,17 +33,6 @@ export function RouteOverview({
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
 
-  const { changeOrigin } = useTripStore((state) => state.actions);
-
-  const { data, error, isPending } = useReverseData(
-    currentLocation.coords.latitude,
-    currentLocation.coords.longitude
-  );
-
-  // if (!origin) {
-  //   changeOrigin(data?.features[0]);
-  // }
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ImageBackground source={background} className="flex-1">
