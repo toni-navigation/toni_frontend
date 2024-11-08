@@ -14,7 +14,6 @@ import background from '@/assets/images/background10.png';
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 import { Route } from '@/components/atoms/icons/Route';
-import { useReverseData } from '@/queries/useReverseData';
 import { useTripStore } from '@/store/useTripStore';
 import { SummaryProps } from '@/types/Valhalla-Types';
 
@@ -132,10 +131,14 @@ export function RouteOverview({
         </ScrollView>
 
         <View className="px-8 mb-8">
-          <Button onPress={() => router.back()} buttonType="primaryOutline">
+          <Button
+            width="full"
+            onPress={() => router.back()}
+            buttonType="primaryOutline"
+          >
             Zurück
           </Button>
-          <Button onPress={onCloseClick} buttonType="primary">
+          <Button width="full" onPress={onCloseClick} buttonType="primary">
             Weiter
           </Button>
         </View>

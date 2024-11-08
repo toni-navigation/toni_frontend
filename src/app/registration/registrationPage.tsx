@@ -65,7 +65,11 @@ export default function RegistrationPage() {
           />
         </ScrollView>
         <View className="mx-8 mb-8">
-          <Button onPress={() => setRegistrationStep(1)} buttonType="primary">
+          <Button
+            width="full"
+            onPress={() => setRegistrationStep(1)}
+            buttonType="primary"
+          >
             Weiter
           </Button>
         </View>
@@ -88,12 +92,14 @@ export default function RegistrationPage() {
         </ScrollView>
         <View className="mx-8 mb-8">
           <Button
+            width="full"
             onPress={() => setRegistrationStep(1)}
             buttonType="primaryOutline"
           >
             Nochmal senden
           </Button>
           <Button
+            width="full"
             buttonType="primary"
             onPress={() => {
               router.push('../calibration/0?fromIntro=true');

@@ -15,8 +15,6 @@ export interface CalibrationStepsProps {
 
 export const calibrationSteps = (
   factors: number[] | undefined,
-  resetCalibrationStore: () => void,
-  shownIntroHandler: () => void,
   id: number,
   fromIntro: boolean
 ): CalibrationStepsProps[] => [
@@ -25,7 +23,10 @@ export const calibrationSteps = (
     forwardButtonHandler: () => {
       router.push(`../calibration/${id + 1}`);
     },
-    text: 'Nun kalibrieren wir gemeinsam deine Schrittlänge, damit wir dich so genau wie möglich an dein Ziel bringen können.',
+    text:
+      'Nun kalibrieren wir gemeinsam deine Schrittlänge, damit wir dich so genau wie möglich an dein Ziel bringen können.\n\n' +
+      'Stelle dazu sicher, dass du deine Schritte auf einer geraden Strecke ohne Hindernisse kalibrierst.\n\n' +
+      'Solltest du dir unsicher sein, bitte eine vertraute Person um Hilfe.',
     backButtonText: fromIntro ? 'Überspringen' : 'Zurück',
     backButtonHandler: () => {
       if (fromIntro) {
@@ -35,7 +36,6 @@ export const calibrationSteps = (
         return;
       }
       router.back();
-      // router.replace('/profile');
     },
   },
   {
@@ -49,14 +49,15 @@ export const calibrationSteps = (
   {
     forwardButtonText: 'Fertig',
     forwardButtonHandler: () => {
-      router.replace('/home/');
+      if (fromIntro) {
+        router.replace('/home/');
+      }
+      router.push('./profile');
     },
-    text: `Deine kalibrierte Schrittlänge beträgt ${
-      factors && getCalibrationValue(factors)
-        ? `${getCalibrationValue(factors)} m`
-        : '-'
-    }.\nDu kannst deine Schrittlänge jederzeit unter deinen Profileinstellungen neu Kalibrieren!`,
-    backButtonText: 'Zurück',
+    text:
+      'Geschafft! Es werden nun alle Anweisungen speziell auf deine Schrittlänge angepasst! \n\n' +
+      'Du kannst deine Schrittlänge jederzeit unter deinen Profileinstellungen neu kalibrieren.',
+    backButtonText: 'Erneut',
     backButtonHandler: () => {
       router.back();
     },

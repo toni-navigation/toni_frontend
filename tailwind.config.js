@@ -17,6 +17,12 @@ export default {
         atkinsonRegular: ['atkinsonRegular'],
         generalSansSemi: ['generalSansSemi'],
       },
+      fontSize: {
+        small: '16px',
+        medium: '20px',
+        large: '24px',
+        button: '18px',
+      },
     },
     screens: {
       tablet: '640px',

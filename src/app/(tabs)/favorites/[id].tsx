@@ -96,6 +96,7 @@ export default function FavoritePage() {
       </ScrollView>
       <View className="mx-5 mb-8">
         <Button
+          width="full"
           onPress={() => {
             router.push({
               pathname: '/favorites/create',
@@ -115,6 +116,7 @@ export default function FavoritePage() {
             setShowPopUp(true);
           }}
           buttonType="primaryOutline"
+          width="full"
         >
           Löschen
         </Button>
@@ -122,6 +124,7 @@ export default function FavoritePage() {
           onPress={() => startNavigationFromFavorite()}
           disabled={favorite.address === undefined}
           buttonType="accent"
+          width="full"
         >
           Route starten
         </Button>

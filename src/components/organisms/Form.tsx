@@ -65,6 +65,7 @@ export function Form({ id, title, address }: FormProps) {
       </ScrollView>
       <View className="my-8">
         <Button
+          width="full"
           onPress={getAddressHandler}
           disabled={!photonData || !titleValue}
           buttonType="primary"

@@ -24,12 +24,14 @@ export default function Registration() {
 
       <View className="mx-8 mb-3">
         <Button
+          width="full"
           buttonType="accent"
           onPress={() => router.push('/registration/registrationPage')}
         >
           Registrieren
         </Button>
         <Button
+          width="full"
           buttonType="primary"
           onPress={() => {
             router.replace('../calibration/0?fromIntro=true');

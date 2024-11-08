@@ -43,12 +43,13 @@ export function IsFinished() {
 
       <View className="mx-5 mb-5">
         <Button
+          width="full"
           onPress={createDestinationPhotonValue}
           buttonType="accentOutline"
         >
           Zu Favoriten hinzufügen
         </Button>
-        <Button onPress={() => router.back()} buttonType="accent">
+        <Button width="full" onPress={() => router.back()} buttonType="accent">
           Fertig!
         </Button>
       </View>

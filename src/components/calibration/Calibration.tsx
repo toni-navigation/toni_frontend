@@ -1,6 +1,6 @@
 import { Audio } from 'expo-av';
 import { LocationObject } from 'expo-location';
-import {router} from "expo-router";
+import { router } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
 import * as Speech from 'expo-speech';
 import React, { useRef, useState } from 'react';
@@ -8,10 +8,14 @@ import { SafeAreaView, ScrollView } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
+import { CalibrationDone } from '@/components/calibration/CalibrationDone';
 import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
-import { calibrationSteps } from '@/components/calibration/calibrationSteps';
+import {
+  CalibrationStepsProps,
+  calibrationSteps,
+} from '@/components/calibration/calibrationSteps';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { usePedometerAvailable } from '@/mutations/usePedometerAvailable';
@@ -21,14 +25,16 @@ import { useStopSound } from '@/mutations/useStopSound';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 const STOP_CALIBRATION_COUNT = 10;
-const UNREALISTIC_CALIBRATION = 0;
+const UNREALISTIC_CALIBRATION = -1;
 export const SPEECH_CONFIG = {
   language: 'de',
 };
+
 interface CalibrationProps {
   id: number;
   fromIntro: boolean;
 }
+
 export function Calibration({ id, fromIntro }: CalibrationProps) {
   const { addCalibration } = useCalibrationStore((state) => state.actions);
   const calibration = useCalibrationStore((state) => state.calibration);
@@ -42,17 +48,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  const { shownIntroHandler } = useCalibrationStore((state) => state.actions);
-  const { resetCalibrationStore } = useCalibrationStore(
-    (state) => state.actions
-  );
-  const calSteps = calibrationSteps(
-    calibration.factors,
-    resetCalibrationStore,
-    shownIntroHandler,
-    id,
-    fromIntro
-  );
+  const calSteps = calibrationSteps(calibration.factors, id, fromIntro);
   const currentStep = calSteps[id];
 
   const stopPedometer = async () => {
@@ -153,10 +149,28 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
       fallback.current
     ) ||
     isLoading;
+
+  const renderCalibrationComponent = (current: CalibrationStepsProps) => {
+    if (current.forwardButtonText === undefined) {
+      return (
+        <CalibrationMode steps={steps} maxSteps={STOP_CALIBRATION_COUNT} />
+      );
+    }
+    if (current.forwardButtonText === 'Fertig') {
+      return <CalibrationDone />;
+    }
+
+    return null;
+  };
+
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
-        <Button buttonType="primary" onPress={() => stopPedometer()}>
+        <Button
+          width="full"
+          buttonType="primary"
+          onPress={() => stopPedometer()}
+        >
           Abbrechen
         </Button>
       );
@@ -167,7 +181,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
       fallback.current
     ) {
       return (
-        <Button buttonType="primary" onPress={fallbackStop}>
+        <Button width="full" buttonType="primary" onPress={fallbackStop}>
           Stopp
         </Button>
       );
@@ -175,12 +189,13 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
 
     return (
       <Button
+        width="full"
         buttonType="primary"
         disabled={isLoading}
         isLoading={isLoading}
         onPress={startPedometer}
       >
-        Start Kalibrierung
+        Start
       </Button>
     );
   };
@@ -189,16 +204,13 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
       <ScrollView className="px-8 mt-8">
         <CalibrationHeader currentStep={currentStep} />
-        {currentStep.forwardButtonText === undefined ? (
-          <CalibrationMode steps={steps} />
-        ) : null}
+        {renderCalibrationComponent(currentStep)}
       </ScrollView>
       <CalibrationNavigation
         index={id}
         calibrationModeButtons={buttonOutput}
         currentElement={currentStep}
         isInCalibrationMode={isInCalibrationMode}
-        stepText={`Schritt ${id + 1} / ${calSteps.length}`}
       />
     </SafeAreaView>
   );
