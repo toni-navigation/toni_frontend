@@ -28,8 +28,7 @@ export default function FavoritesPage() {
           ) : (
             favorites.map((favorite, index) => (
               <MenuButton
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
+                key={favorite.id}
                 onPress={() => {
                   router.push({
                     pathname: '/favorites/[id]',

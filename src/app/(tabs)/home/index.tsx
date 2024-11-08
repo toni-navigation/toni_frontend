@@ -14,6 +14,7 @@ import background from '@/assets/images/background100.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
+import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { InputButton } from '@/components/atoms/InputButton';
@@ -25,6 +26,7 @@ import { photonValue } from '@/functions/photonValue';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
+import { FavoriteProps } from '@/types/Types';
 
 export default function HomePage() {
   const { changeDestination, switchOriginDestination, cleanLastDestinations } =
@@ -77,15 +79,15 @@ export default function HomePage() {
     }
   };
 
-  const startNavigationFromFavorite = (favorite: number) => {
-    changeDestination(favorites[favorite].address);
+  const startNavigationFromFavorite = (favorite: FavoriteProps) => {
+    // changeDestination(favorites[favorite].address);
     if (currentLocation) {
       navigateToTrip({
         origin: [
           currentLocation.coords.longitude,
           currentLocation.coords.latitude,
         ],
-        destination: favorites[favorite].address.geometry.coordinates,
+        destination: favorite.address.geometry.coordinates,
       });
     }
   };
@@ -173,29 +175,16 @@ export default function HomePage() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >
-                {/* <View className="flex flex-row"> */}
-                {/*  <Chip */}
-                {/*    onPress={() => { */}
-                {/*      startNavigationFromFavorite(0); */}
-                {/*    }} */}
-                {/*  > */}
-                {/*    {favorites[0].title} */}
-                {/*  </Chip> */}
-                {/*  <Chip */}
-                {/*    onPress={() => { */}
-                {/*      startNavigationFromFavorite(1); */}
-                {/*    }} */}
-                {/*  > */}
-                {/*    {favorites[1].title} */}
-                {/*  </Chip> */}
-                {/*  <Chip */}
-                {/*    onPress={() => { */}
-                {/*      startNavigationFromFavorite(2); */}
-                {/*    }} */}
-                {/*  > */}
-                {/*    {favorites[2]?.title && favorites[2].title} */}
-                {/*  </Chip> */}
-                {/* </View> */}
+                <View className="flex flex-row">
+                  {favorites.map((favorite) => (
+                    <Chip
+                      onPress={() => startNavigationFromFavorite(favorite)}
+                      key={favorite.id}
+                    >
+                      {favorite.title}
+                    </Chip>
+                  ))}
+                </View>
               </ScrollView>
             </View>
           </View>
