@@ -17,7 +17,6 @@ export default function FavoritesPage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* eslint-disable-next-line react/jsx-no-undef */}
       <BigHeader classes="text-invertedPrimary">Meine Favoriten</BigHeader>
       <ScrollView className="px-8 py-8">
         <View>
@@ -26,7 +25,7 @@ export default function FavoritesPage() {
               Noch keine Favoriten vorhanden
             </Text>
           ) : (
-            favorites.map((favorite, index) => (
+            favorites.map((favorite) => (
               <MenuButton
                 key={favorite.id}
                 onPress={() => {
