@@ -16,7 +16,6 @@ export default function CreatePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* eslint-disable-next-line react/jsx-no-undef */}
       <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
         <Header classes="text-textColor">
           {id === undefined ? 'Favorit hinzufügen' : 'Favorit bearbeiten'}

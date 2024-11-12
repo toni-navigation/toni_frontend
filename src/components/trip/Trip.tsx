@@ -10,7 +10,6 @@ import {
 import PagerView from 'react-native-pager-view';
 
 import { AlertBar } from '@/components/organisms/AlertBar';
-import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { TabBar } from '@/components/organisms/TabBar';
@@ -38,6 +37,7 @@ export function Trip() {
   const ref = React.useRef<PagerView>(null);
 
   const { data, isError, error } = useTrip(tripData);
+
   const handlePageSelected = (
     event: NativeSyntheticEvent<Readonly<{ position: number }>>
   ) => {
@@ -66,6 +66,7 @@ export function Trip() {
     );
   }
 
+  // TODO reset trip origin when stop navigation
   return (
     <SafeAreaView className="flex-1 bg-background">
       <PopUp

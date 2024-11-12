@@ -14,7 +14,6 @@ export default function DestinationPage() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="px-8 my-8">
         <Header classes="text-textColor pb-8">Ziel suchen</Header>
-
         <GeocoderAutocomplete
           value={destination}
           placeholder="Ziel eingeben"

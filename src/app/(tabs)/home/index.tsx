@@ -97,9 +97,9 @@ export default function HomePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <Button width="full" onPress={cleanLastDestinations} buttonType="primary">
-        Letzte Ziele löschen
-      </Button>
+      {/* <Button width="full" onPress={cleanLastDestinations} buttonType="primary"> */}
+      {/*  Letzte Ziele löschen */}
+      {/* </Button> */}
       <PopUp
         visible={showPopUp}
         onCloseClick={() => {
@@ -163,7 +163,6 @@ export default function HomePage() {
                 <InputButton
                   classes="ml-3 flex-1"
                   onPress={() => {
-                    // @ts-ignore
                     router.push('/home/destination');
                   }}
                 >

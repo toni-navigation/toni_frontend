@@ -13,8 +13,8 @@ import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
 import { CalibrationMode } from '@/components/calibration/CalibrationMode';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
 import {
-  CalibrationStepsProps,
   calibrationSteps,
+  CalibrationStepsProps,
 } from '@/components/calibration/calibrationSteps';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
@@ -50,7 +50,6 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
   const speakMutation = useSpeak();
   const calSteps = calibrationSteps(calibration.factors, id, fromIntro);
   const currentStep = calSteps[id];
-
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -62,6 +61,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
   };
 
   const fallbackStop = async (_start?: LocationObject, _steps = 30) => {
+    console.log('stopped', _steps);
     await stopPedometer();
     Speech.speak(
       'Kalibrierung abgeschlossen. Warte bis zum nächsten Audiosignal, wir berechnen deinen Umrechnungsfaktor',
@@ -73,9 +73,10 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
       currentPositionData
     );
 
+    // TODO
     if (
-      distanceInMeter === null ||
-      distanceInMeter <= UNREALISTIC_CALIBRATION
+      distanceInMeter === null
+      // distanceInMeter <= UNREALISTIC_CALIBRATION
     ) {
       Speech.speak(
         `Es ist ein Fehler aufgetreten, bitte versuche es erneut oder fahre ohne Kalibrierung fort.`,
@@ -86,7 +87,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     }
 
     addCalibration(distanceInMeter, _steps);
-    router.push('../calibration/2');
+    router.push('/calibration/2');
     Speech.speak(
       `Du bist ${_steps} Schritte und ${distanceInMeter.toFixed(2)} Meter gegangen. Der Umrechnungsfaktor beträgt ${(distanceInMeter / _steps).toFixed(2)}. Du kannst nun mit dem nächsten Schritt fortfahren.`,
       SPEECH_CONFIG
@@ -117,7 +118,6 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
     const currentPositionData = await currentLocationMutation.mutateAsync();
     // TODO Accuracy
     if (!pedometerAvailable) {
-      // Speech.speak('Gehe 30 Schritte und klicke dann auf Stopp.');
       await speakMutation.mutateAsync(
         'Gehe 30 Schritte und klicke dann auf Stopp.'
       );
@@ -199,6 +199,7 @@ export function Calibration({ id, fromIntro }: CalibrationProps) {
       </Button>
     );
   };
+  console.log(steps);
 
   return (
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">

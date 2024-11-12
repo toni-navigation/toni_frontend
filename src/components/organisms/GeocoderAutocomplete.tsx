@@ -76,6 +76,7 @@ export function GeocoderAutocomplete({
           value={inputValue}
           accessibilityLabel={label}
           placeholder={placeholder}
+          autoFocus
           onClickDelete={() => {
             setInputValue('');
             ref.current?.focus();

@@ -3,10 +3,8 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { PhotonFeature } from '@/services/api-photon';
+import { OriginDestinationType } from '@/store/useTripStore';
 import { FavoriteProps } from '@/types/Types';
-
-export type OriginDestinationType = PhotonFeature | undefined | null;
 
 type FavoriteState = {
   favorites: FavoriteProps[];

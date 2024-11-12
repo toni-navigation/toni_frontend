@@ -1,8 +1,6 @@
 import { router } from 'expo-router';
 import { ReactElement } from 'react';
 
-import { getCalibrationValue } from '@/functions/getCalibrationValue';
-
 export interface CalibrationStepsProps {
   text: string;
   forwardButtonText?: string;
@@ -49,10 +47,10 @@ export const calibrationSteps = (
   {
     forwardButtonText: 'Fertig',
     forwardButtonHandler: () => {
-      if (fromIntro) {
-        router.replace('/home/');
-      }
-      router.push('./profile');
+      // if (fromIntro) {
+      router.replace('/home');
+      // }
+      // router.push('./profile');
     },
     text:
       'Geschafft! Es werden nun alle Anweisungen speziell auf deine Schrittlänge angepasst! \n\n' +
