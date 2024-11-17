@@ -3,13 +3,14 @@ import { LocationObject } from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
-import { MusicNote } from '@/components/atoms/icons/MusicNote';
+import { CalibrationHeader } from '@/components/calibration/CalibrationHeader';
+import { CalibrationMusicNote } from '@/components/calibration/CalibrationMusicNote';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
+import { CalibrationSteps } from '@/components/calibration/CalibrationSteps';
 import { getDistanceInMeter } from '@/functions/getDistanceInMeter';
 import { useCurrentLocation } from '@/mutations/useCurrentLocation';
 import { useSpeak } from '@/mutations/useSpeak';
@@ -37,23 +38,7 @@ export default function CalibrationPage() {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-  // const progress = useRef(new Animated.Value(0)).current;
-  // const iconColor = themes.external[`--${theme}-mode-primary`];
-  // useEffect(() => {
-  //   Animated.timing(progress, {
-  //     toValue: steps / maxSteps,
-  //     duration: 500,
-  //     useNativeDriver: false,
-  //   }).start();
-  // }, [steps, maxSteps, progress]);
-  //
-  // const borderColor = progress.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: [
-  //     themes.external[`--${theme}-mode-primary-inverted`],
-  //     themes.external[`--${theme}-mode-primary`],
-  //   ],
-  // });
+
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -152,17 +137,17 @@ export default function CalibrationPage() {
     speakMutation.isPending ||
     startSoundMutation.isPending;
 
-  const isInCalibrationMode =
-    !!(pedometerSubscription.current && audioSound.current) ||
-    !!(
-      pedometerSubscription.current === undefined &&
-      audioSound.current &&
-      fallback.current
-    ) ||
-    isLoading;
+  // const isInCalibrationMode =
+  //   !!(pedometerSubscription.current && audioSound.current) ||
+  //   !!(
+  //     pedometerSubscription.current === undefined &&
+  //     audioSound.current &&
+  //     fallback.current
+  //   ) ||
+  //   isLoading;
 
-  const calibrationFinished =
-    !isInCalibrationMode && steps >= STOP_CALIBRATION_COUNT;
+  // const calibrationFinished =
+  //   !isInCalibrationMode && steps >= STOP_CALIBRATION_COUNT;
   const buttonOutput = () => {
     if (pedometerSubscription.current && audioSound.current) {
       return (
@@ -225,58 +210,11 @@ export default function CalibrationPage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
-      <Button
-        width="full"
-        buttonType="primary"
-        onPress={() => resetCalibrationStore()}
-      >
-        reset
-      </Button>
-
       <View className="px-8 mt-8 flex-1 flex-grow">
-        <Header classes="text-textColor text-large">
-          Schrittlänge konfigurieren
-        </Header>
-        <View className="my-8">
-          <Text className="text-small font-atkinsonRegular text-textColor">
-            Wenn du auf Start Kalibrierung klickst, ertönt eine Melodie.
-            {pedometerIsAvailable
-              ? ' Laufe so lange geradeaus, bis die Melodie stoppt.'
-              : ' Laufe 30 Schritte und klicke dann auf Stopp.'}
-          </Text>
-        </View>
-        <View
-          style={{
-            borderColor: 'green',
-            borderWidth: 4,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 16,
-            borderRadius: 9999,
-            width: '50%',
-            aspectRatio: 1,
-            alignSelf: 'center',
-            margin: 30,
-          }}
-        >
-          <MusicNote fill="green" width={83} height={83} />
-        </View>
+        <CalibrationHeader pedometerIsAvailable={pedometerIsAvailable} />
+        <CalibrationMusicNote steps={steps} />
       </View>
-
-      {pedometerSubscription.current && (
-        <View>
-          <Text
-            testID="Mode"
-            className="text-small font-atkinsonRegular mt-8 mb-2 text-textColor text-center"
-          >
-            Gelaufene Schritte:
-          </Text>
-          <Text className="text-large font-generalSansSemi text-primary text-center">
-            {steps}
-          </Text>
-        </View>
-      )}
-
+      {pedometerSubscription.current && <CalibrationSteps steps={steps} />}
       <CalibrationNavigation>{buttonOutput()}</CalibrationNavigation>
     </SafeAreaView>
   );

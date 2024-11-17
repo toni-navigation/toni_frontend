@@ -1,8 +1,8 @@
 import * as Location from 'expo-location';
+import { Redirect } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 
-import { Intro } from '@/components/Intro';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
@@ -12,6 +12,18 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
+
+  // const { data: userData, error } = useSuspenseQuery({
+  //   queryKey: ['user'],
+  //   queryFn: async () => {
+  //     const axiosInstance = axios.create({ baseURL: 'http://localhost:3000/' });
+  //     const login = await axiosInstance.get('api/users');
+  //
+  //     return login.data;
+  //   },
+  // });
+  //
+  // console.log(userData);
 
   useEffect(() => {
     (async () => {
@@ -38,7 +50,11 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  return <Intro />;
+  // return (
+  // <Suspense fallback={<ActivityIndicator size="large" />}>
+  //   {userData ? <Redirect href="/home" /> : <Intro />}
+  // </Suspense>
+  // );
   //
-  // return <Redirect href="/home" />;
+  return <Redirect href="/home" />;
 }
