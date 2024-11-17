@@ -1,8 +1,8 @@
 import * as Location from 'expo-location';
-import { Redirect } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Linking, Text } from 'react-native';
 
+import { Intro } from '@/components/Intro';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
@@ -38,7 +38,7 @@ export default function Index() {
     return <Text>Loading</Text>;
   }
 
-  // return <Intro />;
-
-  return <Redirect href="/home" />;
+  return <Intro />;
+  //
+  // return <Redirect href="/home" />;
 }

@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView, Text } from 'react-native';
 
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { getCalibrationValue } from '@/functions/getCalibrationValue';
+// import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { useCalibrationStore } from '@/store/useCalibrationStore';
 
 export default function ProfilePage() {
@@ -15,12 +15,12 @@ export default function ProfilePage() {
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
       <ScrollView className="px-8 my-8">
         <Text className="font-atkinsonRegular text-2xl text-textColor">
-          Schrittlänge: {getCalibrationValue(calibration.factors)} m
+          Schrittlänge: {calibration.factor} m
         </Text>
         <Button
           width="full"
           onPress={() => {
-            router.push('../calibration/0?fromIntro=false');
+            router.push('/profile/calibration');
           }}
           buttonType="primaryOutline"
         >

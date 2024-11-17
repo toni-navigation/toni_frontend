@@ -34,7 +34,7 @@ export default function Registration() {
           width="full"
           buttonType="primary"
           onPress={() => {
-            router.replace('../calibration/0?fromIntro=true');
+            router.replace('/home?isFromIntro=true');
           }}
         >
           Probeabo starten

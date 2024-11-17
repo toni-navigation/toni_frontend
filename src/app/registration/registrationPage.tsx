@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, TextInput, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -102,7 +102,7 @@ export default function RegistrationPage() {
             width="full"
             buttonType="primary"
             onPress={() => {
-              router.push('../calibration/0?fromIntro=true');
+              router.push('/profile/calibration?isFromIntro=true');
             }}
           >
             Fertig

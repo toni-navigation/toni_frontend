@@ -10,8 +10,8 @@ export interface LocationProps {
 export interface CalibrationProps {
   start?: LocationProps;
   end?: LocationProps;
-  meters: number[];
-  factors: number[];
+  meter: number | undefined;
+  factor: number | undefined;
 }
 
 export interface LocationInputProps {

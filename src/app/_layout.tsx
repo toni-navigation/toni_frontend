@@ -37,12 +37,12 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="calibration"
-              options={{
-                headerShown: false,
-              }}
-            />
+            {/* <Stack.Screen */}
+            {/*  name="calibration" */}
+            {/*  options={{ */}
+            {/*    headerShown: false, */}
+            {/*  }} */}
+            {/* /> */}
 
             <Stack.Screen
               name="index"

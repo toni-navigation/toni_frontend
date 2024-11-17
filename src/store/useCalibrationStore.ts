@@ -6,8 +6,8 @@ import { immer } from 'zustand/middleware/immer';
 import { CalibrationProps } from '@/types/Types';
 
 const INITIAL_CALIBRATION: CalibrationProps = {
-  factors: [],
-  meters: [],
+  factor: undefined,
+  meter: undefined,
 };
 
 type CalibrationState = {
@@ -32,8 +32,10 @@ export const useCalibrationStore = create<CalibrationState>()(
       actions: {
         addCalibration: (distanceInMeter, steps) =>
           set((state) => {
-            state.calibration.meters.push(distanceInMeter);
-            state.calibration.factors.push(distanceInMeter / steps);
+            state.calibration.meter = distanceInMeter;
+            state.calibration.factor = Number(
+              (distanceInMeter / steps).toFixed(2)
+            );
           }),
         shownIntroHandler: () =>
           set((state) => ({ ...state, showedIntro: true })),

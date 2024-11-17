@@ -19,7 +19,7 @@ export const calibrationSteps = (
   {
     forwardButtonText: 'Weiter',
     forwardButtonHandler: () => {
-      router.push(`../calibration/${id + 1}`);
+      // router.push(`../calibration/${id + 1}`);
     },
     text:
       'Nun kalibrieren wir gemeinsam deine Schrittlänge, damit wir dich so genau wie möglich an dein Ziel bringen können.\n\n' +
@@ -29,7 +29,7 @@ export const calibrationSteps = (
     backButtonHandler: () => {
       if (fromIntro) {
         router.dismissAll();
-        router.replace('/home');
+        // router.replace('/home');
 
         return;
       }
