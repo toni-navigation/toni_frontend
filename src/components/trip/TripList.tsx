@@ -2,16 +2,14 @@ import React from 'react';
 import { FlatList, SafeAreaView, View } from 'react-native';
 
 import { ListItem } from '@/components/atoms/ListItem';
-import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { tripInstructionOutput } from '@/functions/tripInstructionOutput';
-import { CalibrationProps } from '@/types/Types';
 import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
 interface TripListProps {
   maneuvers: ValhallaManeuverProps[];
-  calibration: CalibrationProps;
+  calibrationFactor: number;
 }
-export function TripList({ maneuvers, calibration }: TripListProps) {
+export function TripList({ maneuvers, calibrationFactor }: TripListProps) {
   return (
     <SafeAreaView className="flex-1 mx-5 mt-5">
       <FlatList
@@ -23,10 +21,7 @@ export function TripList({ maneuvers, calibration }: TripListProps) {
             <ListItem>
               {index + 1}
               {'. '}
-              {tripInstructionOutput(
-                item,
-                getCalibrationValue(calibration.factors)
-              )}
+              {tripInstructionOutput(item, calibrationFactor)}
             </ListItem>
           </View>
         )}

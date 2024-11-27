@@ -7,12 +7,11 @@ export interface LocationProps {
   lat: number;
   lon: number;
 }
-export interface CalibrationProps {
-  start?: LocationProps;
-  end?: LocationProps;
-  meter: number | undefined;
-  factor: number | undefined;
-}
+// export interface CalibrationProps {
+//   start?: LocationProps;
+//   end?: LocationProps;
+//   calibrationFactor: Calibratio;
+// }
 
 export interface LocationInputProps {
   query: string;

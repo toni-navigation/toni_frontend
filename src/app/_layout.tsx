@@ -57,7 +57,7 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
-              name="registration"
+              name="intro"
               options={{
                 headerShown: false,
               }}

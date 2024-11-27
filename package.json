@@ -71,7 +71,8 @@
     "react-test-renderer": "18.2.0",
     "ts-node": "^10.9.2",
     "twrnc": "^4.3.0",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.0",
+    "expo-secure-store": "~13.0.2"
   },
   "peerDependencies": {
     "react": "18.2.0",

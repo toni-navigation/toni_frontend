@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
 
-export default function Registration() {
+export default function IntroIndex() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 py-8">
@@ -26,7 +26,14 @@ export default function Registration() {
         <Button
           width="full"
           buttonType="accent"
-          onPress={() => router.push('/registration/registrationPage')}
+          onPress={() => router.push('/intro/login')}
+        >
+          Login
+        </Button>
+        <Button
+          width="full"
+          buttonType="accent"
+          onPress={() => router.push('/intro/registration')}
         >
           Registrieren
         </Button>
@@ -34,7 +41,8 @@ export default function Registration() {
           width="full"
           buttonType="primary"
           onPress={() => {
-            router.replace('/home?isFromIntro=true');
+            router.push('/profile/');
+            router.push('/profile/calibration');
           }}
         >
           Probeabo starten

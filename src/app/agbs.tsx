@@ -119,7 +119,7 @@ export default function Agbs() {
             !isCheckedDatenschutz
           }
           buttonType="accent"
-          onPress={() => router.push('/registration')}
+          onPress={() => router.push('/intro')}
         >
           Weiter
         </Button>

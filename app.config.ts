@@ -18,6 +18,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     typedRoutes: true,
   },
   plugins: [
+    'expo-secure-store',
     [
       'expo-location',
       {
@@ -42,6 +43,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       image: './src/assets/images/splash.png',
       resizeMode: 'contain',
       backgroundColor: '#0A585C',
+    },
+    config: {
+      usesNonExemptEncryption: false,
     },
     bundleIdentifier: 'io.toni.app',
   },

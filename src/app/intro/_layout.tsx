@@ -19,7 +19,15 @@ function RegistrationLayout() {
         }}
       />
       <Stack.Screen
-        name="registrationPage"
+        name="registration"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="login"
         options={{
           headerShown: false,
           presentation: 'modal',

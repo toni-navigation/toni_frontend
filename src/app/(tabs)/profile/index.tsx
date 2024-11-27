@@ -1,22 +1,43 @@
 import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import React from 'react';
-import { SafeAreaView, ScrollView, Text } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 // import { getCalibrationValue } from '@/functions/getCalibrationValue';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function ProfilePage() {
-  const calibration = useCalibrationStore((state) => state.calibration);
+  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
+  const user = useUserStore((state) => state.user);
+  const { resetCalibrationStore } = useUserStore((state) => state.actions);
+  const logout = async () => {
+    await SecureStore.deleteItemAsync('access_token');
+    // const token = await SecureStore.getItemAsync('access_token');
+    // console.log(token);
+    resetCalibrationStore();
+    // router.push('/');
+  };
+
+  console.log(user);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
+      <Button
+        onPress={() => resetCalibrationStore()}
+        buttonType="accent"
+        width="full"
+      >
+        Reset Store
+      </Button>
       <ScrollView className="px-8 my-8">
-        <Text className="font-atkinsonRegular text-2xl text-textColor">
-          Schrittlänge: {calibration.factor} m
-        </Text>
+        {calibrationFactor && (
+          <Text className="font-atkinsonRegular text-2xl text-textColor">
+            Schrittlänge: {calibrationFactor} m
+          </Text>
+        )}
         <Button
           width="full"
           onPress={() => {
@@ -24,8 +45,48 @@ export default function ProfilePage() {
           }}
           buttonType="primaryOutline"
         >
-          Neu kalibrieren
+          Kalibrieren
         </Button>
+        {!user && (
+          <View>
+            <Button
+              onPress={() => router.push('/intro/login')}
+              buttonType="accent"
+              width="full"
+            >
+              Login
+            </Button>
+            <Button
+              onPress={() => router.push('/intro/registration')}
+              buttonType="accent"
+              width="full"
+            >
+              Register
+            </Button>
+          </View>
+        )}
+        {user && (
+          <Button onPress={logout} buttonType="accent" width="full">
+            Logout
+          </Button>
+        )}
+        <View>
+          {user?.email && (
+            <Text className="font-atkinsonRegular text-2xl text-textColor">
+              E-Mail: {user.email}
+            </Text>
+          )}
+          {user?.firstname && (
+            <Text className="font-atkinsonRegular text-2xl text-textColor">
+              firstname: {user.firstname}
+            </Text>
+          )}
+          {user?.lastname && (
+            <Text className="font-atkinsonRegular text-2xl text-textColor">
+              lastname: {user.lastname}
+            </Text>
+          )}
+        </View>
 
         {/* <MenuButton */}
         {/*  onPress={() => { */}

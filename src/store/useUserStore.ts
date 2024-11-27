@@ -3,42 +3,40 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { CalibrationProps } from '@/types/Types';
+import { User } from '@/services/api-backend';
 
-const INITIAL_CALIBRATION: CalibrationProps = {
-  factor: undefined,
-  meter: undefined,
-};
+export type StoreUser = Omit<User, 'calibrationFactor'> | undefined;
 
 type CalibrationState = {
-  calibration: CalibrationProps;
-  showedIntro: boolean;
+  user: StoreUser;
+  calibrationFactor: number | null;
   actions: {
     addCalibration: (distanceInMeter: number, steps: number) => void;
     resetCalibrationStore: () => void;
-    shownIntroHandler: () => void;
+    addUser: (user: StoreUser) => void;
   };
 };
 
 const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
-  calibration: INITIAL_CALIBRATION,
-  showedIntro: false,
+  user: undefined,
+  calibrationFactor: null,
 };
 
-export const useCalibrationStore = create<CalibrationState>()(
+export const useUserStore = create<CalibrationState>()(
   persist(
     immer((set) => ({
       ...defaultCalibrationState,
       actions: {
         addCalibration: (distanceInMeter, steps) =>
           set((state) => {
-            state.calibration.meter = distanceInMeter;
-            state.calibration.factor = Number(
+            state.calibrationFactor = Number(
               (distanceInMeter / steps).toFixed(2)
             );
           }),
-        shownIntroHandler: () =>
-          set((state) => ({ ...state, showedIntro: true })),
+        addUser: (user) =>
+          set((state) => {
+            state.user = user;
+          }),
         resetCalibrationStore: () =>
           set((state) => ({ ...state, ...defaultCalibrationState })),
       },

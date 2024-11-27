@@ -5,10 +5,10 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
+import { useUserStore } from '@/store/useUserStore';
 
 export function Finished() {
-  const calibration = useCalibrationStore((state) => state.calibration);
+  const calibration = useUserStore((state) => state.calibration);
 
   return (
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">

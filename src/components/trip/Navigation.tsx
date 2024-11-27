@@ -15,8 +15,8 @@ import { TripStep } from '@/components/trip/TripStep';
 import { decodePolyline } from '@/functions/decodePolyline';
 import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
-import { useCalibrationStore } from '@/store/useCalibrationStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useUserStore } from '@/store/useUserStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
 const styles = StyleSheet.create({
@@ -52,7 +52,9 @@ export const Navigation = forwardRef(
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
     );
-    const calibration = useCalibrationStore((state) => state.calibration);
+    const calibrationFactor = useUserStore(
+      (state) => state.user.calibrationFactor
+    );
     const currentLocationPoint =
       currentLocation &&
       point([
@@ -177,7 +179,8 @@ export const Navigation = forwardRef(
               !currentManeuverIndex ? 0 : currentManeuverIndex - 1
             )}
             key="0"
-            calibration={calibration}
+            // TODO
+            calibrationFactor={1.2}
           />
           <TripStep
             key="1"
