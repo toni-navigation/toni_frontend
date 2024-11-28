@@ -51,14 +51,14 @@ export default function ProfilePage() {
         {!user && (
           <View>
             <Button
-              onPress={() => router.push('/intro/login')}
+              onPress={() => router.push('/auth/login')}
               buttonType="accent"
               width="full"
             >
               Login
             </Button>
             <Button
-              onPress={() => router.push('/intro/registration')}
+              onPress={() => router.push('/auth/register')}
               buttonType="accent"
               width="full"
             >

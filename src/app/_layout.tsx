@@ -63,6 +63,13 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="auth"
+              options={{
+                presentation: 'modal', // Enables modal presentation for all screens in 'modal'
+                headerShown: false, // Optional: Hide headers for modals
+              }}
+            />
+            <Stack.Screen
               name="trip"
               options={{
                 headerShown: false,

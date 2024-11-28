@@ -1,12 +1,18 @@
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { Logo } from '@/components/atoms/icons/Logo';
+import { Calibration } from '@/components/calibration/Calibration';
 
-export default function IntroIndex() {
+export default function Intro() {
+  const [showCalibration, setShowCalibration] = useState(false);
+  if (showCalibration) {
+    return <Calibration isFromIntro />;
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 py-8">
@@ -26,14 +32,16 @@ export default function IntroIndex() {
         <Button
           width="full"
           buttonType="accent"
-          onPress={() => router.push('/intro/login')}
+          onPress={() => {
+            router.push('/auth/login');
+          }}
         >
           Login
         </Button>
         <Button
           width="full"
           buttonType="accent"
-          onPress={() => router.push('/intro/registration')}
+          onPress={() => router.push('/auth/register')}
         >
           Registrieren
         </Button>
@@ -41,8 +49,7 @@ export default function IntroIndex() {
           width="full"
           buttonType="primary"
           onPress={() => {
-            router.push('/profile/');
-            router.push('/profile/calibration');
+            setShowCalibration(true);
           }}
         >
           Probeabo starten

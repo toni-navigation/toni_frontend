@@ -18,7 +18,7 @@ import { CreateUserDto } from '@/services/api-backend';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
-export default function Registration() {
+export default function Register() {
   const { onLogin } = useAuthStore((state) => state.actions);
   const { addUser } = useUserStore((state) => state.actions);
   const [email, setEmail] = useState('');

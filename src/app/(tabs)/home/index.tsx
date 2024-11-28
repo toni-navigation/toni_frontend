@@ -80,7 +80,7 @@ export default function HomePage() {
   };
 
   const startNavigationFromFavorite = (favorite: FavoriteProps) => {
-    // changeDestination(favorites[favorite].address);
+    changeDestination(favorite.address);
     if (currentLocation) {
       navigateToTrip({
         origin: [

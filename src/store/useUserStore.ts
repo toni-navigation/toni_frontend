@@ -13,6 +13,7 @@ type UserState = {
   actions: {
     addCalibration: (distanceInMeter: number, steps: number) => void;
     resetUserStore: () => void;
+    resetCalibration: () => void;
     addUser: (user: StoreUser) => void;
   };
 };
@@ -37,6 +38,8 @@ export const useUserStore = create<UserState>()(
           set((state) => {
             state.user = user;
           }),
+        resetCalibration: () =>
+          set((state) => ({ ...state, calibrationFactor: null })),
         resetUserStore: () =>
           set((state) => ({ ...state, ...defaultUserState })),
       },
