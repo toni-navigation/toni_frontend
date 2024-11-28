@@ -7,25 +7,25 @@ import { User } from '@/services/api-backend';
 
 export type StoreUser = Omit<User, 'calibrationFactor'> | undefined;
 
-type CalibrationState = {
+type UserState = {
   user: StoreUser;
   calibrationFactor: number | null;
   actions: {
     addCalibration: (distanceInMeter: number, steps: number) => void;
-    resetCalibrationStore: () => void;
+    resetUserStore: () => void;
     addUser: (user: StoreUser) => void;
   };
 };
 
-const defaultCalibrationState: Omit<CalibrationState, 'actions'> = {
+const defaultUserState: Omit<UserState, 'actions'> = {
   user: undefined,
   calibrationFactor: null,
 };
 
-export const useUserStore = create<CalibrationState>()(
+export const useUserStore = create<UserState>()(
   persist(
     immer((set) => ({
-      ...defaultCalibrationState,
+      ...defaultUserState,
       actions: {
         addCalibration: (distanceInMeter, steps) =>
           set((state) => {
@@ -37,12 +37,12 @@ export const useUserStore = create<CalibrationState>()(
           set((state) => {
             state.user = user;
           }),
-        resetCalibrationStore: () =>
-          set((state) => ({ ...state, ...defaultCalibrationState })),
+        resetUserStore: () =>
+          set((state) => ({ ...state, ...defaultUserState })),
       },
     })),
     {
-      name: `CALIBRATION_STORE`,
+      name: `USER_STORE`,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: ({ actions, ...rest }) => rest,
       version: 1,

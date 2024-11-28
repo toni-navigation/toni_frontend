@@ -1,11 +1,10 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking, Text } from 'react-native';
 
 import { Intro } from '@/components/Intro';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
@@ -15,15 +14,7 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const { data: accessTokenData, error } = useSuspenseQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const accessToken = await SecureStore.getItemAsync('access_token');
-
-      return accessToken;
-    },
-  });
-
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -51,7 +42,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      {accessTokenData ? <Redirect href="/home" /> : <Intro />}
+      {isAuthenticated ? <Redirect href="/home" /> : <Intro />}
     </Suspense>
   );
 

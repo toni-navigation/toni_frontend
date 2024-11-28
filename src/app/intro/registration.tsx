@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React, { useRef, useState } from 'react';
 import {
-  ActivityIndicator,
+  Alert,
   SafeAreaView,
   ScrollView,
   Text,
@@ -14,69 +13,48 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { InputText } from '@/components/atoms/InputText';
-import {
-  CreateUserDto,
-  usersControllerCreateUser,
-} from '@/services/api-backend';
+import { registerUser } from '@/functions/registerUser';
+import { CreateUserDto } from '@/services/api-backend';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
-export const BASE_URL = 'http://localhost:3000';
 export default function Registration() {
+  const { onLogin } = useAuthStore((state) => state.actions);
   const { addUser } = useUserStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
-  async function registerUser(data: CreateUserDto) {
-    const response = await usersControllerCreateUser({
-      body: data,
-      baseUrl: BASE_URL,
-    });
 
-    return response.data;
-  }
-  const { error, isPending, mutateAsync, data } = useMutation({
-    mutationKey: ['register'],
+  const { mutate, isPending, error, data } = useMutation({
     mutationFn: (user: CreateUserDto) => registerUser(user),
+    onSuccess: (successData) => {
+      if (!successData) {
+        Alert.alert('Registration Failed', 'Please try again');
+
+        return;
+      }
+      onLogin(successData.accessToken);
+      addUser(successData.user);
+      router.replace('/home');
+    },
   });
   const ref = useRef<TextInput>(null);
 
-  async function register() {
+  const register = () => {
     if (!email || !password || !firstname || !lastname) {
       console.error('All fields are required!');
 
       return;
     }
 
-    const response = await mutateAsync({
+    mutate({
       email,
       password,
       firstname,
       lastname,
     });
-
-    if (response) {
-      try {
-        await SecureStore.setItemAsync('access_token', response.accessToken);
-        addUser(response.user);
-        router.replace('/home');
-      } catch (secureStoreError) {
-        console.error(secureStoreError);
-      }
-    }
-  }
-
-  if (isPending) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
-  if (error) {
-    console.error(error);
-  }
+  };
 
   if (data) {
     return (
@@ -147,9 +125,15 @@ export default function Registration() {
             ref.current?.focus();
           }}
         />
+        {error && <Text className="text-red-500">{error.message}</Text>}
       </ScrollView>
       <View className="mx-8 mb-8">
-        <Button width="full" onPress={() => register()} buttonType="primary">
+        <Button
+          width="full"
+          onPress={register}
+          buttonType="primary"
+          isLoading={isPending}
+        >
           Registrieren
         </Button>
       </View>

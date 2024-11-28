@@ -98,13 +98,13 @@ export function Intro() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 mx-8 mb-3">
-        <Button
-          width="full"
-          onPress={createCurrentLocationMessage}
-          buttonType="primary"
-        >
-          Test
-        </Button>
+        {/* <Button */}
+        {/*  width="full" */}
+        {/*  onPress={createCurrentLocationMessage} */}
+        {/*  buttonType="primary" */}
+        {/* > */}
+        {/*  Test */}
+        {/* </Button> */}
         <PagerView
           style={styles.container}
           initialPage={0}
@@ -113,9 +113,8 @@ export function Intro() {
             handlePageChange(event.nativeEvent.position)
           }
         >
-          {pagerViewData.map((data, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <View key={index} className="px-8 mt-8">
+          {pagerViewData.map((data) => (
+            <View key={data.headline} className="px-8 mt-8">
               <View className="flex items-center pb-8">{data.icon}</View>
               <View className="flex items-center">
                 <Header classes="text-textColor">{data.headline}</Header>
@@ -130,8 +129,7 @@ export function Intro() {
           {pagerViewData.map((data, index) => (
             <View
               style={index === currentPage ? styles.activeDot : styles.dot}
-              /* eslint-disable-next-line react/no-array-index-key */
-              key={index}
+              key={data.headline}
             />
           ))}
         </View>

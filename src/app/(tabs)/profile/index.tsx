@@ -1,23 +1,22 @@
 import { router } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
 // import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
 export default function ProfilePage() {
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const user = useUserStore((state) => state.user);
-  const { resetCalibrationStore } = useUserStore((state) => state.actions);
+  const { resetUserStore } = useUserStore((state) => state.actions);
+  const { onLogout, resetAuthStore } = useAuthStore((state) => state.actions);
   const logout = async () => {
-    await SecureStore.deleteItemAsync('access_token');
-    // const token = await SecureStore.getItemAsync('access_token');
-    // console.log(token);
-    resetCalibrationStore();
-    // router.push('/');
+    onLogout();
+    resetAuthStore();
+    resetUserStore();
   };
 
   console.log(user);
@@ -26,11 +25,13 @@ export default function ProfilePage() {
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
       <Button
-        onPress={() => resetCalibrationStore()}
+        onPress={() => {
+          resetUserStore();
+        }}
         buttonType="accent"
         width="full"
       >
-        Reset Store
+        Reset Auth
       </Button>
       <ScrollView className="px-8 my-8">
         {calibrationFactor && (
