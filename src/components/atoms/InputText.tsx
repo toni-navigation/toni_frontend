@@ -23,7 +23,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
           <TextInput
             ref={ref}
             testID="TextInput"
-            className={`font-atkinsonRegular text border-2 border-primary rounded-[25px] text-textColor p-4 !pr-12' ${className}`}
+            className={`font-atkinsonRegular text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
             {...props}
           />
           {props.value && (

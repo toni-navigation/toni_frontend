@@ -13,13 +13,11 @@ export default function ProfilePage() {
   const user = useUserStore((state) => state.user);
   const { resetUserStore } = useUserStore((state) => state.actions);
   const { onLogout, resetAuthStore } = useAuthStore((state) => state.actions);
-  const logout = async () => {
+  const logout = () => {
     onLogout();
     resetAuthStore();
     resetUserStore();
   };
-
-  console.log(user);
 
   return (
     <SafeAreaView className="flex-1 bg-background">

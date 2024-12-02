@@ -4,7 +4,6 @@ import lineSlice from '@turf/line-slice';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import * as Speech from 'expo-speech';
 import React, { forwardRef, useContext, useRef } from 'react';
-import { NativeSyntheticEvent, StyleSheet } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
@@ -19,18 +18,8 @@ import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useUserStore } from '@/store/useUserStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
-const styles = StyleSheet.create({
-  pager: {
-    flex: 1,
-    alignSelf: 'stretch',
-  },
-});
 interface NavigationProps {
   trip: TripProps;
-  handlePageSelected: (
-    event: NativeSyntheticEvent<Readonly<{ position: number }>>
-  ) => void;
-  activePage: number;
 }
 interface ReadRefProps {
   [key: number]: {
@@ -41,10 +30,7 @@ interface ReadRefProps {
   };
 }
 export const Navigation = forwardRef(
-  (
-    { trip, activePage, handlePageSelected }: NavigationProps,
-    ref: React.ForwardedRef<PagerView>
-  ) => {
+  ({ trip }: NavigationProps, ref: React.ForwardedRef<PagerView>) => {
     const { theme } = useContext(ThemeContext);
     const readRef = useRef<ReadRefProps>({});
     const decodedShape = decodePolyline(trip.legs[0].shape);
@@ -52,9 +38,7 @@ export const Navigation = forwardRef(
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
     );
-    const calibrationFactor = useUserStore(
-      (state) => state.user.calibrationFactor
-    );
+    const calibrationFactor = useUserStore((state) => state.calibrationFactor);
     const currentLocationPoint =
       currentLocation &&
       point([
@@ -168,36 +152,30 @@ export const Navigation = forwardRef(
         {/*  maneuvers={trip.legs[0].maneuvers} */}
         {/*  currentManeuverIndex={currentManeuverIndex} */}
         {/* /> */}
-        <PagerView
-          onPageSelected={(event) => handlePageSelected(event)}
-          initialPage={activePage}
-          style={styles.pager}
-          ref={ref}
-        >
-          <TripList
-            maneuvers={trip.legs[0].maneuvers.slice(
-              !currentManeuverIndex ? 0 : currentManeuverIndex - 1
-            )}
-            key="0"
-            // TODO
-            calibrationFactor={1.2}
-          />
-          <TripStep
-            key="1"
-            instruction={
-              currentManeuverIndex !== undefined
-                ? maneuvers[currentManeuverIndex]?.instruction
-                : undefined
-            }
-            icon={
-              currentManeuverIndex !== undefined &&
-              matchIconType(
-                maneuvers[currentManeuverIndex].type,
-                themes.external[`--${theme}-mode-primary`]
-              )
-            }
-          />
-        </PagerView>
+
+        <TripList
+          maneuvers={trip.legs[0].maneuvers.slice(
+            !currentManeuverIndex ? 0 : currentManeuverIndex - 1
+          )}
+          key="0"
+          // TODO
+          calibrationFactor={1.2}
+        />
+        <TripStep
+          key="1"
+          instruction={
+            currentManeuverIndex !== undefined
+              ? maneuvers[currentManeuverIndex]?.instruction
+              : undefined
+          }
+          icon={
+            currentManeuverIndex !== undefined &&
+            matchIconType(
+              maneuvers[currentManeuverIndex].type,
+              themes.external[`--${theme}-mode-primary`]
+            )
+          }
+        />
       </>
     );
   }

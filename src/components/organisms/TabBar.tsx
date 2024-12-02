@@ -1,51 +1,55 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { NativeSyntheticEvent, View } from 'react-native';
+import PagerView from 'react-native-pager-view';
 
-interface TabBarProps {
-  setPage: (page: number) => void;
-  activePage: number;
-}
-export function TabBar({ setPage, activePage }: TabBarProps) {
-  const activeButton =
-    'h-12 w-40 justify-center py-2 px-4 rounded-[35px] bg-accent';
-  const inactiveButton =
-    'h-12 w-40  justify-center py-2 px-4 rounded-[35px] bg-transparent border border-2 border-solid border-primary';
-  const activeText = 'text-center text-base text-white';
+import { Login } from '@/components/organisms/Login';
+import { Registration } from '@/components/organisms/Registration';
+import { TabButton } from '@/components/organisms/TabButton';
 
-  const inactiveText = 'text-center text-base text-primary';
+// interface TabBarProps {
+//   setPage: (page: number) => void;
+//   activePage: number;
+// }
+
+export function TabBar() {
+  const ref = React.useRef<PagerView>(null);
+
+  const [activePage, setActivePage] = useState(0);
+  const handlePageSelected = (
+    event: NativeSyntheticEvent<Readonly<{ position: number }>>
+  ) => {
+    setActivePage(event.nativeEvent.position);
+  };
 
   return (
-    <View className="flex flex-row justify-evenly mt-5">
-      <TouchableOpacity
-        accessibilityRole="button"
-        accessibilityLabel="Übersicht"
-        accessibilityHint="Übersicht über die komplette Route"
-        onPress={() => setPage(0)}
-        className={activePage === 0 ? activeButton : inactiveButton}
-        disabled={activePage === 0}
+    <>
+      <View className="flex-row">
+        <TabButton
+          onPress={() => ref.current?.setPage(0)}
+          index={0}
+          activePage={activePage}
+          accessibilityLabel="Registrierung"
+          accessibilityHint="Registrierung"
+        />
+        <TabButton
+          onPress={() => {
+            ref.current?.setPage(1);
+          }}
+          index={1}
+          activePage={activePage}
+          accessibilityLabel="Login"
+          accessibilityHint="Login"
+        />
+      </View>
+      <PagerView
+        onPageSelected={(event) => handlePageSelected(event)}
+        initialPage={0}
+        ref={ref}
+        style={{ flex: 1 }}
       >
-        <Text
-          style={{ fontFamily: 'generalSansSemi' }}
-          className={activePage === 0 ? activeText : inactiveText}
-        >
-          Übersicht
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        accessibilityRole="button"
-        accessibilityLabel="Navigation"
-        accessibilityHint="Aktuelles Manöver der Route"
-        onPress={() => setPage(1)}
-        className={activePage === 1 ? activeButton : inactiveButton}
-        disabled={activePage === 1}
-      >
-        <Text
-          style={{ fontFamily: 'generalSansSemi' }}
-          className={activePage === 1 ? activeText : inactiveText}
-        >
-          Navigation
-        </Text>
-      </TouchableOpacity>
-    </View>
+        <Registration key="1" />
+        <Login key="2" />
+      </PagerView>
+    </>
   );
 }
