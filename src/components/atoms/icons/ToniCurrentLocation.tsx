@@ -14,8 +14,8 @@ export function ToniCurrentLocation({
   width = 50,
   height = 50,
   viewBox = '0 0 50 50',
-  fill = 'currentColor',
-  stroke = 'currentColor',
+  fill = 'none',
+  stroke = 'none',
   strokeWidth = 2,
 }: ToniCurrentLocationProps) {
   return (

@@ -15,7 +15,7 @@ export function ToniClose({
   width = 50,
   height = 50,
   viewBox = '0 0 50 50',
-  stroke = 'currentColor',
+  stroke = 'none',
   strokeWidth = 2,
   strokeLinecap = 'round',
   strokeLinejoin = 'round',

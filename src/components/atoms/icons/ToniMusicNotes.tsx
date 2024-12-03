@@ -13,8 +13,8 @@ export function ToniMusicNotes({
   width = 50,
   height = 50,
   viewBox = '0 0 50 50',
-  fillColorNote1 = 'currentColor',
-  fillColorNote2 = 'currentColor',
+  fillColorNote1 = 'none',
+  fillColorNote2 = 'none',
 }: ToniMusicNotesProps) {
   return (
     <Svg width={width} height={height} viewBox={viewBox}>

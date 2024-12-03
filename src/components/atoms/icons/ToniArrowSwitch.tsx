@@ -16,11 +16,11 @@ export function ToniArrowSwitch({
   width = 85,
   height = 50,
   viewBox = '0 0 85 50',
-  stroke = 'currentColor',
+  stroke = 'none',
   strokeWidth = 5,
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
-  fill = 'currentColor',
+  fill = 'none',
 }: ToniArrowSwitchProps) {
   return (
     <Svg width={width} height={height} viewBox={viewBox}>

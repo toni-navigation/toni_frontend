@@ -16,11 +16,11 @@ export function ToniArrowRight({
   width = 50,
   height = 50,
   viewBox = '0 0 50 50',
-  stroke = 'currentColor',
+  stroke = 'none',
   strokeWidth = 2,
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
-  fill = 'currentColor',
+  fill = 'none',
 }: ToniArrowRightProps) {
   return (
     <Svg width={width} height={height} viewBox={viewBox}>

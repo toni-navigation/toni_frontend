@@ -12,7 +12,7 @@ export function ToniArrow({
   width = 50,
   height = 50,
   viewBox = '0 0 50 50',
-  stroke = 'currentColor',
+  stroke = 'none',
 }: ToniArrowProps) {
   return (
     <Svg width={width} height={height} viewBox={viewBox}>

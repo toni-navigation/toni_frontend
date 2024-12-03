@@ -18,8 +18,8 @@ export function ToniArrowHigh({
   viewBox = '0 0 50 50',
   stroke = 'currentColor',
   strokeWidth = 2,
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
+  strokeLinecap = 'none',
+  strokeLinejoin = 'none',
   fill = 'currentColor',
 }: ToniArrowHighProps) {
   return (
