@@ -1,25 +1,23 @@
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
+import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
-import { ThemeContext } from '@/components/ThemeProvider';
-import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
-import { Heart } from '@/components/atoms/icons/Heart';
+import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritesPage() {
   const favorites = useFavoriteStore((state) => state.favorites);
   const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
-  const { theme } = useContext(ThemeContext);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <BigHeader classes="text-invertedPrimary">Meine Favoriten</BigHeader>
       <ScrollView className="px-8 py-8">
-        <View>
+        <Header>Meine Favoriten</Header>
+        <View className="mt-8">
           {favorites.length === 0 ? (
             <Text className="font-atkinsonRegular text-2xl text-textColor">
               Noch keine Favoriten vorhanden
@@ -35,8 +33,9 @@ export default function FavoritesPage() {
                   });
                 }}
                 icon={
-                  <Heart
-                    fill={themes.external[`--${theme}-mode-primary`]}
+                  <ToniLocation
+                    fillOuter={themes.external[`--accent`]}
+                    fillInner={themes.external[`--accent`]}
                     width={50}
                     height={50}
                   />

@@ -1,27 +1,27 @@
 import React from 'react';
 
-import { ArrowLeft } from '@/components/atoms/icons/ArrowLeft';
-import { ArrowRight } from '@/components/atoms/icons/ArrowRight';
-import { ArrowStraight } from '@/components/atoms/icons/ArrowStraight';
+import { ToniArrowHigh } from '@/components/atoms/icons/ToniArrowHigh';
+import { ToniArrowLeft } from '@/components/atoms/icons/ToniArrowLeft';
+import { ToniArrowRight } from '@/components/atoms/icons/ToniArrowRight';
 
 export const matchIconType = (
   directionType: number | undefined,
-  fill: string
+  stroke: string
 ): React.ReactNode => {
   switch (directionType) {
     case 9:
-      return <ArrowRight fill={fill} width={200} height={200} />;
+      return <ToniArrowRight width={200} height={200} stroke={stroke} />;
     case 10:
-      return <ArrowRight width={200} height={200} fill={fill} />;
+      return <ToniArrowRight width={200} height={200} stroke={stroke} />;
     case 11:
-      return <ArrowRight width={200} height={200} fill={fill} />;
+      return <ToniArrowRight width={200} height={200} stroke={stroke} />;
     case 14:
-      return <ArrowLeft width={200} height={200} fill={fill} />;
+      return <ToniArrowLeft width={200} height={200} stroke={stroke} />;
     case 15:
-      return <ArrowLeft width={200} height={200} fill={fill} />;
+      return <ToniArrowLeft width={200} height={200} stroke={stroke} />;
     case 16:
-      return <ArrowLeft width={200} height={200} fill={fill} />;
+      return <ToniArrowLeft width={200} height={200} stroke={stroke} />;
     default:
-      return <ArrowStraight width={200} height={200} fill={fill} />;
+      return <ToniArrowHigh width={200} height={200} stroke={stroke} />;
   }
 };

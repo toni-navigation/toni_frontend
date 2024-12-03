@@ -33,9 +33,7 @@ export function Trip() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const calibrationFactor = useUserStore(
-    (state) => state.user.calibrationFactor
-  );
+  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const ref = React.useRef<PagerView>(null);
 
   const { data, isError, error } = useTrip(tripData);

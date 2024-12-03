@@ -52,9 +52,7 @@ export const Navigation = forwardRef(
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
     );
-    const calibrationFactor = useUserStore(
-      (state) => state.user.calibrationFactor
-    );
+    const calibrationFactor = useUserStore((state) => state.calibrationFactor);
     const currentLocationPoint =
       currentLocation &&
       point([

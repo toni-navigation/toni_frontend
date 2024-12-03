@@ -4,7 +4,7 @@ import { TextInputProps } from 'react-native/Libraries/Components/TextInput/Text
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Cross } from '@/components/atoms/icons/Cross';
+import { ToniClose } from '@/components/atoms/icons/ToniClose';
 
 interface InputTextProps extends TextInputProps {
   onClickDelete?: () => void;
@@ -34,10 +34,11 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               className={` absolute top-2 right-3`}
               testID="DeleteButton"
             >
-              <Cross
-                fill={themes.external[`--${theme}-mode-primary`]}
-                width={40}
-                height={40}
+              <ToniClose
+                stroke={themes.external[`--${theme}-mode-primary`]}
+                width={32}
+                height={32}
+                strokeWidth={3}
               />
             </TouchableOpacity>
           )}

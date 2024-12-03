@@ -7,7 +7,7 @@ import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/icons/Logo';
+import { ToniLogo } from '@/components/atoms/icons/ToniLogo';
 
 export default function Agbs() {
   const [isCheckedAgbs, setCheckedAgbs] = useState(false);
@@ -20,7 +20,7 @@ export default function Agbs() {
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 py-8">
         <View className="flex items-center pb-8">
-          <Logo width={100} height={100} />
+          <ToniLogo width={100} height={100} />
           <Header classes="pt-4">Die Pflicht ruft</Header>
           <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
             Bitte akzeptiere unsere AGBs, die Nutzungsbedingungen und

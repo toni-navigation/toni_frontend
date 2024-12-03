@@ -12,9 +12,8 @@ import {
 
 // @ts-ignore
 import background from '@/assets/images/background10.png';
-import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { Route } from '@/components/atoms/icons/Route';
+import { Header } from '@/components/atoms/Header';
 import { photonValue } from '@/functions/photonValue';
 import { useReverseData } from '@/queries/useReverseData';
 import { useTripStore } from '@/store/useTripStore';
@@ -57,16 +56,15 @@ export function RouteOverview({
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ImageBackground source={background} className="flex-1">
-        <BigHeader classes="text-invertedPrimary">Deine Route</BigHeader>
         <Suspense fallback={<ActivityIndicator size="large" />}>
           <ScrollView className="flex flex-col flex-1 px-8 mt-8">
+            <Header>Deine Route</Header>
             <Text className="text-2xl font-generalSansSemi text-primary">
               Von
             </Text>
             <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
               {origin ? photonValue(origin) : 'Mein Standort'}
             </Text>
-
             <Text className="text-2xl font-generalSansSemi text-primary pt-2">
               Nach
             </Text>
@@ -105,13 +103,6 @@ export function RouteOverview({
                 </Text>
               )}
             </Text>
-            <View className="flex-1 justify-center items-center">
-              <Route
-                transform="rotate(30) translate(35 -40)"
-                viewBox="0,0,150,140"
-              />
-            </View>
-
             <Text className="text-2xl font-generalSansSemi text-accent py-4">
               Deine Route beträgt:
             </Text>

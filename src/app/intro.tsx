@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/icons/Logo';
+import { ToniLogo } from '@/components/atoms/icons/ToniLogo';
 import { Calibration } from '@/components/calibration/Calibration';
 
 export default function Intro() {
@@ -17,7 +17,7 @@ export default function Intro() {
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-8 py-8">
         <View className="flex items-center">
-          <Logo width={100} height={100} />
+          <ToniLogo width={100} height={100} />
           <Header classes="pt-4">Willkommen</Header>
           <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
             Wir freuen uns, dir deinen Alltag mit Toni zu erleichtern. {'\n'}

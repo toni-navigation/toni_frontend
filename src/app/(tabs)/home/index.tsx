@@ -18,9 +18,9 @@ import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { InputButton } from '@/components/atoms/InputButton';
-import { CurrentLocationIcon } from '@/components/atoms/icons/CurrentLocationIcon';
-import { Location } from '@/components/atoms/icons/Location';
-import { SwitchArrow } from '@/components/atoms/icons/SwitchArrow';
+import { ToniArrowSwitch } from '@/components/atoms/icons/ToniArrowSwitch';
+import { ToniCurrentLocation } from '@/components/atoms/icons/ToniCurrentLocation';
+import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { PopUp } from '@/components/organisms/PopUp';
 import { photonValue } from '@/functions/photonValue';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -29,10 +29,10 @@ import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 import { FavoriteProps } from '@/types/Types';
 
 export default function HomePage() {
-  const { changeDestination, switchOriginDestination, cleanLastDestinations } =
-    useTripStore((state) => state.actions);
+  const { changeDestination, switchOriginDestination } = useTripStore(
+    (state) => state.actions
+  );
   const origin = useTripStore((state) => state.origin);
-  const lastDestinations = useTripStore((state) => state.lastDestinations);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -130,8 +130,8 @@ export default function HomePage() {
                   disabled={origin === undefined && destination === undefined}
                   iconName="Start und Ziel tauschen"
                   icon={
-                    <SwitchArrow
-                      fill={themes.external[`--accent`]}
+                    <ToniArrowSwitch
+                      stroke={themes.external[`--accent`]}
                       width={30}
                       height={30}
                     />
@@ -140,13 +140,14 @@ export default function HomePage() {
               </View>
 
               <View className="flex flex-row items-center pb-8">
-                <Location
-                  width={30}
-                  height={30}
+                <ToniCurrentLocation
+                  width={40}
+                  height={40}
                   fill={themes.external[`--${theme}-mode-icon-button`]}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
                 />
                 <InputButton
-                  classes="ml-4 flex-1"
+                  classes="ml-3 flex-1"
                   onPress={() => {
                     router.push('/home/start');
                   }}
@@ -155,10 +156,11 @@ export default function HomePage() {
                 </InputButton>
               </View>
               <View className="flex flex-row items-center pb-8">
-                <CurrentLocationIcon
-                  width={35}
-                  height={35}
-                  fill={themes.external[`--accent`]}
+                <ToniLocation
+                  width={40}
+                  height={40}
+                  stroke={themes.external[`--accent`]}
+                  fillInner={themes.external[`--accent`]}
                 />
                 <InputButton
                   classes="ml-3 flex-1"
