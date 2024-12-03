@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
@@ -7,6 +8,9 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
+import { BASE_URL } from '@/functions/api';
+import { favoritesControllerFindAllFavorites } from '@/services/api-backend';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritesPage() {
@@ -60,7 +64,7 @@ export default function FavoritesPage() {
                   />
                 }
               >
-                {favorite.title}
+                {favorite.name}
               </MenuButton>
             ))
           )}
