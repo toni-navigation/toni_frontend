@@ -1,9 +1,10 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/icons/Logo';
+import { ToniLogo } from '@/components/atoms/icons/ToniLogo';
 import { Calibration } from '@/components/calibration/Calibration';
 import { Card } from '@/components/organisms/Card';
 import { TabBar } from '@/components/organisms/TabBar';
@@ -17,7 +18,7 @@ export default function Intro() {
   return (
     <SafeAreaView className="bg-background flex-1">
       <View className="items-center">
-        <Logo width={100} height={100} />
+        <ToniLogo width={100} height={100} />
         <Header classes="pt-4">Willkommen</Header>
         <Text className="mx-auto mb-10 text-center font-atkinsonRegular text-2xl text-textColor">
           Wir freuen uns, dir deinen Alltag mit Toni zu erleichtern.

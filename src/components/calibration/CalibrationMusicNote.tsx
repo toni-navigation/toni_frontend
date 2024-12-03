@@ -3,7 +3,7 @@ import { Animated, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { MusicNote } from '@/components/atoms/icons/MusicNote';
+import { ToniMusicNotes } from '@/components/atoms/icons/ToniMusicNotes';
 
 interface CalibrationHeaderProps {
   steps: number;
@@ -45,7 +45,12 @@ export function CalibrationMusicNote({ steps }: CalibrationHeaderProps) {
         margin: 30,
       }}
     >
-      <MusicNote fill={iconColor} width={100} height={100} />
+      <ToniMusicNotes
+        fillColorNote1={themes.external[`--${theme}-mode-primary`]}
+        fillColorNote2={themes.external[`--${theme}-mode-primary`]}
+        width={130}
+        height={130}
+      />
     </View>
   );
 }

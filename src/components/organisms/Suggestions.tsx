@@ -7,7 +7,7 @@ import { ThemeContext } from '@/components/ThemeProvider';
 import { Destination } from '@/components/atoms/Destination';
 import { Header } from '@/components/atoms/Header';
 import { ListItem } from '@/components/atoms/ListItem';
-import { Location } from '@/components/atoms/icons/Location';
+import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { getPhotonKey } from '@/functions/getPhotonKey';
 import { photonValue } from '@/functions/photonValue';
 import { useTripStore } from '@/store/useTripStore';
@@ -34,10 +34,13 @@ export function Suggestions({
     >
       {currentLocation && (
         <View className="flex flex-row items-center">
-          <Location
-            width={18}
-            height={18}
-            fill={themes.external[`--${theme}-mode-icon-button`]}
+          <ToniLocation
+            width={22}
+            height={22}
+            fillInner="none"
+            fillOuter="none"
+            stroke={themes.external[`--${theme}-mode-primary`]}
+            strokeWidth={4}
           />
           <ListItem
             classes="flex-1"

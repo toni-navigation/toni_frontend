@@ -1,20 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { Suspense } from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import { BigHeader } from '@/components/atoms/BigHeader';
+import { themes } from '@/colors';
 import { Button } from '@/components/atoms/Button';
-import { Favorite, Favorites } from '@/components/favorite/Favorite';
-import { BASE_URL } from '@/functions/api';
-import { favoritesControllerFindAllFavorites } from '@/services/api-backend';
-import { useAuthStore } from '@/store/useAuthStore';
+import { Header } from '@/components/atoms/Header';
+import { MenuButton } from '@/components/atoms/MenuButton';
+import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritesPage() {
@@ -42,31 +34,36 @@ export default function FavoritesPage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <BigHeader classes="text-invertedPrimary">Meine Favoriten</BigHeader>
       <ScrollView className="px-8 py-8">
-        <View>
-          {error && (
+        <Header>Meine Favoriten</Header>
+        <View className="mt-8">
+          {favorites.length === 0 ? (
             <Text className="font-atkinsonRegular text-2xl text-textColor">
-              {error.message}
+              Noch keine Favoriten vorhanden
             </Text>
+          ) : (
+            favorites.map((favorite) => (
+              <MenuButton
+                key={favorite.id}
+                onPress={() => {
+                  router.push({
+                    pathname: '/favorites/[id]',
+                    params: { id: favorite.id },
+                  });
+                }}
+                icon={
+                  <ToniLocation
+                    fillOuter={themes.external[`--accent`]}
+                    fillInner={themes.external[`--accent`]}
+                    width={50}
+                    height={50}
+                  />
+                }
+              >
+                {favorite.title}
+              </MenuButton>
+            ))
           )}
-          <Suspense fallback={<ActivityIndicator size="large" />}>
-            {favorites.length === 0 ? (
-              <Text className="font-atkinsonRegular text-2xl text-textColor">
-                Noch keine Favoriten vorhanden
-              </Text>
-            ) : (
-              favorites.map((favorite) => (
-                <Favorites
-                  photonFeature={favorite.photonFeature}
-                  name={favorite.name}
-                  destinationType={favorite.destinationType}
-                  key={favorite.id}
-                />
-              ))
-            )}
-          </Suspense>
-          {/*  */}
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">

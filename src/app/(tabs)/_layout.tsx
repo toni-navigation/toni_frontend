@@ -3,19 +3,19 @@ import React, { useContext } from 'react';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { NavigationArrow } from '@/components/atoms/icons/NavigationArrow';
-import { Person } from '@/components/atoms/icons/Person';
-import { Star } from '@/components/atoms/icons/Star';
+import { ToniFavorites } from '@/components/atoms/icons/ToniFavorites';
+import { ToniNavigationArrow } from '@/components/atoms/icons/ToniNavigationArrow';
+import { ToniProfile } from '@/components/atoms/icons/ToniProfile';
 
 const iconsArray = {
   star: ({ color }: { color: string }) => (
-    <Star classes={color} fill={color} width={36} height={36} />
+    <ToniFavorites fill={color} width={36} height={36} />
   ),
   navigationArrow: ({ color }: { color: string }) => (
-    <NavigationArrow fill={color} width={32} height={32} />
+    <ToniNavigationArrow fill={color} width={32} height={32} />
   ),
   person: ({ color }: { color: string }) => (
-    <Person fill={color} width={36} height={36} />
+    <ToniProfile fill={color} width={36} height={36} />
   ),
 };
 export default function Layout() {
@@ -28,9 +28,6 @@ export default function Layout() {
         headerShown: false,
         tabBarStyle: {
           display: currentPath.includes('trip') ? 'none' : undefined,
-          // currentPath.includes('trip') || currentPath.includes('calibration')
-          //   ? 'none'
-          //   : undefined,
           height: 110,
           backgroundColor: themes.external[`--${theme}-mode-background`],
         },

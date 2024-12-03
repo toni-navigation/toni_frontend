@@ -7,16 +7,13 @@ import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
-import { Logo } from '@/components/atoms/icons/Logo';
-import { useReverseData } from '@/mutations/useReverseData';
-import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { ToniLogo } from '@/components/atoms/icons/ToniLogo';
+import { ToniMusicNotes } from '@/components/atoms/icons/ToniMusicNotes';
+import { ToniWay } from '@/components/atoms/icons/ToniWay';
 
 export function Intro() {
   const pagerRef = useRef<any>(null);
-  const [currentPage, setCurrentPage] = React.useState(0); // Add this line
-  const currentLocation = useCurrentLocationStore(
-    (state) => state.currentLocation
-  );
+  const [currentPage, setCurrentPage] = React.useState(0);
   const { theme } = useContext(ThemeContext);
 
   const pagerViewData: {
@@ -27,17 +24,24 @@ export function Intro() {
     {
       headline: 'Dein Weg',
       text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
-      icon: <Logo height={115} width={115} />,
+      icon: <ToniLogo height={115} width={115} />,
     },
     {
       headline: 'Dein Klang',
       text: 'Entscheide individuell welche Stimme dich auf deinem Weg begleitet!',
-      icon: <Logo height={115} width={115} />,
+      icon: (
+        <ToniMusicNotes
+          fillColorNote1={themes.external[`--${theme}-mode-primary`]}
+          fillColorNote2={themes.external[`--accent`]}
+          height={115}
+          width={115}
+        />
+      ),
     },
     {
       headline: 'Deine Freiheit',
       text: 'Für mehr Leichtigkeit und Selbständigkeit in deinem Alltag!',
-      icon: <Logo height={115} width={115} />,
+      icon: <ToniWay height={115} width={115} />,
     },
   ];
 
@@ -81,19 +85,6 @@ export function Intro() {
       alignItems: 'center',
     },
   });
-  const reverseLocation = useReverseData();
-  const createCurrentLocationMessage = async () => {
-    if (currentLocation) {
-      const currentLocationData = await reverseLocation.mutateAsync({
-        lat: currentLocation.coords.latitude,
-        lon: currentLocation.coords.longitude,
-      });
-      console.log(
-        'currentLocationData',
-        currentLocationData.features[0].properties
-      );
-    }
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
