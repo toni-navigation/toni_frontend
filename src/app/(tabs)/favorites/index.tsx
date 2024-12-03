@@ -1,51 +1,72 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { Suspense } from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 
-import { themes } from '@/colors';
-import { ThemeContext } from '@/components/ThemeProvider';
 import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
-import { MenuButton } from '@/components/atoms/MenuButton';
-import { Heart } from '@/components/atoms/icons/Heart';
+import { Favorite, Favorites } from '@/components/favorite/Favorite';
+import { BASE_URL } from '@/functions/api';
+import { favoritesControllerFindAllFavorites } from '@/services/api-backend';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritesPage() {
-  const favorites = useFavoriteStore((state) => state.favorites);
+  // const favorites = useFavoriteStore((state) => state.favorites);
   const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
-  const { theme } = useContext(ThemeContext);
+  const token = useAuthStore((state) => state.token);
+  const fetchFavorites = async () => {
+    const response = await favoritesControllerFindAllFavorites({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      baseUrl: BASE_URL,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data;
+  };
+  const { data: favorites, error } = useSuspenseQuery({
+    queryKey: ['favorites'],
+    queryFn: () => fetchFavorites(),
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Meine Favoriten</BigHeader>
       <ScrollView className="px-8 py-8">
         <View>
-          {favorites.length === 0 ? (
+          {error && (
             <Text className="font-atkinsonRegular text-2xl text-textColor">
-              Noch keine Favoriten vorhanden
+              {error.message}
             </Text>
-          ) : (
-            favorites.map((favorite) => (
-              <MenuButton
-                key={favorite.id}
-                onPress={() => {
-                  router.push({
-                    pathname: '/favorites/[id]',
-                    params: { id: favorite.id },
-                  });
-                }}
-                icon={
-                  <Heart
-                    fill={themes.external[`--${theme}-mode-primary`]}
-                    width={50}
-                    height={50}
-                  />
-                }
-              >
-                {favorite.title}
-              </MenuButton>
-            ))
           )}
+          <Suspense fallback={<ActivityIndicator size="large" />}>
+            {favorites.length === 0 ? (
+              <Text className="font-atkinsonRegular text-2xl text-textColor">
+                Noch keine Favoriten vorhanden
+              </Text>
+            ) : (
+              favorites.map((favorite) => (
+                <Favorites
+                  photonFeature={favorite.photonFeature}
+                  name={favorite.name}
+                  destinationType={favorite.destinationType}
+                  key={favorite.id}
+                />
+              ))
+            )}
+          </Suspense>
+          {/*  */}
         </View>
       </ScrollView>
       <View className="mx-5 mb-8">

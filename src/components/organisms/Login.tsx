@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, TextInput, View } from 'react-native';
+import { SafeAreaView, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -11,7 +11,7 @@ import { LoginUserDto } from '@/services/api-backend';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
-export default function Login() {
+export function Login() {
   const { onLogin } = useAuthStore((state) => state.actions);
   const { addUser } = useUserStore((state) => state.actions);
 
@@ -55,41 +55,37 @@ export default function Login() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header classes="text-textColor">Login</Header>
-
-        <InputText
-          className="mb-4"
-          accessibilityLabel="Email Adresse *"
-          accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
-          placeholder="Email Adresse eingeben"
-          inputMode="email"
-          maxLength={300}
-          value={email}
-          onChange={(event) => setEmail(event.nativeEvent.text)}
-          onClickDelete={() => {
-            setEmail('');
-            ref.current?.focus();
-          }}
-        />
-        <InputText
-          className="mb-4"
-          accessibilityLabel="Password *"
-          accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
-          placeholder="Passwort eingeben"
-          secureTextEntry // Hides the text input for security
-          inputMode="text"
-          maxLength={300}
-          value={password}
-          onChange={(event) => setPassword(event.nativeEvent.text)}
-          onClickDelete={() => {
-            setPassword('');
-            ref.current?.focus();
-          }}
-        />
-        {error && <Header classes="text-red-500">{error.message}</Header>}
-      </ScrollView>
+    <View>
+      <InputText
+        className="mb-4"
+        accessibilityLabel="Email Adresse *"
+        accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
+        placeholder="Email Adresse eingeben"
+        inputMode="email"
+        maxLength={300}
+        value={email}
+        onChange={(event) => setEmail(event.nativeEvent.text)}
+        onClickDelete={() => {
+          setEmail('');
+          ref.current?.focus();
+        }}
+      />
+      <InputText
+        className="mb-4"
+        accessibilityLabel="Password *"
+        accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
+        placeholder="Passwort eingeben"
+        secureTextEntry // Hides the text input for security
+        inputMode="text"
+        maxLength={300}
+        value={password}
+        onChange={(event) => setPassword(event.nativeEvent.text)}
+        onClickDelete={() => {
+          setPassword('');
+          ref.current?.focus();
+        }}
+      />
+      {error && <Header classes="text-red-500">{error.message}</Header>}
       <View className="mx-8 mb-8">
         <Button
           width="full"
@@ -100,6 +96,6 @@ export default function Login() {
           Login
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

@@ -1,12 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { Suspense } from 'react';
-import {
-  ActivityIndicator,
-  NativeSyntheticEvent,
-  SafeAreaView,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 import { AlertBar } from '@/components/organisms/AlertBar';
@@ -27,24 +21,15 @@ export type SearchParamType = {
 const ACCURACY_THRESHOLD = 10;
 export function Trip() {
   const tripData = useLocalSearchParams() as SearchParamType;
-  const [activePage, setActivePage] = React.useState(0);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [showTripOverview, setShowTripOverview] = React.useState(true);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const calibrationFactor = useUserStore(
-    (state) => state.user.calibrationFactor
-  );
+  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const ref = React.useRef<PagerView>(null);
 
   const { data, isError, error } = useTrip(tripData);
-
-  const handlePageSelected = (
-    event: NativeSyntheticEvent<Readonly<{ position: number }>>
-  ) => {
-    setActivePage(event.nativeEvent.position);
-  };
 
   const summary = data && data.trip.summary;
   const convertSecondsToMinutes = (seconds: number | undefined) => {
@@ -94,17 +79,9 @@ export function Trip() {
               }
             />
           ))}
-      <TabBar
-        setPage={(page) => ref.current?.setPage(page)}
-        activePage={activePage}
-      />
+      <TabBar />
       <Suspense fallback={<ActivityIndicator size="large" />}>
-        <Navigation
-          trip={data.trip}
-          activePage={activePage}
-          handlePageSelected={handlePageSelected}
-          ref={ref}
-        />
+        <Navigation trip={data.trip} ref={ref} />
         <View className="m-auto">
           <Text className="py-8 text-accent text-2xl font-generalSansSemi">
             {summary.length} km, {convertSecondsToMinutes(summary.time)} Minuten
