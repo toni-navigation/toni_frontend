@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
@@ -8,33 +7,30 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { MenuButton } from '@/components/atoms/MenuButton';
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
-import { BASE_URL } from '@/functions/api';
-import { favoritesControllerFindAllFavorites } from '@/services/api-backend';
-import { useAuthStore } from '@/store/useAuthStore';
 import { useFavoriteStore } from '@/store/useFavoritesStore';
 
 export default function FavoritesPage() {
-  // const favorites = useFavoriteStore((state) => state.favorites);
+  const favorites = useFavoriteStore((state) => state.favorites);
   const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
-  const token = useAuthStore((state) => state.token);
-  const fetchFavorites = async () => {
-    const response = await favoritesControllerFindAllFavorites({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      baseUrl: BASE_URL,
-    });
-
-    if (response.error) {
-      throw new Error(response.error.message);
-    }
-
-    return response.data;
-  };
-  const { data: favorites, error } = useSuspenseQuery({
-    queryKey: ['favorites'],
-    queryFn: () => fetchFavorites(),
-  });
+  // const token = useAuthStore((state) => state.token);
+  // const fetchFavorites = async () => {
+  //   const response = await favoritesControllerFindAllFavorites({
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     baseUrl: BASE_URL,
+  //   });
+  //
+  //   if (response.error) {
+  //     throw new Error(response.error.message);
+  //   }
+  //
+  //   return response.data;
+  // };
+  // const { data: favorites, error } = useSuspenseQuery({
+  //   queryKey: ['favorites'],
+  //   queryFn: () => fetchFavorites(),
+  // });
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -64,7 +60,7 @@ export default function FavoritesPage() {
                   />
                 }
               >
-                {favorite.name}
+                {favorite.title}
               </MenuButton>
             ))
           )}
