@@ -13,7 +13,6 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
 import { registerUser } from '@/functions/registerUser';
-import { CreateUserDto } from '@/services/api-backend';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
@@ -26,9 +25,10 @@ export function Registration() {
   // const [firstname, setFirstName] = useState('');
   // const [lastname, setLastName] = useState('');
 
-  const { mutate, isPending, error, data } = useMutation({
-    mutationFn: (user: CreateUserDto) => registerUser(user),
+  const { mutate, error, isError, data, isPending } = useMutation({
+    mutationFn: registerUser,
     onSuccess: (successData) => {
+      console.log(successData);
       if (!successData) {
         Alert.alert('Registration Failed', 'Please try again');
 
@@ -47,10 +47,10 @@ export function Registration() {
 
       return;
     }
-
     mutate({
       email,
       password,
+      confirmPassword,
     });
   };
 
@@ -64,35 +64,8 @@ export function Registration() {
 
   return (
     <ScrollView>
-      {/* <InputText */}
-      {/*  className="mb-4" */}
-      {/*  accessibilityLabel="Vorname *" */}
-      {/*  accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein" */}
-      {/*  placeholder="Vorname eingeben" */}
-      {/*  inputMode="text" */}
-      {/*  maxLength={300} */}
-      {/*  value={firstname} */}
-      {/*  onChange={(event) => setFirstName(event.nativeEvent.text)} */}
-      {/*  onClickDelete={() => { */}
-      {/*    setFirstName(''); */}
-      {/*    ref.current?.focus(); */}
-      {/*  }} */}I{/* /> */}
-      {/* <InputText */}
-      {/*  className="mb-4" */}
-      {/*  accessibilityLabel="Nachname *" */}
-      {/*  accessibilityHint="Pflichtfeld: Geben Sie ihren Nachnamen ein" */}
-      {/*  placeholder="Nachname eingeben" */}
-      {/*  inputMode="text" */}
-      {/*  maxLength={300} */}
-      {/*  value={lastname} */}
-      {/*  onChange={(event) => setLastName(event.nativeEvent.text)} */}
-      {/*  onClickDelete={() => { */}
-      {/*    setLastName(''); */}
-      {/*    ref.current?.focus(); */}
-      {/*  }} */}
-      {/* /> */}
       <InputText
-        className="mb-2"
+        className="mb-2 bg-white"
         accessibilityLabel="Email Adresse *"
         accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
         placeholder="Email Adresse eingeben"
@@ -106,7 +79,7 @@ export function Registration() {
         }}
       />
       <InputText
-        className="mb-2"
+        className="mb-2 bg-white"
         accessibilityLabel="Passwort *"
         accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
         placeholder="Passwort eingeben"
@@ -121,25 +94,27 @@ export function Registration() {
         }}
       />
       <InputText
-        className="mb-2"
+        className="mb-2 bg-white"
         accessibilityLabel="Passwort bestätigen"
         accessibilityHint="Bestätige das Passwort"
-        placeholder="Passwort eingeben"
+        placeholder="Passwort bestätigen"
         secureTextEntry // Hides the text input for security
         inputMode="text"
         maxLength={300}
-        value={password}
-        onChange={(event) => setPassword(event.nativeEvent.text)}
+        value={confirmPassword}
+        onChange={(event) => setConfirmPassword(event.nativeEvent.text)}
         onClickDelete={() => {
-          setPassword('');
+          setConfirmPassword('');
           ref.current?.focus();
         }}
       />
-      {error && <Text className="text-red-500">{error.message}</Text>}
-      <View className="mx-8 mb-8">
+      {error && (
+        <Text className="text-red-500">{JSON.stringify(error.message)}</Text>
+      )}
+      <View className="flex items-center">
         <Button
-          width="full"
           onPress={register}
+          width="half"
           buttonType="primary"
           isLoading={isPending}
         >

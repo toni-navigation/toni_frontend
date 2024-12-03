@@ -57,7 +57,7 @@ export function Login() {
   return (
     <View>
       <InputText
-        className="mb-4"
+        className="mb-4 bg-white"
         accessibilityLabel="Email Adresse *"
         accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
         placeholder="Email Adresse eingeben"
@@ -71,7 +71,7 @@ export function Login() {
         }}
       />
       <InputText
-        className="mb-4"
+        className="mb-4 bg-white"
         accessibilityLabel="Password *"
         accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
         placeholder="Passwort eingeben"
@@ -86,9 +86,9 @@ export function Login() {
         }}
       />
       {error && <Header classes="text-red-500">{error.message}</Header>}
-      <View className="mx-8 mb-8">
+      <View className="flex items-center">
         <Button
-          width="full"
+          width="half"
           isLoading={isPending}
           onPress={login}
           buttonType="primary"

@@ -3,7 +3,6 @@ import { Redirect } from 'expo-router';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking, Text } from 'react-native';
 
-import { Intro } from '@/components/Intro';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
@@ -42,7 +41,8 @@ export default function Index() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      {isAuthenticated ? <Redirect href="/home" /> : <Intro />}
+      {isAuthenticated ? <Redirect href="/home" /> : <Redirect href="/intro" />}
+      {/* {isAuthenticated ? <Redirect href="/home" /> : <Intro />} */}
     </Suspense>
   );
 

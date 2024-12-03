@@ -47,11 +47,6 @@ export function Button({
       width: 'w-1/3',
     },
   };
-  const handlePress = () => {
-    if (!disabled) {
-      onPress();
-    }
-  };
 
   const accessibilityOutput = () => {
     if (disabled && isLoading) {
@@ -68,7 +63,7 @@ export function Button({
     <TouchableOpacity
       accessibilityHint={accessibilityOutput()}
       className={`h-12 ${specificWidth[width].width}  flex justify-center py-2 px-4 rounded-[30px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
-      onPress={handlePress}
+      onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityOutput()}
       disabled={disabled}

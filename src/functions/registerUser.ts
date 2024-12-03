@@ -9,10 +9,11 @@ export async function registerUser(data: CreateUserDto) {
     body: data,
     baseUrl: BASE_URL,
   });
-
-  if (response.error) {
-    throw new Error(response.error.message);
-  }
+  // if (response.error) {
+  //   // throw response.error;
+  //   console.log(response.error.message);
+  //   throw new Error(response.error?.message || 'An error occurred');
+  // }
 
   return response.data;
 }

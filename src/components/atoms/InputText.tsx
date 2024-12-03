@@ -15,11 +15,11 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
     const { theme } = useContext(ThemeContext);
 
     return (
-      <>
-        <Text className="font-atkinsonRegular text-lg mb-3 text-textColor">
+      <View className="mb-2">
+        <Text className="font-atkinsonRegular text-lg mb-1 text-textColor">
           {props.accessibilityLabel}
         </Text>
-        <View className="relative mb-2">
+        <View className="relative">
           <TextInput
             ref={ref}
             testID="TextInput"
@@ -31,7 +31,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               accessibilityRole="button"
               accessibilityHint="Eingabe löschen"
               onPress={onClickDelete}
-              className={` absolute top-2 right-3`}
+              className="absolute right-0 top-0"
               testID="DeleteButton"
             >
               <Cross
@@ -42,7 +42,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
             </TouchableOpacity>
           )}
         </View>
-      </>
+      </View>
     );
   }
 );

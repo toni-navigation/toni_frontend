@@ -23,7 +23,7 @@ export function TabBar() {
 
   return (
     <>
-      <View className="flex-row">
+      <View className="flex-row bg-primary rounded-[35px] p-0.5 mb-3">
         <TabButton
           onPress={() => ref.current?.setPage(0)}
           index={0}
