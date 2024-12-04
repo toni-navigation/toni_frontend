@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { MenuButton } from '@/components/atoms/MenuButton';
+import { FavoritesCard } from '@/components/atoms/FavoritesCard';
 import { Heart } from '@/components/atoms/icons/Heart';
 import { Favorite } from '@/services/api-backend';
 
@@ -25,7 +25,7 @@ export function Favorites({ id, name, destinationType }: Partial<Favorite>) {
     );
 
   return (
-    <MenuButton
+    <FavoritesCard
       onPress={() => {
         router.push({
           pathname: '/favorites/[id]',
@@ -35,6 +35,6 @@ export function Favorites({ id, name, destinationType }: Partial<Favorite>) {
       icon={icon}
     >
       {name}
-    </MenuButton>
+    </FavoritesCard>
   );
 }

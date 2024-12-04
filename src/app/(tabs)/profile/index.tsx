@@ -87,7 +87,7 @@ export default function ProfilePage() {
           )}
         </View>
 
-        {/* <MenuButton */}
+        {/* <FavoritesCard */}
         {/*  onPress={() => { */}
         {/*    router.push('/profile/calibration/0'); */}
         {/*  }} */}
@@ -100,8 +100,8 @@ export default function ProfilePage() {
         {/*  } */}
         {/* > */}
         {/*  Profil bearbeiten */}
-        {/* </MenuButton> */}
-        {/* <MenuButton */}
+        {/* </FavoritesCard> */}
+        {/* <FavoritesCard */}
         {/*  onPress={() => { */}
         {/*    router.push('/profile/calibration/0'); */}
         {/*  }} */}
@@ -114,10 +114,10 @@ export default function ProfilePage() {
         {/*  } */}
         {/* > */}
         {/*  Schrittlänge */}
-        {/* </MenuButton> */}
-        {/* <MenuButton onPress={() => router.push('/profile')} icon="audio">
+        {/* </FavoritesCard> */}
+        {/* <FavoritesCard onPress={() => router.push('/profile')} icon="audio">
           Audio
-          </MenuButton> */}
+          </FavoritesCard> */}
       </ScrollView>
     </SafeAreaView>
   );

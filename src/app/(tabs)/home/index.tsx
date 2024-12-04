@@ -93,7 +93,7 @@ export default function HomePage() {
   };
 
   const screenHeight = Dimensions.get('window').height;
-  const viewHeight = 0.5 * screenHeight;
+  const viewHeight = 0.45 * screenHeight;
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -119,10 +119,10 @@ export default function HomePage() {
         <ScrollView keyboardShouldPersistTaps="always">
           <View
             style={{ height: viewHeight }}
-            className="px-8 py-8 bg-background rounded-b-[70]"
+            className="px-8 py-8 bg-background rounded-b-[25]"
           >
             <View>
-              <View className="my-6 flex flex-row justify-between">
+              <View className="mb-6 flex flex-row justify-between">
                 <Header>Neue Route</Header>
                 <IconButton
                   onPress={switchOriginDestination}

@@ -28,15 +28,15 @@ export default function Layout() {
         headerShown: false,
         tabBarStyle: {
           display: currentPath.includes('trip') ? 'none' : undefined,
-          height: 110,
           backgroundColor: themes.external[`--${theme}-mode-background`],
+          height: 100,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontFamily: 'generalSans-semibold',
-          height: 40,
           justifyContent: 'center',
           alignContent: 'center',
+          paddingTop: 10,
         },
         // tabBarLabelPosition: 'beside-icon',
         tabBarActiveTintColor: themes.external['--accent'],
@@ -45,6 +45,7 @@ export default function Layout() {
         tabBarIconStyle: {
           justifyContent: 'center',
           alignContent: 'center',
+          marginTop: 10,
         },
       }}
     >
@@ -58,7 +59,6 @@ export default function Layout() {
           tabBarAccessibilityLabel: 'Favoriten',
           tabBarItemStyle: {
             backgroundColor: themes.external[`--${theme}-mode-primary`],
-            borderTopLeftRadius: 40,
             height: 110,
           },
           headerShown: false,
@@ -88,7 +88,6 @@ export default function Layout() {
           tabBarAccessibilityLabel: 'Profil',
           tabBarItemStyle: {
             backgroundColor: themes.external[`--${theme}-mode-primary`],
-            borderTopRightRadius: 40,
             height: 110,
           },
           headerShown: false,
