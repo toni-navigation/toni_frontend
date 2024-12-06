@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 
 import { Card } from '@/components/organisms/Card';
 
@@ -10,7 +10,11 @@ interface TripStepProps {
 export function TripStep({ icon, instruction }: TripStepProps) {
   return (
     <SafeAreaView className="flex-1 m-5">
-      {instruction && <Card icon={icon}>{instruction}</Card>}
+      {instruction && (
+        <Card icon={icon}>
+          <Text>{instruction}</Text>
+        </Card>
+      )}
     </SafeAreaView>
   );
 }

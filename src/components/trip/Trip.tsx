@@ -7,7 +7,6 @@ import { AlertBar } from '@/components/organisms/AlertBar';
 import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
-import { TabBar } from '@/components/organisms/TabBar';
 import { Navigation } from '@/components/trip/Navigation';
 import { useTrip } from '@/queries/useTrip';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -77,7 +76,7 @@ export function Trip() {
               }
             />
           ))}
-      <TabBar />
+
       <Suspense fallback={<ActivityIndicator size="large" />}>
         <Navigation trip={data.trip} ref={ref} />
         <View className="m-auto">

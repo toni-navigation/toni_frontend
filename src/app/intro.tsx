@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
@@ -8,6 +7,8 @@ import { ToniLogo } from '@/components/atoms/icons/ToniLogo';
 import { Calibration } from '@/components/calibration/Calibration';
 import { Card } from '@/components/organisms/Card';
 import { TabBar } from '@/components/organisms/TabBar';
+import { Registration } from '@/components/organisms/Registration';
+import { Login } from '@/components/organisms/Login';
 
 export default function Intro() {
   const [showCalibration, setShowCalibration] = useState(false);
@@ -25,7 +26,10 @@ export default function Intro() {
         </Text>
       </View>
       <Card>
-        <TabBar />
+        <TabBar firstTabButtonText="Registrierung" secondTabButtonText="Login">
+          <Registration key="1" />
+          <Login key="2" />
+        </TabBar>
       </Card>
       {/* <Card /> */}
       {/* <View className="mx-8 mb-3"> */}

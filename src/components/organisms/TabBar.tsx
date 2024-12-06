@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { NativeSyntheticEvent, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-
-import { Login } from '@/components/organisms/Login';
-import { Registration } from '@/components/organisms/Registration';
 import { TabButton } from '@/components/organisms/TabButton';
 
-// interface TabBarProps {
-//   setPage: (page: number) => void;
-//   activePage: number;
-// }
+interface TabBarProps {
+  children: React.ReactNode;
+  firstTabButtonText: string;
+  secondTabButtonText: string;
+}
 
-export function TabBar() {
+export function TabBar({
+  children,
+  secondTabButtonText,
+  firstTabButtonText,
+}: TabBarProps) {
   const ref = React.useRef<PagerView>(null);
 
   const [activePage, setActivePage] = useState(0);
@@ -28,8 +30,8 @@ export function TabBar() {
           onPress={() => ref.current?.setPage(0)}
           index={0}
           activePage={activePage}
-          accessibilityLabel="Registrierung"
-          accessibilityHint="Registrierung"
+          accessibilityLabel={firstTabButtonText}
+          accessibilityHint={firstTabButtonText}
         />
         <TabButton
           onPress={() => {
@@ -37,8 +39,8 @@ export function TabBar() {
           }}
           index={1}
           activePage={activePage}
-          accessibilityLabel="Login"
-          accessibilityHint="Login"
+          accessibilityLabel={secondTabButtonText}
+          accessibilityHint={secondTabButtonText}
         />
       </View>
       <PagerView
@@ -47,8 +49,7 @@ export function TabBar() {
         ref={ref}
         style={{ flex: 1 }}
       >
-        <Registration key="1" />
-        <Login key="2" />
+        {children}
       </PagerView>
     </>
   );

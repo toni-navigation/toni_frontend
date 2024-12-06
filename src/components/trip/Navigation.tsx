@@ -16,6 +16,7 @@ import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { TripProps } from '@/types/Valhalla-Types';
+import { TabBar } from '@/components/organisms/TabBar';
 
 interface NavigationProps {
   trip: TripProps;
@@ -139,19 +140,7 @@ export const Navigation = forwardRef(
     }
 
     return (
-      <>
-        {/* <Map */}
-        {/*  // sliced={sliced} */}
-        {/*  origin={decodedShape.coordinates[0]} */}
-        {/*  destination={ */}
-        {/*    decodedShape.coordinates[decodedShape.coordinates.length - 1] */}
-        {/*  } */}
-        {/*  snapshot={snapshot} */}
-        {/*  decodedShape={decodedShape} */}
-        {/*  maneuvers={trip.legs[0].maneuvers} */}
-        {/*  currentManeuverIndex={currentManeuverIndex} */}
-        {/* /> */}
-
+      <TabBar firstTabButtonText="Übersicht" secondTabButtonText="Navigation">
         <TripList
           maneuvers={trip.legs[0].maneuvers.slice(
             !currentManeuverIndex ? 0 : currentManeuverIndex - 1
@@ -175,7 +164,7 @@ export const Navigation = forwardRef(
             )
           }
         />
-      </>
+      </TabBar>
     );
   }
 );
