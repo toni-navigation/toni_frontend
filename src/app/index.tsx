@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking, Text } from 'react-native';
-
+import '@/services/client';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
