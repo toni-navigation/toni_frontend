@@ -6,6 +6,7 @@ interface InputButtonProps {
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
+  active?: boolean;
 }
 
 export function InputButton({
@@ -13,6 +14,7 @@ export function InputButton({
   disabled,
   classes,
   onPress,
+  active,
 }: InputButtonProps) {
   const handlePress = () => {
     if (!disabled) {

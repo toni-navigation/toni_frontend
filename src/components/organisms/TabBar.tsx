@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NativeSyntheticEvent, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
+
 import { TabButton } from '@/components/organisms/TabButton';
 
 interface TabBarProps {
@@ -25,7 +26,7 @@ export function TabBar({
 
   return (
     <>
-      <View className="flex-row bg-primary rounded-[35px] p-0.5 mb-3">
+      <View className="flex-row bg-primary rounded-[35px] mt-5 p-0.5 mb-3">
         <TabButton
           onPress={() => ref.current?.setPage(0)}
           index={0}

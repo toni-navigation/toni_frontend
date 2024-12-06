@@ -26,6 +26,16 @@ export function ToniThreeCircles({
     <Svg width={width} height={height} viewBox={viewBox}>
       <Circle
         cx="25"
+        cy="7"
+        r="4"
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        strokeLinecap={strokeLinecap}
+        strokeLinejoin={strokeLinejoin}
+      />
+      <Circle
+        cx="25"
         cy="25"
         r="4"
         fill={fill}
@@ -35,18 +45,8 @@ export function ToniThreeCircles({
         strokeLinejoin={strokeLinejoin}
       />
       <Circle
-        cx="43"
-        cy="25"
-        r="4"
-        fill={fill}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        strokeLinecap={strokeLinecap}
-        strokeLinejoin={strokeLinejoin}
-      />
-      <Circle
-        cx="7"
-        cy="25"
+        cx="25"
+        cy="43"
         r="4"
         fill={fill}
         stroke={stroke}

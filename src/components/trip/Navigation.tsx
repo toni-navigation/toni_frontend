@@ -8,6 +8,7 @@ import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { TabBar } from '@/components/organisms/TabBar';
 import { IsFinished } from '@/components/trip/IsFinished';
 import { TripList } from '@/components/trip/TripList';
 import { TripStep } from '@/components/trip/TripStep';
@@ -16,7 +17,6 @@ import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { TripProps } from '@/types/Valhalla-Types';
-import { TabBar } from '@/components/organisms/TabBar';
 
 interface NavigationProps {
   trip: TripProps;
@@ -153,9 +153,18 @@ export const Navigation = forwardRef(
           key="1"
           instruction={
             currentManeuverIndex !== undefined
-              ? maneuvers[currentManeuverIndex]?.instruction
+              ? maneuvers[currentManeuverIndex - 1]?.instruction
               : undefined
           }
+          manueverLength={length(
+            lineSlice(
+              snapshot,
+              decodedShape.coordinates[
+                maneuvers[currentManeuverIndex - 1].end_shape_index
+              ],
+              line
+            )
+          )}
           icon={
             currentManeuverIndex !== undefined &&
             matchIconType(
@@ -163,6 +172,7 @@ export const Navigation = forwardRef(
               themes.external[`--${theme}-mode-primary`]
             )
           }
+          calibrationFactor={1.2}
         />
       </TabBar>
     );

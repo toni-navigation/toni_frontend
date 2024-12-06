@@ -44,7 +44,7 @@ export function Button({
       width: 'w-1/2',
     },
     third: {
-      width: 'w-1/3',
+      width: 'w-2/3',
     },
   };
 
@@ -62,7 +62,7 @@ export function Button({
   return (
     <TouchableOpacity
       accessibilityHint={accessibilityOutput()}
-      className={`h-12 ${specificWidth[width].width}  flex justify-center py-2 px-4 rounded-[30px] mt-4 ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
+      className={`h-12 ${specificWidth[width].width}  flex justify-center py-2 px-4 rounded-[30px] ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityOutput()}

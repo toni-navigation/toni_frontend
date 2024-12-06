@@ -8,6 +8,7 @@ import { Error } from '@/components/organisms/Error';
 import { PopUp } from '@/components/organisms/PopUp';
 import { RouteOverview } from '@/components/organisms/RouteOverview';
 import { Navigation } from '@/components/trip/Navigation';
+import { TripSummary } from '@/components/trip/TripSummary';
 import { useTrip } from '@/queries/useTrip';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
@@ -20,6 +21,7 @@ const ACCURACY_THRESHOLD = 10;
 export function Trip() {
   const tripData = useLocalSearchParams() as SearchParamType;
   const [showPopUp, setShowPopUp] = React.useState(false);
+  const [showMap, setMap] = React.useState(false);
   const [showTripOverview, setShowTripOverview] = React.useState(true);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
@@ -29,11 +31,6 @@ export function Trip() {
   const { data, isError, error } = useTrip(tripData);
 
   const summary = data && data.trip.summary;
-  const convertSecondsToMinutes = (seconds: number | undefined) => {
-    if (!seconds) return 0;
-
-    return Math.floor(seconds / 60);
-  };
 
   if (isError && error) {
     return <Error error={error.message} />;
@@ -50,6 +47,33 @@ export function Trip() {
   }
 
   // TODO reset trip origin when stop navigation
+  if (showMap) {
+    return (
+      <SafeAreaView className="flex-1 bg-background">
+        <PopUp
+          visible={showPopUp}
+          onClick={() => setShowPopUp(false)}
+          onClickButtonText="Beenden"
+          onCloseClick={() => setShowPopUp(false)}
+          onCloseButtonText="Schließen"
+          onDismiss={() => router.back()}
+        >
+          <Text className="text-2xl text-text-col font-atkinsonRegular text-center text-background">
+            Möchtest du die Navigation wirklich beenden?
+          </Text>
+        </PopUp>
+        <View className="flex-1" />
+        <View className="mx-5">
+          <TripSummary
+            summary={summary}
+            onPressMap={() => setMap(false)}
+            setIconButton="primary"
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <PopUp
@@ -78,11 +102,13 @@ export function Trip() {
           ))}
 
       <Suspense fallback={<ActivityIndicator size="large" />}>
-        <Navigation trip={data.trip} ref={ref} />
-        <View className="m-auto">
-          <Text className="py-8 text-accent text-2xl font-generalSansSemi">
-            {summary.length} km, {convertSecondsToMinutes(summary.time)} Minuten
-          </Text>
+        <View className="flex-1 mx-5">
+          <Navigation trip={data.trip} ref={ref} />
+          <TripSummary
+            summary={summary}
+            onPressMap={() => setMap(true)}
+            setIconButton="primaryOutline"
+          />
         </View>
       </Suspense>
     </SafeAreaView>
