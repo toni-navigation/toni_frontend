@@ -3,8 +3,8 @@ import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { BigHeader } from '@/components/atoms/BigHeader';
-import { Button } from '@/components/atoms/Button';
 // import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { Button } from '@/components/atoms/Button';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
@@ -12,26 +12,28 @@ export default function ProfilePage() {
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const user = useUserStore((state) => state.user);
   const { resetUserStore } = useUserStore((state) => state.actions);
-  const { onLogout, resetAuthStore } = useAuthStore((state) => state.actions);
+  // const { mutate: logout } = useMutation(
+  //   authenticationControllerLogoutMutation()
+  // );
+  const { onLogout } = useAuthStore((state) => state.actions);
+  // const {
+  //   data: user,
+  //   error,
+  //   isError,
+  //   isPending,
+  // } = useQuery(authenticationControllerGetUserOptions());
   const logout = () => {
     onLogout();
-    resetAuthStore();
     resetUserStore();
+    router.replace('/home');
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
-      <Button
-        onPress={() => {
-          resetUserStore();
-        }}
-        buttonType="accent"
-        width="full"
-      >
-        Reset Auth
-      </Button>
       <ScrollView className="px-8 my-8">
+        {/* {isPending && <ActivityIndicator size="large" />} */}
+        {/* {isError && <Text>{error.message}</Text>} */}
         {calibrationFactor && (
           <Text className="font-atkinsonRegular text-2xl text-textColor">
             Schrittlänge: {calibrationFactor} m
@@ -46,29 +48,13 @@ export default function ProfilePage() {
         >
           Kalibrieren
         </Button>
-        {!user && (
-          <View>
-            <Button
-              onPress={() => router.push('/auth/login')}
-              buttonType="accent"
-              width="full"
-            >
-              Login
-            </Button>
-            <Button
-              onPress={() => router.push('/auth/register')}
-              buttonType="accent"
-              width="full"
-            >
-              Register
-            </Button>
-          </View>
-        )}
+
         {user && (
           <Button onPress={logout} buttonType="accent" width="full">
             Logout
           </Button>
         )}
+
         <View>
           {user?.email && (
             <Text className="font-atkinsonRegular text-2xl text-textColor">
@@ -86,7 +72,6 @@ export default function ProfilePage() {
             </Text>
           )}
         </View>
-
         {/* <FavoritesCard */}
         {/*  onPress={() => { */}
         {/*    router.push('/profile/calibration/0'); */}

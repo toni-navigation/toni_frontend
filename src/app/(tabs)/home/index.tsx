@@ -14,7 +14,6 @@ import background from '@/assets/images/background100.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
-import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { InputButton } from '@/components/atoms/InputButton';
@@ -24,20 +23,15 @@ import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { PopUp } from '@/components/organisms/PopUp';
 import { photonValue } from '@/functions/photonValue';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { useFavoriteStore } from '@/store/useFavoritesStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
-import { FavoriteProps } from '@/types/Types';
 
 export default function HomePage() {
-  const { changeDestination, switchOriginDestination } = useTripStore(
-    (state) => state.actions
-  );
+  const { switchOriginDestination } = useTripStore((state) => state.actions);
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const favorites = useFavoriteStore((state) => state.favorites);
 
   const { theme } = useContext(ThemeContext);
 
@@ -65,6 +59,8 @@ export default function HomePage() {
     // Assuming router.push handles navigation to the trip page
     router.push({ pathname: `/trip`, params });
   };
+  // const { onLogout } = useAuthStore((state) => state.actions);
+  // const { resetUserStore } = useUserStore((state) => state.actions);
 
   const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
@@ -78,27 +74,43 @@ export default function HomePage() {
       navigateToTrip(params);
     }
   };
-
-  const startNavigationFromFavorite = (favorite: FavoriteProps) => {
-    changeDestination(favorite.address);
-    if (currentLocation) {
-      navigateToTrip({
-        origin: [
-          currentLocation.coords.longitude,
-          currentLocation.coords.latitude,
-        ],
-        destination: favorite.address.geometry.coordinates,
-      });
-    }
-  };
+  // const logout = () => {
+  //   onLogout();
+  // };
+  // const startNavigationFromFavorite = (favorite: FavoriteProps) => {
+  //   changeDestination(favorite.address);
+  //   if (currentLocation) {
+  //     navigateToTrip({
+  //       origin: [
+  //         currentLocation.coords.longitude,
+  //         currentLocation.coords.latitude,
+  //       ],
+  //       destination: favorite.address.geometry.coordinates,
+  //     });
+  //   }
+  // };
 
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.45 * screenHeight;
+  // const clearAsyncStorage = async () => {
+  //   try {
+  //     await AsyncStorage.clear();
+  //     console.log('AsyncStorage successfully cleared!');
+  //   } catch (error) {
+  //     console.error('Failed to clear AsyncStorage:', error);
+  //   }
+  // };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       {/* <Button width="full" onPress={cleanLastDestinations} buttonType="primary"> */}
-      {/*  Letzte Ziele löschen */}
+      {/* Letzte Ziele löschen */}
+      {/* </Button> */}
+      {/* <Button onPress={clearAsyncStorage} buttonType="accent" width="full"> */}
+      {/*  Clean AsyncStorage */}
+      {/* </Button> */}
+      {/* <Button onPress={logout} buttonType="accent" width="full"> */}
+      {/*  Clean Auth */}
       {/* </Button> */}
       <PopUp
         visible={showPopUp}
@@ -176,16 +188,17 @@ export default function HomePage() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >
-                <View className="flex flex-row">
-                  {favorites.map((favorite) => (
-                    <Chip
-                      onPress={() => startNavigationFromFavorite(favorite)}
-                      key={favorite.id}
-                    >
-                      {favorite.title}
-                    </Chip>
-                  ))}
-                </View>
+                {/* <View className="flex flex-row"> */}
+                {/*  {favorites && */}
+                {/*    favorites.map((favorite) => ( */}
+                {/*      <Chip */}
+                {/*        onPress={() => startNavigationFromFavorite(favorite)} */}
+                {/*        key={favorite.id} */}
+                {/*      > */}
+                {/*        {favorite.title} */}
+                {/*      </Chip> */}
+                {/*    ))} */}
+                {/* </View> */}
               </ScrollView>
             </View>
           </View>

@@ -12,30 +12,24 @@ import {
 
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
-import { registerUser } from '@/functions/registerUser';
+import { usersControllerCreateUserMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useUserStore } from '@/store/useUserStore';
 
 export function Registration() {
   const { onLogin } = useAuthStore((state) => state.actions);
-  const { addUser } = useUserStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // const [firstname, setFirstName] = useState('');
-  // const [lastname, setLastName] = useState('');
 
   const { mutate, error, isError, data, isPending } = useMutation({
-    mutationFn: registerUser,
-    onSuccess: (successData) => {
-      console.log(successData);
+    ...usersControllerCreateUserMutation(),
+    onSuccess: async (successData) => {
       if (!successData) {
         Alert.alert('Registration Failed', 'Please try again');
 
         return;
       }
       onLogin(successData.accessToken);
-      addUser(successData.user);
       router.replace('/home');
     },
   });
@@ -48,9 +42,11 @@ export function Registration() {
       return;
     }
     mutate({
-      email,
-      password,
-      confirmPassword,
+      body: {
+        email,
+        password,
+        confirmPassword,
+      },
     });
   };
 
@@ -93,6 +89,9 @@ export function Registration() {
           ref.current?.focus();
         }}
       />
+      {/* {error && error.message[0].constraints?.IsMatchingPasswordConstraint && ( */}
+      {/*  <Text>Passwörter stimmen nicht überein</Text> */}
+      {/* )} */}
       <InputText
         className="mb-2 bg-white"
         accessibilityLabel="Passwort bestätigen"
@@ -108,9 +107,7 @@ export function Registration() {
           ref.current?.focus();
         }}
       />
-      {error && (
-        <Text className="text-red-500">{JSON.stringify(error.message)}</Text>
-      )}
+      {/* {error && <Text className="text-red-500">{error.message}</Text>} */}
       <View className="flex items-center">
         <Button
           onPress={register}

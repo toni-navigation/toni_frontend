@@ -6,29 +6,32 @@ import { SafeAreaView, TextInput, View } from 'react-native';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { InputText } from '@/components/atoms/InputText';
-import { loginUser } from '@/functions/loginUser';
-import { LoginUserDto } from '@/services/api-backend';
+import { authenticationControllerLoginMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
 export function Login() {
-  const { onLogin } = useAuthStore((state) => state.actions);
   const { addUser } = useUserStore((state) => state.actions);
-
+  const { onLogin } = useAuthStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { error, isPending, mutate, data } = useMutation({
-    mutationFn: (user: LoginUserDto) => loginUser(user),
-    onSuccess: (successData) => {
+    ...authenticationControllerLoginMutation(),
+    onSuccess: async (successData) => {
       if (!successData) {
-        console.error('Kein Nutzer mit dieser E-Mail Adresse gefunden.');
+        console.error(
+          'Kein Nutzer npm run mit dieser E-Mail Adresse gefunden.'
+        );
 
         return;
       }
       onLogin(successData.accessToken);
       addUser(successData.user);
       router.replace('/home');
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
   const ref = useRef<TextInput>(null);
@@ -39,10 +42,11 @@ export function Login() {
 
       return;
     }
-
     mutate({
-      email,
-      password,
+      body: {
+        email,
+        password,
+      },
     });
   };
 

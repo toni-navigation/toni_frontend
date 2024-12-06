@@ -29,7 +29,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { addCalibration } = useUserStore((state) => state.actions);
   const [steps, setSteps] = useState(0);
 
-  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
+  // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
   const audioSound = useRef<Audio.Sound>();
   const fallback = useRef<any>();

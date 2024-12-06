@@ -14,94 +14,94 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
-  // TODO add Theme Provider
+    // TODO add Theme Provider
 
-  return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <Stack
-            screenOptions={{
-              headerTitleStyle: {
-                fontFamily: 'generalSansSemi',
-                fontWeight: 'bold',
-              },
+    return (
+        <React.StrictMode>
+            <QueryClientProvider client={queryClient}>
+                <ThemeProvider>
+                    <Stack
+                        screenOptions={{
+                            headerTitleStyle: {
+                                fontFamily: 'generalSansSemi',
+                                fontWeight: 'bold',
+                            },
 
-              // eslint-disable-next-line react/jsx-no-undef
-              // headerBackVisible: false, // TODO: set to false when back button is implemented
-            }}
-          >
-            <Stack.Screen
-              name="(tabs)"
-              options={{
-                headerShown: false,
-              }}
-            />
-            {/* <Stack.Screen */}
-            {/*  name="calibration" */}
-            {/*  options={{ */}
-            {/*    headerShown: false, */}
-            {/*  }} */}
-            {/* /> */}
+                            // eslint-disable-next-line react/jsx-no-undef
+                            // headerBackVisible: false, // TODO: set to false when back button is implemented
+                        }}
+                    >
+                        <Stack.Screen
+                            name="(tabs)"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        {/* <Stack.Screen */}
+                        {/*  name="calibration" */}
+                        {/*  options={{ */}
+                        {/*    headerShown: false, */}
+                        {/*  }} */}
+                        {/* /> */}
 
-            <Stack.Screen
-              name="index"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="agbs"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="intro"
-              options={{
-                headerShown: false,
-              }}
-            />
-            {/* <Stack.Screen */}
-            {/*  name="auth" */}
-            {/*  options={{ */}
-            {/*    presentation: 'modal', // Enables modal presentation for all screens in 'modal' */}
-            {/*    headerShown: false, // Optional: Hide headers for modals */}
-            {/*  }} */}
-            {/* /> */}
-            <Stack.Screen
-              name="trip"
-              options={{
-                headerShown: false,
-                headerBackTitle: 'Home',
-              }}
-            />
-          </Stack>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
-  );
+                        <Stack.Screen
+                            name="index"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="agbs"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="intro"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        {/* <Stack.Screen */}
+                        {/*  name="auth" */}
+                        {/*  options={{ */}
+                        {/*    presentation: 'modal', // Enables modal presentation for all screens in 'modal' */}
+                        {/*    headerShown: false, // Optional: Hide headers for modals */}
+                        {/*  }} */}
+                        {/* /> */}
+                        <Stack.Screen
+                            name="trip"
+                            options={{
+                                headerShown: false,
+                                headerBackTitle: 'Home',
+                            }}
+                        />
+                    </Stack>
+                </ThemeProvider>
+            </QueryClientProvider>
+        </React.StrictMode>
+    );
 }
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    atkinsonRegular: AtkinsonHyperlegible_400Regular,
-    generalSansSemi,
-  });
+    const [loaded, error] = useFonts({
+        atkinsonRegular: AtkinsonHyperlegible_400Regular,
+        generalSansSemi,
+    });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+    useEffect(() => {
+        if (error) throw error;
+    }, [error]);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded]);
+
+    if (!loaded) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
+    return <RootLayoutNav />;
 }

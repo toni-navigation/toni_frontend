@@ -9,10 +9,9 @@ import { useReverseData } from '@/mutations/useReverseData';
 import { useGeocoding } from '@/queries/useGeocoding';
 import { PhotonFeature, PhotonFeatureCollection } from '@/services/api-photon';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { OriginDestinationType } from '@/store/useTripStore';
 
 type GeocoderAutocompleteProps = {
-  value?: OriginDestinationType;
+  value?: PhotonFeature | undefined | null;
   label?: string;
   placeholder: string;
   onChange: (newValue: PhotonFeature | undefined) => void;
@@ -88,7 +87,7 @@ export function GeocoderAutocomplete({
         />
       </View>
       <ScrollView>
-        {data && data.features.length >= 0 && (
+        {data && focused && data.features.length >= 0 && (
           <Suggestions
             currentLocation={currentLocationData?.features[0]}
             suggestions={data.features}

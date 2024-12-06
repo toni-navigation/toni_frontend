@@ -1,66 +1,55 @@
-import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+
+import { deleteToken, getToken, saveToken } from '@/store/secureStore';
 
 // Define the type for the Auth state
 type AuthState = {
   token: string | null;
-  isAuthenticated: boolean;
   actions: {
     onLogin: (token: string) => void;
     onLogout: () => void;
-    checkAuth: () => void;
-    resetAuthStore: () => void;
+    loadToken: () => void;
   };
 };
 
-// Default state
 const defaultAuthState: Omit<AuthState, 'actions'> = {
   token: null,
-  isAuthenticated: false,
 };
 
-// Configure SecureStore for zustand
-const secureStorage = createJSONStorage(() => ({
-  getItem: SecureStore.getItemAsync,
-  setItem: SecureStore.setItemAsync,
-  removeItem: SecureStore.deleteItemAsync,
-}));
-
-// Create the Zustand store
+const TOKEN = 'token';
 export const useAuthStore = create<AuthState>()(
-  persist(
-    immer((set) => ({
-      ...defaultAuthState,
-      actions: {
-        onLogin: (token: string) => {
+  immer((set) => ({
+    ...defaultAuthState,
+    actions: {
+      onLogin: async (token: string) => {
+        try {
+          await saveToken(TOKEN, token);
           set((state) => {
             state.token = token;
-            state.isAuthenticated = true;
           });
-        },
-        onLogout: () =>
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      onLogout: async () => {
+        try {
+          await deleteToken(TOKEN);
           set((state) => {
             state.token = null;
-            state.isAuthenticated = false;
-          }),
-        checkAuth: () =>
-          set((state) => {
-            state.isAuthenticated = !!state.token;
-          }),
-        resetAuthStore: () =>
-          set((state) => ({ ...state, ...defaultAuthState })),
+          });
+        } catch (error) {
+          console.error(error);
+        }
       },
-    })),
-    {
-      name: `AUTH_STORE`,
-      storage: secureStorage,
-      partialize: ({ token, isAuthenticated }) => ({
-        token,
-        isAuthenticated,
-      }),
-      version: 1,
-    }
-  )
+      loadToken: async () => {
+        try {
+          const token = await getToken(TOKEN);
+          set({ token });
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    },
+  }))
 );

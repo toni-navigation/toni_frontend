@@ -4,6 +4,7 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 // eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  newArchEnabled: true,
   name: 'toni',
   slug: 'toni',
   version: '1.0.0',

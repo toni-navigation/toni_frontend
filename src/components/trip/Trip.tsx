@@ -11,7 +11,6 @@ import { TabBar } from '@/components/organisms/TabBar';
 import { Navigation } from '@/components/trip/Navigation';
 import { useTrip } from '@/queries/useTrip';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { useUserStore } from '@/store/useUserStore';
 
 export type SearchParamType = {
   origin: string;
@@ -26,7 +25,6 @@ export function Trip() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const ref = React.useRef<PagerView>(null);
 
   const { data, isError, error } = useTrip(tripData);

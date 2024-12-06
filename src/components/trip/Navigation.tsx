@@ -15,7 +15,6 @@ import { decodePolyline } from '@/functions/decodePolyline';
 import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { useUserStore } from '@/store/useUserStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
 interface NavigationProps {
@@ -38,7 +37,7 @@ export const Navigation = forwardRef(
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
     );
-    const calibrationFactor = useUserStore((state) => state.calibrationFactor);
+    // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
     const currentLocationPoint =
       currentLocation &&
       point([

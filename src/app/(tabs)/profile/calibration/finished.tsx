@@ -8,7 +8,7 @@ import { CalibrationNavigation } from '@/components/calibration/CalibrationNavig
 import { useUserStore } from '@/store/useUserStore';
 
 export function Finished() {
-  const calibration = useUserStore((state) => state.calibration);
+  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
 
   return (
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
@@ -16,7 +16,7 @@ export function Finished() {
         <Header classes="text-textColor text-large">
           Schrittlänge konfiguriert
         </Header>
-        {calibration.factor && (
+        {calibrationFactor && (
           <View>
             <Text
               testID="Mode"
@@ -25,7 +25,7 @@ export function Finished() {
               Schrittlänge:
             </Text>
             <Text className="text-large font-generalSansSemi text-primary text-center">
-              {calibration.factor} m
+              {calibrationFactor} m
             </Text>
           </View>
         )}

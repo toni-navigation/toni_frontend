@@ -13,7 +13,7 @@ export default function Index() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const token = useAuthStore((state) => state.token);
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -41,10 +41,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      {isAuthenticated ? <Redirect href="/home" /> : <Redirect href="/intro" />}
-      {/* {isAuthenticated ? <Redirect href="/home" /> : <Intro />} */}
+      {token ? <Redirect href="/home" /> : <Redirect href="/intro" />}
     </Suspense>
   );
-
-  // return <Redirect href="/home" />;
 }

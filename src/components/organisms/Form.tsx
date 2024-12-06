@@ -1,45 +1,65 @@
-import { uuid } from 'expo-modules-core';
+import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import React, { useRef } from 'react';
+import { Alert, ScrollView, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import {
-  OriginDestinationType,
-  useFavoriteStore,
-} from '@/store/useFavoritesStore';
+import { favoritesControllerCreateFavoriteMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { useFavoriteStore } from '@/store/useFavoriteStore';
 
-interface FormProps {
-  id: string | undefined;
-  title: string | undefined;
-  address: OriginDestinationType;
-}
-
-export function Form({ id, title, address }: FormProps) {
-  const [titleValue, setTitleValue] = useState(title ?? '');
-  const [photonData, setPhotonData] = useState<OriginDestinationType>(address);
-  const ref = useRef<TextInput>(null);
-
-  const { addFavorite, updateFavoriteItem } = useFavoriteStore(
+export function Form() {
+  const title = useFavoriteStore((state) => state.title);
+  const photonFeature = useFavoriteStore((state) => state.photonFeature);
+  const { addTitle, addPhotonFeature, resetFavoritesStore } = useFavoriteStore(
     (state) => state.actions
   );
+  const ref = useRef<TextInput>(null);
 
-  const getAddressHandler = () => {
-    if (!id) {
-      addFavorite(uuid.v4(), titleValue, photonData);
-    } else {
-      updateFavoriteItem(id, titleValue, photonData);
+  const { mutate } = useMutation({
+    ...favoritesControllerCreateFavoriteMutation(),
+    onSuccess: (successData) => {
+      console.log('Yei');
+      Alert.alert(`${successData.title} erfolgreich hinzugefügt.`, '', [
+        {
+          text: 'OK',
+          onPress: () => {
+            resetFavoritesStore();
+            router.replace('/favorites');
+          },
+        },
+      ]);
+    },
+    onError: (error) => {
+      Alert.alert(error.message);
+    },
+  });
+  const addFavorite = () => {
+    if (!photonFeature || !title) {
+      console.error('All fields are required!');
+
+      return;
     }
-
-    router.back();
+    mutate({
+      body: {
+        title,
+        destinationType: 'normal',
+        photonFeature,
+      },
+    });
   };
-  console.log(photonData);
 
   return (
     <>
       <ScrollView className="" keyboardShouldPersistTaps="always">
+        <Button
+          onPress={() => resetFavoritesStore()}
+          buttonType="accent"
+          width="full"
+        >
+          Clean up
+        </Button>
         <InputText
           className="mb-4"
           accessibilityLabel="Titel *"
@@ -47,27 +67,31 @@ export function Form({ id, title, address }: FormProps) {
           placeholder="Name eingeben"
           inputMode="text"
           maxLength={300}
-          value={titleValue}
-          onChange={(event) => setTitleValue(event.nativeEvent.text)}
+          value={title}
+          onChange={(event) => addTitle(event.nativeEvent.text)}
           onClickDelete={() => {
-            setTitleValue('');
+            addTitle('');
             ref.current?.focus();
           }}
         />
         <GeocoderAutocomplete
-          value={photonData}
+          value={photonFeature}
           placeholder="Adresse eingeben"
           label="Adresse *"
           onChange={(value) => {
-            setPhotonData(value);
+            if (value === undefined) {
+              addPhotonFeature(undefined);
+            } else {
+              addPhotonFeature(value);
+            }
           }}
         />
       </ScrollView>
       <View className="my-8">
         <Button
           width="full"
-          onPress={getAddressHandler}
-          disabled={!photonData || !titleValue}
+          onPress={addFavorite}
+          disabled={!photonFeature || !title}
           buttonType="primary"
         >
           Speichern
