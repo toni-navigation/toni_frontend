@@ -87,7 +87,7 @@ export function GeocoderAutocomplete({
         />
       </View>
       <ScrollView>
-        {data && focused && data.features.length >= 0 && (
+        {data && data.features.length >= 0 && (
           <Suggestions
             currentLocation={currentLocationData?.features[0]}
             suggestions={data.features}
