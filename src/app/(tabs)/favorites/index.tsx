@@ -10,23 +10,26 @@ import {
   View,
 } from 'react-native';
 
-import { themes } from '@/colors';
 import { Button } from '@/components/atoms/Button';
 import { FavoritesCard } from '@/components/atoms/FavoritesCard';
 import { Header } from '@/components/atoms/Header';
-import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { favoritesControllerFindAllFavoritesOptions } from '@/services/api-backend/@tanstack/react-query.gen';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 export default function FavoritesPage() {
   const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
+  const token = useAuthStore((state) => state.token);
 
   const {
     data: favorites,
     error,
     isError,
     isPending,
-  } = useQuery(favoritesControllerFindAllFavoritesOptions());
+  } = useQuery({
+    ...favoritesControllerFindAllFavoritesOptions(),
+    queryKey: ['favorites', token],
+  });
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.12 * screenHeight;
 
@@ -59,23 +62,7 @@ export default function FavoritesPage() {
             {favorites &&
               favorites?.length > 0 &&
               favorites.map((favorite) => (
-                <FavoritesCard
-                  key={favorite.id}
-                  onPress={() => {
-                    router.push('/favorites/[id]');
-                  }}
-                  icon={
-                    <ToniLocation
-                      fillOuter={themes.external[`--accent`]}
-                      stroke={themes.external[`--accent`]}
-                      fillInner={themes.external[`--accent`]}
-                      width={36}
-                      height={36}
-                    />
-                  }
-                >
-                  {favorite.title}
-                </FavoritesCard>
+                <FavoritesCard key={favorite.id} favorite={favorite} />
               ))}
           </View>
         </ScrollView>

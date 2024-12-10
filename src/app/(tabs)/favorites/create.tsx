@@ -1,17 +1,39 @@
+import { useMutation } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { Alert } from 'react-native';
 
-import { Header } from '@/components/atoms/Header';
+import { FavoriteWrapper } from '@/components/favorite/FavoriteWrapper';
 import { Form } from '@/components/organisms/Form';
+import { CreateFavoriteDto } from '@/services/api-backend';
+import { favoritesControllerCreateFavoriteMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 
 export default function CreatePage() {
-  return (
-    <SafeAreaView className="flex-1 bg-background">
-      <ScrollView className="px-8 my-8" keyboardShouldPersistTaps="always">
-        <Header classes="text-textColor">Favorit hinzufügen</Header>
+  const { mutate } = useMutation({
+    ...favoritesControllerCreateFavoriteMutation(),
+    onSuccess: (successData) => {
+      Alert.alert(`${successData.title} erfolgreich hinzugefügt.`, '', [
+        {
+          text: 'OK',
+          onPress: () => {
+            router.replace('/favorites');
+          },
+        },
+      ]);
+    },
+    onError: (error) => {
+      Alert.alert(error.message);
+    },
+  });
+  const addFavorite = (body: CreateFavoriteDto) => {
+    mutate({
+      body,
+    });
+  };
 
-        <Form />
-      </ScrollView>
-    </SafeAreaView>
+  return (
+    <FavoriteWrapper title="Favorit hinzufügen">
+      <Form onSave={addFavorite} />
+    </FavoriteWrapper>
   );
 }

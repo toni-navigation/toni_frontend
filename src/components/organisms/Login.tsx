@@ -1,18 +1,20 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, TextInput, View } from 'react-native';
+import { SafeAreaView, ScrollView, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { InputText } from '@/components/atoms/InputText';
 import { authenticationControllerLoginMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { TOKEN } from '@/services/client';
+import { saveToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
 export function Login() {
   const { addUser } = useUserStore((state) => state.actions);
-  const { onLogin } = useAuthStore((state) => state.actions);
+  const { addToken } = useAuthStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -26,9 +28,14 @@ export function Login() {
 
         return;
       }
-      onLogin(successData.accessToken);
-      addUser(successData.user);
-      router.replace('/home');
+      try {
+        await saveToken(TOKEN, successData.accessToken);
+        addUser(successData.user);
+        addToken(successData.accessToken);
+        router.replace('/home');
+      } catch (error) {
+        console.error(error);
+      }
     },
     onError: (error) => {
       console.error(error);
@@ -59,7 +66,7 @@ export function Login() {
   }
 
   return (
-    <View>
+    <ScrollView>
       <InputText
         className="mb-4 bg-white"
         accessibilityLabel="Email Adresse *"
@@ -100,6 +107,6 @@ export function Login() {
           Login
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }

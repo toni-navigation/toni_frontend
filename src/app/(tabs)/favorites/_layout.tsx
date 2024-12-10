@@ -21,9 +21,11 @@ function FavoritesLayout() {
       <Stack.Screen
         name="create"
         options={{
-          headerShown: false,
-          presentation: 'modal',
+          headerShown: true,
+          headerTitle: '',
           gestureEnabled: true,
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
       <Stack.Screen
@@ -31,7 +33,6 @@ function FavoritesLayout() {
         options={{
           headerShown: true,
           headerTitle: '',
-          headerBackTitle: 'Zurück',
           headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}

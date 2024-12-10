@@ -2,18 +2,25 @@ import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking, Text } from 'react-native';
+
 import '@/services/client';
+import { useTokenLoader } from '@/queries/useTokenLoader';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 export default function Index() {
+  const { addToken } = useAuthStore((state) => state.actions);
+  const { data, isPending, isError, isSuccess } = useTokenLoader();
+  // TODO: Add token to secure store
+  if (isSuccess && data) {
+    addToken(data);
+  }
   const { updateCurrentLocation } = useCurrentLocationStore(
     (state) => state.actions
   );
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-  const token = useAuthStore((state) => state.token);
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -41,7 +48,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      {token ? <Redirect href="/home" /> : <Redirect href="/intro" />}
+      {data ? <Redirect href="/home" /> : <Redirect href="/intro" />}
     </Suspense>
   );
 }

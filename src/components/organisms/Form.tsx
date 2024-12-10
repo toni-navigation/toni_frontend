@@ -1,65 +1,61 @@
-import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useRef } from 'react';
-import { Alert, ScrollView, TextInput, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { ScrollView, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import { favoritesControllerCreateFavoriteMutation } from '@/services/api-backend/@tanstack/react-query.gen';
-import { useFavoriteStore } from '@/store/useFavoriteStore';
+import {
+  CreateFavoriteDto,
+  CreatePhotonFeatureDto,
+} from '@/services/api-backend';
 
-export function Form() {
-  const title = useFavoriteStore((state) => state.title);
-  const photonFeature = useFavoriteStore((state) => state.photonFeature);
-  const { addTitle, addPhotonFeature, resetFavoritesStore } = useFavoriteStore(
-    (state) => state.actions
-  );
+interface FormProps {
+  onSave: (data: CreateFavoriteDto) => void;
+  initialTitle?: string;
+  initialPhotonFeature?: CreatePhotonFeatureDto;
+}
+export function Form({
+  onSave,
+  initialTitle = '',
+  initialPhotonFeature,
+}: FormProps) {
+  const [title, setTitle] = useState(initialTitle);
+  const [photonFeature, setPhotonFeature] = useState(initialPhotonFeature);
+
   const ref = useRef<TextInput>(null);
-
-  const { mutate } = useMutation({
-    ...favoritesControllerCreateFavoriteMutation(),
-    onSuccess: (successData) => {
-      console.log('Yei');
-      Alert.alert(`${successData.title} erfolgreich hinzugefügt.`, '', [
-        {
-          text: 'OK',
-          onPress: () => {
-            resetFavoritesStore();
-            router.replace('/favorites');
-          },
-        },
-      ]);
-    },
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
-  });
-  const addFavorite = () => {
-    if (!photonFeature || !title) {
-      console.error('All fields are required!');
+  const handleSave = () => {
+    if (!title || !photonFeature) {
+      console.error('Title and photonFeature are required');
 
       return;
     }
-    mutate({
-      body: {
+
+    let changes: CreateFavoriteDto | Partial<CreateFavoriteDto>;
+
+    if (initialTitle === undefined && initialPhotonFeature === undefined) {
+      changes = {
         title,
-        destinationType: 'normal',
         photonFeature,
-      },
-    });
+        destinationType: 'normal',
+      };
+    } else {
+      changes = {};
+      if (title !== initialTitle) {
+        changes.title = title;
+      }
+      if (photonFeature !== initialPhotonFeature) {
+        changes.photonFeature = photonFeature;
+      }
+      changes.destinationType = 'normal';
+    }
+
+    onSave(changes as CreateFavoriteDto);
   };
 
   return (
     <>
       <ScrollView className="" keyboardShouldPersistTaps="always">
-        <Button
-          onPress={() => resetFavoritesStore()}
-          buttonType="accent"
-          width="full"
-        >
-          Clean up
-        </Button>
         <InputText
           className="mb-4"
           accessibilityLabel="Titel *"
@@ -67,32 +63,39 @@ export function Form() {
           placeholder="Name eingeben"
           inputMode="text"
           maxLength={300}
+          autoFocus
           value={title}
-          onChange={(event) => addTitle(event.nativeEvent.text)}
+          onChange={(event) => setTitle(event.nativeEvent.text)}
           onClickDelete={() => {
-            addTitle('');
+            setTitle('');
             ref.current?.focus();
           }}
         />
+
         <GeocoderAutocomplete
           value={photonFeature}
           placeholder="Adresse eingeben"
           label="Adresse *"
           onChange={(value) => {
-            if (value === undefined) {
-              addPhotonFeature(undefined);
-            } else {
-              addPhotonFeature(value);
-            }
+            setPhotonFeature(value);
           }}
         />
       </ScrollView>
-      <View className="my-8">
+      <View className="pt-2 flex-row justify-between">
         <Button
-          width="full"
-          onPress={addFavorite}
+          width="half"
+          onPress={() => {
+            router.replace('/favorites');
+          }}
+          buttonType="primaryOutline"
+        >
+          Abbrechen
+        </Button>
+        <Button
+          width="half"
+          onPress={handleSave}
           disabled={!photonFeature || !title}
-          buttonType="primary"
+          buttonType="accent"
         >
           Speichern
         </Button>

@@ -3,12 +3,13 @@ import { StyleSheet, View } from 'react-native';
 
 interface CardProps {
   children: React.ReactNode;
+  color?: 'primary' | 'secondary' | 'accent' | 'invertedPrimary' | 'white';
 }
 
 const styles = StyleSheet.create({
   card: {
     borderRadius: 24,
-    backgroundColor: 'invertedPrimary',
+    // backgroundColor: 'invertedPrimary',
     padding: 16,
     shadowColor: '#000',
     shadowOffset: { width: 4, height: 4 },
@@ -18,11 +19,11 @@ const styles = StyleSheet.create({
   },
 });
 // TODO: Add accessibilityLabel and accessibilityRole
-export function Card({ children }: CardProps) {
+export function Card({ children, color = 'invertedPrimary' }: CardProps) {
   return (
     <View
       style={styles.card}
-      className="rounded-3xl bg-invertedPrimary drop-shadow-[4px_4px_10px_rgba(0,0,0,1)] flex-1"
+      className={`rounded-3xl bg-${color} drop-shadow-[4px_4px_10px_rgba(0,0,0,1)] flex-1`}
     >
       {children}
     </View>

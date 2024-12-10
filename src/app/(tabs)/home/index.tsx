@@ -22,6 +22,7 @@ import { ToniCurrentLocation } from '@/components/atoms/icons/ToniCurrentLocatio
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { PopUp } from '@/components/organisms/PopUp';
 import { photonValue } from '@/functions/photonValue';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
@@ -32,7 +33,7 @@ export default function HomePage() {
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
-
+  const token = useAuthStore((state) => state.token);
   const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);

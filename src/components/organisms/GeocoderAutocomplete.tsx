@@ -7,11 +7,12 @@ import { Suggestions } from '@/components/organisms/Suggestions';
 import { photonValue } from '@/functions/photonValue';
 import { useReverseData } from '@/mutations/useReverseData';
 import { useGeocoding } from '@/queries/useGeocoding';
+import { CreatePhotonFeatureDto } from '@/services/api-backend';
 import { PhotonFeature, PhotonFeatureCollection } from '@/services/api-photon';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 type GeocoderAutocompleteProps = {
-  value?: PhotonFeature | undefined | null;
+  value?: CreatePhotonFeatureDto | undefined | null;
   label?: string;
   placeholder: string;
   onChange: (newValue: PhotonFeature | undefined) => void;
@@ -75,7 +76,6 @@ export function GeocoderAutocomplete({
           value={inputValue}
           accessibilityLabel={label}
           placeholder={placeholder}
-          autoFocus
           onClickDelete={() => {
             setInputValue('');
             ref.current?.focus();

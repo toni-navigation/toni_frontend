@@ -1,14 +1,12 @@
-import * as SecureStore from 'expo-secure-store';
-
 import { client } from '@/services/api-backend';
+import { getToken } from '@/store/secureStore';
 
 client.setConfig({
   baseUrl: 'http://localhost:3000',
 });
 export const TOKEN = 'token';
 client.interceptors.request.use(async (request, options) => {
-  const token = await SecureStore.getItemAsync(TOKEN);
-  console.log(`Client ${token}`);
+  const token = await getToken(TOKEN);
   if (token) {
     request.headers.set('Authorization', `Bearer ${token}`);
   }

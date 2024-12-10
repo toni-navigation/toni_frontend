@@ -1,6 +1,7 @@
+import { CreatePhotonFeatureDto } from '@/services/api-backend';
 import { PhotonFeature } from '@/services/api-photon';
 
-export function photonValue(feature: PhotonFeature) {
+export function photonValue(feature: PhotonFeature | CreatePhotonFeatureDto) {
   let value = '';
   if (feature.properties.name) {
     value += `${feature.properties.name}, `;

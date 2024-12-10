@@ -5,6 +5,12 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { BigHeader } from '@/components/atoms/BigHeader';
 // import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/organisms/Card';
+import { Login } from '@/components/organisms/Login';
+import { Registration } from '@/components/organisms/Registration';
+import { TabBar } from '@/components/organisms/TabBar';
+import { TOKEN } from '@/services/client';
+import { deleteToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
@@ -15,22 +21,37 @@ export default function ProfilePage() {
   // const { mutate: logout } = useMutation(
   //   authenticationControllerLogoutMutation()
   // );
-  const { onLogout } = useAuthStore((state) => state.actions);
+  const { removeToken } = useAuthStore((state) => state.actions);
   // const {
   //   data: user,
   //   error,
   //   isError,
   //   isPending,
   // } = useQuery(authenticationControllerGetUserOptions());
-  const logout = () => {
-    onLogout();
-    resetUserStore();
-    router.replace('/home');
+  const logout = async () => {
+    try {
+      await deleteToken(TOKEN);
+      removeToken();
+      resetUserStore();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
+      {!user && (
+        <Card>
+          <TabBar
+            firstTabButtonText="Login"
+            secondTabButtonText="Registrierung"
+          >
+            <Login />
+            <Registration />
+          </TabBar>
+        </Card>
+      )}
       <ScrollView className="px-8 my-8">
         {/* {isPending && <ActivityIndicator size="large" />} */}
         {/* {isError && <Text>{error.message}</Text>} */}
