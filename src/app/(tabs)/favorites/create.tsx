@@ -35,7 +35,14 @@ export default function CreatePage() {
 
       return;
     }
-
+    console.log({
+      body: {
+        title: favorite.title,
+        isPinned: favorite?.isPinned || false,
+        photonFeature: favorite.photonFeature,
+        destinationType: 'normal',
+      },
+    });
     mutate({
       body: {
         title: favorite.title,

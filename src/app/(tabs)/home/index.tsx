@@ -1,6 +1,8 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   ImageBackground,
   SafeAreaView,
@@ -14,6 +16,7 @@ import background from '@/assets/images/background100.png';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
+import { Chip } from '@/components/atoms/Chip';
 import { Header } from '@/components/atoms/Header';
 import { IconButton } from '@/components/atoms/IconButton';
 import { InputButton } from '@/components/atoms/InputButton';
@@ -22,18 +25,27 @@ import { ToniCurrentLocation } from '@/components/atoms/icons/ToniCurrentLocatio
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { PopUp } from '@/components/organisms/PopUp';
 import { photonValue } from '@/functions/photonValue';
+import { Favorite } from '@/services/api-backend';
+import { favoritesControllerFindAllPinnedFavoritesOptions } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { OriginDestinationType, useTripStore } from '@/store/useTripStore';
 
 export default function HomePage() {
-  const { switchOriginDestination } = useTripStore((state) => state.actions);
+  const { switchOriginDestination, changeDestination } = useTripStore(
+    (state) => state.actions
+  );
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
   const token = useAuthStore((state) => state.token);
+
+  const { data: favorites } = useSuspenseQuery({
+    ...favoritesControllerFindAllPinnedFavoritesOptions(),
+    queryKey: ['favorites', 'pinned', token],
+  });
   const { theme } = useContext(ThemeContext);
 
   const [showPopUp, setShowPopUp] = React.useState(false);
@@ -57,11 +69,8 @@ export default function HomePage() {
     origin: number[];
     destination: number[];
   }) => {
-    // Assuming router.push handles navigation to the trip page
     router.push({ pathname: `/trip`, params });
   };
-  // const { onLogout } = useAuthStore((state) => state.actions);
-  // const { resetUserStore } = useUserStore((state) => state.actions);
 
   const startNavigationHandler = () => {
     const newOrigin = getCoordinates(origin);
@@ -75,44 +84,25 @@ export default function HomePage() {
       navigateToTrip(params);
     }
   };
-  // const logout = () => {
-  //   onLogout();
-  // };
-  // const startNavigationFromFavorite = (favorite: FavoriteProps) => {
-  //   changeDestination(favorite.address);
-  //   if (currentLocation) {
-  //     navigateToTrip({
-  //       origin: [
-  //         currentLocation.coords.longitude,
-  //         currentLocation.coords.latitude,
-  //       ],
-  //       destination: favorite.address.geometry.coordinates,
-  //     });
-  //   }
-  // };
+
+  const startNavigationFromFavorite = (favorite: Favorite) => {
+    changeDestination(favorite.photonFeature);
+    if (currentLocation) {
+      navigateToTrip({
+        origin: [
+          currentLocation.coords.longitude,
+          currentLocation.coords.latitude,
+        ],
+        destination: favorite.photonFeature.geometry.coordinates,
+      });
+    }
+  };
 
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.45 * screenHeight;
-  // const clearAsyncStorage = async () => {
-  //   try {
-  //     await AsyncStorage.clear();
-  //     console.log('AsyncStorage successfully cleared!');
-  //   } catch (error) {
-  //     console.error('Failed to clear AsyncStorage:', error);
-  //   }
-  // };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* <Button width="full" onPress={cleanLastDestinations} buttonType="primary"> */}
-      {/* Letzte Ziele löschen */}
-      {/* </Button> */}
-      {/* <Button onPress={clearAsyncStorage} buttonType="accent" width="full"> */}
-      {/*  Clean AsyncStorage */}
-      {/* </Button> */}
-      {/* <Button onPress={logout} buttonType="accent" width="full"> */}
-      {/*  Clean Auth */}
-      {/* </Button> */}
       <PopUp
         visible={showPopUp}
         onCloseClick={() => {
@@ -191,17 +181,19 @@ export default function HomePage() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >
-                {/* <View className="flex flex-row"> */}
-                {/*  {favorites && */}
-                {/*    favorites.map((favorite) => ( */}
-                {/*      <Chip */}
-                {/*        onPress={() => startNavigationFromFavorite(favorite)} */}
-                {/*        key={favorite.id} */}
-                {/*      > */}
-                {/*        {favorite.title} */}
-                {/*      </Chip> */}
-                {/*    ))} */}
-                {/* </View> */}
+                <View className="flex flex-row">
+                  <Suspense fallback={<ActivityIndicator size="small" />}>
+                    {favorites &&
+                      favorites.map((favorite) => (
+                        <Chip
+                          onPress={() => startNavigationFromFavorite(favorite)}
+                          key={favorite.id}
+                        >
+                          {favorite.title}
+                        </Chip>
+                      ))}
+                  </Suspense>
+                </View>
               </ScrollView>
             </View>
           </View>

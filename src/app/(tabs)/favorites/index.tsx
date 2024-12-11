@@ -66,7 +66,7 @@ export default function FavoritesPage() {
               ))}
           </View>
         </ScrollView>
-        <View className="flex flex-row mx-5 mb-5 items-center justify-center">
+        <View className="flex items-center justify-center p-4">
           <Button
             width="full"
             onPress={() => {

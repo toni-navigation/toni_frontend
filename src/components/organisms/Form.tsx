@@ -12,7 +12,7 @@ import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 interface FormProps {
   onSave: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   favorite: UpdateFavoriteDto;
   existingFavorite?: boolean;
 }
@@ -66,7 +66,7 @@ export function Form({
         </View>
       </ScrollView>
       <View className="pt-2 flex-row justify-center">
-        {existingFavorite && (
+        {existingFavorite && onDelete && (
           <Button width="half" onPress={onDelete} buttonType="primaryOutline">
             Löschen
           </Button>

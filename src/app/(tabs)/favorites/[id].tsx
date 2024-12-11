@@ -59,6 +59,10 @@ export default function FavoritePage() {
     },
   });
 
+  const deleteHandler = () => {
+    deleteFavorite({ path: { favoriteId } });
+  };
+
   const changeFavorite = () => {
     const updatedFields: Partial<UpdateFavoriteDto> = {};
     if (favorite.title !== data.title) updatedFields.title = favorite.title;
@@ -82,7 +86,7 @@ export default function FavoritePage() {
     <FavoriteWrapper title="Favorit bearbeiten">
       <Suspense fallback={<ActivityIndicator size="large" />}>
         <Form
-          onDelete={deleteFavorite}
+          onDelete={deleteHandler}
           onSave={changeFavorite}
           favorite={favorite}
           existingFavorite={!!data}
