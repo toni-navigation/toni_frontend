@@ -31,13 +31,13 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
               accessibilityRole="button"
               accessibilityHint="Eingabe löschen"
               onPress={onClickDelete}
-              className="absolute right-0 top-0"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2"
               testID="DeleteButton"
             >
               <ToniClose
                 stroke={themes.external[`--${theme}-mode-primary`]}
-                width={32}
-                height={32}
+                width={16}
+                height={16}
                 strokeWidth={3}
               />
             </TouchableOpacity>

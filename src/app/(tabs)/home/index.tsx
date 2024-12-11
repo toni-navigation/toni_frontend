@@ -152,38 +152,40 @@ export default function HomePage() {
                 />
               </View>
 
-              <View className="flex flex-row items-center pb-8">
-                <ToniCurrentLocation
-                  width={40}
-                  height={40}
-                  fill={themes.external[`--${theme}-mode-icon-button`]}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                />
-                <InputButton
-                  classes="ml-3 flex-1"
-                  onPress={() => {
-                    router.push('/home/start');
-                  }}
-                >
-                  {origin ? photonValue(origin) : 'Mein Standort'}
-                </InputButton>
-              </View>
-              <View className="flex flex-row items-center pb-8">
-                <ToniLocation
-                  width={40}
-                  height={40}
-                  stroke={themes.external[`--accent`]}
-                  fillInner={themes.external[`--accent`]}
-                />
-                <InputButton
-                  classes="ml-3 flex-1"
-                  onPress={() => {
-                    router.push('/home/destination');
-                  }}
-                >
-                  {destination ? photonValue(destination) : ''}
-                </InputButton>
-              </View>
+              <InputButton
+                onPress={() => {
+                  router.push('/home/start');
+                }}
+                label="Start"
+                icon={
+                  <ToniCurrentLocation
+                    width={40}
+                    height={40}
+                    fill={themes.external[`--${theme}-mode-icon-button`]}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  />
+                }
+              >
+                {origin ? photonValue(origin) : 'Mein Standort'}
+              </InputButton>
+
+              <InputButton
+                classes=""
+                onPress={() => {
+                  router.push('/home/destination');
+                }}
+                label="Ziel"
+                icon={
+                  <ToniLocation
+                    width={40}
+                    height={40}
+                    stroke={themes.external[`--accent`]}
+                    fillInner={themes.external[`--accent`]}
+                  />
+                }
+              >
+                {destination ? photonValue(destination) : ''}
+              </InputButton>
               <ScrollView
                 className="my-8 rounded-full"
                 horizontal

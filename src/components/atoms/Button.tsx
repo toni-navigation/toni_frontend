@@ -63,7 +63,10 @@ export function Button({
     <TouchableOpacity
       accessibilityHint={accessibilityOutput()}
       className={`h-12 ${specificWidth[width].width}  flex justify-center py-2 px-4 rounded-[30px] ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
-      onPress={onPress}
+      onPress={(event) => {
+        event.persist();
+        onPress();
+      }}
       accessibilityRole="button"
       accessibilityLabel={accessibilityOutput()}
       disabled={disabled}

@@ -1,57 +1,31 @@
+import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import React, { useRef } from 'react';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
+import { InputButton } from '@/components/atoms/InputButton';
 import { InputText } from '@/components/atoms/InputText';
-import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
-import {
-  CreateFavoriteDto,
-  CreatePhotonFeatureDto,
-} from '@/services/api-backend';
+import { photonValue } from '@/functions/photonValue';
+import { UpdateFavoriteDto } from '@/services/api-backend';
+import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 interface FormProps {
-  onSave: (data: CreateFavoriteDto) => void;
-  initialTitle?: string;
-  initialPhotonFeature?: CreatePhotonFeatureDto;
+  onSave: () => void;
+  onDelete: () => void;
+  favorite: UpdateFavoriteDto;
+  existingFavorite?: boolean;
 }
 export function Form({
   onSave,
-  initialTitle = '',
-  initialPhotonFeature,
+  favorite,
+  existingFavorite,
+  onDelete,
 }: FormProps) {
-  const [title, setTitle] = useState(initialTitle);
-  const [photonFeature, setPhotonFeature] = useState(initialPhotonFeature);
-
+  const { addTitle, changeIsPinned } = useFavoriteStore(
+    (state) => state.actions
+  );
   const ref = useRef<TextInput>(null);
-  const handleSave = () => {
-    if (!title || !photonFeature) {
-      console.error('Title and photonFeature are required');
-
-      return;
-    }
-
-    let changes: CreateFavoriteDto | Partial<CreateFavoriteDto>;
-
-    if (initialTitle === undefined && initialPhotonFeature === undefined) {
-      changes = {
-        title,
-        photonFeature,
-        destinationType: 'normal',
-      };
-    } else {
-      changes = {};
-      if (title !== initialTitle) {
-        changes.title = title;
-      }
-      if (photonFeature !== initialPhotonFeature) {
-        changes.photonFeature = photonFeature;
-      }
-      changes.destinationType = 'normal';
-    }
-
-    onSave(changes as CreateFavoriteDto);
-  };
 
   return (
     <>
@@ -64,37 +38,43 @@ export function Form({
           inputMode="text"
           maxLength={300}
           autoFocus
-          value={title}
-          onChange={(event) => setTitle(event.nativeEvent.text)}
+          value={favorite?.title ?? ''}
+          onChange={(event) => addTitle(event.nativeEvent.text)}
           onClickDelete={() => {
-            setTitle('');
+            addTitle('');
             ref.current?.focus();
           }}
         />
-
-        <GeocoderAutocomplete
-          value={photonFeature}
-          placeholder="Adresse eingeben"
-          label="Adresse *"
-          onChange={(value) => {
-            setPhotonFeature(value);
-          }}
-        />
-      </ScrollView>
-      <View className="pt-2 flex-row justify-between">
-        <Button
-          width="half"
+        <InputButton
           onPress={() => {
-            router.replace('/favorites');
+            router.push('/favorites/location-modal');
           }}
-          buttonType="primaryOutline"
+          label="Adresse"
         >
-          Abbrechen
-        </Button>
+          {favorite?.photonFeature
+            ? photonValue(favorite.photonFeature)
+            : 'Standort hinzufügen'}
+        </InputButton>
+        <View className="flex-1 flex-row items-center justify-center">
+          <Checkbox
+            value={favorite?.isPinned ?? false}
+            onValueChange={changeIsPinned}
+            color={favorite?.isPinned ? '#0A585C' : undefined}
+            className="mr-2"
+          />
+          <Text>Angepinnt am Homescreen</Text>
+        </View>
+      </ScrollView>
+      <View className="pt-2 flex-row justify-center">
+        {existingFavorite && (
+          <Button width="half" onPress={onDelete} buttonType="primaryOutline">
+            Löschen
+          </Button>
+        )}
         <Button
           width="half"
-          onPress={handleSave}
-          disabled={!photonFeature || !title}
+          onPress={onSave}
+          disabled={!favorite?.photonFeature || !favorite?.title}
           buttonType="accent"
         >
           Speichern

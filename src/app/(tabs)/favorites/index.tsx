@@ -66,17 +66,13 @@ export default function FavoritesPage() {
               ))}
           </View>
         </ScrollView>
-        <View className="flex flex-row mx-5 mb-5 gap-1.5">
+        <View className="flex flex-row mx-5 mb-5 items-center justify-center">
           <Button
-            width="half"
-            onPress={() => resetFavoritesStore()}
-            buttonType="accentOutline"
-          >
-            Alle löschen
-          </Button>
-          <Button
-            width="half"
-            onPress={() => router.push('/favorites/create')}
+            width="full"
+            onPress={() => {
+              resetFavoritesStore();
+              router.push('/favorites/create');
+            }}
             buttonType="accent"
           >
             Neu

@@ -4,18 +4,21 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { getPhotonKey } from '@/functions/getPhotonKey';
+import { CreatePhotonFeatureDto } from '@/services/api-backend';
 import { PhotonFeature } from '@/services/api-photon';
 
 export type OriginDestinationType = PhotonFeature | undefined | null;
 
 type TripState = {
-  origin: OriginDestinationType;
-  destination: OriginDestinationType;
-  lastDestinations: PhotonFeature[];
+  origin: CreatePhotonFeatureDto | undefined | null;
+  destination: CreatePhotonFeatureDto | undefined | null;
+  lastDestinations: CreatePhotonFeatureDto[];
   actions: {
     resetTripStore: () => void;
-    changeOrigin: (origin: OriginDestinationType) => void;
-    changeDestination: (destination: OriginDestinationType) => void;
+    changeOrigin: (origin: CreatePhotonFeatureDto | undefined | null) => void;
+    changeDestination: (
+      destination: CreatePhotonFeatureDto | undefined | null
+    ) => void;
     switchOriginDestination: () => void;
     cleanLastDestinations: () => void;
   };
@@ -34,11 +37,13 @@ export const useTripStore = create<TripState>()(
       actions: {
         resetTripStore: () =>
           set((state) => ({ ...state, ...defaultTripState })),
-        changeOrigin: (origin: OriginDestinationType) =>
+        changeOrigin: (origin: CreatePhotonFeatureDto | undefined | null) =>
           set((state) => {
             state.origin = origin;
           }),
-        changeDestination: (destination: OriginDestinationType) =>
+        changeDestination: (
+          destination: CreatePhotonFeatureDto | undefined | null
+        ) =>
           set((state) => {
             state.destination = destination;
             if (destination) {

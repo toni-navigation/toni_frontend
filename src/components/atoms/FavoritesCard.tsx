@@ -8,12 +8,14 @@ import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { photonValue } from '@/functions/photonValue';
 import { Favorite } from '@/services/api-backend';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 interface FavoritesCardProps {
   favorite: Favorite;
 }
 
 export function FavoritesCard({ favorite }: FavoritesCardProps) {
+  const { addFavorite } = useFavoriteStore((state) => state.actions);
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -50,18 +52,21 @@ export function FavoritesCard({ favorite }: FavoritesCardProps) {
           <Text className="mb-5 mt-5 font-light text-s">Adresse</Text>
           <Text className="">{photonValue(favorite.photonFeature)}</Text>
         </View>
-        <ToniLocation
-          fillOuter={themes.external[`--accent`]}
-          stroke={themes.external[`--accent`]}
-          fillInner={themes.external[`--accent`]}
-          width={36}
-          height={36}
-        />
+        {favorite.isPinned && (
+          <ToniLocation
+            fillOuter={themes.external[`--accent`]}
+            stroke={themes.external[`--accent`]}
+            fillInner={themes.external[`--accent`]}
+            width={36}
+            height={36}
+          />
+        )}
       </View>
 
       <View className="flex flex-row gap-2">
         <Button
           onPress={() => {
+            addFavorite(favorite);
             router.push({
               pathname: '/favorites/[id]',
               params: {

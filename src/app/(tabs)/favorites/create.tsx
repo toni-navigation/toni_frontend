@@ -5,10 +5,13 @@ import { Alert } from 'react-native';
 
 import { FavoriteWrapper } from '@/components/favorite/FavoriteWrapper';
 import { Form } from '@/components/organisms/Form';
-import { CreateFavoriteDto } from '@/services/api-backend';
 import { favoritesControllerCreateFavoriteMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 export default function CreatePage() {
+  const favorite = useFavoriteStore((state) => state.favorite);
+
+  const { resetFavoritesStore } = useFavoriteStore((state) => state.actions);
   const { mutate } = useMutation({
     ...favoritesControllerCreateFavoriteMutation(),
     onSuccess: (successData) => {
@@ -17,6 +20,7 @@ export default function CreatePage() {
           text: 'OK',
           onPress: () => {
             router.replace('/favorites');
+            resetFavoritesStore();
           },
         },
       ]);
@@ -25,15 +29,26 @@ export default function CreatePage() {
       Alert.alert(error.message);
     },
   });
-  const addFavorite = (body: CreateFavoriteDto) => {
+  const addFavorite = () => {
+    if (!favorite.title || !favorite.photonFeature) {
+      console.error('Title and photonFeature are required');
+
+      return;
+    }
+
     mutate({
-      body,
+      body: {
+        title: favorite.title,
+        isPinned: favorite.isPinned ?? false,
+        photonFeature: favorite.photonFeature,
+        destinationType: 'normal',
+      },
     });
   };
 
   return (
     <FavoriteWrapper title="Favorit hinzufügen">
-      <Form onSave={addFavorite} />
+      <Form onSave={addFavorite} favorite={favorite} />
     </FavoriteWrapper>
   );
 }
