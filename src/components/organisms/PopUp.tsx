@@ -26,30 +26,29 @@ export function PopUp({
     <Modal
       animationType="slide"
       visible={visible}
-      testID="modal"
       onRequestClose={onCloseClick}
       onDismiss={onDismiss}
     >
       <SafeAreaView className="bg-background">
         <View className="justify-center items-center h-full w-full p-4">
-          <View className="flex justify-between items-center w-full h-full rounded-[35px] p-4 bg-primary">
-            <View className="flex flex-col items-center justify-center flex-1">
+          <View className="flex justify-between items-center w-full h-full rounded-[35px] p-4 bg-invertedPrimary">
+            <View className="flex flex-col items-center justify-center flex-1 text-textColor">
               {children}
             </View>
 
-            <View className="mx-5 w-full">
-              {onClick && onClickButtonText && (
-                <Button width="full" onPress={onClick} buttonType="accent">
-                  {onClickButtonText}
-                </Button>
-              )}
+            <View className="flex flex-row mx-3 mb-5 gap-1.5">
               <Button
-                width="full"
+                width={onClick ? 'half' : 'third'}
                 onPress={onCloseClick}
-                buttonType={onClick ? 'accentOutline' : 'accent'}
+                buttonType={onClick ? 'primaryOutline' : 'primary'}
               >
                 {onCloseButtonText}
               </Button>
+              {onClick && onClickButtonText && (
+                <Button width="half" onPress={onClick} buttonType="accent">
+                  {onClickButtonText}
+                </Button>
+              )}
             </View>
           </View>
         </View>

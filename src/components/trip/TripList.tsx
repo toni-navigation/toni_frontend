@@ -9,7 +9,7 @@ import { ValhallaManeuverProps } from '@/types/Valhalla-Types';
 
 interface TripListProps {
   maneuvers: ValhallaManeuverProps[];
-  calibrationFactor: number;
+  calibrationFactor: number | null;
 }
 export function TripList({ maneuvers, calibrationFactor }: TripListProps) {
   const { theme } = useContext(ThemeContext);

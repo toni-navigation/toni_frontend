@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
 
@@ -6,20 +7,27 @@ import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { IconButton } from '@/components/atoms/IconButton';
 import { ToniMap } from '@/components/atoms/icons/ToniMap';
+import { PopUp } from '@/components/organisms/PopUp';
 import { calculateSteps } from '@/functions/calculateSteps';
+import { useTripStore } from '@/store/useTripStore';
+import { useUserStore } from '@/store/useUserStore';
 
 interface TripSummaryProps {
   summary: { time: number; length: number };
   onPressMap: () => void;
   setIconButton: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
+  totalManeuverLength?: number;
 }
 
 export function TripSummary({
   summary,
   onPressMap,
   setIconButton,
+  totalManeuverLength,
 }: TripSummaryProps) {
   const { theme } = useContext(ThemeContext);
+  const [showPopUp, setShowPopUp] = React.useState(false);
+  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const convertSecondsToMinutes = (seconds: number | undefined) => {
     if (!seconds) return 0;
 
@@ -38,9 +46,55 @@ export function TripSummary({
         return themes.external[`--${theme}-mode-primary`];
     }
   };
+  const destination = useTripStore((state) => state.destination);
 
   return (
     <View className="flex items-center my-5 text-center text-textColor text-medium font-generalSansSemi">
+      <PopUp
+        visible={showPopUp}
+        onClick={() => {
+          router.back();
+        }}
+        onClickButtonText="Beenden"
+        onCloseClick={() => setShowPopUp(false)}
+        onCloseButtonText="Abbrechen"
+      >
+        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
+          Möchtest du deine Route nach
+        </Text>
+        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
+          <>
+            {destination?.properties?.name && (
+              <>
+                <Text className="text-large font-generalSansSemi flex-1 text-primary">
+                  {destination?.properties?.name}
+                </Text>
+                {'\n'}
+              </>
+            )}
+            {destination?.properties?.street &&
+              destination?.properties.housenumber && (
+                <>
+                  <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
+                    {destination?.properties?.street}{' '}
+                    {destination?.properties.housenumber}
+                  </Text>
+                  {'\n'}
+                </>
+              )}
+            {destination?.properties?.postcode &&
+              destination?.properties.city && (
+                <Text className="text-2xl font-atkinsonRegular flex-1 text-textColor">
+                  {destination?.properties?.postcode}{' '}
+                  {destination?.properties?.city}
+                </Text>
+              )}
+          </>
+        </Text>
+        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
+          wirklich beenden und zurück zum Start?
+        </Text>
+      </PopUp>
       <Text className="text-textColor text-medium font-generalSansSemi">
         Noch
       </Text>
@@ -49,11 +103,20 @@ export function TripSummary({
         {' | '}
         {summary.length} km
         {' | '}
-        {calculateSteps(summary.length, 1.2)} Schritte
+        {calculateSteps(
+          summary.length,
+          calibrationFactor
+        )} Schritte
       </Text>
       <View className="mt-8 w-full flex items-center flex-row justify-center relative">
         <View className="w-2/3 flex items-center px-5">
-          <Button onPress={() => {}} buttonType="accentOutline" width="full">
+          <Button
+            onPress={() => {
+              setShowPopUp(true);
+            }}
+            buttonType="accentOutline"
+            width="full"
+          >
             Beenden
           </Button>
         </View>

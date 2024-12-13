@@ -16,6 +16,7 @@ import { decodePolyline } from '@/functions/decodePolyline';
 import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
+import { useUserStore } from '@/store/useUserStore';
 import { TripProps } from '@/types/Valhalla-Types';
 
 interface NavigationProps {
@@ -38,6 +39,8 @@ export const Navigation = forwardRef(
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
     );
+    const calibrationFactor = useUserStore((state) => state.calibrationFactor);
+
     // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
     const currentLocationPoint =
       currentLocation &&
@@ -147,7 +150,7 @@ export const Navigation = forwardRef(
           )}
           key="0"
           // TODO
-          calibrationFactor={1.2}
+          calibrationFactor={calibrationFactor}
         />
         <TripStep
           key="1"
@@ -172,7 +175,7 @@ export const Navigation = forwardRef(
               themes.external[`--${theme}-mode-primary`]
             )
           }
-          calibrationFactor={1.2}
+          calibrationFactor={calibrationFactor}
         />
       </TabBar>
     );
