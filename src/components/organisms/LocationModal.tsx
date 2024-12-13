@@ -7,7 +7,7 @@ import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplet
 import { CreatePhotonFeatureDto } from '@/services/api-backend';
 
 interface LocationModalProps {
-  changeLocation: (location: CreatePhotonFeatureDto | undefined) => void;
+  changeLocation: (location: CreatePhotonFeatureDto | undefined | null) => void;
   location: CreatePhotonFeatureDto | undefined | null;
   children: React.ReactNode;
 }

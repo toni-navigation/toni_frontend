@@ -1,6 +1,6 @@
+import { useRoute } from '@react-navigation/core';
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
-import { PhotonFeature } from 'src/services/api-photon';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -10,20 +10,22 @@ import { ListItem } from '@/components/atoms/ListItem';
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { getPhotonKey } from '@/functions/getPhotonKey';
 import { photonValue } from '@/functions/photonValue';
+import { CreatePhotonFeatureDto } from '@/services/api-backend';
 import { useTripStore } from '@/store/useTripStore';
 
 interface SuggestionProps {
-  suggestions: PhotonFeature[];
-  onLocationSuggestionClick: (newValue: PhotonFeature) => void;
-  currentLocation: PhotonFeature | undefined;
+  suggestions: CreatePhotonFeatureDto[];
+  onLocationSuggestionClick: (newValue: CreatePhotonFeatureDto | null) => void;
 }
 export function Suggestions({
   suggestions,
   onLocationSuggestionClick,
-  currentLocation,
 }: SuggestionProps) {
   const { theme } = useContext(ThemeContext);
   const lastDestinations = useTripStore((state) => state.lastDestinations);
+  const route = useRoute();
+
+  console.log(route.name); // Logs the name of the current route
 
   return (
     <View
@@ -32,26 +34,25 @@ export function Suggestions({
       accessibilityLabel="Liste der Vorschläge"
       accessibilityRole="list"
     >
-      {currentLocation && (
-        <View className="flex flex-row items-center">
-          <ToniLocation
-            width={22}
-            height={22}
-            fillInner="none"
-            fillOuter="none"
-            stroke={themes.external[`--${theme}-mode-primary`]}
-            strokeWidth={4}
-          />
-          <ListItem
-            classes="flex-1"
-            onPress={() => {
-              onLocationSuggestionClick(currentLocation);
-            }}
-          >
-            Mein Standort
-          </ListItem>
-        </View>
-      )}
+      <View className="flex flex-row items-center">
+        <ToniLocation
+          width={22}
+          height={22}
+          fillInner="none"
+          fillOuter="none"
+          stroke={themes.external[`--${theme}-mode-primary`]}
+          strokeWidth={4}
+        />
+        <ListItem
+          classes="flex-1"
+          onPress={() => {
+            // onLocationSuggestionClick(currentLocation);
+            onLocationSuggestionClick(null);
+          }}
+        >
+          Mein Standort
+        </ListItem>
+      </View>
       {suggestions.map((suggestion, index) => (
         <ListItem
           key={getPhotonKey(suggestion)}

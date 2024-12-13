@@ -1,21 +1,18 @@
 import { useDebounce } from '@uidotdev/usehooks';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 
 import { InputText } from '@/components/atoms/InputText';
 import { Suggestions } from '@/components/organisms/Suggestions';
 import { photonValue } from '@/functions/photonValue';
-import { useReverseData } from '@/mutations/useReverseData';
 import { useGeocoding } from '@/queries/useGeocoding';
 import { CreatePhotonFeatureDto } from '@/services/api-backend';
-import { PhotonFeature, PhotonFeatureCollection } from '@/services/api-photon';
-import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 type GeocoderAutocompleteProps = {
   value?: CreatePhotonFeatureDto | undefined | null;
   label?: string;
   placeholder: string;
-  onChange: (newValue: PhotonFeature | undefined) => void;
+  onChange: (newValue: CreatePhotonFeatureDto | undefined | null) => void;
 };
 
 export function GeocoderAutocomplete({
@@ -28,33 +25,6 @@ export function GeocoderAutocomplete({
   const [inputValue, setInputValue] = useState('');
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
-  const currentLocation = useCurrentLocationStore(
-    (state) => state.currentLocation
-  );
-
-  const reverseLocation = useReverseData();
-  const [currentLocationData, setCurrentLocationData] = useState<
-    PhotonFeatureCollection | undefined
-  >(undefined);
-
-  const createCurrentLocation = useCallback(async () => {
-    if (currentLocation) {
-      const data = await reverseLocation.mutateAsync({
-        lat: currentLocation.coords.latitude,
-        lon: currentLocation.coords.longitude,
-      });
-      setCurrentLocationData(data);
-    }
-  }, [currentLocation, reverseLocation]);
-
-  const hasCalledCreateCurrentLocation = useRef(false);
-
-  useEffect(() => {
-    if (!hasCalledCreateCurrentLocation.current) {
-      createCurrentLocation();
-      hasCalledCreateCurrentLocation.current = true;
-    }
-  }, [createCurrentLocation]);
 
   const { data } = useGeocoding(debouncedInputValue, focused);
   useEffect(() => {
@@ -89,9 +59,10 @@ export function GeocoderAutocomplete({
       <ScrollView>
         {data && data.features.length >= 0 && (
           <Suggestions
-            currentLocation={currentLocationData?.features[0]}
             suggestions={data.features}
-            onLocationSuggestionClick={(suggestion: PhotonFeature) => {
+            onLocationSuggestionClick={(
+              suggestion: CreatePhotonFeatureDto | null
+            ) => {
               setFocused(false);
               onChange(suggestion);
               ref.current?.blur();

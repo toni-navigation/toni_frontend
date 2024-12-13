@@ -9,8 +9,12 @@ import {
   UpdateFavoriteDto,
 } from '@/services/api-backend';
 
+interface FavoriteWithCurrentLocation extends UpdateFavoriteDto {
+  isCurrentLocation?: boolean;
+}
+
 type FavoriteState = {
-  favorite: UpdateFavoriteDto;
+  favorite: FavoriteWithCurrentLocation;
 
   actions: {
     addTitle: (title: string) => void;
@@ -19,6 +23,8 @@ type FavoriteState = {
       photonFeature: CreatePhotonFeatureDto | undefined
     ) => void;
     changeIsPinned: (isPinned: boolean) => void;
+    changeIsCurrentLocation: (isCurrentLocation: boolean) => void;
+
     addFavorite: (favorite: CreateFavoriteDto) => void;
   };
 };
@@ -28,6 +34,7 @@ const defaultFavoriteState: Omit<FavoriteState, 'actions'> = {
     title: '',
     photonFeature: undefined,
     isPinned: false,
+    isCurrentLocation: false,
   },
 };
 
@@ -39,27 +46,34 @@ export const useFavoriteStore = create<FavoriteState>()(
         addTitle: (title) =>
           set((state) => {
             if (!state.favorite) {
-              state.favorite = {}; // Initialize if undefined
+              state.favorite = {};
             }
-            state.favorite.title = title; // Update title
+            state.favorite.title = title;
           }),
         addPhotonFeature: (photonFeature) =>
           set((state) => {
             if (!state.favorite) {
-              state.favorite = {}; // Initialize if undefined
+              state.favorite = {};
             }
-            state.favorite.photonFeature = photonFeature; // Update photonFeature
+            state.favorite.photonFeature = photonFeature;
           }),
         changeIsPinned: (isPinned) =>
           set((state) => {
             if (!state.favorite) {
-              state.favorite = {}; // Initialize if undefined
+              state.favorite = {};
             }
-            state.favorite.isPinned = isPinned; // Update isPinned
+            state.favorite.isPinned = isPinned;
+          }),
+        changeIsCurrentLocation: (isPinned) =>
+          set((state) => {
+            if (!state.favorite) {
+              state.favorite = {};
+            }
+            state.favorite.isCurrentLocation = isPinned;
           }),
         addFavorite: (favorite) =>
           set((state) => {
-            state.favorite = favorite; // Replace the entire favorite object
+            state.favorite = favorite;
           }),
         resetFavoritesStore: () =>
           set((state) => ({ ...state, ...defaultFavoriteState })),
