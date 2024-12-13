@@ -120,9 +120,9 @@ export default function HomePage() {
         }}
         onCloseButtonText="Alles klar!"
       >
-        <Header classes="text-background">Hinweis</Header>
+        <Header classes="text-textColor m-5">Hinweis</Header>
 
-        <Text className="text-2xl font-atkinsonRegular text-center text-background">
+        <Text className="text-2xl font-atkinsonRegular text-center m-5">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
@@ -157,6 +157,7 @@ export default function HomePage() {
                   height={40}
                   fill={themes.external[`--${theme}-mode-icon-button`]}
                   stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={3}
                 />
                 <InputButton
                   classes="ml-3 flex-1"
@@ -173,6 +174,7 @@ export default function HomePage() {
                   height={40}
                   stroke={themes.external[`--accent`]}
                   fillInner={themes.external[`--accent`]}
+                  strokeWidth={3}
                 />
                 <InputButton
                   classes="ml-3 flex-1"

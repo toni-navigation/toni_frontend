@@ -7,7 +7,7 @@ interface TripStepProps {
   icon: React.ReactNode;
   instruction: string | undefined;
   manueverLength: number | undefined;
-  calibrationFactor: number;
+  calibrationFactor: number | null;
 }
 export function TripStep({
   icon,
