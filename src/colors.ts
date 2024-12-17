@@ -9,6 +9,7 @@ export const themes = {
     '--color-text-color': '#000',
     '--color-white': '#fff',
     '--color-black': '#000',
+    '--color-gray': '#d9d9d9',
   }),
   dark: vars({
     '--color-primary': '#DAFBDE',
@@ -18,6 +19,7 @@ export const themes = {
     '--color-text-color': '#fff',
     '--color-white': '#fff',
     '--color-black': '#000',
+    '--color-gray': '#d9d9d9',
   }),
   external: {
     '--light-mode-primary': '#0A585C',

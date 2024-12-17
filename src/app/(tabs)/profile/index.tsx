@@ -1,14 +1,19 @@
 import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Dimensions, SafeAreaView, ScrollView, View } from 'react-native';
 
-import { BigHeader } from '@/components/atoms/BigHeader';
 // import { getCalibrationValue } from '@/functions/getCalibrationValue';
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/organisms/Card';
-import { Login } from '@/components/organisms/Login';
-import { Registration } from '@/components/organisms/Registration';
-import { TabBar } from '@/components/organisms/TabBar';
+import { Header } from '@/components/atoms/Header';
+import { ProfileMenuCard } from '@/components/atoms/ProfileMenuCard';
+import { ProfileMenuItem } from '@/components/atoms/ProfileMenuItem';
+import { ToniEmail } from '@/components/atoms/icons/ToniEmail';
+import { ToniHome } from '@/components/atoms/icons/ToniHome';
+import { ToniName } from '@/components/atoms/icons/ToniName';
+import { ToniProfilePicture } from '@/components/atoms/icons/ToniProfilePicture';
+import { ToniSteps } from '@/components/atoms/icons/ToniSteps';
 import { TOKEN } from '@/services/client';
 import { deleteToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -38,93 +43,142 @@ export default function ProfilePage() {
     }
   };
 
+  const screenHeight = Dimensions.get('window').height;
+  const viewHeight = 0.2 * screenHeight;
+  const { theme } = useContext(ThemeContext);
+
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <BigHeader classes="text-invertedPrimary">Profil</BigHeader>
-      {!user && (
-        <Card>
-          <TabBar
-            firstTabButtonText="Login"
-            secondTabButtonText="Registrierung"
-          >
-            <Login />
-            <Registration />
-          </TabBar>
-        </Card>
-      )}
-      <ScrollView className="px-8 my-8">
-        {/* {isPending && <ActivityIndicator size="large" />} */}
-        {/* {isError && <Text>{error.message}</Text>} */}
-        {calibrationFactor && (
-          <Text className="font-atkinsonRegular text-2xl text-textColor">
-            Schrittlänge: {calibrationFactor} m
-          </Text>
-        )}
-        <Button
-          width="full"
-          onPress={() => {
-            router.push('/profile/calibration');
-          }}
-          buttonType="primaryOutline"
+      <View className="flex-1 bg-invertedPrimary">
+        <View
+          style={{ height: viewHeight }}
+          className="px-8 py-5 bg-background rounded-b-[25] items-center"
         >
-          Kalibrieren
-        </Button>
-
-        {user && (
-          <Button onPress={logout} buttonType="accent" width="full">
-            Logout
-          </Button>
-        )}
-
-        <View>
-          {user?.email && (
-            <Text className="font-atkinsonRegular text-2xl text-textColor">
-              E-Mail: {user.email}
-            </Text>
-          )}
-          {user?.firstname && (
-            <Text className="font-atkinsonRegular text-2xl text-textColor">
-              firstname: {user.firstname}
-            </Text>
-          )}
-          {user?.lastname && (
-            <Text className="font-atkinsonRegular text-2xl text-textColor">
-              lastname: {user.lastname}
-            </Text>
-          )}
+          <ToniProfilePicture height={70} width={70} />
+          <Header classes="text-center mt-4">
+            {user?.firstname && user?.lastname
+              ? `${user.firstname} ${user.lastname}`
+              : 'Mein Profil'}
+          </Header>
         </View>
-        {/* <FavoritesCard */}
-        {/*  onPress={() => { */}
-        {/*    router.push('/profile/calibration/0'); */}
-        {/*  }} */}
-        {/*  icon={ */}
-        {/*    <Person */}
-        {/*      fill={themes.external[`--${theme}-mode-primary`]} */}
-        {/*      width={50} */}
-        {/*      height={50} */}
-        {/*    /> */}
-        {/*  } */}
-        {/* > */}
-        {/*  Profil bearbeiten */}
-        {/* </FavoritesCard> */}
-        {/* <FavoritesCard */}
-        {/*  onPress={() => { */}
-        {/*    router.push('/profile/calibration/0'); */}
-        {/*  }} */}
-        {/*  icon={ */}
-        {/*    <StepLength */}
-        {/*      fill={themes.external[`--${theme}-mode-primary`]} */}
-        {/*      width={50} */}
-        {/*      height={50} */}
-        {/*    /> */}
-        {/*  } */}
-        {/* > */}
-        {/*  Schrittlänge */}
-        {/* </FavoritesCard> */}
-        {/* <FavoritesCard onPress={() => router.push('/profile')} icon="audio">
-          Audio
-          </FavoritesCard> */}
-      </ScrollView>
+
+        {/* {!user && ( */}
+        {/*   <Card> */}
+        {/*     <TabBar */}
+        {/*       firstTabButtonText="Login" */}
+        {/*       secondTabButtonText="Registrierung" */}
+        {/*     > */}
+        {/*       <Login /> */}
+        {/*       <Registration /> */}
+        {/*     </TabBar> */}
+        {/*   </Card> */}
+        {/* )} */}
+        <ScrollView className="px-8">
+          <ProfileMenuCard header="Allgemein" onPress={() => {}}>
+            <ProfileMenuItem
+              label="Vorname"
+              icon={
+                <ToniName
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              {user?.firstname ? `${user.firstname}` : 'Kein Vorname'}
+            </ProfileMenuItem>
+            <ProfileMenuItem
+              label="Nachname"
+              icon={
+                <ToniName
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              {user?.lastname ? `${user.lastname}` : 'Kein Nachname'}
+            </ProfileMenuItem>
+            <ProfileMenuItem
+              classes="border-b-0 pb-0"
+              label="Heimat Adresse"
+              icon={
+                <ToniHome
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              Keine Heimat Adresse
+            </ProfileMenuItem>
+          </ProfileMenuCard>
+          <ProfileMenuCard
+            header="Schrittlänge"
+            onPress={() => {
+              router.push('/profile/calibration');
+            }}
+          >
+            <ProfileMenuItem
+              classes="border-b-0 pb-0"
+              icon={
+                <ToniSteps
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              Deine Schrittlänge: {calibrationFactor} m
+            </ProfileMenuItem>
+          </ProfileMenuCard>
+          <ProfileMenuCard classes="mb-8" header="Konto" onPress={() => {}}>
+            <ProfileMenuItem
+              label="Email"
+              icon={
+                <ToniEmail
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              {user?.email ? `${user.email}` : 'Keine Email Adresse'}
+            </ProfileMenuItem>
+            <ProfileMenuItem
+              classes="border-b-0 pb-0"
+              label="Passwort"
+              icon={
+                <ToniEmail
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+            >
+              {user?.password ? '********' : 'Kein Passwort'}
+            </ProfileMenuItem>
+          </ProfileMenuCard>
+          {/* {isPending && <ActivityIndicator size="large" />} */}
+          {/* {isError && <Text>{error.message}</Text>} */}
+          <View className="flex items-center mb-8">
+            <Button
+              onPress={logout}
+              buttonType="accent"
+              width="third"
+              disabled={!user}
+            >
+              Logout
+            </Button>
+          </View>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }

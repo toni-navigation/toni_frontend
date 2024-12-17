@@ -23,7 +23,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
           <TextInput
             ref={ref}
             testID="TextInput"
-            className={`font-atkinsonRegular text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
+            className={`font-atkinsonRegular h-12 text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
             {...props}
           />
           {props.value && (
@@ -38,7 +38,7 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
                 stroke={themes.external[`--${theme}-mode-primary`]}
                 width={16}
                 height={16}
-                strokeWidth={3}
+                strokeWidth={5}
               />
             </TouchableOpacity>
           )}

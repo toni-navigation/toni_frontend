@@ -28,19 +28,19 @@ export function InputButton({
 
   return (
     <View className="flex flex-col mb-4">
-      <Text className={`${icon ? 'pl-14' : 'pl-2'} mb-1`}>{label}</Text>
+      <Text className={`${icon ? 'pl-16' : 'pl-4'} mb-1`}>{label}</Text>
       <View className="flex flex-row items-center">
-        {icon && icon}
+        <View className="pe-2">{icon && icon}</View>
         <TouchableOpacity
           accessibilityHint={accessibilityOutput()}
-          className={`flex-row items-center border-2 border-primary rounded-[25px] flex-1 text-textColor h-10 pb-0 ${classes}`}
+          className={`flex-row items-center border-2 border-primary rounded-[25px] flex-1 text-textColor h-12 pb-0 ${classes}`}
           onPress={onPress}
           accessibilityRole="button"
           accessibilityLabel={accessibilityOutput()}
           disabled={disabled}
           testID="InputButton"
         >
-          <Text className="font-atkinsonRegular text pb-0 pl-2">
+          <Text className="font-atkinsonRegular text pb-0 pl-3">
             {children}
           </Text>
         </TouchableOpacity>

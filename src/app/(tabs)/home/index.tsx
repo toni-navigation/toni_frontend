@@ -138,13 +138,14 @@ export default function HomePage() {
                       stroke={themes.external[`--accent`]}
                       width={30}
                       height={30}
-                      strokeWidth={3}
+                      strokeWidth={5}
                     />
                   }
                 />
               </View>
 
               <InputButton
+                classes="my-2"
                 onPress={() => {
                   router.push('/home/start');
                 }}

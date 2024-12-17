@@ -11,6 +11,7 @@ export default {
       textColor: 'var(--color-text-color)',
       white: 'var(--color-white)',
       black: 'var(--color-black)',
+      gray: 'var(--color-gray)',
     },
     extend: {
       fontFamily: {

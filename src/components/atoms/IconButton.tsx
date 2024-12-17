@@ -10,7 +10,6 @@ interface IconButtonProps {
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
-  size?: number;
   buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 export function IconButton({
@@ -20,7 +19,6 @@ export function IconButton({
   classes,
   buttonType,
   iconName,
-  size,
 }: IconButtonProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -41,6 +39,10 @@ export function IconButton({
       button:
         'bg-transparent border border-solid border-solid border-primary border-2',
       fill: themes.external[`--${theme}-mode-primary`],
+    },
+    icon: {
+      button: 'bg-transparent',
+      fill: themes.external[`--${theme}-mode-icon-button`],
     },
   };
 
