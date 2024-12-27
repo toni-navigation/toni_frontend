@@ -6,6 +6,7 @@ interface ProfileMenuItemProps {
   label?: string;
   classes?: string;
   icon?: React.ReactNode;
+  isLast?: boolean;
 }
 
 export function ProfileMenuItem({
@@ -13,10 +14,11 @@ export function ProfileMenuItem({
   label,
   icon,
   classes,
+  isLast,
 }: ProfileMenuItemProps) {
   return (
     <View
-      className={`border-b-2 border-gray flex flex-row items-center py-5 ${classes}`}
+      className={`flex flex-row items-center pt-5 ${isLast ? '' : 'border-b-2 border-gray pb-5'} ${classes}`}
     >
       {icon && icon}
       <View className="ps-5">

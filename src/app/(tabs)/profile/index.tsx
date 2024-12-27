@@ -102,7 +102,7 @@ export default function ProfilePage() {
               {user?.lastname ? `${user.lastname}` : 'Kein Nachname'}
             </ProfileMenuItem>
             <ProfileMenuItem
-              classes="border-b-0 pb-0"
+              isLast
               label="Heimat Adresse"
               icon={
                 <ToniHome
@@ -123,7 +123,7 @@ export default function ProfilePage() {
             }}
           >
             <ProfileMenuItem
-              classes="border-b-0 pb-0"
+              isLast
               icon={
                 <ToniSteps
                   height={30}
@@ -151,7 +151,7 @@ export default function ProfilePage() {
               {user?.email ? `${user.email}` : 'Keine Email Adresse'}
             </ProfileMenuItem>
             <ProfileMenuItem
-              classes="border-b-0 pb-0"
+              isLast
               label="Passwort"
               icon={
                 <ToniEmail
