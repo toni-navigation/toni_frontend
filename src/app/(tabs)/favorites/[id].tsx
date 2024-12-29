@@ -3,7 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { Suspense } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 
-import { FavoriteWrapper } from '@/components/favorite/FavoriteWrapper';
+import { ModalWrapper } from '@/components/favorite/ModalWrapper';
 import { Form } from '@/components/organisms/Form';
 import { UpdateFavoriteDto } from '@/services/api-backend';
 import {
@@ -83,7 +83,7 @@ export default function FavoritePage() {
   };
 
   return (
-    <FavoriteWrapper title="Favorit bearbeiten">
+    <ModalWrapper title="Favorit bearbeiten">
       <Suspense fallback={<ActivityIndicator size="large" />}>
         <Form
           onDelete={deleteHandler}
@@ -92,6 +92,6 @@ export default function FavoritePage() {
           existingFavorite={!!data}
         />
       </Suspense>
-    </FavoriteWrapper>
+    </ModalWrapper>
   );
 }

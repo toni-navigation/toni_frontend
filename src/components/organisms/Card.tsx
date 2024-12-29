@@ -8,12 +8,11 @@ interface CardProps {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 24,
-    // backgroundColor: 'invertedPrimary',
+    borderRadius: 25,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5,
   },

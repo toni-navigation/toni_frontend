@@ -10,7 +10,7 @@ export function Header({ classes = '', children }: HeaderProps) {
   return (
     <Text
       testID="HeaderText"
-      className={`text-4xl font-generalSansSemi ${classes}`}
+      className={`text-large font-generalSansSemi ${classes}`}
     >
       {children}
     </Text>

@@ -25,7 +25,6 @@ export function ToniArrow({
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        fill="none"
       />
       <Polyline
         points="4 25 25 4 46 25"
@@ -33,7 +32,6 @@ export function ToniArrow({
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        fill="none"
       />
     </Svg>
   );

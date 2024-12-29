@@ -1,4 +1,3 @@
-import { useRoute } from '@react-navigation/core';
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
 
@@ -16,16 +15,15 @@ import { useTripStore } from '@/store/useTripStore';
 interface SuggestionProps {
   suggestions: CreatePhotonFeatureDto[];
   onLocationSuggestionClick: (newValue: CreatePhotonFeatureDto | null) => void;
+  extraSuggestions: boolean;
 }
 export function Suggestions({
   suggestions,
+  extraSuggestions,
   onLocationSuggestionClick,
 }: SuggestionProps) {
   const { theme } = useContext(ThemeContext);
   const lastDestinations = useTripStore((state) => state.lastDestinations);
-  const route = useRoute();
-
-  console.log(route.name); // Logs the name of the current route
 
   return (
     <View
@@ -65,25 +63,30 @@ export function Suggestions({
           {index + 1}. {photonValue(suggestion)}
         </ListItem>
       ))}
-      <Header classes="text-xl mt-12">Letzte Ziele</Header>
-      <View>
-        {lastDestinations.length === 0 ? (
-          <Text className="font-atkinsonRegular text-2xl text-textColor">
-            keine Ziele vorhanden
-          </Text>
-        ) : (
-          lastDestinations.map((destination) => (
-            <Destination
-              key={getPhotonKey(destination)}
-              onPress={() => {
-                onLocationSuggestionClick(destination);
-              }}
-            >
-              {photonValue(destination)}
-            </Destination>
-          ))
-        )}
-      </View>
+
+      {extraSuggestions && (
+        <View>
+          <Header classes="text-xl mt-12">Letzte Ziele</Header>
+          <View>
+            {lastDestinations.length === 0 ? (
+              <Text className="font-atkinsonRegular text-2xl text-textColor">
+                keine Ziele vorhanden
+              </Text>
+            ) : (
+              lastDestinations.map((destination) => (
+                <Destination
+                  key={getPhotonKey(destination)}
+                  onPress={() => {
+                    onLocationSuggestionClick(destination);
+                  }}
+                >
+                  {photonValue(destination)}
+                </Destination>
+              ))
+            )}
+          </View>
+        </View>
+      )}
     </View>
   );
 }

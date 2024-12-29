@@ -18,6 +18,28 @@ function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="general-settings"
+        options={{
+          headerTitle: 'Allgemeine Einstellungen',
+          headerStyle: {
+            backgroundColor:
+              themes.external[`--${theme}-mode-primary-inverted`],
+          },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
+        }}
+      />
+      <Stack.Screen
+        name="account-settings"
+        options={{
+          headerTitle: 'Allgemeine Einstellungen',
+          headerStyle: {
+            backgroundColor:
+              themes.external[`--${theme}-mode-primary-inverted`],
+          },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
+        }}
+      />
+      <Stack.Screen
         name="calibration/index"
         options={{
           headerTitle: 'Kalibrierung',

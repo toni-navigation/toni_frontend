@@ -66,9 +66,9 @@ export default function FavoritesPage() {
               ))}
           </View>
         </ScrollView>
-        <View className="flex items-center justify-center p-4">
+        <View className="flex items-center justify-center p-5">
           <Button
-            width="full"
+            width="third"
             onPress={() => {
               resetFavoritesStore();
               router.push('/favorites/create');

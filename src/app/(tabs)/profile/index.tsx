@@ -14,6 +14,10 @@ import { ToniHome } from '@/components/atoms/icons/ToniHome';
 import { ToniName } from '@/components/atoms/icons/ToniName';
 import { ToniProfilePicture } from '@/components/atoms/icons/ToniProfilePicture';
 import { ToniSteps } from '@/components/atoms/icons/ToniSteps';
+import { Card } from '@/components/organisms/Card';
+import { Login } from '@/components/organisms/Login';
+import { Registration } from '@/components/organisms/Registration';
+import { TabBar } from '@/components/organisms/TabBar';
 import { TOKEN } from '@/services/client';
 import { deleteToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -62,122 +66,136 @@ export default function ProfilePage() {
           </Header>
         </View>
 
-        {/* {!user && ( */}
-        {/*   <Card> */}
-        {/*     <TabBar */}
-        {/*       firstTabButtonText="Login" */}
-        {/*       secondTabButtonText="Registrierung" */}
-        {/*     > */}
-        {/*       <Login /> */}
-        {/*       <Registration /> */}
-        {/*     </TabBar> */}
-        {/*   </Card> */}
-        {/* )} */}
-        <ScrollView className="px-8">
-          <ProfileMenuCard header="Allgemein" onPress={() => {}}>
-            <ProfileMenuItem
-              label="Vorname"
-              icon={
-                <ToniName
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
+        {!user ? (
+          <Card>
+            <TabBar
+              firstTabButtonText="Login"
+              secondTabButtonText="Registrierung"
             >
-              {user?.firstname ? `${user.firstname}` : 'Kein Vorname'}
-            </ProfileMenuItem>
-            <ProfileMenuItem
-              label="Nachname"
-              icon={
-                <ToniName
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
+              <Login />
+              <Registration />
+            </TabBar>
+          </Card>
+        ) : (
+          <ScrollView className="px-8">
+            <ProfileMenuCard
+              header="Allgemein"
+              onPress={() => {
+                router.push('/profile/general-settings');
+              }}
             >
-              {user?.lastname ? `${user.lastname}` : 'Kein Nachname'}
-            </ProfileMenuItem>
-            <ProfileMenuItem
-              isLast
-              label="Heimat Adresse"
-              icon={
-                <ToniHome
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
+              <ProfileMenuItem
+                label="Vorname"
+                icon={
+                  <ToniName
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                {user?.firstname ? `${user.firstname}` : 'Kein Vorname'}
+              </ProfileMenuItem>
+              <ProfileMenuItem
+                label="Nachname"
+                icon={
+                  <ToniName
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                {user?.lastname ? `${user.lastname}` : 'Kein Nachname'}
+              </ProfileMenuItem>
+              <ProfileMenuItem
+                isLast
+                label="Heimat Adresse"
+                icon={
+                  <ToniHome
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                Keine Heimat Adresse
+              </ProfileMenuItem>
+            </ProfileMenuCard>
+            <ProfileMenuCard
+              header="Schrittlänge"
+              onPress={() => {
+                router.push('/profile/calibration');
+              }}
             >
-              Keine Heimat Adresse
-            </ProfileMenuItem>
-          </ProfileMenuCard>
-          <ProfileMenuCard
-            header="Schrittlänge"
-            onPress={() => {
-              router.push('/profile/calibration');
-            }}
-          >
-            <ProfileMenuItem
-              isLast
-              icon={
-                <ToniSteps
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
+              <ProfileMenuItem
+                isLast
+                icon={
+                  <ToniSteps
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                {calibrationFactor
+                  ? `Deine Schrittlänge: ${calibrationFactor} m`
+                  : 'Keine Schrittlänge hinterlegt'}
+              </ProfileMenuItem>
+            </ProfileMenuCard>
+            <ProfileMenuCard
+              classes="mb-8"
+              header="Konto"
+              onPress={() => {
+                router.push('/profile/account-settings');
+              }}
             >
-              Deine Schrittlänge: {calibrationFactor} m
-            </ProfileMenuItem>
-          </ProfileMenuCard>
-          <ProfileMenuCard classes="mb-8" header="Konto" onPress={() => {}}>
-            <ProfileMenuItem
-              label="Email"
-              icon={
-                <ToniEmail
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
-            >
-              {user?.email ? `${user.email}` : 'Keine Email Adresse'}
-            </ProfileMenuItem>
-            <ProfileMenuItem
-              isLast
-              label="Passwort"
-              icon={
-                <ToniEmail
-                  height={30}
-                  width={30}
-                  stroke={themes.external[`--${theme}-mode-icon-button`]}
-                  strokeWidth={4}
-                />
-              }
-            >
-              {user?.password ? '********' : 'Kein Passwort'}
-            </ProfileMenuItem>
-          </ProfileMenuCard>
-          {/* {isPending && <ActivityIndicator size="large" />} */}
-          {/* {isError && <Text>{error.message}</Text>} */}
-          <View className="flex items-center mb-8">
-            <Button
-              onPress={logout}
-              buttonType="accent"
-              width="third"
-              disabled={!user}
-            >
-              Logout
-            </Button>
-          </View>
-        </ScrollView>
+              <ProfileMenuItem
+                label="Email"
+                icon={
+                  <ToniEmail
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                {user?.email ? `${user.email}` : 'Keine Email Adresse'}
+              </ProfileMenuItem>
+              <ProfileMenuItem
+                isLast
+                label="Passwort"
+                icon={
+                  <ToniEmail
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                {user?.password ? '********' : 'Kein Passwort'}
+              </ProfileMenuItem>
+            </ProfileMenuCard>
+            {/* {isPending && <ActivityIndicator size="large" />} */}
+            {/* {isError && <Text>{error.message}</Text>} */}
+            <View className="flex items-center mb-8">
+              <Button
+                onPress={logout}
+                buttonType="accent"
+                width="third"
+                disabled={!user}
+              >
+                Logout
+              </Button>
+            </View>
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

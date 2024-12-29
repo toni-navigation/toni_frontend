@@ -22,6 +22,7 @@ export function LocationModal({
         <Header classes="text-textColor pb-8">{children}</Header>
 
         <GeocoderAutocomplete
+          extraSuggestions
           value={location}
           placeholder="Start eingeben"
           onChange={(value) => {

@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { Alert } from 'react-native';
 
-import { FavoriteWrapper } from '@/components/favorite/FavoriteWrapper';
+import { ModalWrapper } from '@/components/favorite/ModalWrapper';
 import { Form } from '@/components/organisms/Form';
 import { favoritesControllerCreateFavoriteMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
@@ -54,8 +54,8 @@ export default function CreatePage() {
   };
 
   return (
-    <FavoriteWrapper title="Favorit hinzufügen">
+    <ModalWrapper title="Favorit hinzufügen">
       <Form onSave={addFavorite} favorite={favorite} />
-    </FavoriteWrapper>
+    </ModalWrapper>
   );
 }

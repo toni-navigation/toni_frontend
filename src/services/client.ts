@@ -2,7 +2,11 @@ import { client } from '@/services/api-backend';
 import { getToken } from '@/store/secureStore';
 
 client.setConfig({
-  baseUrl: 'http://localhost:3000',
+  // baseUrl: Platform.OS ? 'http://127.0.0.1:3000' : 'http://10.0.2.2:3000',
+  // IOS
+  // baseUrl:'http://127.0.0.1:3000',
+  // ANDROID
+  baseUrl: 'http://10.0.2.2:3000',
 });
 export const TOKEN = 'token';
 client.interceptors.request.use(async (request, options) => {

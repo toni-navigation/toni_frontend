@@ -13,9 +13,11 @@ type GeocoderAutocompleteProps = {
   label?: string;
   placeholder: string;
   onChange: (newValue: CreatePhotonFeatureDto | undefined | null) => void;
+  extraSuggestions: boolean;
 };
 
 export function GeocoderAutocomplete({
+  extraSuggestions,
   label,
   placeholder,
   value,
@@ -59,6 +61,7 @@ export function GeocoderAutocomplete({
       <ScrollView>
         {data && data.features.length >= 0 && (
           <Suggestions
+            extraSuggestions={extraSuggestions}
             suggestions={data.features}
             onLocationSuggestionClick={(
               suggestion: CreatePhotonFeatureDto | null
