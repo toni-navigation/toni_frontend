@@ -4,6 +4,11 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 // eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  extra: {
+    eas: {
+      projectId: '41ce45b0-f361-4e31-a1b3-4b1f8185b526',
+    },
+  },
   newArchEnabled: true,
   name: 'toni',
   slug: 'toni',
