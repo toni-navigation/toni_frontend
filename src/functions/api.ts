@@ -6,9 +6,9 @@ import { jwtDecode } from 'jwt-decode';
 // IOS
 // const BASE_URL = 'http://127.0.0.1:3000';
 // ANDROID
-const BASE_URL = 'http://10.0.2.2:3000';
+// const BASE_URL = 'http://10.0.2.2:3000';
 const api = axios.create({
-  baseURL: BASE_URL, // Replace with your API base URL
+  baseURL: process.env.EXPO_PUBLIC_LOCAL_URL_IOS, // Replace with your API base URL
 });
 
 // Add an interceptor to attach the token to requests
@@ -36,4 +36,4 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-export { api, BASE_URL };
+export { api };

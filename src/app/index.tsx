@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { Redirect } from 'expo-router';
 import React, { Suspense, useEffect } from 'react';
-import { ActivityIndicator, Linking, Text } from 'react-native';
+import { ActivityIndicator, Linking } from 'react-native';
 
 import '@/services/client';
 import { useTokenLoader } from '@/queries/useTokenLoader';
@@ -42,9 +42,9 @@ export default function Index() {
     })();
   }, [updateCurrentLocation]);
 
-  if (currentLocation === null || currentLocation === undefined) {
-    return <Text>Loading</Text>;
-  }
+  // if (currentLocation === null || currentLocation === undefined) {
+  //   return <Text>Loading</Text>;
+  // }
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>

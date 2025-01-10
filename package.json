@@ -1,5 +1,5 @@
 {
-  "name": "blndfnd",
+  "name": "toni-navigation",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -38,14 +38,14 @@
     "@turf/nearest-point-on-line": "^6.5.0",
     "@uidotdev/usehooks": "2.4.1",
     "axios": "^1.6.7",
-    "expo": "~52.0.11",
+    "expo": "~52.0.24",
     "expo-av": "~15.0.1",
     "expo-checkbox": "~4.0.0",
     "expo-constants": "~17.0.3",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
     "expo-linking": "~7.0.3",
-    "expo-location": "~18.0.2",
+    "expo-location": "~18.0.4",
     "expo-modules-core": "~2.1.1",
     "expo-router": "~4.0.9",
     "expo-screen-orientation": "~8.0.0",

@@ -10,7 +10,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   newArchEnabled: true,
-  name: 'toni',
+  name: 'toni-navigation',
   slug: 'toni',
   version: '1.0.0',
   icon: './src/assets/images/icon.png',
@@ -28,8 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-location',
       {
-        locationAlwaysAndWhenInUsePermission:
-          'Allow Toni to use your location.',
+        locationAlwaysAndWhenInUsePermission: 'Allow Toni to use your location.',
       },
     ],
     'expo-router',
