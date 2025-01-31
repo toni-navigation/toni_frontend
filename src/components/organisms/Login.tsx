@@ -13,7 +13,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
 export function Login() {
-  const { addUser } = useUserStore((state) => state.actions);
+  const { addUser, addCalibration } = useUserStore((state) => state.actions);
   const { addToken } = useAuthStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +38,7 @@ export function Login() {
       }
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
   });
   const ref = useRef<TextInput>(null);

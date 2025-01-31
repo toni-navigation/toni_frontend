@@ -72,8 +72,8 @@ export type CreateUserResponseDto = {
 };
 
 export type UpdateUserDto = {
-    firstname: string;
-    lastname: string;
+    firstname?: string;
+    lastname?: string;
     calibrationFactor: number | null;
     email?: string;
     password?: string;
@@ -213,12 +213,7 @@ export type AuthenticationControllerConfirmEmailResponses = {
 };
 
 export type AuthenticationControllerForgotPasswordData = {
-    body: {
-        /**
-         * The email address of the user who wants to reset their password.
-         */
-        email: string;
-    };
+    body?: never;
     url: '/api/authentication/forgot-password';
 };
 

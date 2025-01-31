@@ -27,16 +27,9 @@ export default function ProfilePage() {
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const user = useUserStore((state) => state.user);
   const { resetUserStore } = useUserStore((state) => state.actions);
-  // const { mutate: logout } = useMutation(
-  //   authenticationControllerLogoutMutation()
-  // );
+
   const { removeToken } = useAuthStore((state) => state.actions);
-  // const {
-  //   data: user,
-  //   error,
-  //   isError,
-  //   isPending,
-  // } = useQuery(authenticationControllerGetUserOptions());
+
   const logout = async () => {
     try {
       await deleteToken(TOKEN);

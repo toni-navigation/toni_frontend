@@ -80,13 +80,9 @@ export const authenticationControllerConfirmEmail = <ThrowOnError extends boolea
     });
 };
 
-export const authenticationControllerForgotPassword = <ThrowOnError extends boolean = false>(options: Options<AuthenticationControllerForgotPasswordData, ThrowOnError>) => {
+export const authenticationControllerForgotPassword = <ThrowOnError extends boolean = false>(options?: Options<AuthenticationControllerForgotPasswordData, ThrowOnError>) => {
     return (options?.client ?? client).post<unknown, unknown, ThrowOnError>({
         ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...options?.headers
-        },
         url: '/api/authentication/forgot-password'
     });
 };

@@ -20,7 +20,7 @@ import { usePedometerAvailable } from '@/queries/usePedometerAvailable';
 import { useUserStore } from '@/store/useUserStore';
 
 const STOP_CALIBRATION_COUNT = 30;
-const MOCK_PEDOMETER = true;
+const MOCK_PEDOMETER = false;
 interface CalibrationProps {
   isFromIntro?: boolean;
 }
@@ -28,6 +28,8 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { data: pedometerIsAvailable } = usePedometerAvailable();
   const { addCalibration } = useUserStore((state) => state.actions);
   const [steps, setSteps] = useState(0);
+  const isLoggedIn = useUserStore((state) => state.user);
+  console.log(isLoggedIn);
 
   // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();

@@ -1,14 +1,35 @@
+import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
+import { usersControllerUpdateUserMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useUserStore } from '@/store/useUserStore';
 
 export function Finished() {
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
+  const user = useUserStore((state) => state.user);
+  const { mutate: updateUser, isPending } = useMutation({
+    ...usersControllerUpdateUserMutation(),
+    onSuccess: (successData) => {},
+    onError: (error) => {
+      Alert.alert(error.message);
+    },
+  });
+  const clickFinishedHandler = () => {
+    if (user) {
+      updateUser({
+        path: { userId: user.id },
+        body: {
+          calibrationFactor,
+        },
+      });
+    }
+    router.navigate('/profile');
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background" testID="calibrationID">
@@ -34,9 +55,10 @@ export function Finished() {
         <Button
           width="full"
           buttonType="accent"
-          onPress={() => router.navigate('/profile')}
+          disabled={isPending}
+          onPress={clickFinishedHandler}
         >
-          Fertig
+          {isPending ? 'Lädt...' : 'Fertig'}
         </Button>
       </CalibrationNavigation>
     </SafeAreaView>

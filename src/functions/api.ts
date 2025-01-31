@@ -9,8 +9,8 @@ import { jwtDecode } from 'jwt-decode';
 // const BASE_URL = 'http://10.0.2.2:3000';
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_LOCAL_URL_IOS, // Replace with your API base URL
+  // baseURL: 'http://127.0.0.1:3000', // Replace with your API base URL
 });
-
 // Add an interceptor to attach the token to requests
 api.interceptors.request.use(
   async (config) => {

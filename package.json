@@ -15,7 +15,7 @@
     "lint:tsc": "tsc --noemit",
     "lint:eslint": "eslint './src/**/*.{ts,tsx}' --fix",
     "openapi": "openapi --input openapi.photon.json --output src/services/api-photon --useOptions",
-    "openapi:backend": "openapi-ts -i https://toni-navigation-f17f8a80400b.herokuapp.com/api/docs-json -o src/services/api-backend -c @hey-api/client-fetch"
+    "openapi:backend": "openapi-ts -i http://127.0.0.1:3000/api/docs-json -o src/services/api-backend -c @hey-api/client-fetch"
   },
   "jest": {
     "preset": "jest-expo"

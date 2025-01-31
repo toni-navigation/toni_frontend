@@ -6,7 +6,8 @@ import { immer } from 'zustand/middleware/immer';
 import { User } from '@/services/api-backend';
 
 export type StoreUser = Omit<User, 'calibrationFactor'> | undefined;
-
+export const calculateCalibration = (distanceInMeter: number, steps: number) =>
+  Number((distanceInMeter / steps).toFixed(2));
 type UserState = {
   user: StoreUser;
   calibrationFactor: number | null;
@@ -14,7 +15,7 @@ type UserState = {
     addCalibration: (distanceInMeter: number, steps: number) => void;
     resetUserStore: () => void;
     resetCalibration: () => void;
-    addUser: (user: StoreUser) => void;
+    addUser: (user: User) => void;
   };
 };
 
@@ -30,13 +31,24 @@ export const useUserStore = create<UserState>()(
       actions: {
         addCalibration: (distanceInMeter, steps) =>
           set((state) => {
-            state.calibrationFactor = Number(
-              (distanceInMeter / steps).toFixed(2)
+            state.calibrationFactor = calculateCalibration(
+              distanceInMeter,
+              steps
             );
           }),
         addUser: (user) =>
           set((state) => {
-            state.user = user;
+            state.user = {
+              role: user?.role,
+              firstname: user?.firstname,
+              lastname: user?.lastname,
+              email: user?.email,
+              favorites: user?.favorites,
+              id: user?.id,
+              createdAt: user?.createdAt,
+              updatedAt: user?.updatedAt,
+            };
+            state.calibrationFactor = user.calibrationFactor;
           }),
         resetCalibration: () =>
           set((state) => ({ ...state, calibrationFactor: null })),
