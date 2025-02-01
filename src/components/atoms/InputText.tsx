@@ -16,14 +16,14 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
 
     return (
       <View className="mb-2">
-        <Text className="font-atkinsonRegular text-lg mb-1 text-textColor">
+        <Text className="font-atkinsonRegular text-xsmall mx-3 mb-2 text-primary">
           {props.accessibilityLabel}
         </Text>
         <View className="relative">
           <TextInput
             ref={ref}
             testID="TextInput"
-            className={`font-atkinsonRegular h-12 text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
+            className={`bg-background font-atkinsonRegular h-12 text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
             {...props}
           />
           {props.value && (

@@ -59,7 +59,7 @@ export function TripSummary({
         onCloseClick={() => setShowPopUp(false)}
         onCloseButtonText="Abbrechen"
       >
-        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
+        <Text className="text-medium m-5 text-text-col text-textColor font-generalSansSemi text-center">
           Möchtest du deine Route nach
         </Text>
         <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
@@ -91,7 +91,7 @@ export function TripSummary({
               )}
           </>
         </Text>
-        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center">
+        <Text className="text-medium m-5 text-text-col font-generalSansSemi text-center text-textColor ">
           wirklich beenden und zurück zum Start?
         </Text>
       </PopUp>

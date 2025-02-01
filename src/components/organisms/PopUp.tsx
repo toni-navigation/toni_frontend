@@ -32,7 +32,7 @@ export function PopUp({
       <SafeAreaView className="bg-background">
         <View className="justify-center items-center h-full w-full p-4">
           <View className="flex justify-between items-center w-full h-full rounded-[35px] p-4 bg-invertedPrimary">
-            <View className="flex flex-col items-center justify-center flex-1 text-textColor">
+            <View className="flex flex-col items-center justify-center flex-1 mx-5">
               {children}
             </View>
 

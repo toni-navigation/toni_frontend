@@ -24,7 +24,7 @@ export function LocationModal({
         <GeocoderAutocomplete
           extraSuggestions
           value={location}
-          placeholder="Start eingeben"
+          placeholder="Was suchst Du?"
           onChange={(value) => {
             if (value === undefined) {
               changeLocation(undefined);

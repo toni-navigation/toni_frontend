@@ -16,7 +16,7 @@ export function ListItem({ children, onPress, classes }: ListItemProps) {
         onPress={onPress}
         className={`py-3 px-2 ${classes}`}
       >
-        <Text className="font-atkinsonRegular text-lg">{children}</Text>
+        <Text className="font-atkinsonRegular text-textColor text-small">{children}</Text>
       </TouchableOpacity>
     );
   }

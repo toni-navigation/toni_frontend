@@ -42,7 +42,7 @@ export function Suggestions({
           strokeWidth={4}
         />
         <ListItem
-          classes="flex-1"
+          classes="flex-1 text-textColor"
           onPress={() => {
             // onLocationSuggestionClick(currentLocation);
             onLocationSuggestionClick(null);

@@ -8,6 +8,7 @@ interface TabBarProps {
   children: React.ReactNode;
   firstTabButtonText: string;
   secondTabButtonText: string;
+  classes?: string;
 }
 
 export function TabBar({

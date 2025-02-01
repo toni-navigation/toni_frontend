@@ -112,9 +112,9 @@ export default function HomePage() {
         }}
         onCloseButtonText="Alles klar!"
       >
-        <Header classes="text-background">Hinweis</Header>
+        <Header>Hinweis</Header>
 
-        <Text className="text-2xl font-atkinsonRegular text-center text-background">
+        <Text className="text-medium pt-4 font-atkinsonRegular text-center text-textColor">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
           Haltestelle ein. Toni verfügt nur über die Navigation von Fußwegen.
         </Text>
@@ -145,7 +145,7 @@ export default function HomePage() {
               </View>
 
               <InputButton
-                classes="my-2"
+                classes="mb-2"
                 onPress={() => {
                   router.push('/home/start');
                 }}
@@ -204,9 +204,9 @@ export default function HomePage() {
           </View>
         </ScrollView>
 
-        <View className="mx-5 mb-8">
+        <View className="mx-5 mb-8 items-center">
           <Button
-            width="full"
+            width="third"
             onPress={() => setShowPopUp(true)}
             disabled={origin === undefined || !destination}
             buttonType="accent"

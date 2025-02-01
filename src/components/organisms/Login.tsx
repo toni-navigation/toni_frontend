@@ -66,9 +66,10 @@ export function Login() {
   }
 
   return (
-    <ScrollView>
+      <SafeAreaView className={"flex-1"}>
+    <ScrollView className={"flex-1 mt-3"}>
       <InputText
-        className="mb-4 bg-white"
+        className="mb-4"
         accessibilityLabel="Email Adresse *"
         accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
         placeholder="Email Adresse eingeben"
@@ -82,7 +83,7 @@ export function Login() {
         }}
       />
       <InputText
-        className="mb-4 bg-white"
+        className="mb-4"
         accessibilityLabel="Password *"
         accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
         placeholder="Passwort eingeben"
@@ -97,9 +98,11 @@ export function Login() {
         }}
       />
       {error && <Header classes="text-red-500">{error.message}</Header>}
-      <View className="flex items-center">
+    </ScrollView>
+
+        <View className="flex mb-3 items-center">
         <Button
-          width="half"
+          width="third"
           isLoading={isPending}
           onPress={login}
           buttonType="primary"
@@ -107,6 +110,6 @@ export function Login() {
           Login
         </Button>
       </View>
-    </ScrollView>
+      </SafeAreaView>
   );
 }

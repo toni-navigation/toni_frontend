@@ -18,10 +18,11 @@ export default function Intro() {
 
   return (
     <SafeAreaView className="bg-background flex-1">
-      <View className="items-center">
-        <ToniLogo width={100} height={100} />
+        <View className="flex-1 mx-5">
+      <View className="items-center pt-4">
+        <ToniLogo width={80} height={80} />
         <Header classes="pt-4">Willkommen</Header>
-        <Text className="mx-auto mb-10 text-center font-atkinsonRegular text-2xl text-textColor">
+        <Text className="mx-auto mt-5 mb-10 text-center font-atkinsonRegular text-small text-textColor">
           Wir freuen uns, dir deinen Alltag mit Toni zu erleichtern.
         </Text>
       </View>
@@ -50,7 +51,8 @@ export default function Intro() {
       {/*    Registrieren */}
       {/*  </Button> */}
       {/* </View> */}
-      <Text className="mt-5">
+            <View className={"mt-10 mb-5"}>
+      <Text className="mb-2 text-xsmall mx-auto text-textColor">
         Du kannst Toni zu Beginn zwei Wochen kostenlos testen.
       </Text>
       <Button
@@ -62,6 +64,8 @@ export default function Intro() {
       >
         Probeabo starten
       </Button>
+            </View>
+        </View>
     </SafeAreaView>
   );
 }
