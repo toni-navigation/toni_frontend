@@ -1,5 +1,4 @@
 import * as Location from 'expo-location';
-import { Redirect } from 'expo-router';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking } from 'react-native';
 
@@ -8,10 +7,11 @@ import { useTokenLoader } from '@/queries/useTokenLoader';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
+import { Redirect } from 'expo-router';
+
 export default function Index() {
   const { addToken } = useAuthStore((state) => state.actions);
   const { data, isPending, isError, isSuccess } = useTokenLoader();
-  // TODO: Add token to secure store
   if (isSuccess && data) {
     addToken(data);
   }
@@ -34,6 +34,7 @@ export default function Index() {
           distanceInterval: 1,
         },
         (locationObject) => {
+          console.log(locationObject);
           updateCurrentLocation(locationObject);
         }
       );
@@ -41,10 +42,6 @@ export default function Index() {
       return () => watchPosition.remove();
     })();
   }, [updateCurrentLocation]);
-
-  // if (currentLocation === null || currentLocation === undefined) {
-  //   return <Text>Loading</Text>;
-  // }
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>

@@ -16,14 +16,12 @@ interface TripSummaryProps {
   summary: { time: number; length: number };
   onPressMap: () => void;
   setIconButton: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
-  totalManeuverLength?: number;
 }
 
 export function TripSummary({
   summary,
   onPressMap,
   setIconButton,
-  totalManeuverLength,
 }: TripSummaryProps) {
   const { theme } = useContext(ThemeContext);
   const [showPopUp, setShowPopUp] = React.useState(false);
@@ -101,7 +99,7 @@ export function TripSummary({
       <Text className="text-textColor text-medium font-generalSansSemi">
         {convertSecondsToMinutes(summary.time)} min
         {' | '}
-        {summary.length} km
+        {summary.length.toFixed(1)} km
         {' | '}
         {calculateSteps(
           summary.length,

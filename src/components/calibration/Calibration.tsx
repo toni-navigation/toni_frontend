@@ -1,9 +1,10 @@
 import { Audio } from 'expo-av';
+import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
 import { router } from 'expo-router';
 import { Pedometer } from 'expo-sensors';
-import React, { useRef, useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Linking, SafeAreaView, View } from 'react-native';
 
 import Song from '@/assets/calibration.wav';
 import { Button } from '@/components/atoms/Button';
@@ -17,6 +18,7 @@ import { useSpeak } from '@/mutations/useSpeak';
 import { useStartSound } from '@/mutations/useStartSound';
 import { useStopSound } from '@/mutations/useStopSound';
 import { usePedometerAvailable } from '@/queries/usePedometerAvailable';
+import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useUserStore } from '@/store/useUserStore';
 
 const STOP_CALIBRATION_COUNT = 30;
@@ -29,7 +31,6 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const { addCalibration } = useUserStore((state) => state.actions);
   const [steps, setSteps] = useState(0);
   const isLoggedIn = useUserStore((state) => state.user);
-  console.log(isLoggedIn);
 
   // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
   const pedometerSubscription = useRef<Pedometer.Subscription | null>();
@@ -40,7 +41,9 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
   const startSoundMutation = useStartSound();
   const stopSoundMutation = useStopSound();
   const speakMutation = useSpeak();
-
+  const { updateCurrentLocation } = useCurrentLocationStore(
+    (state) => state.actions
+  );
   const stopPedometer = async () => {
     pedometerSubscription.current?.remove();
     pedometerSubscription.current = undefined;
@@ -84,7 +87,27 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       fallback.current = undefined;
     }
   };
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        await Linking.openSettings();
+      }
+      const watchPosition = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 1000,
+          distanceInterval: 1,
+        },
+        (locationObject) => {
+          console.log(locationObject);
+          updateCurrentLocation(locationObject);
+        }
+      );
 
+      return () => watchPosition.remove();
+    })();
+  }, [updateCurrentLocation]);
   const handlePedometerUpdate = async (
     start: LocationObject | undefined,
     result: Pedometer.PedometerResult

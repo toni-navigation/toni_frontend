@@ -41,23 +41,21 @@ export function GeocoderAutocomplete({
 
   return (
     <View>
-      <View>
-        <InputText
-          accessibilityHint={label}
-          ref={ref}
-          value={inputValue}
-          accessibilityLabel={label}
-          placeholder={placeholder}
-          onClickDelete={() => {
-            setInputValue('');
-            ref.current?.focus();
-            onChange(undefined);
-          }}
-          onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-        />
-      </View>
+      <InputText
+        accessibilityHint={label}
+        ref={ref}
+        value={inputValue}
+        accessibilityLabel={label}
+        placeholder={placeholder}
+        onClickDelete={() => {
+          setInputValue('');
+          ref.current?.focus();
+          onChange(undefined);
+        }}
+        onChange={(event) => focused && setInputValue(event.nativeEvent.text)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
       <ScrollView>
         {data && data.features.length >= 0 && (
           <Suggestions

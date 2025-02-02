@@ -8,6 +8,7 @@ import PagerView from 'react-native-pager-view';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { NavigationMap } from '@/components/organisms/NavigationMap';
 import { TabBar } from '@/components/organisms/TabBar';
 import { IsFinished } from '@/components/trip/IsFinished';
 import { TripList } from '@/components/trip/TripList';
@@ -21,6 +22,7 @@ import { TripProps } from '@/types/Valhalla-Types';
 
 interface NavigationProps {
   trip: TripProps;
+  showMap?: boolean;
 }
 interface ReadRefProps {
   [key: number]: {
@@ -31,13 +33,17 @@ interface ReadRefProps {
   };
 }
 export const Navigation = forwardRef(
-  ({ trip }: NavigationProps, ref: React.ForwardedRef<PagerView>) => {
+  ({ trip, showMap }: NavigationProps, ref: React.ForwardedRef<PagerView>) => {
     const { theme } = useContext(ThemeContext);
     const readRef = useRef<ReadRefProps>({});
     const decodedShape = decodePolyline(trip.legs[0].shape);
     const line = lineString(decodedShape.coordinates);
     const currentLocation = useCurrentLocationStore(
       (state) => state.currentLocation
+    );
+
+    const { updateCurrentLocation } = useCurrentLocationStore(
+      (state) => state.actions
     );
     const calibrationFactor = useUserStore((state) => state.calibrationFactor);
 
@@ -86,18 +92,39 @@ export const Navigation = forwardRef(
         ],
         line
       );
-      const lengthFromCurrentPositionToNextManeuver = length(sliced) * 1000;
-      const maneuverLength = maneuvers[currentManeuverIndex - 1].length * 1000;
-      const nextManeuverThreshold = maneuverLength / 3;
+      const lengthFromCurrentPositionToNextManeuver = () => {
+        if (calibrationFactor) {
+          return length(sliced) * 1000 * calibrationFactor;
+        }
+
+        return length(sliced) * 1000;
+      };
+      const maneuverLength = () => {
+        if (calibrationFactor) {
+          return (
+            maneuvers[currentManeuverIndex - 1].length *
+            1000 *
+            calibrationFactor
+          );
+        }
+
+        return maneuvers[currentManeuverIndex - 1].length * 1000;
+      };
+      // const maneuverLength = maneuvers[currentManeuverIndex - 1].length * 1000;
+      const nextManeuverThreshold = maneuverLength() / 3;
 
       if (
-        lengthFromCurrentPositionToNextManeuver < nextManeuverThreshold &&
+        lengthFromCurrentPositionToNextManeuver() < nextManeuverThreshold &&
         readRef.current[currentManeuverIndex]
           ?.verbal_transition_alert_instruction === undefined &&
         verbal_transition_alert_instruction !== undefined
       ) {
+        console.log(
+          'first',
+          `In ${lengthFromCurrentPositionToNextManeuver().toFixed(2)} ${calibrationFactor ? 'Schritte' : 'Meter'} ${verbal_transition_alert_instruction}`
+        );
         Speech.speak(
-          `In ${lengthFromCurrentPositionToNextManeuver.toFixed(2)} Metern ${verbal_transition_alert_instruction}`,
+          `In ${lengthFromCurrentPositionToNextManeuver().toFixed(2)} ${calibrationFactor ? 'Schritte' : 'Meter'} ${verbal_transition_alert_instruction}`,
           {
             language: 'de',
           }
@@ -107,11 +134,12 @@ export const Navigation = forwardRef(
         };
       }
       if (
-        lengthFromCurrentPositionToNextManeuver < 5 &&
+        lengthFromCurrentPositionToNextManeuver() < 5 &&
         verbal_pre_transition_instruction !== undefined &&
         readRef.current[currentManeuverIndex]
           ?.verbal_pre_transition_instruction === undefined
       ) {
+        console.log('second', `${verbal_pre_transition_instruction}`);
         Speech.speak(`${verbal_pre_transition_instruction ?? ''}`, {
           language: 'de',
         });
@@ -122,11 +150,12 @@ export const Navigation = forwardRef(
         };
       }
       if (
-        lengthFromCurrentPositionToNextManeuver < 5 &&
+        lengthFromCurrentPositionToNextManeuver() < 5 &&
         verbal_post_transition_instruction !== undefined &&
         readRef.current[currentManeuverIndex]
           ?.verbal_post_transition_instruction === undefined
       ) {
+        console.log('third', `${verbal_post_transition_instruction}`);
         Speech.speak(`${verbal_post_transition_instruction ?? ''}`, {
           language: 'de',
         });
@@ -142,6 +171,32 @@ export const Navigation = forwardRef(
       return <IsFinished />;
     }
 
+    if (showMap) {
+      return (
+        <NavigationMap
+          origin={[trip.locations[0].lat, trip.locations[0].lon]}
+          destination={[trip.locations[1].lat, trip.locations[1].lon]}
+          snapshot={snapshot}
+          decodedShape={decodedShape}
+          currentLocation={currentLocation}
+          updateCurrentLocation={updateCurrentLocation}
+        />
+      );
+    }
+
+    const maneuverLength =
+      snapshot &&
+      currentManeuverIndex &&
+      length(
+        lineSlice(
+          snapshot,
+          decodedShape.coordinates[
+            maneuvers[currentManeuverIndex - 1].end_shape_index
+          ],
+          line
+        )
+      );
+
     return (
       <TabBar firstTabButtonText="Übersicht" secondTabButtonText="Navigation">
         <TripList
@@ -149,7 +204,6 @@ export const Navigation = forwardRef(
             !currentManeuverIndex ? 0 : currentManeuverIndex - 1
           )}
           key="0"
-          // TODO
           calibrationFactor={calibrationFactor}
         />
         <TripStep
@@ -159,15 +213,7 @@ export const Navigation = forwardRef(
               ? maneuvers[currentManeuverIndex - 1]?.instruction
               : undefined
           }
-          manueverLength={length(
-            lineSlice(
-              snapshot,
-              decodedShape.coordinates[
-                maneuvers[currentManeuverIndex - 1].end_shape_index
-              ],
-              line
-            )
-          )}
+          manueverLength={maneuverLength}
           icon={
             currentManeuverIndex !== undefined &&
             matchIconType(
