@@ -18,7 +18,9 @@ export function TripStep({
   const stepsToGo = calculateSteps(manueverLength, calibrationFactor);
 
   return (
-    <SafeAreaView className="flex-1 m-5">
+    <SafeAreaView className="flex-1 mt-5">
+      <View className={"bg-invertedPrimary rounded-[25px] px-5 py-8 flex-1"}>
+
       {instruction && (
         <View className="flex-1 justify-center items-center text-center">
           {icon}
@@ -30,6 +32,7 @@ export function TripStep({
           </Text>
         </View>
       )}
+        </View>
     </SafeAreaView>
   );
 }
