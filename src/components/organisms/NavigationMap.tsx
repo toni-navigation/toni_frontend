@@ -24,6 +24,7 @@ interface NavigationMapMapProps {
   bbox?: { latitude: number; longitude: number }[] | null | undefined;
   updateCurrentLocation: (location: any) => void;
   currentLocation: LocationObject | undefined;
+  newLine: [number, number][] | null | undefined;
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +55,7 @@ export function NavigationMap({
   snapshot,
   destination,
   decodedShape,
+  newLine,
   bbox,
   updateCurrentLocation,
   currentLocation,
@@ -190,8 +192,7 @@ export function NavigationMap({
         {/* Bounding Box */}
         {bbox && <Polygon key={1} coordinates={bbox} />}
 
-        {/* Decoded Shape */}
-        {decodedShape?.coordinates.map((coord, index) => {
+        {decodedShape?.coordinates?.map((coord, index) => {
           if (index === 0) {
             return null;
           }
@@ -201,8 +202,34 @@ export function NavigationMap({
               key={coord.toString()}
               coordinates={[
                 {
-                  latitude: decodedShape.coordinates[index - 1][0],
-                  longitude: decodedShape.coordinates[index - 1][1],
+                  latitude: decodedShape?.coordinates[index - 1][0],
+                  longitude: decodedShape?.coordinates[index - 1][1],
+                },
+                {
+                  latitude: coord[0],
+                  longitude: coord[1],
+                },
+              ]}
+              strokeColor={themes.external[`--${theme}-mode-primary-inverted`]}
+              strokeWidth={6}
+              zIndex={97}
+            />
+          );
+        })}
+
+        {/* Decoded Shape */}
+        {newLine?.map((coord, index) => {
+          if (index === 0) {
+            return null;
+          }
+
+          return (
+            <Polyline
+              key={coord.toString()}
+              coordinates={[
+                {
+                  latitude: newLine[index - 1][0],
+                  longitude: newLine[index - 1][1],
                 },
                 {
                   latitude: coord[0],

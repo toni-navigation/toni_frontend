@@ -14,11 +14,13 @@ import { useUserStore } from '@/store/useUserStore';
 
 interface TripSummaryProps {
   summary: { time: number; length: number };
+  length: number;
   onPressMap: () => void;
   setIconButton: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
 }
 
 export function TripSummary({
+  length,
   summary,
   onPressMap,
   setIconButton,
@@ -31,7 +33,7 @@ export function TripSummary({
 
     return Math.floor(seconds / 60);
   };
-
+  console.log(length, summary.length * 1000);
   const getStrokeColor = (
     buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline'
   ) => {
@@ -97,14 +99,11 @@ export function TripSummary({
         Noch
       </Text>
       <Text className="text-textColor text-medium font-generalSansSemi">
-        {convertSecondsToMinutes(summary.time)} min
+        {(length * 12).toFixed(0)} min
         {' | '}
-        {summary.length.toFixed(1)} km
+        {length.toFixed(1)} km
         {' | '}
-        {calculateSteps(
-          summary.length,
-          calibrationFactor
-        )} Schritte
+        {calculateSteps(length, calibrationFactor)} Schritte
       </Text>
       <View className="mt-8 w-full flex items-center flex-row justify-center relative">
         <View className="w-2/3 flex items-center px-5">

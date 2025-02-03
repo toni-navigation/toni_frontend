@@ -22,7 +22,6 @@ api.interceptors.request.use(
         const currentTime = Date.now() / 1000;
 
         // Check if the token has expired
-        console.log(decodedToken);
         if (decodedToken.exp < currentTime) {
           // Handle token expiration, e.g., refresh or redirect to login
           console.warn('Token has expired. Please login again.');

@@ -34,7 +34,6 @@ export default function Index() {
           distanceInterval: 1,
         },
         (locationObject) => {
-          console.log(locationObject);
           updateCurrentLocation(locationObject);
         }
       );
