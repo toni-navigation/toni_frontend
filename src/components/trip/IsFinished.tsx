@@ -4,8 +4,8 @@ import { SafeAreaView, Text, View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { BigHeader } from '@/components/atoms/BigHeader';
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { Flag } from '@/components/atoms/icons/Flag';
 import { Card } from '@/components/organisms/Card';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
@@ -27,28 +27,30 @@ export function IsFinished() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <BigHeader classes="text-invertedPrimary">Geschafft</BigHeader>
-      <View className="flex-1 px-8 my-8">
-        <Card>
+    <SafeAreaView className="flex-1 mx-5 mt-8">
+      <Header classes="mb-8">Geschafft!</Header>
+      <Card>
+        <View className="flex-1 items-center justify-center">
           <Flag
             fill={themes.external[`--${theme}-mode-primary`]}
             width={150}
             height={150}
           />
-          <Text>Ziel erreicht !</Text>
-        </Card>
-      </View>
+          <Text className="text-medium text-textColor font-atkinsonRegular mt-5">
+            Ziel erreicht!
+          </Text>
+        </View>
+      </Card>
 
-      <View className="mx-5 mb-5">
+      <View className="flex flex-row my-8 gap-1.5">
         <Button
-          width="full"
+          width="half"
           onPress={createDestinationPhotonValue}
-          buttonType="accentOutline"
+          buttonType="primaryOutline"
         >
-          Zu Favoriten hinzufügen
+          Zu Favoriten
         </Button>
-        <Button width="full" onPress={() => router.back()} buttonType="accent">
+        <Button width="half" onPress={() => router.back()} buttonType="accent">
           Fertig!
         </Button>
       </View>

@@ -22,7 +22,7 @@ export function Card({ children, color = 'invertedPrimary' }: CardProps) {
   return (
     <View
       style={styles.card}
-      className={`rounded-3xl bg-${color} drop-shadow-[4px_4px_10px_rgba(0,0,0,1)] flex-1`}
+      className={`rounded-[25px] bg-${color} drop-shadow-[4px_4px_10px_rgba(0,0,0,1)] flex-1`}
     >
       {children}
     </View>
