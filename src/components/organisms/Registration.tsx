@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
 import { usersControllerCreateUserMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { PopUp } from '@/components/organisms/PopUp';
 
 export function Registration() {
   // const { onLogin } = useAuthStore((state) => state.actions);
@@ -25,11 +26,7 @@ export function Registration() {
     onSuccess: async (successData) => {
       if (!successData) {
         Alert.alert('Registration Failed', 'Please try again');
-
-        return;
       }
-      // onLogin(successData.accessToken);
-      router.replace('/home');
     },
   });
   const ref = useRef<TextInput>(null);
@@ -52,7 +49,9 @@ export function Registration() {
   if (data) {
     return (
       <SafeAreaView>
-        <Text>Success</Text>
+        <PopUp visible>
+          <Text className="font-atkinsonRegular text-large text-textColor">Ihnen wurde eine Email zugesendet. Bitte bestätigen Sie ihre Email Adresse um fortzufahren.</Text>
+        </PopUp>
       </SafeAreaView>
     );
   }

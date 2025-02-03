@@ -1,7 +1,7 @@
 import { AtkinsonHyperlegible_400Regular } from '@expo-google-fonts/atkinson-hyperlegible';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 
@@ -9,13 +9,13 @@ import 'react-native-reanimated';
 import '@/global.css';
 import generalSansSemi from '@/assets/fonts/GeneralSans-Semibold.otf';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import * as Linking from 'expo-linking';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
-    // TODO add Theme Provider
-
     return (
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
@@ -27,8 +27,6 @@ function RootLayoutNav() {
                                 fontWeight: 'bold',
                             },
 
-                            // eslint-disable-next-line react/jsx-no-undef
-                            // headerBackVisible: false, // TODO: set to false when back button is implemented
                         }}
                     >
                         <Stack.Screen
@@ -98,6 +96,29 @@ export default function RootLayout() {
             SplashScreen.hideAsync();
         }
     }, [loaded]);
+    const router = useRouter();
+
+    useEffect(() => {
+        const handleDeepLink = async (event: { url: string }) => {
+            const { queryParams } = Linking.parse(event.url);
+            if (queryParams?.token) {
+                await AsyncStorage.setItem('emailConfirmationToken', queryParams.token as string);
+                console.log('Stored token:', queryParams.token);
+            }
+        };
+
+        // Listen for deep links when app is already open
+        const subscription = Linking.addEventListener('url', handleDeepLink);
+
+        // Handle deep link if app was opened from a link
+        Linking.getInitialURL().then((url) => {
+            if (url) handleDeepLink({ url });
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, [router]);
 
     if (!loaded) {
         return null;

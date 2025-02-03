@@ -7,8 +7,8 @@ interface PopUpProps {
   visible: boolean;
   onClick?: () => void;
   onClickButtonText?: string;
-  onCloseClick: () => void;
-  onCloseButtonText: string;
+  onCloseClick?: () => void;
+  onCloseButtonText?: string;
   children: React.ReactNode;
   onDismiss?: () => void;
 }
@@ -37,13 +37,13 @@ export function PopUp({
             </View>
 
             <View className="flex flex-row mx-3 mb-5 gap-1.5">
-              <Button
+              {onCloseClick && <Button
                 width={onClick ? 'half' : 'third'}
                 onPress={onCloseClick}
                 buttonType={onClick ? 'primaryOutline' : 'primary'}
               >
                 {onCloseButtonText}
-              </Button>
+              </Button>}
               {onClick && onClickButtonText && (
                 <Button width="half" onPress={onClick} buttonType="accent">
                   {onClickButtonText}
