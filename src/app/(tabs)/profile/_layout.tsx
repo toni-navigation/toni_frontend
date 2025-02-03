@@ -40,6 +40,14 @@ function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="home-address"
+        options={{
+          headerTitle: 'Heimatadresse',
+
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
+        }}
+      />
+      <Stack.Screen
         name="calibration/index"
         options={{
           headerTitle: 'Kalibrierung',

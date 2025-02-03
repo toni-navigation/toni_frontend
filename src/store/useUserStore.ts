@@ -16,6 +16,8 @@ type UserState = {
     resetUserStore: () => void;
     resetCalibration: () => void;
     addUser: (user: User) => void;
+    changeFirstName: (firstname: string) => void;
+    changeLastName: (lastname: string) => void;
   };
 };
 
@@ -50,6 +52,20 @@ export const useUserStore = create<UserState>()(
             };
             state.calibrationFactor = user.calibrationFactor;
           }),
+        changeFirstName: (firstname) => {
+          set((state) => {
+            if (state.user) {
+              state.user.firstname = firstname;
+            }
+          });
+        },
+        changeLastName: (lastname) => {
+          set((state) => {
+            if (state.user) {
+              state.user.lastname = lastname;
+            }
+          });
+        },
         resetCalibration: () =>
           set((state) => ({ ...state, calibrationFactor: null })),
         resetUserStore: () =>
