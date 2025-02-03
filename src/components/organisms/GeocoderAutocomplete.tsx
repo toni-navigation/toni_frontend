@@ -13,11 +13,9 @@ type GeocoderAutocompleteProps = {
   label?: string;
   placeholder: string;
   onChange: (newValue: CreatePhotonFeatureDto | undefined | null) => void;
-  extraSuggestions: boolean;
 };
 
 export function GeocoderAutocomplete({
-  extraSuggestions,
   label,
   placeholder,
   value,
@@ -28,7 +26,10 @@ export function GeocoderAutocomplete({
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
 
-  const { data } = useGeocoding(debouncedInputValue, focused);
+  const { data, isLoading, isPending, status } = useGeocoding(
+    debouncedInputValue,
+    focused
+  );
   useEffect(() => {
     let newValue = '';
     if (value) {
@@ -57,9 +58,9 @@ export function GeocoderAutocomplete({
         onBlur={() => setFocused(false)}
       />
       <ScrollView>
+        {/* {isLoading && <ActivityIndicator size="small" />} */}
         {data && data.features.length >= 0 && (
           <Suggestions
-            extraSuggestions={extraSuggestions}
             suggestions={data.features}
             onLocationSuggestionClick={(
               suggestion: CreatePhotonFeatureDto | null

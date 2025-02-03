@@ -31,7 +31,6 @@ export default function GeneralSettings() {
           value={user?.lastname ? `${user.lastname}` : undefined}
         />
         <GeocoderAutocomplete
-          extraSuggestions={false}
           label="Heimatadresse"
           value={undefined}
           placeholder="Heimatadresse eingeben"

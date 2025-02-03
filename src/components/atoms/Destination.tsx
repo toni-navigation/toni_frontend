@@ -15,7 +15,7 @@ export function Destination({ children, onPress }: DestinationProps) {
       accessibilityLabel={`${children}`}
       onPress={onPress}
       className="flex flex-row items-center
-            bg-primary rounded-[25px] my-5 py-3 px-2"
+            bg-primary rounded-[25px] my-2 py-3 px-2"
     >
       <Text
         testID="DestinationText"

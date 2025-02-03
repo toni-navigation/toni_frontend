@@ -28,12 +28,12 @@ export function TripSummary({
   const { theme } = useContext(ThemeContext);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
-  const convertSecondsToMinutes = (seconds: number | undefined) => {
-    if (!seconds) return 0;
+  // const convertSecondsToMinutes = (seconds: number | undefined) => {
+  //   if (!seconds) return 0;
+  //
+  //   return Math.floor(seconds / 60);
+  // };
 
-    return Math.floor(seconds / 60);
-  };
-  console.log(length, summary.length * 1000);
   const getStrokeColor = (
     buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline'
   ) => {
@@ -103,7 +103,7 @@ export function TripSummary({
         {' | '}
         {length.toFixed(1)} km
         {' | '}
-        {calculateSteps(length, calibrationFactor)} Schritte
+        {calculateSteps(length, calibrationFactor)?.toFixed(0)} Schritte
       </Text>
       <View className="mt-8 w-full flex items-center flex-row justify-center relative">
         <View className="w-2/3 flex items-center px-5">

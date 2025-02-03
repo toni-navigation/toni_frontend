@@ -216,11 +216,11 @@ export const authenticationControllerConfirmEmailOptions = (options: Options<Aut
     });
 };
 
-export const authenticationControllerForgotPasswordQueryKey = (options?: Options<AuthenticationControllerForgotPasswordData>) => [
+export const authenticationControllerForgotPasswordQueryKey = (options: Options<AuthenticationControllerForgotPasswordData>) => [
     createQueryKey('authenticationControllerForgotPassword', options)
 ];
 
-export const authenticationControllerForgotPasswordOptions = (options?: Options<AuthenticationControllerForgotPasswordData>) => {
+export const authenticationControllerForgotPasswordOptions = (options: Options<AuthenticationControllerForgotPasswordData>) => {
     return queryOptions({
         queryFn: async ({ queryKey, signal }) => {
             const { data } = await authenticationControllerForgotPassword({

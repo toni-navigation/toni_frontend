@@ -213,7 +213,12 @@ export type AuthenticationControllerConfirmEmailResponses = {
 };
 
 export type AuthenticationControllerForgotPasswordData = {
-    body?: never;
+    body: {
+        /**
+         * The email address of the user who wants to reset their password.
+         */
+        email: string;
+    };
     url: '/api/authentication/forgot-password';
 };
 

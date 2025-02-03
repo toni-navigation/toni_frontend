@@ -172,7 +172,8 @@ export default function ProfilePage() {
                   />
                 }
               >
-                {user?.password ? '********' : 'Kein Passwort'}
+                {/* {user?.password ? '********' : 'Kein Passwort'} */}
+                Kein Passwort
               </ProfileMenuItem>
             </ProfileMenuCard>
             {/* {isPending && <ActivityIndicator size="large" />} */}

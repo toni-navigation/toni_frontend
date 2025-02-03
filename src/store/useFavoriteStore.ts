@@ -20,7 +20,7 @@ type FavoriteState = {
     addTitle: (title: string) => void;
     resetFavoritesStore: () => void;
     addPhotonFeature: (
-      photonFeature: CreatePhotonFeatureDto | undefined
+      photonFeature: CreatePhotonFeatureDto | undefined | null
     ) => void;
     changeIsPinned: (isPinned: boolean) => void;
     changeIsCurrentLocation: (isCurrentLocation: boolean) => void;
@@ -54,6 +54,12 @@ export const useFavoriteStore = create<FavoriteState>()(
           set((state) => {
             if (!state.favorite) {
               state.favorite = {};
+            }
+            // TODO: Fix this
+            if (photonFeature === null) {
+              state.favorite.photonFeature = undefined;
+
+              return;
             }
             state.favorite.photonFeature = photonFeature;
           }),

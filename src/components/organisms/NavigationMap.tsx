@@ -1,13 +1,7 @@
 import { NearestPointOnLine } from '@turf/nearest-point-on-line';
 import { LocationObject } from 'expo-location';
 import React, { useContext } from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 
 import { themes } from '@/colors';
@@ -65,56 +59,56 @@ export function NavigationMap({
   // const [mockLocation, setMockLocation] = useState(origin || [0, 0]); // Start from the origin or default to (0, 0)
 
   // Move mock location based on direction
-  const moveLocation = (direction: string) => {
-    const step = 0.00005; // Adjust step size for movement
-    if (!currentLocation) {
-      return;
-    }
-    let newLocation: [number, number];
-    switch (direction) {
-      case 'up':
-        newLocation = [
-          currentLocation.coords.latitude + step,
-          currentLocation.coords.longitude,
-        ];
-        break;
-      case 'down':
-        newLocation = [
-          currentLocation.coords.latitude - step,
-          currentLocation.coords.longitude,
-        ];
-        break;
-      case 'left':
-        newLocation = [
-          currentLocation.coords.latitude,
-          currentLocation.coords.longitude - step,
-        ];
-        break;
-      case 'right':
-        newLocation = [
-          currentLocation.coords.latitude,
-          currentLocation.coords.longitude + step,
-        ];
-        break;
-      default:
-        newLocation = [
-          currentLocation.coords.latitude,
-          currentLocation.coords.longitude,
-        ];
-    }
-    updateCurrentLocation({
-      coords: {
-        latitude: newLocation[0],
-        longitude: newLocation[1],
-        accuracy: 5, // Example accuracy value
-        heading: 0, // Example heading value
-        speed: 0, // Example speed value
-        altitude: 0, // Example altitude value
-        altitudeAccuracy: 0, // Example altitude accuracy value
-        timestamp: Date.now(), // Example timestamp value
-      },
-    });
-  };
+  // const moveLocation = (direction: string) => {
+  //   const step = 0.00005; // Adjust step size for movement
+  //   if (!currentLocation) {
+  //     return;
+  //   }
+  //   let newLocation: [number, number];
+  //   switch (direction) {
+  //     case 'up':
+  //       newLocation = [
+  //         currentLocation.coords.latitude + step,
+  //         currentLocation.coords.longitude,
+  //       ];
+  //       break;
+  //     case 'down':
+  //       newLocation = [
+  //         currentLocation.coords.latitude - step,
+  //         currentLocation.coords.longitude,
+  //       ];
+  //       break;
+  //     case 'left':
+  //       newLocation = [
+  //         currentLocation.coords.latitude,
+  //         currentLocation.coords.longitude - step,
+  //       ];
+  //       break;
+  //     case 'right':
+  //       newLocation = [
+  //         currentLocation.coords.latitude,
+  //         currentLocation.coords.longitude + step,
+  //       ];
+  //       break;
+  //     default:
+  //       newLocation = [
+  //         currentLocation.coords.latitude,
+  //         currentLocation.coords.longitude,
+  //       ];
+  //   }
+  //   updateCurrentLocation({
+  //     coords: {
+  //       latitude: newLocation[0],
+  //       longitude: newLocation[1],
+  //       accuracy: 5, // Example accuracy value
+  //       heading: 0, // Example heading value
+  //       speed: 0, // Example speed value
+  //       altitude: 0, // Example altitude value
+  //       altitudeAccuracy: 0, // Example altitude accuracy value
+  //       timestamp: Date.now(), // Example timestamp value
+  //     },
+  //   });
+  // };
   const screenHeight = Dimensions.get('window').height;
 
   return (
@@ -132,22 +126,22 @@ export function NavigationMap({
         showsCompass
       >
         {/* Mock Location Marker */}
-        <Marker
-          coordinate={{
-            latitude: currentLocation ? currentLocation.coords.latitude : 0,
-            longitude: currentLocation ? currentLocation.coords.longitude : 0,
-          }}
-          title="Mock Location"
-          description="Simulated location"
-        >
-          <ToniCurrentLocation
-            width={40}
-            height={40}
-            fill={themes.external[`--${theme}-mode-icon-button`]}
-            stroke={themes.external[`--${theme}-mode-icon-button`]}
-            strokeWidth={3}
-          />
-        </Marker>
+        {/* <Marker */}
+        {/*   coordinate={{ */}
+        {/*     latitude: currentLocation ? currentLocation.coords.latitude : 0, */}
+        {/*     longitude: currentLocation ? currentLocation.coords.longitude : 0, */}
+        {/*   }} */}
+        {/*   title="Mock Location" */}
+        {/*   description="Simulated location" */}
+        {/* > */}
+        {/*   <ToniCurrentLocation */}
+        {/*     width={40} */}
+        {/*     height={40} */}
+        {/*     fill={themes.external[`--${theme}-mode-icon-button`]} */}
+        {/*     stroke={themes.external[`--${theme}-mode-icon-button`]} */}
+        {/*     strokeWidth={3} */}
+        {/*   /> */}
+        {/* </Marker> */}
 
         {/* Snapshot Marker */}
         {snapshot && origin && (
@@ -245,40 +239,40 @@ export function NavigationMap({
       </MapView>
 
       {/* Navigation Buttons */}
-      <View style={styles.controls}>
-        <View style={styles.row}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.button}
-            onPress={() => moveLocation('up')}
-          >
-            <Text style={styles.buttonText}>↑</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.button}
-            onPress={() => moveLocation('left')}
-          >
-            <Text style={styles.buttonText}>←</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.button}
-            onPress={() => moveLocation('down')}
-          >
-            <Text style={styles.buttonText}>↓</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.button}
-            onPress={() => moveLocation('right')}
-          >
-            <Text style={styles.buttonText}>→</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      {/* <View style={styles.controls}> */}
+      {/*   <View style={styles.row}> */}
+      {/*     <TouchableOpacity */}
+      {/*       accessibilityRole="button" */}
+      {/*       style={styles.button} */}
+      {/*       onPress={() => moveLocation('up')} */}
+      {/*     > */}
+      {/*       <Text style={styles.buttonText}>↑</Text> */}
+      {/*     </TouchableOpacity> */}
+      {/*   </View> */}
+      {/*   <View style={styles.row}> */}
+      {/*     <TouchableOpacity */}
+      {/*       accessibilityRole="button" */}
+      {/*       style={styles.button} */}
+      {/*       onPress={() => moveLocation('left')} */}
+      {/*     > */}
+      {/*       <Text style={styles.buttonText}>←</Text> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity */}
+      {/*       accessibilityRole="button" */}
+      {/*       style={styles.button} */}
+      {/*       onPress={() => moveLocation('down')} */}
+      {/*     > */}
+      {/*       <Text style={styles.buttonText}>↓</Text> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity */}
+      {/*       accessibilityRole="button" */}
+      {/*       style={styles.button} */}
+      {/*       onPress={() => moveLocation('right')} */}
+      {/*     > */}
+      {/*       <Text style={styles.buttonText}>→</Text> */}
+      {/*     </TouchableOpacity> */}
+      {/*   </View> */}
+      {/* </View> */}
     </View>
   );
 }

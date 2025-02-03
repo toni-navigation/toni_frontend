@@ -9,16 +9,10 @@ export function useGeocoding(
   focused: boolean,
   limit = 5
 ) {
-  // const currentLocation = useCurrentLocationStore(
-  //   (state) => state.currentLocation
-  // );
-  // const defaultBbox = currentLocation && getBbox(currentLocation);
-
   const parameters: Parameters<typeof PhotonService.geocoding>[0] = {
     q: debouncedInputValue,
     limit,
     lang: 'de',
-    // ...(defaultBbox ? { bbox: defaultBbox.join(',') } : {}),
   };
 
   return useQuery({

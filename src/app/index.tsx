@@ -29,7 +29,7 @@ export default function Index() {
       }
       const watchPosition = await Location.watchPositionAsync(
         {
-          accuracy: Location.Accuracy.High,
+          accuracy: Location.Accuracy.BestForNavigation,
           timeInterval: 1000,
           distanceInterval: 1,
         },

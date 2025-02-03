@@ -74,6 +74,7 @@ export default function FavoritesPage() {
               router.push('/favorites/create');
             }}
             buttonType="accent"
+            // disabled={isError}
           >
             Neu
           </Button>

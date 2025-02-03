@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Line, Polyline } from 'react-native-svg';
+import Svg, { Line, Linecap, Linejoin, Polyline } from 'react-native-svg';
 
 interface ToniArrowHighProps {
   width?: number;
@@ -7,8 +7,8 @@ interface ToniArrowHighProps {
   viewBox?: string;
   stroke?: string;
   strokeWidth?: number;
-  strokeLinecap?: 'butt' | 'round' | 'square';
-  strokeLinejoin?: 'miter' | 'round' | 'bevel';
+  strokeLinecap?: Linecap | undefined;
+  strokeLinejoin?: Linejoin | undefined;
   fill?: string;
 }
 
@@ -18,8 +18,8 @@ export function ToniArrowHigh({
   viewBox = '0 0 50 50',
   stroke = 'currentColor',
   strokeWidth = 2,
-  strokeLinecap = 'none',
-  strokeLinejoin = 'none',
+  strokeLinecap,
+  strokeLinejoin,
   fill = 'currentColor',
 }: ToniArrowHighProps) {
   return (

@@ -41,7 +41,7 @@ export function ProfileMenuCard({
             }
             iconName="Bearbeiten"
             onPress={onPress}
-            buttonType="icon"
+            buttonType="primary"
           />
         </View>
         {children}
