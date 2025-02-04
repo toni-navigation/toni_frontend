@@ -41,6 +41,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   assetBundlePatterns: ['**/*'],
+  scheme: 'toni',
+
   ios: {
     supportsTablet: true,
     requireFullScreen: true,
@@ -54,6 +56,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     bundleIdentifier: 'io.toni.app',
   },
+
   android: {
     adaptiveIcon: {
       foregroundImage: './src/assets/images/adaptive-icon.png',
@@ -61,8 +64,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     package: 'io.toni.app',
   },
+
   web: {
     favicon: './src/assets/favicon.png',
   },
-  scheme: 'toni',
 });
