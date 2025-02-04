@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { IconButton } from '@/components/atoms/IconButton';
-import { ToniCircle } from '@/components/atoms/icons/ToniCircle';
+import { ToniEdit } from '@/components/atoms/icons/ToniEdit';
 
 interface ProfileMenuCardProps {
   header: string;
@@ -23,7 +23,7 @@ export function ProfileMenuCard({
 
   return (
     <View
-      className={`rounded-[25px] mt-8 bg-white border-gray border-2 shadow-md ${classes}`}
+      className={`rounded-[25px] mt-8 bg-background border-gray border-2 shadow-md ${classes}`}
     >
       <View className="p-6">
         <View className="flex flex-row justify-between items-center">
@@ -32,7 +32,7 @@ export function ProfileMenuCard({
           </Text>
           <IconButton
             icon={
-              <ToniCircle
+              <ToniEdit
                 height={30}
                 width={30}
                 stroke={themes.external[`--${theme}-mode-icon-button`]}
@@ -41,7 +41,7 @@ export function ProfileMenuCard({
             }
             iconName="Bearbeiten"
             onPress={onPress}
-            buttonType="primary"
+            buttonType="icon"
           />
         </View>
         {children}

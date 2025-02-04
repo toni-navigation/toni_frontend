@@ -6,7 +6,7 @@ client.setConfig({
   // IOS
   // baseUrl:'http://127.0.0.1:3000',
   // ANDROID
-  baseUrl: process.env.EXPO_PUBLIC_LOCAL_URL_IOS,
+  baseUrl: 'http://10.0.2.2:3000',
 });
 export const TOKEN = 'token';
 client.interceptors.request.use(async (request, options) => {
