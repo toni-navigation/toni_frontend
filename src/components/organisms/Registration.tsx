@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { DefaultError, useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
@@ -19,7 +19,23 @@ export function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [requiredFields, setRequiredFields] = useState(false);
+  // function getErrorMessage(errors, field) {
+  //   const errorM = errors.find((errProp) => errProp.property === field);
+  //   console.log('error', errorM);
+  //
+  //   return errorM;
+  // }
 
+  function getErrorMessage(errors: DefaultError, field: string): string | null {
+    const errorMessage = errors.message.find(
+      (errProp) => errProp.property === field
+    );
+
+    const test = Object.values(errorMessage.constraints)[0];
+
+    return errorMessage ? test : null;
+  }
   const { mutate, error, isError, data, isPending } = useMutation({
     ...usersControllerCreateUserMutation(),
     onSuccess: async (successData) => {
@@ -35,8 +51,9 @@ export function Registration() {
   const ref = useRef<TextInput>(null);
 
   const register = () => {
+    setRequiredFields(false);
     if (!email || !password || !confirmPassword) {
-      console.error('All fields are required!');
+      setRequiredFields(true);
 
       return;
     }
@@ -74,6 +91,11 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
+        {error && (
+          <Text className="font-generalSansSemi text-small text-accent mb-4">
+            {getErrorMessage(error, 'email')}
+          </Text>
+        )}
         <InputText
           className="mb-2"
           accessibilityLabel="Passwort *"
@@ -89,6 +111,11 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
+        {error && (
+          <Text className="font-generalSansSemi text-small text-accent mb-4">
+            {getErrorMessage(error, 'password')}
+          </Text>
+        )}
         <InputText
           className="mb-2"
           accessibilityLabel="Passwort bestätigen"
@@ -104,9 +131,19 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
+        {error && (
+          <Text className="font-generalSansSemi text-small text-accent mb-4">
+            {getErrorMessage(error, 'confirmPassword')}
+          </Text>
+        )}
       </ScrollView>
 
       <View className="flex mb-3 items-center">
+        {requiredFields && (
+          <Text className="mb-5 text-small font-generalSansSemi text-accent">
+            Bitte alle Felder ausfüllen!
+          </Text>
+        )}
         <Button
           onPress={register}
           width="third"
