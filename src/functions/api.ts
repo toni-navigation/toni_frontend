@@ -6,10 +6,11 @@ import { jwtDecode } from 'jwt-decode';
 // IOS
 // const BASE_URL = 'http://127.0.0.1:3000';
 // ANDROID
-// const BASE_URL = 'http://10.0.2.2:3000';
+const BASE_URL = 'http://10.0.2.2:3000';
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_LOCAL_URL_IOS, // Replace with your API base URL
+  // baseURL: process.env.EXPO_PUBLIC_LOCAL_URL_IOS, // Replace with your API base URL
   // baseURL: 'http://127.0.0.1:3000', // Replace with your API base URL
+  baseURL: BASE_URL,
 });
 // Add an interceptor to attach the token to requests
 api.interceptors.request.use(
@@ -35,4 +36,4 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-export { api };
+export { api, BASE_URL };
