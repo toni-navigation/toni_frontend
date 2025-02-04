@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, TextInput, View, Text } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
@@ -10,16 +10,20 @@ import { authenticationControllerLoginMutation } from '@/services/api-backend/@t
 import { TOKEN } from '@/services/client';
 import { saveToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useUserStore } from '@/store/useUserStore';
 
 export function Login() {
-  const { addUser, addCalibration } = useUserStore((state) => state.actions);
+  // const { addUser, addCalibration } = useUserStore((state) => state.actions);
   const { addToken } = useAuthStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [requiredFields, setRequiredFields] = useState(false);
 
-  const { error, isPending, mutate, data } = useMutation({
+  const {
+    error: loginError,
+    isPending,
+    mutate,
+    data,
+  } = useMutation({
     ...authenticationControllerLoginMutation(),
     onSuccess: async (successData) => {
       if (!successData) {
@@ -29,7 +33,6 @@ export function Login() {
       }
       try {
         await saveToken(TOKEN, successData.accessToken);
-        addUser(successData.user);
         addToken(successData.accessToken);
         router.replace('/home');
       } catch (error) {
@@ -79,7 +82,7 @@ export function Login() {
             ref.current?.focus();
           }}
         />
-        {error && error.statusCode === 404 && (
+        {loginError && loginError.statusCode === 404 && (
           <Text className="font-generalSansSemi text-small text-accent mb-4">
             Kein Nutzer mit dieser Email gefunden
           </Text>
@@ -98,7 +101,7 @@ export function Login() {
             ref.current?.focus();
           }}
         />
-        {error && error.statusCode === 500 && (
+        {loginError && loginError.statusCode === 500 && (
           <Text className="font-generalSansSemi text-small text-accent">
             Falsches Password
           </Text>

@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
 import { Dimensions, SafeAreaView, ScrollView, View } from 'react-native';
@@ -19,24 +20,36 @@ import { Card } from '@/components/organisms/Card';
 import { Login } from '@/components/organisms/Login';
 import { Registration } from '@/components/organisms/Registration';
 import { TabBar } from '@/components/organisms/TabBar';
+import { photonValue } from '@/functions/photonValue';
+import { QUERY_KEYS } from '@/query-keys';
+import {
+  authenticationControllerGetUserOptions,
+  favoritesControllerFindHomeAddressOptions,
+} from '@/services/api-backend/@tanstack/react-query.gen';
 import { TOKEN } from '@/services/client';
 import { deleteToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useUserStore } from '@/store/useUserStore';
 
 export default function ProfilePage() {
-  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
-  const user = useUserStore((state) => state.user);
-  const { resetUserStore } = useUserStore((state) => state.actions);
-
+  const token = useAuthStore((state) => state.token);
   const { removeToken } = useAuthStore((state) => state.actions);
+  // const { addFavorite } = useFavoriteStore((state) => state.actions);
+  const { data: user } = useQuery({
+    ...authenticationControllerGetUserOptions(),
+    queryKey: [QUERY_KEYS.user, token],
+  });
 
+  const { data: homeAddress } = useQuery({
+    ...favoritesControllerFindHomeAddressOptions(),
+    queryKey: [QUERY_KEYS.home_address, token],
+  });
+  // if (home !== undefined) {
+  //   addFavorite(home);
+  // }
   const logout = async () => {
     try {
       await deleteToken(TOKEN);
       removeToken();
-      resetUserStore();
-      router.dismissTo('/intro');
     } catch (error) {
       console.error(error);
     }
@@ -86,7 +99,17 @@ export default function ProfilePage() {
             <ProfileMenuCard
               header="Allgemein"
               onPress={() => {
-                router.push('/profile/general-settings');
+                router.push({
+                  pathname: '/profile/general-settings',
+                  params: {
+                    userId: user?.id,
+                    firstname: user?.firstname,
+                    lastname: user?.lastname,
+                    homeFavorite: homeAddress
+                      ? JSON.stringify(homeAddress)
+                      : undefined,
+                  },
+                });
               }}
             >
               <ProfileMenuItem
@@ -127,7 +150,9 @@ export default function ProfilePage() {
                   />
                 }
               >
-                Keine Heimat Adresse
+                {homeAddress
+                  ? photonValue(homeAddress.photonFeature)
+                  : 'Keine Heimat Adresse'}
               </ProfileMenuItem>
             </ProfileMenuCard>
             <ProfileMenuCard
@@ -147,8 +172,8 @@ export default function ProfilePage() {
                   />
                 }
               >
-                {calibrationFactor
-                  ? `Deine Schrittlänge: ${calibrationFactor} m`
+                {user.calibrationFactor
+                  ? `Deine Schrittlänge: ${user.calibrationFactor} m`
                   : 'Keine Schrittlänge hinterlegt'}
               </ProfileMenuItem>
             </ProfileMenuCard>

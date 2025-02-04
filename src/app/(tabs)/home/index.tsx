@@ -24,6 +24,7 @@ import { ToniCurrentLocation } from '@/components/atoms/icons/ToniCurrentLocatio
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { PopUp } from '@/components/organisms/PopUp';
 import { inputButtonOutput } from '@/functions/originOutput';
+import { QUERY_KEYS } from '@/query-keys';
 import { Favorite } from '@/services/api-backend';
 import { favoritesControllerFindAllFavoritesOptions } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -44,7 +45,7 @@ export default function HomePage() {
 
   const { data: favorites } = useQuery({
     ...favoritesControllerFindAllFavoritesOptions(),
-    queryKey: ['favorites', token],
+    queryKey: [QUERY_KEYS.favorites, token],
   });
 
   const { theme } = useContext(ThemeContext);

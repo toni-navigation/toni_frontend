@@ -27,7 +27,7 @@ export default function AccountSettings() {
           placeholder="Passwort eingeben"
           accessibilityLabel="Passwort"
           accessibilityHint="Passwort eingeben"
-          value={user?.password ? `********` : undefined}
+          // value={user?.password ? `********` : undefined}
         />
         <Text
           className="underline text-medium font-generalSansSemi text-primary mt-5"

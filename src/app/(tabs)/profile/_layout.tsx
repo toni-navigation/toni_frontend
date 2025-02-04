@@ -29,6 +29,14 @@ function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="location-modal"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
         name="account-settings"
         options={{
           headerTitle: 'Allgemeine Einstellungen',

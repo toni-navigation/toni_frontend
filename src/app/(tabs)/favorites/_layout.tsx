@@ -37,14 +37,6 @@ function FavoritesLayout() {
           headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
-      <Stack.Screen
-        name="location-modal"
-        options={{
-          headerShown: false,
-          presentation: 'modal',
-          gestureEnabled: true,
-        }}
-      />
     </Stack>
   );
 }

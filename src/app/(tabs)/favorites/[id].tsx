@@ -1,10 +1,15 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { Suspense } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 
 import { ModalWrapper } from '@/components/favorite/ModalWrapper';
 import { Form } from '@/components/organisms/Form';
+import { QUERY_KEYS } from '@/query-keys';
 import { UpdateFavoriteDto } from '@/services/api-backend';
 import {
   favoritesControllerDeleteFavoriteMutation,
@@ -15,13 +20,14 @@ import { useFavoriteStore } from '@/store/useFavoriteStore';
 
 export default function FavoritePage() {
   const favorite = useFavoriteStore((state) => state.favorite);
+  const queryClient = useQueryClient();
 
   const { id: favoriteId } = useLocalSearchParams<{ id: string }>();
   const { data } = useSuspenseQuery({
     ...favoritesControllerFindFavoriteByIdOptions({
       path: { favoriteId },
     }),
-    queryKey: ['favorites', favoriteId],
+    queryKey: [QUERY_KEYS.favorites, favoriteId],
   });
 
   const { mutate: updateFavorite } = useMutation({
@@ -30,16 +36,28 @@ export default function FavoritePage() {
       Alert.alert(`${successData.title} erfolgreich bearbeitet.`, '', [
         {
           text: 'OK',
-          onPress: () => {
-            router.replace('/favorites');
+          onPress: async () => {
+            await queryClient.invalidateQueries({
+              queryKey: [QUERY_KEYS.favorites],
+            });
+            if (successData.destinationType === 'home') {
+              await queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.home_address],
+              });
+            }
+            router.back();
           },
         },
       ]);
     },
     onError: (error) => {
-      Alert.alert(error.message);
+      Alert.alert(
+        'Es ist leider etwas schiefgelaufen.',
+        'Eventuell hast du den Titel schonmal verwendet.'
+      );
     },
   });
+
   const { mutate: deleteFavorite } = useMutation({
     ...favoritesControllerDeleteFavoriteMutation({
       path: { favoriteId },
@@ -48,8 +66,17 @@ export default function FavoritePage() {
       Alert.alert(`${successData.title} erfolgreich gelöscht.`, '', [
         {
           text: 'OK',
-          onPress: () => {
-            router.replace('/favorites');
+          onPress: async () => {
+            await queryClient.invalidateQueries({
+              queryKey: [QUERY_KEYS.favorites],
+            });
+            if (successData.destinationType === 'home') {
+              await queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.home_address],
+              });
+            }
+
+            router.back();
           },
         },
       ]);

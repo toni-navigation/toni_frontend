@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { FavoritesCard } from '@/components/atoms/FavoritesCard';
 import { Header } from '@/components/atoms/Header';
+import { QUERY_KEYS } from '@/query-keys';
 import { favoritesControllerFindAllFavoritesOptions } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
@@ -28,7 +29,7 @@ export default function FavoritesPage() {
     isPending,
   } = useQuery({
     ...favoritesControllerFindAllFavoritesOptions(),
-    queryKey: ['favorites', token],
+    queryKey: [QUERY_KEYS.favorites, token],
   });
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.12 * screenHeight;
@@ -61,9 +62,11 @@ export default function FavoritesPage() {
               ))}
             {favorites &&
               favorites?.length > 0 &&
-              favorites.map((favorite) => (
-                <FavoritesCard key={favorite.id} favorite={favorite} />
-              ))}
+              favorites
+                // .filter((favorite) => favorite.destinationType === 'normal')
+                .map((favorite) => (
+                  <FavoritesCard key={favorite.id} favorite={favorite} />
+                ))}
           </View>
         </ScrollView>
         <View className="flex items-center justify-center p-5">

@@ -3,6 +3,7 @@ import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Linking } from 'react-native';
 
 import '@/services/client';
+import { Intro } from '@/components/Intro';
 import { useTokenLoader } from '@/queries/useTokenLoader';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
@@ -44,7 +45,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      {data ? <Redirect href="/home" /> : <Redirect href="/intro" />}
+      {data ? <Redirect href="/home" /> : <Intro />}
     </Suspense>
   );
 }
