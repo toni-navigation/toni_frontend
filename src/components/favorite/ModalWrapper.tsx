@@ -13,7 +13,7 @@ export function ModalWrapper({ children, title }: ModalWrapperProps) {
     <SafeAreaView className="flex-1 bg-invertedPrimary">
       <View className="p-5 flex-1">
         <Header classes="mt-5 mb-8">{title}</Header>
-        <Card color="white">{children}</Card>
+        <Card color="background">{children}</Card>
       </View>
     </SafeAreaView>
   );

@@ -18,9 +18,9 @@ export function ToniArrowHigh({
   viewBox = '0 0 50 50',
   stroke = 'currentColor',
   strokeWidth = 2,
-  strokeLinecap,
-  strokeLinejoin,
-  fill = 'currentColor',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  fill = 'none',
 }: ToniArrowHighProps) {
   return (
     <Svg width={width} height={height} viewBox={viewBox}>

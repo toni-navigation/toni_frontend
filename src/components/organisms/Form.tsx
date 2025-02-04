@@ -1,8 +1,10 @@
 import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
 import { InputButton } from '@/components/atoms/InputButton';
 import { InputText } from '@/components/atoms/InputText';
@@ -26,6 +28,7 @@ export function Form({
     (state) => state.actions
   );
   const ref = useRef<TextInput>(null);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -59,13 +62,17 @@ export function Form({
           <Checkbox
             value={favorite?.isPinned ?? false}
             onValueChange={changeIsPinned}
-            color={favorite?.isPinned ? '#0A585C' : undefined}
-            className="mr-2"
+            color={
+              favorite?.isPinned
+                ? `${themes.external[`--${theme}-mode-primary`]}`
+                : undefined
+            }
+            className="mr-2 border-primary"
           />
-          <Text>Angepinnt am Homescreen</Text>
+          <Text className="text-textColor">Angepinnt am Homescreen</Text>
         </View>
       </ScrollView>
-      <View className="pt-2 flex-row justify-center">
+      <View className="pt-2 flex-row justify-center gap-1.5">
         {existingFavorite && onDelete && (
           <Button width="half" onPress={onDelete} buttonType="primaryOutline">
             Löschen

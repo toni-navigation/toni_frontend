@@ -1,5 +1,10 @@
 import React from 'react';
-import { ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -24,7 +29,7 @@ export function Button({
       text: 'text-white',
     },
     accentOutline: {
-      button: 'bg-transparent border border-2 border-solid border-accent',
+      button: 'bg-background border border-2 border-solid border-accent',
       text: 'text-accent',
     },
     primary: {
@@ -32,7 +37,7 @@ export function Button({
       text: 'text-invertedPrimary',
     },
     primaryOutline: {
-      button: 'bg-transparent border border-2 border-solid border-primary',
+      button: 'bg-background border border-2 border-solid border-primary',
       text: 'text-primary',
     },
   };
@@ -48,6 +53,15 @@ export function Button({
     },
   };
 
+  const styles = StyleSheet.create({
+    shadow: {
+      shadowColor: '#000',
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+  });
+
   const accessibilityOutput = () => {
     if (disabled && isLoading) {
       return `${children} nicht nutzbar, wird geladen`;
@@ -61,6 +75,7 @@ export function Button({
 
   return (
     <TouchableOpacity
+      style={styles.shadow}
       accessibilityHint={accessibilityOutput()}
       className={`h-12 ${specificWidth[width].width}  flex justify-center py-2 px-4 rounded-[30px] ${variant[buttonType].button} ${disabled && 'opacity-30'} items-center`}
       onPress={(event) => {

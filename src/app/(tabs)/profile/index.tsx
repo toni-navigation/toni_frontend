@@ -12,6 +12,7 @@ import { ProfileMenuItem } from '@/components/atoms/ProfileMenuItem';
 import { ToniEmail } from '@/components/atoms/icons/ToniEmail';
 import { ToniHome } from '@/components/atoms/icons/ToniHome';
 import { ToniName } from '@/components/atoms/icons/ToniName';
+import { ToniPassword } from '@/components/atoms/icons/ToniPassword';
 import { ToniProfilePicture } from '@/components/atoms/icons/ToniProfilePicture';
 import { ToniSteps } from '@/components/atoms/icons/ToniSteps';
 import { Card } from '@/components/organisms/Card';
@@ -46,30 +47,40 @@ export default function ProfilePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 bg-invertedPrimary">
-        <View
-          style={{ height: viewHeight }}
-          className="px-8 py-5 bg-background rounded-b-[25] items-center"
-        >
-          <ToniProfilePicture height={70} width={70} />
-          <Header classes="text-center mt-4">
-            {user?.firstname && user?.lastname
-              ? `${user.firstname} ${user.lastname}`
-              : 'Mein Profil'}
-          </Header>
+      {!user ? (
+        <View className="flex-1 bg-invertedPrimary">
+          <View
+            style={{ height: viewHeight }}
+            className="px-8 py-5 bg-background rounded-b-[25] items-center"
+          >
+            <ToniProfilePicture height={70} width={70} />
+            <Header classes="text-center mt-4">Mein Profil</Header>
+          </View>
+          <View className="flex-1 m-5">
+            <Card color="background">
+              <TabBar
+                firstTabButtonText="Login"
+                secondTabButtonText="Registrierung"
+              >
+                <Login />
+                <Registration />
+              </TabBar>
+            </Card>
+          </View>
         </View>
-
-        {!user ? (
-          <Card>
-            <TabBar
-              firstTabButtonText="Login"
-              secondTabButtonText="Registrierung"
-            >
-              <Login />
-              <Registration />
-            </TabBar>
-          </Card>
-        ) : (
+      ) : (
+        <View className="flex-1 bg-invertedPrimary">
+          <View
+            style={{ height: viewHeight }}
+            className="px-8 py-5 bg-background rounded-b-[25] items-center"
+          >
+            <ToniProfilePicture height={70} width={70} />
+            <Header classes="text-center mt-4">
+              {user?.firstname && user?.lastname
+                ? `${user.firstname} ${user.lastname}`
+                : 'Mein Profil'}
+            </Header>
+          </View>
           <ScrollView className="px-8">
             <ProfileMenuCard
               header="Allgemein"
@@ -164,7 +175,7 @@ export default function ProfilePage() {
                 isLast
                 label="Passwort"
                 icon={
-                  <ToniEmail
+                  <ToniPassword
                     height={30}
                     width={30}
                     stroke={themes.external[`--${theme}-mode-icon-button`]}
@@ -189,8 +200,8 @@ export default function ProfilePage() {
               </Button>
             </View>
           </ScrollView>
-        )}
-      </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

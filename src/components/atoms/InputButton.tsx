@@ -22,21 +22,28 @@ export function InputButton({
     if (disabled) {
       return `${children} nicht nutzbar`;
     }
+    if (children === 'undefined' || children === null) {
+      return `${label} eingeben`;
+    }
 
     return `${children}`;
   };
 
   return (
     <View className="flex flex-col mb-4">
-      <Text className={`${icon ? 'pl-16' : 'pl-4'} mb-3 text-textColor`}>{label}</Text>
+      <Text
+        className={`${icon ? 'ps-16' : 'ps-3'} mb-2 text-primary text-xsmall`}
+      >
+        {label}
+      </Text>
       <View className="flex flex-row items-center">
-        <View className="pe-2">{icon && icon}</View>
+        <View className={`${icon ? 'pe-2' : ''}`}>{icon && icon}</View>
         <TouchableOpacity
           accessibilityHint={accessibilityOutput()}
-          className={`flex-row items-center border-2 border-primary rounded-[25px] flex-1 h-12 pb-0 ${classes}`}
+          className={`flex-row bg-background items-center border-2 border-primary rounded-[25px] flex-1 h-12 pb-0 ${classes}`}
           onPress={onPress}
           accessibilityRole="button"
-          accessibilityLabel={accessibilityOutput()}
+          accessibilityLabel={label}
           disabled={disabled}
           testID="InputButton"
         >

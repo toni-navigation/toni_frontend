@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 interface CardProps {
   children: React.ReactNode;
-  color?: 'primary' | 'secondary' | 'accent' | 'invertedPrimary' | 'white';
+  color?: 'primary' | 'secondary' | 'accent' | 'invertedPrimary' | 'background';
 }
 
 const styles = StyleSheet.create({
