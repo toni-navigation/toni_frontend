@@ -57,6 +57,7 @@ export default function ProfilePage() {
     try {
       await deleteToken(TOKEN);
       removeToken();
+      router.dismissTo('/intro');
     } catch (error) {
       console.error(error);
     }
