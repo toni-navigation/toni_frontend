@@ -51,8 +51,6 @@ export function NavigationMap({
   decodedShape,
   newLine,
   bbox,
-  updateCurrentLocation,
-  currentLocation,
 }: NavigationMapMapProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -147,8 +145,8 @@ export function NavigationMap({
         {snapshot && origin && (
           <Marker
             coordinate={{
-              latitude: snapshot.geometry.coordinates[0],
-              longitude: snapshot.geometry.coordinates[1],
+              latitude: origin[0],
+              longitude: origin[1],
             }}
             title="Nearest Point"
             description="You are here"
@@ -204,7 +202,7 @@ export function NavigationMap({
                   longitude: coord[1],
                 },
               ]}
-              strokeColor={themes.external[`--${theme}-mode-primary-inverted`]}
+              strokeColor={themes.external[`--accent`]}
               strokeWidth={6}
               zIndex={97}
             />

@@ -199,25 +199,6 @@ export const Navigation = forwardRef(
       return <IsFinished />;
     }
 
-    // if (showMap) {
-    //   return (
-    //
-    //   );
-    // }
-
-    // const maneuverLength =
-    //   snapshot &&
-    //   currentManeuverIndex &&
-    //   length(
-    //     lineSlice(
-    //       snapshot,
-    //       decodedShape.coordinates[
-    //         maneuvers[currentManeuverIndex - 1].end_shape_index
-    //       ],
-    //       line
-    //     )
-    //   );
-
     return (
       <>
         {showMap ? (

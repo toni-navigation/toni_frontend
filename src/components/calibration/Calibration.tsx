@@ -198,7 +198,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
         <Button
           width={isFromIntro ? 'half' : 'third'}
           buttonType="accent"
-          // disabled={isLoading}
+          disabled={isLoading}
           isLoading={isLoading}
           onPress={startPedometer}
         >
