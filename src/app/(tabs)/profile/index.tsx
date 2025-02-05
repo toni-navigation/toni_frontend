@@ -4,10 +4,12 @@ import React, { useContext } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
+  Linking,
   SafeAreaView,
   ScrollView,
+  Text,
   View,
-} from 'react-native'; // import { getCalibrationValue } from '@/functions/getCalibrationValue';
+} from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -15,6 +17,7 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { ProfileMenuCard } from '@/components/atoms/ProfileMenuCard';
 import { ProfileMenuItem } from '@/components/atoms/ProfileMenuItem';
+import { ToniCircle } from '@/components/atoms/icons/ToniCircle';
 import { ToniEmail } from '@/components/atoms/icons/ToniEmail';
 import { ToniHome } from '@/components/atoms/icons/ToniHome';
 import { ToniName } from '@/components/atoms/icons/ToniName';
@@ -64,15 +67,6 @@ export default function ProfilePage() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* <View className="flex-1 bg-invertedPrimary"> */}
-      {/*   <View */}
-      {/*     style={{ height: viewHeight }} */}
-      {/*     className="px-8 py-5 bg-background rounded-b-[25] items-center" */}
-      {/*   > */}
-      {/*     <ToniProfilePicture height={70} width={70} /> */}
-      {/*     <Header classes="text-center mt-4">Mein Profil</Header> */}
-      {/*   </View> */}
-      {/* </View> */}
       <View className="flex-1 bg-invertedPrimary">
         <View
           style={{ height: viewHeight }}
@@ -102,6 +96,7 @@ export default function ProfilePage() {
           <ScrollView className="px-8">
             <ProfileMenuCard
               header="Allgemein"
+              editButton
               onPress={() => {
                 router.push({
                   pathname: '/profile/general-settings',
@@ -161,6 +156,7 @@ export default function ProfilePage() {
             </ProfileMenuCard>
             <ProfileMenuCard
               header="Schrittlänge"
+              editButton
               onPress={() => {
                 router.push('/profile/calibration');
               }}
@@ -182,8 +178,8 @@ export default function ProfilePage() {
               </ProfileMenuItem>
             </ProfileMenuCard>
             <ProfileMenuCard
-              classes="mb-8"
               header="Konto"
+              editButton
               onPress={() => {
                 router.push({
                   pathname: '/profile/account-settings',
@@ -217,11 +213,82 @@ export default function ProfilePage() {
                 }
               >
                 {/* {user?.password ? '********' : 'Kein Passwort'} */}
-                Kein Passwort
+                ********
               </ProfileMenuItem>
             </ProfileMenuCard>
-            {/* {isPending && <ActivityIndicator size="large" />} */}
-            {/* {isError && <Text>{error.message}</Text>} */}
+
+            <ProfileMenuCard classes="mb-8" header="Rechtliches">
+              <ProfileMenuItem
+                icon={
+                  <ToniCircle
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                <Text
+                  accessibilityLabel="Nutzungsbedingungen"
+                  accessibilityRole="link"
+                  accessibilityHint="Link zu den Nutzungsbedingungen"
+                  className="text-accent"
+                  onPress={() =>
+                    Linking.openURL(
+                      'https://toni-navigation.at/nutzungsbedingungen'
+                    )
+                  }
+                >
+                  Nutzungsbedingungen
+                </Text>
+              </ProfileMenuItem>
+              <ProfileMenuItem
+                icon={
+                  <ToniCircle
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                <Text
+                  accessibilityLabel="AGBs"
+                  accessibilityRole="link"
+                  accessibilityHint="Link zu den AGBs"
+                  className="text-accent"
+                  onPress={() =>
+                    Linking.openURL('https://toni-navigation.at/agbs')
+                  }
+                >
+                  AGBs
+                </Text>
+              </ProfileMenuItem>
+              <ProfileMenuItem
+                isLast
+                icon={
+                  <ToniCircle
+                    height={30}
+                    width={30}
+                    stroke={themes.external[`--${theme}-mode-icon-button`]}
+                    strokeWidth={4}
+                  />
+                }
+              >
+                <Text
+                  accessibilityLabel="Datenschutz Richtlinien"
+                  accessibilityRole="link"
+                  accessibilityHint="Link zu den Datenschutz Richtlinien"
+                  className="text-accent"
+                  onPress={() =>
+                    Linking.openURL('https://toni-navigation.at/datenschutz')
+                  }
+                >
+                  Datenschutz Richtlinien
+                </Text>
+              </ProfileMenuItem>
+            </ProfileMenuCard>
+
             <View className="flex items-center mb-8">
               <Button
                 onPress={logout}
