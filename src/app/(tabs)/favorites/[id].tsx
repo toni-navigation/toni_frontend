@@ -56,23 +56,23 @@ export default function FavoritePage() {
         'Eventuell hast du den Titel schonmal verwendet.'
       );
     },
+    mutationKey: [QUERY_KEYS.favorites, 'update', favoriteId],
   });
-
   const { mutate: deleteFavorite } = useMutation({
     ...favoritesControllerDeleteFavoriteMutation(),
-    onSuccess: (successData) => {
+    onSuccess: async (successData) => {
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.favorites],
+      });
+      if (successData.destinationType === 'home') {
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.home_address],
+        });
+      }
       Alert.alert(`${successData.title} erfolgreich gelöscht.`, '', [
         {
           text: 'OK',
-          onPress: async () => {
-            await queryClient.invalidateQueries({
-              queryKey: [QUERY_KEYS.favorites],
-            });
-            if (successData.destinationType === 'home') {
-              await queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.home_address],
-              });
-            }
+          onPress: () => {
             router.back();
           },
         },
@@ -81,6 +81,7 @@ export default function FavoritePage() {
     onError: (error) => {
       Alert.alert(error.message);
     },
+    mutationKey: [QUERY_KEYS.favorites, 'delete', favoriteId],
   });
 
   const deleteHandler = () => {

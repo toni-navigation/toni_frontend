@@ -37,6 +37,7 @@ export function FavoritesCard({ favorite }: FavoritesCardProps) {
 
     const newDestination = favorite.photonFeature.geometry.coordinates;
     if (newOrigin && newDestination) {
+      changeOrigin(null);
       changeDestination(favorite.photonFeature);
       const params = {
         origin: newOrigin,

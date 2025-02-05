@@ -3,6 +3,8 @@ import { View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
+import { Destination } from '@/components/atoms/Destination';
+import { Header } from '@/components/atoms/Header';
 import { ListItem } from '@/components/atoms/ListItem';
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { getPhotonKey } from '@/functions/getPhotonKey';
@@ -20,6 +22,7 @@ export function Suggestions({
 }: SuggestionProps) {
   const { theme } = useContext(ThemeContext);
   const lastDestinations = useTripStore((state) => state.lastDestinations);
+  const { cleanLastDestinations } = useTripStore((state) => state.actions);
 
   return (
     <View
@@ -57,24 +60,30 @@ export function Suggestions({
           {index + 1}. {photonValue(suggestion)}
         </ListItem>
       ))}
-
-      {/* {lastDestinations.length > 0 && ( */}
-      {/*   <View> */}
-      {/*     <Header classes="text-xl mt-12">Letzte Ziele</Header> */}
-      {/*     <View> */}
-      {/*       {lastDestinations.map((destination) => ( */}
-      {/*         <Destination */}
-      {/*           key={getPhotonKey(destination)} */}
-      {/*           onPress={() => { */}
-      {/*             onLocationSuggestionClick(destination); */}
-      {/*           }} */}
-      {/*         > */}
-      {/*           {photonValue(destination)} */}
-      {/*         </Destination> */}
-      {/*       ))} */}
-      {/*     </View> */}
-      {/*   </View> */}
-      {/* )} */}
+      {/* <Button */}
+      {/*   onPress={() => cleanLastDestinations()} */}
+      {/*   buttonType="primary" */}
+      {/*   width="full" */}
+      {/* > */}
+      {/*   Löschen */}
+      {/* </Button> */}
+      {lastDestinations.length > 0 && (
+        <View>
+          <Header classes="text-xl mt-12">Letzte Ziele</Header>
+          <View>
+            {lastDestinations.map((destination) => (
+              <Destination
+                key={getPhotonKey(destination)}
+                onPress={() => {
+                  onLocationSuggestionClick(destination);
+                }}
+              >
+                {photonValue(destination)}
+              </Destination>
+            ))}
+          </View>
+        </View>
+      )}
     </View>
   );
 }

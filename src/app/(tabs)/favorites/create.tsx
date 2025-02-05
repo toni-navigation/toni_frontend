@@ -34,6 +34,7 @@ export default function CreatePage() {
     onError: (error) => {
       Alert.alert(error.message);
     },
+    mutationKey: [QUERY_KEYS.favorites, 'createFavorite'],
   });
   const addFavorite = () => {
     if (!favorite.title || !favorite.photonFeature) {

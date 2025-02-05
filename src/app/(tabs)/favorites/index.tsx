@@ -30,7 +30,6 @@ export default function FavoritesPage() {
   } = useQuery({
     ...favoritesControllerFindAllFavoritesOptions(),
     queryKey: [QUERY_KEYS.favorites, token],
-    retry: 0,
   });
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.12 * screenHeight;
