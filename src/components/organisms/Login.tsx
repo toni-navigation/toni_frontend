@@ -33,6 +33,7 @@ export function Login() {
         console.error(error);
       }
     },
+    mutationKey: ['login'],
   });
   const typeError: any = loginError;
   const ref = useRef<TextInput>(null);

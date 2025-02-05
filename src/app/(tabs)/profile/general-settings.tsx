@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
@@ -45,24 +45,38 @@ export default function GeneralSettings() {
     initialFavorite
   );
 
-  const { mutateAsync: updateUser, isPending: isPendingUser } = useMutation({
+  const { mutate: updateUser, isPending: isPendingUser } = useMutation({
     ...usersControllerUpdateUserMutation(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.user] });
+      router.back();
+    },
   });
 
-  const { mutateAsync: updateFavoriteHome, isPending: isPendingFavorite } =
+  const { mutate: updateFavoriteHome, isPending: isPendingFavorite } =
     useMutation({
       ...favoritesControllerUpdateFavoriteMutation(),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.home_address],
+        });
+        router.back();
+      },
     });
 
-  const { mutateAsync: createFavoriteHome } = useMutation({
+  const { mutate: createFavoriteHome } = useMutation({
     ...favoritesControllerCreateFavoriteMutation(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.home_address],
+      });
+      router.back();
+    },
   });
 
-  const saveSettings = async () => {
-    const updatePromises: Promise<any>[] = [];
+  const saveSettings = () => {
     const userUpdates: UpdateUserDto = {};
 
-    // Check for changes in user details
     if (firstname !== params.firstname) {
       userUpdates.firstname = firstname;
     }
@@ -71,12 +85,10 @@ export default function GeneralSettings() {
     }
 
     if (params.userId && Object.keys(userUpdates).length > 0) {
-      updatePromises.push(
-        updateUser({
-          body: userUpdates,
-          path: { userId: params.userId },
-        })
-      );
+      updateUser({
+        body: userUpdates,
+        path: { userId: params.userId },
+      });
     }
 
     const oldAddress = initialFavorite?.photonFeature?.geometry.coordinates;
@@ -90,49 +102,25 @@ export default function GeneralSettings() {
       home?.title !== undefined
     ) {
       if (initialFavorite) {
-        // console.log({
-        //   body: {
-        //     ...home,
-        //   },
-        //   path: { favoriteId: initialFavorite.id },
-        // });
-        updatePromises.push(
-          updateFavoriteHome({
-            body: {
-              destinationType: home.destinationType,
-              isPinned: home.isPinned,
-              photonFeature: home.photonFeature,
-              title: home.title,
-            },
-            path: { favoriteId: initialFavorite.id },
-          })
-        );
-      } else {
-        updatePromises.push(
-          createFavoriteHome({
-            body: {
-              title: home.title,
-              destinationType: home.destinationType,
-              isPinned: home.isPinned,
-              photonFeature: home.photonFeature,
-            },
-          })
-        );
-      }
-    }
-
-    try {
-      if (updatePromises.length > 0) {
-        await Promise.all(updatePromises);
-        await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.user] });
-        await queryClient.invalidateQueries({
-          queryKey: [QUERY_KEYS.home_address],
+        updateFavoriteHome({
+          body: {
+            destinationType: home.destinationType,
+            isPinned: home.isPinned,
+            photonFeature: home.photonFeature,
+            title: home.title,
+          },
+          path: { favoriteId: initialFavorite.id },
         });
-        Alert.alert('Einstellungen erfolgreich gespeichert.');
+      } else {
+        createFavoriteHome({
+          body: {
+            title: home.title,
+            destinationType: home.destinationType,
+            isPinned: home.isPinned,
+            photonFeature: home.photonFeature,
+          },
+        });
       }
-      router.back();
-    } catch (error: any) {
-      Alert.alert('Fehler beim Speichern der Einstellungen:', error.message);
     }
   };
 
@@ -207,6 +195,7 @@ export default function GeneralSettings() {
           onPress={saveSettings}
           buttonType="accent"
           disabled={isPendingFavorite || isPendingUser}
+          isLoading={isPendingFavorite || isPendingUser}
         >
           Speichern
         </Button>
