@@ -31,23 +31,16 @@ export default function FavoritePage() {
 
   const { mutate: updateFavorite, isPending: isPendingUpdate } = useMutation({
     ...favoritesControllerUpdateFavoriteMutation(),
-    onSuccess: (successData) => {
-      Alert.alert(`${successData.title} erfolgreich bearbeitet.`, '', [
-        {
-          text: 'OK',
-          onPress: async () => {
-            await queryClient.invalidateQueries({
-              queryKey: [QUERY_KEYS.favorites],
-            });
-            if (successData.destinationType === 'home') {
-              await queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.home_address],
-              });
-            }
-            router.back();
-          },
-        },
-      ]);
+    onSuccess: async (successData) => {
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.favorites],
+      });
+      if (successData.destinationType === 'home') {
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.home_address],
+        });
+      }
+      router.back();
     },
     onError: (error) => {
       Alert.alert(
