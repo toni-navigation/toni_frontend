@@ -52,7 +52,7 @@ function FavoritesLayout() {
         options={{
           headerShown: true,
           headerTitle: '',
-          presentation: 'modal',
+          // presentation: 'modal',
           headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
           headerStyle: {

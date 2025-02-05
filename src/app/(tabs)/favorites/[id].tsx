@@ -27,10 +27,9 @@ export default function FavoritePage() {
     ...favoritesControllerFindFavoriteByIdOptions({
       path: { favoriteId },
     }),
-    queryKey: [QUERY_KEYS.favorites, favoriteId],
   });
 
-  const { mutate: updateFavorite } = useMutation({
+  const { mutate: updateFavorite, isPending: isPendingUpdate } = useMutation({
     ...favoritesControllerUpdateFavoriteMutation(),
     onSuccess: (successData) => {
       Alert.alert(`${successData.title} erfolgreich bearbeitet.`, '', [
@@ -56,9 +55,13 @@ export default function FavoritePage() {
         'Eventuell hast du den Titel schonmal verwendet.'
       );
     },
-    mutationKey: [QUERY_KEYS.favorites, 'update', favoriteId],
   });
-  const { mutate: deleteFavorite } = useMutation({
+
+  const {
+    mutate: deleteFavorite,
+    isPending,
+    status,
+  } = useMutation({
     ...favoritesControllerDeleteFavoriteMutation(),
     onSuccess: async (successData) => {
       await queryClient.invalidateQueries({
@@ -69,19 +72,11 @@ export default function FavoritePage() {
           queryKey: [QUERY_KEYS.home_address],
         });
       }
-      Alert.alert(`${successData.title} erfolgreich gelöscht.`, '', [
-        {
-          text: 'OK',
-          onPress: () => {
-            router.back();
-          },
-        },
-      ]);
+      router.back();
     },
     onError: (error) => {
       Alert.alert(error.message);
     },
-    mutationKey: [QUERY_KEYS.favorites, 'delete', favoriteId],
   });
 
   const deleteHandler = () => {
@@ -109,14 +104,18 @@ export default function FavoritePage() {
 
   return (
     <ModalWrapper title="Favorit bearbeiten">
-      <Suspense fallback={<ActivityIndicator size="large" />}>
-        <Form
-          onDelete={deleteHandler}
-          onSave={changeFavorite}
-          favorite={favorite}
-          existingFavorite={!!data}
-        />
-      </Suspense>
+      {isPending || isPendingUpdate ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <Suspense fallback={<ActivityIndicator size="large" />}>
+          <Form
+            onDelete={deleteHandler}
+            onSave={changeFavorite}
+            favorite={favorite}
+            existingFavorite={!!data}
+          />
+        </Suspense>
+      )}
     </ModalWrapper>
   );
 }

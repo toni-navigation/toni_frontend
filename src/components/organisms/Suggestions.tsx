@@ -22,7 +22,6 @@ export function Suggestions({
 }: SuggestionProps) {
   const { theme } = useContext(ThemeContext);
   const lastDestinations = useTripStore((state) => state.lastDestinations);
-  const { cleanLastDestinations } = useTripStore((state) => state.actions);
 
   return (
     <View

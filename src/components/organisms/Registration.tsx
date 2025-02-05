@@ -197,7 +197,7 @@ export function Registration() {
           width="third"
           buttonType="primary"
           isLoading={isPending}
-          disabled={!email || !password || !confirmPassword}
+          disabled={!email || !password || !confirmPassword || isPending}
         >
           Registrieren
         </Button>

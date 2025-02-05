@@ -125,7 +125,7 @@ export function Login() {
           isLoading={isPending}
           onPress={onSubmit}
           buttonType="primary"
-          disabled={!email || !password}
+          disabled={!email || !password || isPending}
         >
           Login
         </Button>

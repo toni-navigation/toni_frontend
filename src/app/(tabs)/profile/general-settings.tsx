@@ -64,15 +64,16 @@ export default function GeneralSettings() {
       },
     });
 
-  const { mutate: createFavoriteHome } = useMutation({
-    ...favoritesControllerCreateFavoriteMutation(),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.home_address],
-      });
-      router.back();
-    },
-  });
+  const { mutate: createFavoriteHome, isPending: isPendingCreate } =
+    useMutation({
+      ...favoritesControllerCreateFavoriteMutation(),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.home_address],
+        });
+        router.back();
+      },
+    });
 
   const saveSettings = () => {
     const userUpdates: UpdateUserDto = {};
@@ -194,8 +195,8 @@ export default function GeneralSettings() {
           width="half"
           onPress={saveSettings}
           buttonType="accent"
-          disabled={isPendingFavorite || isPendingUser}
-          isLoading={isPendingFavorite || isPendingUser}
+          disabled={isPendingFavorite || isPendingUser || isPendingCreate}
+          isLoading={isPendingFavorite || isPendingUser || isPendingCreate}
         >
           Speichern
         </Button>

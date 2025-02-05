@@ -15,6 +15,7 @@ export default function LocationModalPage() {
   const addLocation = async (
     location: CreatePhotonFeatureDto | undefined | null
   ) => {
+    console.log(location);
     if (location === null) {
       const position = await getCurrentPosition();
       if (position) {
