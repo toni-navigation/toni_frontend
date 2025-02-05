@@ -13,6 +13,9 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { InputText } from '@/components/atoms/InputText';
 import { usersControllerCreateUserMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { TOKEN } from '@/services/client';
+import { saveToken } from '@/store/secureStore';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export function Registration() {
   // const { onLogin } = useAuthStore((state) => state.actions);
@@ -20,6 +23,8 @@ export function Registration() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [requiredFields, setRequiredFields] = useState(false);
+  const { addToken } = useAuthStore((state) => state.actions);
+
   // function getErrorMessage(errors, field) {
   //   const errorM = errors.find((errProp) => errProp.property === field);
   //   console.log('error', errorM);
@@ -45,7 +50,9 @@ export function Registration() {
         return;
       }
       // onLogin(successData.accessToken);
-      router.replace('/home');
+      await saveToken(TOKEN, successData.accessToken);
+      addToken(successData.accessToken);
+      router.replace('/profile');
     },
   });
   const ref = useRef<TextInput>(null);
