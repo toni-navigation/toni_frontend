@@ -10,7 +10,8 @@ interface ProfileMenuCardProps {
   header: string;
   classes?: string;
   children: React.ReactNode;
-  onPress: () => void;
+  onPress?: () => void;
+  editButton?: boolean;
 }
 
 export function ProfileMenuCard({
@@ -18,6 +19,7 @@ export function ProfileMenuCard({
   classes,
   children,
   onPress,
+  editButton,
 }: ProfileMenuCardProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -30,19 +32,21 @@ export function ProfileMenuCard({
           <Text className="font-generalSansSemi text-primary text-medium">
             {header}
           </Text>
-          <IconButton
-            icon={
-              <ToniEdit
-                height={30}
-                width={30}
-                stroke={themes.external[`--${theme}-mode-icon-button`]}
-                strokeWidth={4}
-              />
-            }
-            iconName="Bearbeiten"
-            onPress={onPress}
-            buttonType="icon"
-          />
+          {editButton && onPress && (
+            <IconButton
+              icon={
+                <ToniEdit
+                  height={30}
+                  width={30}
+                  stroke={themes.external[`--${theme}-mode-icon-button`]}
+                  strokeWidth={4}
+                />
+              }
+              iconName="Bearbeiten"
+              onPress={onPress}
+              buttonType="icon"
+            />
+          )}
         </View>
         {children}
       </View>
