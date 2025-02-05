@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
-import { Dimensions, SafeAreaView, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  View,
+} from 'react-native'; // import { getCalibrationValue } from '@/functions/getCalibrationValue';
 
-// import { getCalibrationValue } from '@/functions/getCalibrationValue';
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Button } from '@/components/atoms/Button';
@@ -33,19 +38,18 @@ import { useAuthStore } from '@/store/useAuthStore';
 export default function ProfilePage() {
   const token = useAuthStore((state) => state.token);
   const { removeToken } = useAuthStore((state) => state.actions);
-  // const { addFavorite } = useFavoriteStore((state) => state.actions);
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     ...authenticationControllerGetUserOptions(),
     queryKey: [QUERY_KEYS.user, token],
+    enabled: !!token,
   });
 
   const { data: homeAddress } = useQuery({
     ...favoritesControllerFindHomeAddressOptions(),
     queryKey: [QUERY_KEYS.home_address, token],
+    enabled: !!token,
   });
-  // if (home !== undefined) {
-  //   addFavorite(home);
-  // }
+
   const logout = async () => {
     try {
       await deleteToken(TOKEN);
@@ -54,22 +58,35 @@ export default function ProfilePage() {
       console.error(error);
     }
   };
-
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.2 * screenHeight;
   const { theme } = useContext(ThemeContext);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {!user ? (
-        <View className="flex-1 bg-invertedPrimary">
-          <View
-            style={{ height: viewHeight }}
-            className="px-8 py-5 bg-background rounded-b-[25] items-center"
-          >
-            <ToniProfilePicture height={70} width={70} />
-            <Header classes="text-center mt-4">Mein Profil</Header>
-          </View>
+      {/* <View className="flex-1 bg-invertedPrimary"> */}
+      {/*   <View */}
+      {/*     style={{ height: viewHeight }} */}
+      {/*     className="px-8 py-5 bg-background rounded-b-[25] items-center" */}
+      {/*   > */}
+      {/*     <ToniProfilePicture height={70} width={70} /> */}
+      {/*     <Header classes="text-center mt-4">Mein Profil</Header> */}
+      {/*   </View> */}
+      {/* </View> */}
+      <View className="flex-1 bg-invertedPrimary">
+        <View
+          style={{ height: viewHeight }}
+          className="px-8 py-5 bg-background rounded-b-[25] items-center"
+        >
+          <ToniProfilePicture height={70} width={70} />
+          <Header classes="text-center mt-4">
+            {user?.firstname && user?.lastname
+              ? `${user.firstname} ${user.lastname}`
+              : 'Mein Profil'}
+          </Header>
+        </View>
+        {isLoading && <ActivityIndicator size="large" />}
+        {!user && !isLoading ? (
           <View className="flex-1 m-5">
             <Card color="background">
               <TabBar
@@ -81,20 +98,7 @@ export default function ProfilePage() {
               </TabBar>
             </Card>
           </View>
-        </View>
-      ) : (
-        <View className="flex-1 bg-invertedPrimary">
-          <View
-            style={{ height: viewHeight }}
-            className="px-8 py-5 bg-background rounded-b-[25] items-center"
-          >
-            <ToniProfilePicture height={70} width={70} />
-            <Header classes="text-center mt-4">
-              {user?.firstname && user?.lastname
-                ? `${user.firstname} ${user.lastname}`
-                : 'Mein Profil'}
-            </Header>
-          </View>
+        ) : (
           <ScrollView className="px-8">
             <ProfileMenuCard
               header="Allgemein"
@@ -172,7 +176,7 @@ export default function ProfilePage() {
                   />
                 }
               >
-                {user.calibrationFactor
+                {user?.calibrationFactor
                   ? `Deine Schrittlänge: ${user.calibrationFactor} m`
                   : 'Keine Schrittlänge hinterlegt'}
               </ProfileMenuItem>
@@ -181,7 +185,10 @@ export default function ProfilePage() {
               classes="mb-8"
               header="Konto"
               onPress={() => {
-                router.push('/profile/account-settings');
+                router.push({
+                  pathname: '/profile/account-settings',
+                  params: { userId: user?.id, email: user?.email },
+                });
               }}
             >
               <ProfileMenuItem
@@ -226,8 +233,8 @@ export default function ProfilePage() {
               </Button>
             </View>
           </ScrollView>
-        </View>
-      )}
+        )}
+      </View>
     </SafeAreaView>
   );
 }

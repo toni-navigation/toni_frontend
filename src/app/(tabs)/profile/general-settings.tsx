@@ -20,7 +20,7 @@ import {
   usersControllerUpdateUserMutation,
 } from '@/services/api-backend/@tanstack/react-query.gen';
 
-type CustomNavigationOptions = {
+type ParamsProps = {
   userId: string | undefined;
   firstname: string | undefined;
   lastname: string | undefined;
@@ -30,7 +30,7 @@ type CustomNavigationOptions = {
 export default function GeneralSettings() {
   const queryClient = useQueryClient();
 
-  const params = useLocalSearchParams() as CustomNavigationOptions;
+  const params = useLocalSearchParams() as ParamsProps;
   const initialFavorite = params.homeFavorite
     ? (JSON.parse(params.homeFavorite) as Favorite)
     : undefined;
@@ -76,9 +76,7 @@ export default function GeneralSettings() {
 
   const saveSettings = async () => {
     const updatePromises: Promise<any>[] = [];
-    const userUpdates: UpdateUserDto = {
-      calibrationFactor: null,
-    };
+    const userUpdates: UpdateUserDto = {};
 
     // Check for changes in user details
     if (firstname !== params.firstname) {
