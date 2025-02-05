@@ -194,15 +194,17 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
             Überspringen
           </Button>
         )}
-        <Button
-          width={isFromIntro ? 'half' : 'full'}
-          buttonType="accent"
-          // disabled={isLoading}
-          isLoading={isLoading}
-          onPress={startPedometer}
-        >
-          Start
-        </Button>
+        <View className="flex flex-1 items-center justify-center">
+          <Button
+            width={isFromIntro ? 'half' : 'third'}
+            buttonType="accent"
+            // disabled={isLoading}
+            isLoading={isLoading}
+            onPress={startPedometer}
+          >
+            Start
+          </Button>
+        </View>
       </>
     );
   };

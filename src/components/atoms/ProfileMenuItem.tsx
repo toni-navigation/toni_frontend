@@ -23,9 +23,7 @@ export function ProfileMenuItem({
       {icon && icon}
       <View className="ps-5">
         {label && (
-          <Text className="font-atkinsonRegular text-textColor opacity-50">
-            {label}
-          </Text>
+          <Text className="font-atkinsonRegular text-primary">{label}</Text>
         )}
         <Text className="font-atkinsonRegular text-small text-textColor">
           {children && children}

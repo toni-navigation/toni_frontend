@@ -23,8 +23,9 @@ export const InputText = forwardRef<TextInput, InputTextProps>(
           <TextInput
             ref={ref}
             testID="TextInput"
-            className={`bg-background font-atkinsonRegular h-12 text border-2 border-primary rounded-[25px] text-textColor p-2 !pr-12' ${className}`}
+            className={`bg-background font-atkinsonRegular h-12 text border-2 border-primary rounded-[25px] text-textColor p-3 !pr-12' ${className}`}
             {...props}
+            placeholderTextColor={themes.external[`--${theme}-mode-text-color`]}
           />
           {props.value && (
             <TouchableOpacity
