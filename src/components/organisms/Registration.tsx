@@ -32,8 +32,8 @@ export function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [validateInput, setValidateInput] = useState(true);
   const { addToken } = useAuthStore((state) => state.actions);
-
 
   const extractConstraints = (
     validationData: ValidationResponse[]
@@ -82,13 +82,23 @@ export function Registration() {
     });
   };
 
-  if (data) {
-    return (
-      <SafeAreaView>
-        <Text>Success</Text>
-      </SafeAreaView>
-    );
-  }
+  const onSubmit = () => {
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      password !== confirmPassword ||
+      password.length < 8 ||
+      !email.includes('@')
+    ) {
+      setValidateInput(false);
+
+      return;
+    }
+    register();
+  };
+
+  console.log(error);
 
   return (
     <SafeAreaView className="flex-1">
@@ -101,12 +111,20 @@ export function Registration() {
           inputMode="email"
           maxLength={300}
           value={email}
-          onChange={(event) => setEmail(event.nativeEvent.text)}
+          onChange={(event) => {
+            setValidateInput(true);
+            setEmail(event.nativeEvent.text);
+          }}
           onClickDelete={() => {
             setEmail('');
             ref.current?.focus();
           }}
         />
+        {!validateInput && !email.includes('@') && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Email muss eine gültige Email Adresse sein
+          </Text>
+        )}
         {error &&
           (error.statusCode === 400 || error.statusCode === 409) &&
           getErrorMessage(error, 'email') && (
@@ -123,13 +141,20 @@ export function Registration() {
           inputMode="text"
           maxLength={300}
           value={password}
-          onChange={(event) => setPassword(event.nativeEvent.text)}
+          onChange={(event) => {
+            setValidateInput(true);
+            setPassword(event.nativeEvent.text);
+          }}
           onClickDelete={() => {
             setPassword('');
             ref.current?.focus();
           }}
         />
-
+        {!validateInput && password.length < 8 && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Passwort muss mindestens 8 Zeichen lang sein
+          </Text>
+        )}
         {error &&
           error.statusCode === 400 &&
           getErrorMessage(error, 'password') && (
@@ -146,7 +171,10 @@ export function Registration() {
           inputMode="text"
           maxLength={300}
           value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.nativeEvent.text)}
+          onChange={(event) => {
+            setValidateInput(true);
+            setConfirmPassword(event.nativeEvent.text);
+          }}
           onClickDelete={() => {
             setConfirmPassword('');
             ref.current?.focus();
@@ -159,11 +187,21 @@ export function Registration() {
               {getErrorMessage(error, 'confirmPassword')}
             </Text>
           )}
+        {!validateInput && confirmPassword !== password && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Passwörter stimmen nicht überein
+          </Text>
+        )}
+        {!validateInput && confirmPassword.length < 8 && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Passwort muss mindestens 8 Zeichen lang sein
+          </Text>
+        )}
       </ScrollView>
 
       <View className="flex mb-3 items-center">
         <Button
-          onPress={register}
+          onPress={onSubmit}
           width="third"
           buttonType="primary"
           isLoading={isPending}

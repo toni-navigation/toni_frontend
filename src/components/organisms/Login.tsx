@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
@@ -17,6 +17,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [requiredFields, setRequiredFields] = useState(false);
+  const [validateInput, setValidateInput] = useState(true);
 
   const {
     error: loginError,
@@ -40,15 +41,10 @@ export function Login() {
       }
     },
   });
+
   const ref = useRef<TextInput>(null);
 
   const login = () => {
-    setRequiredFields(false);
-    if (!email || !password) {
-      setRequiredFields(true);
-
-      return;
-    }
     mutate({
       body: {
         email,
@@ -57,13 +53,14 @@ export function Login() {
     });
   };
 
-  if (data) {
-    return (
-      <SafeAreaView className="flex-1 bg-background">
-        <Header classes="text-textColor">Success</Header>
-      </SafeAreaView>
-    );
-  }
+  const onSubmit = () => {
+    if (!email || !password || password.length < 8 || !email.includes('@')) {
+      setValidateInput(false);
+
+      return;
+    }
+    login();
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -76,15 +73,23 @@ export function Login() {
           inputMode="email"
           maxLength={300}
           value={email}
-          onChange={(event) => setEmail(event.nativeEvent.text)}
+          onChange={(event) => {
+            setRequiredFields(false);
+            setEmail(event.nativeEvent.text);
+          }}
           onClickDelete={() => {
             setEmail('');
             ref.current?.focus();
           }}
         />
+        {!validateInput && !email.includes('@') && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Email muss eine gültige Email Adresse sein
+          </Text>
+        )}
         {loginError && loginError.statusCode === 404 && (
           <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
-            Kein Nutzer mit dieser Email gefunden
+            {loginError.message}
           </Text>
         )}
         <InputText
@@ -95,12 +100,20 @@ export function Login() {
           inputMode="text"
           maxLength={300}
           value={password}
-          onChange={(event) => setPassword(event.nativeEvent.text)}
+          onChange={(event) => {
+            setRequiredFields(false);
+            setPassword(event.nativeEvent.text);
+          }}
           onClickDelete={() => {
             setPassword('');
             ref.current?.focus();
           }}
         />
+        {!validateInput && password.length < 8 && (
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+            Passwort muss mindestens 8 Zeichen lang sein
+          </Text>
+        )}
         {loginError && loginError.statusCode === 500 && (
           <Text className="font-generalSansSemi text-xsmall text-accent">
             Falsches Password
@@ -117,8 +130,9 @@ export function Login() {
         <Button
           width="third"
           isLoading={isPending}
-          onPress={login}
+          onPress={onSubmit}
           buttonType="primary"
+          disabled={!email || !password}
         >
           Login
         </Button>
