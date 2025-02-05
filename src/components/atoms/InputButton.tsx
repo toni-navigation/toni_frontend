@@ -47,7 +47,7 @@ export function InputButton({
           disabled={disabled}
           testID="InputButton"
         >
-          <Text className="font-atkinsonRegular text-textColor pb-0 pl-3">
+          <Text className="font-atkinsonRegular text-textColor pb-0 ps-3">
             {children}
           </Text>
         </TouchableOpacity>

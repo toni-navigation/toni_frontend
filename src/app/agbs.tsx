@@ -21,8 +21,8 @@ export default function Agbs() {
       <ScrollView className="px-8 py-8">
         <View className="flex items-center pb-8">
           <ToniLogo width={100} height={100} />
-          <Header classes="pt-4">Die Pflicht ruft</Header>
-          <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
+          <Header classes="pt-5">Die Pflicht ruft</Header>
+          <Text className="mx-auto py-5 text-center font-atkinsonRegular text-small text-textColor">
             Bitte akzeptiere unsere AGBs, die Nutzungsbedingungen und
             Richtlinien zum Datenschutz.
           </Text>
@@ -38,13 +38,13 @@ export default function Agbs() {
             value={isCheckedNutzungsbedingungen}
             onValueChange={setCheckedNutzungsbedingungen}
           />
-          <Text className="px-4">
+          <Text className="px-4 text-textColor text-small">
             Hiermit akzeptiere ich die{' '}
             <Text
               accessibilityLabel="Nutzungsbedingungen"
               accessibilityRole="link"
               accessibilityHint="Link zu den Nutzungsbedingungen"
-              className="text-accent"
+              className="text-accent text-small"
               onPress={() =>
                 Linking.openURL(
                   'https://toni-navigation.at/nutzungsbedingungen'
@@ -67,13 +67,13 @@ export default function Agbs() {
             value={isCheckedAgbs}
             onValueChange={setCheckedAgbs}
           />
-          <Text className="px-4">
+          <Text className="px-4 text-textColor text-small">
             Hiermit akzeptiere ich die{' '}
             <Text
               accessibilityLabel="AGBs"
               accessibilityRole="link"
               accessibilityHint="Link zu den AGBs"
-              className="text-accent"
+              className="text-accent text-small"
               onPress={() => Linking.openURL('https://toni-navigation.at/agbs')}
             >
               AGBs
@@ -92,13 +92,13 @@ export default function Agbs() {
             value={isCheckedDatenschutz}
             onValueChange={setCheckedDatenschutz}
           />
-          <Text className="px-4">
+          <Text className="px-4 text-textColor text-small">
             Hiermit akzeptiere ich die{' '}
             <Text
               accessibilityLabel="Datenschutz Richtlinien"
               accessibilityRole="link"
               accessibilityHint="Link zu den Datenschutz Richtlinien"
-              className="text-accent"
+              className="text-accent text-small"
               onPress={() =>
                 Linking.openURL('https://toni-navigation.at/datenschutz')
               }
@@ -110,9 +110,9 @@ export default function Agbs() {
         </View>
       </ScrollView>
 
-      <View className="mx-8 mb-3">
+      <View className="flex items-center justify-center mx-8 my-8">
         <Button
-          width="full"
+          width="third"
           disabled={
             !isCheckedAgbs ||
             !isCheckedNutzungsbedingungen ||

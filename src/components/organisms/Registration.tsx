@@ -17,30 +17,45 @@ import { TOKEN } from '@/services/client';
 import { saveToken } from '@/store/secureStore';
 import { useAuthStore } from '@/store/useAuthStore';
 
+interface ValidationError {
+  property: string;
+  message: string;
+}
+
+interface ValidationResponse {
+  children: any[];
+  constraints: Record<string, string>;
+  property: string;
+}
 export function Registration() {
   // const { onLogin } = useAuthStore((state) => state.actions);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [requiredFields, setRequiredFields] = useState(false);
   const { addToken } = useAuthStore((state) => state.actions);
 
-  // function getErrorMessage(errors, field) {
-  //   const errorM = errors.find((errProp) => errProp.property === field);
-  //   console.log('error', errorM);
-  //
-  //   return errorM;
-  // }
 
-  function getErrorMessage(errors: DefaultError, field: string): string | null {
-    const errorMessage = errors.message.find(
-      (errProp) => errProp.property === field
+  const extractConstraints = (
+    validationData: ValidationResponse[]
+  ): ValidationError[] =>
+    validationData.flatMap((item) =>
+      Object.values(item.constraints).map((message) => ({
+        property: item.property,
+        message,
+      }))
     );
 
-    const test = Object.values(errorMessage.constraints)[0];
+  const getErrorMessage = (error: any, field: string): string | null => {
+    if (!error || ![400, 409].includes(error.statusCode)) return null;
+    if (error.statusCode === 409) return error.message;
 
-    return errorMessage ? test : null;
-  }
+    return (
+      extractConstraints(error.message).find(
+        (errorProperty) => errorProperty.property === field
+      )?.message || null
+    );
+  };
+
   const { mutate, error, isError, data, isPending } = useMutation({
     ...usersControllerCreateUserMutation(),
     onSuccess: async (successData) => {
@@ -58,12 +73,6 @@ export function Registration() {
   const ref = useRef<TextInput>(null);
 
   const register = () => {
-    setRequiredFields(false);
-    if (!email || !password || !confirmPassword) {
-      setRequiredFields(true);
-
-      return;
-    }
     mutate({
       body: {
         email,
@@ -98,11 +107,13 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
-        {error && (
-          <Text className="font-generalSansSemi text-small text-accent mb-4">
-            {getErrorMessage(error, 'email')}
-          </Text>
-        )}
+        {error &&
+          (error.statusCode === 400 || error.statusCode === 409) &&
+          getErrorMessage(error, 'email') && (
+            <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+              {getErrorMessage(error, 'email')}
+            </Text>
+          )}
         <InputText
           className="mb-2"
           accessibilityLabel="Passwort *"
@@ -118,14 +129,17 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
-        {error && (
-          <Text className="font-generalSansSemi text-small text-accent mb-4">
-            {getErrorMessage(error, 'password')}
-          </Text>
-        )}
+
+        {error &&
+          error.statusCode === 400 &&
+          getErrorMessage(error, 'password') && (
+            <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+              {getErrorMessage(error, 'password')}
+            </Text>
+          )}
         <InputText
           className="mb-2"
-          accessibilityLabel="Passwort bestätigen"
+          accessibilityLabel="Passwort bestätigen *"
           accessibilityHint="Pflichtfeld: Bestätige das Passwort"
           placeholder="Passwort bestätigen"
           secureTextEntry // Hides the text input for security
@@ -138,24 +152,22 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
-        {error && (
-          <Text className="font-generalSansSemi text-small text-accent mb-4">
-            {getErrorMessage(error, 'confirmPassword')}
-          </Text>
-        )}
+        {error &&
+          error.statusCode === 400 &&
+          getErrorMessage(error, 'confirmPassword') && (
+            <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
+              {getErrorMessage(error, 'confirmPassword')}
+            </Text>
+          )}
       </ScrollView>
 
       <View className="flex mb-3 items-center">
-        {requiredFields && (
-          <Text className="mb-5 text-small font-generalSansSemi text-accent">
-            Bitte alle Felder ausfüllen!
-          </Text>
-        )}
         <Button
           onPress={register}
           width="third"
           buttonType="primary"
           isLoading={isPending}
+          disabled={!email || !password || !confirmPassword}
         >
           Registrieren
         </Button>

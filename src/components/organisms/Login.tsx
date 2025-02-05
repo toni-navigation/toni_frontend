@@ -83,7 +83,7 @@ export function Login() {
           }}
         />
         {loginError && loginError.statusCode === 404 && (
-          <Text className="font-generalSansSemi text-small text-accent mb-4">
+          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
             Kein Nutzer mit dieser Email gefunden
           </Text>
         )}
@@ -102,7 +102,7 @@ export function Login() {
           }}
         />
         {loginError && loginError.statusCode === 500 && (
-          <Text className="font-generalSansSemi text-small text-accent">
+          <Text className="font-generalSansSemi text-xsmall text-accent">
             Falsches Password
           </Text>
         )}

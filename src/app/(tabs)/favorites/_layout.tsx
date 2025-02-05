@@ -15,7 +15,11 @@ function FavoritesLayout() {
         options={{
           headerTitle: 'Meine Favoriten',
           headerShown: false,
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
         }}
       />
       <Stack.Screen
@@ -26,6 +30,9 @@ function FavoritesLayout() {
           gestureEnabled: true,
           headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
         }}
       />
       <Stack.Screen
@@ -35,6 +42,21 @@ function FavoritesLayout() {
           headerTitle: '',
           headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
+        }}
+      />
+      <Stack.Screen
+        name="location-modal"
+        options={{
+          headerShown: true,
+          headerTitle: '',
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
         }}
       />
     </Stack>

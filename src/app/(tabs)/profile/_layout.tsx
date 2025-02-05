@@ -22,10 +22,10 @@ function ProfileLayout() {
         options={{
           headerTitle: 'Allgemeine Einstellungen',
           headerStyle: {
-            backgroundColor:
-              themes.external[`--${theme}-mode-primary-inverted`],
+            backgroundColor: themes.external[`--${theme}-mode-background`],
           },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
         }}
       />
       <Stack.Screen
@@ -33,9 +33,10 @@ function ProfileLayout() {
         options={{
           headerTitle: 'Allgemeine Einstellungen',
           headerStyle: {
-            backgroundColor:
-              themes.external[`--${theme}-mode-primary-inverted`],
+            backgroundColor: themes.external[`--${theme}-mode-background`],
           },
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+
           headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
@@ -46,6 +47,8 @@ function ProfileLayout() {
           headerStyle: {
             backgroundColor: themes.external[`--${theme}-mode-background`],
           },
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+
           headerTintColor: themes.external[`--${theme}-mode-primary`],
         }}
       />
@@ -57,6 +60,7 @@ function ProfileLayout() {
             backgroundColor: themes.external[`--${theme}-mode-background`],
           },
           headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
         }}
       />
     </Stack>

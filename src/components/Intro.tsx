@@ -89,13 +89,6 @@ export function Intro() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 mx-8 mb-3">
-        {/* <Button */}
-        {/*  width="full" */}
-        {/*  onPress={createCurrentLocationMessage} */}
-        {/*  buttonType="primary" */}
-        {/* > */}
-        {/*  Test */}
-        {/* </Button> */}
         <PagerView
           style={styles.container}
           initialPage={0}
@@ -109,7 +102,7 @@ export function Intro() {
               <View className="flex items-center pb-8">{data.icon}</View>
               <View className="flex items-center">
                 <Header classes="text-textColor">{data.headline}</Header>
-                <Text className="mx-auto text-center font-atkinsonRegular text-2xl text-textColor">
+                <Text className="mx-auto text-center font-atkinsonRegular text-medium my-8 text-textColor">
                   {data.text}
                 </Text>
               </View>
@@ -124,14 +117,15 @@ export function Intro() {
             />
           ))}
         </View>
-
-        <Button
-          width="full"
-          buttonType="primary"
-          onPress={() => router.push('/agbs')}
-        >
-          Los gehts
-        </Button>
+        <View className="flex items-center justify-center my-8">
+          <Button
+            width="third"
+            buttonType="primary"
+            onPress={() => router.push('/agbs')}
+          >
+            Los gehts
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
