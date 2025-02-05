@@ -23,13 +23,13 @@ export function Trip() {
     (state) => state.currentLocation
   );
   const ref = React.useRef<PagerView>(null);
+  console.log(tripData);
   const { data, isError, error } = useTrip(tripData);
   // const summary = data && data.trip.summary;
 
   if (isError && error) {
     return <Error error={error.message} />;
   }
-
   if (showTripOverview && currentLocation) {
     return (
       <RouteOverview

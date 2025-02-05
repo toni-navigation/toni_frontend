@@ -17,7 +17,7 @@ export function TripList({ maneuvers, calibrationFactor }: TripListProps) {
 
   return (
     <SafeAreaView className="flex-1 mt-5">
-        <View className={"bg-invertedPrimary rounded-[25px] px-5 py-8 flex-1"}>
+        <View className="bg-invertedPrimary rounded-[25px] px-5 py-8 flex-1">
       <Text className="text-textColor font-generalSansSemi text-medium mb-5">
         Deine Route
       </Text>
@@ -26,12 +26,12 @@ export function TripList({ maneuvers, calibrationFactor }: TripListProps) {
         renderItem={({ item, index }) => (
 
             <View className="flex flex-row mb-3">
-                {/*<ToniCircle*/}
-                {/*    fill={themes.external[`--${theme}-mode-primary`]}*/}
-                {/*    width={20}*/}
-                {/*    height={20}>*/}
+                {/* <ToniCircle */}
+                {/*    fill={themes.external[`--${theme}-mode-primary`]} */}
+                {/*    width={20} */}
+                {/*    height={20}> */}
 
-                {/*</ToniCircle>*/}
+                {/* </ToniCircle> */}
               <View>
                 <Text className="text-small text-textColor font-generalSansSemi mb-3">
                   {tripInstructionOutput(item, calibrationFactor)}

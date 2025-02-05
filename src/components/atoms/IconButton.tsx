@@ -10,7 +10,12 @@ interface IconButtonProps {
   onPress: () => void;
   disabled?: boolean;
   classes?: string;
-  buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
+  buttonType:
+    | 'accent'
+    | 'accentOutline'
+    | 'primary'
+    | 'primaryOutline'
+    | 'icon';
 }
 export function IconButton({
   icon,

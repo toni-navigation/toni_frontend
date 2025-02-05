@@ -8,8 +8,11 @@ import { InputText } from '@/components/atoms/InputText';
 import { ToniProfilePicture } from '@/components/atoms/icons/ToniProfilePicture';
 import { ModalWrapper } from '@/components/favorite/ModalWrapper';
 import { GeocoderAutocomplete } from '@/components/organisms/GeocoderAutocomplete';
+import { getCurrentPosition } from '@/functions/getCurrentPosition';
+import { useReverseData } from '@/mutations/useReverseData';
 import { QUERY_KEYS } from '@/query-keys';
 import {
+  CreatePhotonFeatureDto,
   Favorite,
   UpdateFavoriteDto,
   UpdateUserDto,
@@ -29,6 +32,7 @@ type ParamsProps = {
 
 export default function GeneralSettings() {
   const queryClient = useQueryClient();
+  const reverseData = useReverseData();
 
   const params = useLocalSearchParams() as ParamsProps;
   const initialFavorite = params.homeFavorite
@@ -41,37 +45,17 @@ export default function GeneralSettings() {
     initialFavorite
   );
 
-  const { mutateAsync: updateUser } = useMutation({
+  const { mutateAsync: updateUser, isPending: isPendingUser } = useMutation({
     ...usersControllerUpdateUserMutation(),
-    onSuccess: () => {
-      // Alert.alert('Benutzer erfolgreich bearbeitet.');
-    },
-    onError: (error) => {
-      // Alert.alert('Fehler beim Aktualisieren des Benutzers:', error.message);
-    },
   });
 
-  const { mutateAsync: updateFavoriteHome } = useMutation({
-    ...favoritesControllerUpdateFavoriteMutation(),
-    onSuccess: () => {
-      // Alert.alert('Heimatadresse erfolgreich aktualisiert.');
-    },
-    onError: (error) => {
-      // Alert.alert(
-      //   'Fehler beim Aktualisieren der Heimatadresse:',
-      //   error.message
-      // );
-    },
-  });
+  const { mutateAsync: updateFavoriteHome, isPending: isPendingFavorite } =
+    useMutation({
+      ...favoritesControllerUpdateFavoriteMutation(),
+    });
 
   const { mutateAsync: createFavoriteHome } = useMutation({
-    ...favoritesControllerCreateFavoriteMutation({}),
-    onSuccess: () => {
-      // Alert.alert('Heimatadresse erfolgreich erstellt.');
-    },
-    onError: (error) => {
-      // Alert.alert('Fehler beim Erstellen der Heimatadresse:', error.message);
-    },
+    ...favoritesControllerCreateFavoriteMutation(),
   });
 
   const saveSettings = async () => {
@@ -95,7 +79,6 @@ export default function GeneralSettings() {
       );
     }
 
-    // Check for changes in home address
     const oldAddress = initialFavorite?.photonFeature?.geometry.coordinates;
     const newAddress = home?.photonFeature?.geometry.coordinates;
 
@@ -137,18 +120,51 @@ export default function GeneralSettings() {
         );
       }
     }
-    // // Execute all updates in parallel
+
     try {
-      await Promise.all(updatePromises);
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.user] });
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.home_address],
-      });
-      Alert.alert('Einstellungen erfolgreich gespeichert.');
+      if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+        await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.user] });
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.home_address],
+        });
+        Alert.alert('Einstellungen erfolgreich gespeichert.');
+      }
       router.back();
     } catch (error: any) {
       Alert.alert('Fehler beim Speichern der Einstellungen:', error.message);
     }
+  };
+
+  const addLocation = async (
+    location: CreatePhotonFeatureDto | undefined | null
+  ) => {
+    if (location === null) {
+      const position = await getCurrentPosition();
+      if (position) {
+        const data = await reverseData.mutateAsync({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
+        setHome((prevState) => ({
+          ...prevState,
+          title: 'Heimatadresse',
+          destinationType: 'home',
+          isPinned: true,
+          photonFeature: data.features[0],
+        }));
+
+        return;
+      }
+    }
+
+    setHome((prevState) => ({
+      ...prevState,
+      title: 'Heimatadresse',
+      destinationType: 'home',
+      isPinned: true,
+      photonFeature: location || undefined,
+    }));
   };
 
   return (
@@ -175,15 +191,7 @@ export default function GeneralSettings() {
           label="Heimatadresse"
           value={home?.photonFeature}
           placeholder="Heimatadresse eingeben"
-          onChange={(photonFeature) =>
-            setHome((prevState) => ({
-              ...prevState,
-              title: 'Heimatadresse',
-              destinationType: 'home',
-              isPinned: true,
-              photonFeature: photonFeature || undefined,
-            }))
-          }
+          onChange={(photonFeature) => addLocation(photonFeature)}
         />
       </ScrollView>
       <View className="flex flex-row mb-8 gap-1.5">
@@ -194,7 +202,12 @@ export default function GeneralSettings() {
         >
           Abbrechen
         </Button>
-        <Button width="half" onPress={saveSettings} buttonType="accent">
+        <Button
+          width="half"
+          onPress={saveSettings}
+          buttonType="accent"
+          disabled={isPendingFavorite || isPendingUser}
+        >
           Speichern
         </Button>
       </View>

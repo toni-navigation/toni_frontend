@@ -9,18 +9,15 @@ export type StoreUser = Omit<User, 'calibrationFactor'> | undefined;
 export const calculateCalibration = (distanceInMeter: number, steps: number) =>
   Number((distanceInMeter / steps).toFixed(2));
 type UserState = {
-  user: StoreUser;
   calibrationFactor: number | null;
   actions: {
     addCalibration: (distanceInMeter: number, steps: number) => void;
     resetUserStore: () => void;
     resetCalibration: () => void;
-    addUser: (user: User) => void;
   };
 };
 
 const defaultUserState: Omit<UserState, 'actions'> = {
-  user: undefined,
   calibrationFactor: null,
 };
 
@@ -36,20 +33,7 @@ export const useUserStore = create<UserState>()(
               steps
             );
           }),
-        addUser: (user) =>
-          set((state) => {
-            state.user = {
-              role: user?.role,
-              firstname: user?.firstname,
-              lastname: user?.lastname,
-              email: user?.email,
-              favorites: user?.favorites,
-              id: user?.id,
-              createdAt: user?.createdAt,
-              updatedAt: user?.updatedAt,
-            };
-            state.calibrationFactor = user.calibrationFactor;
-          }),
+
         resetCalibration: () =>
           set((state) => ({ ...state, calibrationFactor: null })),
         resetUserStore: () =>

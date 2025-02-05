@@ -3,8 +3,6 @@ import { View } from 'react-native';
 
 import { themes } from '@/colors';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Destination } from '@/components/atoms/Destination';
-import { Header } from '@/components/atoms/Header';
 import { ListItem } from '@/components/atoms/ListItem';
 import { ToniLocation } from '@/components/atoms/icons/ToniLocation';
 import { getPhotonKey } from '@/functions/getPhotonKey';
@@ -60,23 +58,23 @@ export function Suggestions({
         </ListItem>
       ))}
 
-      {lastDestinations.length > 0 && (
-        <View>
-          <Header classes="text-xl mt-12">Letzte Ziele</Header>
-          <View>
-            {lastDestinations.map((destination) => (
-              <Destination
-                key={getPhotonKey(destination)}
-                onPress={() => {
-                  onLocationSuggestionClick(destination);
-                }}
-              >
-                {photonValue(destination)}
-              </Destination>
-            ))}
-          </View>
-        </View>
-      )}
+      {/* {lastDestinations.length > 0 && ( */}
+      {/*   <View> */}
+      {/*     <Header classes="text-xl mt-12">Letzte Ziele</Header> */}
+      {/*     <View> */}
+      {/*       {lastDestinations.map((destination) => ( */}
+      {/*         <Destination */}
+      {/*           key={getPhotonKey(destination)} */}
+      {/*           onPress={() => { */}
+      {/*             onLocationSuggestionClick(destination); */}
+      {/*           }} */}
+      {/*         > */}
+      {/*           {photonValue(destination)} */}
+      {/*         </Destination> */}
+      {/*       ))} */}
+      {/*     </View> */}
+      {/*   </View> */}
+      {/* )} */}
     </View>
   );
 }

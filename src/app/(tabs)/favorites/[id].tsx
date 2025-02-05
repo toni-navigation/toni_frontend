@@ -59,9 +59,7 @@ export default function FavoritePage() {
   });
 
   const { mutate: deleteFavorite } = useMutation({
-    ...favoritesControllerDeleteFavoriteMutation({
-      path: { favoriteId },
-    }),
+    ...favoritesControllerDeleteFavoriteMutation(),
     onSuccess: (successData) => {
       Alert.alert(`${successData.title} erfolgreich gelöscht.`, '', [
         {
@@ -75,7 +73,6 @@ export default function FavoritePage() {
                 queryKey: [QUERY_KEYS.home_address],
               });
             }
-
             router.back();
           },
         },

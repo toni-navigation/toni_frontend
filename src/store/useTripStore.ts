@@ -45,6 +45,7 @@ export const useTripStore = create<TripState>()(
           destination: CreatePhotonFeatureDto | undefined | null
         ) =>
           set((state) => {
+            console.log(destination);
             state.destination = destination;
             if (destination) {
               state.lastDestinations = [

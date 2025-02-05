@@ -9,7 +9,7 @@ client.setConfig({
   baseUrl: process.env.EXPO_PUBLIC_LOCAL_URL,
 });
 export const TOKEN = 'token';
-client.interceptors.request.use(async (request, options) => {
+client.interceptors.request.use(async (request) => {
   const token = await getToken(TOKEN);
   if (token) {
     request.headers.set('Authorization', `Bearer ${token}`);

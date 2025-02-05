@@ -9,6 +9,7 @@ import { photonValue } from '@/functions/photonValue';
 import { Favorite } from '@/services/api-backend';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
+import { useTripStore } from '@/store/useTripStore';
 
 interface FavoritesCardProps {
   favorite: Favorite;
@@ -16,6 +17,9 @@ interface FavoritesCardProps {
 
 export function FavoritesCard({ favorite }: FavoritesCardProps) {
   const { addFavorite } = useFavoriteStore((state) => state.actions);
+  const { changeDestination, changeOrigin } = useTripStore(
+    (state) => state.actions
+  );
   const currentLocation = useCurrentLocationStore(
     (state) => state.currentLocation
   );
@@ -30,9 +34,10 @@ export function FavoritesCard({ favorite }: FavoritesCardProps) {
       currentLocation.coords.longitude,
       currentLocation.coords.latitude,
     ];
-    const newDestination = favorite.photonFeature.geometry.coordinates;
 
+    const newDestination = favorite.photonFeature.geometry.coordinates;
     if (newOrigin && newDestination) {
+      changeDestination(favorite.photonFeature);
       const params = {
         origin: newOrigin,
         destination: newDestination,

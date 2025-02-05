@@ -26,10 +26,7 @@ export function GeocoderAutocomplete({
   const [focused, setFocused] = useState(false);
   const debouncedInputValue = useDebounce(inputValue, 500);
 
-  const { data, isLoading, isPending, status } = useGeocoding(
-    debouncedInputValue,
-    focused
-  );
+  const { data } = useGeocoding(debouncedInputValue, focused);
   useEffect(() => {
     let newValue = '';
     if (value) {
@@ -58,7 +55,6 @@ export function GeocoderAutocomplete({
         onBlur={() => setFocused(false)}
       />
       <ScrollView>
-        {/* {isLoading && <ActivityIndicator size="small" />} */}
         {data && data.features.length >= 0 && (
           <Suggestions
             suggestions={data.features}

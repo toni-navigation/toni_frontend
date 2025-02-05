@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React from 'react';
 import { Alert, SafeAreaView, Text, View } from 'react-native';
@@ -6,15 +6,31 @@ import { Alert, SafeAreaView, Text, View } from 'react-native';
 import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { CalibrationNavigation } from '@/components/calibration/CalibrationNavigation';
-import { usersControllerUpdateUserMutation } from '@/services/api-backend/@tanstack/react-query.gen';
+import { QUERY_KEYS } from '@/query-keys';
+import {
+  authenticationControllerGetUserOptions,
+  usersControllerUpdateUserMutation,
+} from '@/services/api-backend/@tanstack/react-query.gen';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useUserStore } from '@/store/useUserStore';
 
 export function Finished() {
+  const queryClient = useQueryClient();
+
+  const token = useAuthStore((state) => state.token);
   const calibrationFactor = useUserStore((state) => state.calibrationFactor);
-  const user = useUserStore((state) => state.user);
+  const { data: user } = useQuery({
+    ...authenticationControllerGetUserOptions(),
+    queryKey: [QUERY_KEYS.user, token],
+    enabled: !!token,
+  });
   const { mutate: updateUser, isPending } = useMutation({
     ...usersControllerUpdateUserMutation(),
-    onSuccess: (successData) => {},
+    onSuccess: async (successData) => {
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.user] });
+
+      router.replace('/profile');
+    },
     onError: (error) => {
       Alert.alert(error.message);
     },
@@ -28,7 +44,6 @@ export function Finished() {
         },
       });
     }
-    router.navigate('/profile');
   };
 
   return (
