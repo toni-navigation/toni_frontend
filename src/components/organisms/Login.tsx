@@ -1,10 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
-import { Header } from '@/components/atoms/Header';
 import { InputText } from '@/components/atoms/InputText';
 import { authenticationControllerLoginMutation } from '@/services/api-backend/@tanstack/react-query.gen';
 import { TOKEN } from '@/services/client';
@@ -23,15 +22,9 @@ export function Login() {
     error: loginError,
     isPending,
     mutate,
-    data,
   } = useMutation({
     ...authenticationControllerLoginMutation(),
     onSuccess: async (successData) => {
-      if (!successData) {
-        console.error('Kein Nutzer mit dieser E-Mail Adresse gefunden.');
-
-        return;
-      }
       try {
         await saveToken(TOKEN, successData.accessToken);
         addToken(successData.accessToken);
@@ -40,8 +33,11 @@ export function Login() {
         console.error(error);
       }
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
-
+  const typeError: any = loginError;
   const ref = useRef<TextInput>(null);
 
   const login = () => {
@@ -74,7 +70,6 @@ export function Login() {
           maxLength={300}
           value={email}
           onChange={(event) => {
-            setRequiredFields(false);
             setEmail(event.nativeEvent.text);
           }}
           onClickDelete={() => {
@@ -87,9 +82,9 @@ export function Login() {
             Email muss eine gültige Email Adresse sein
           </Text>
         )}
-        {loginError && loginError.statusCode === 404 && (
+        {typeError && typeError.statusCode === 404 && (
           <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
-            {loginError.message}
+            {typeError.message}
           </Text>
         )}
         <InputText
@@ -114,7 +109,7 @@ export function Login() {
             Passwort muss mindestens 8 Zeichen lang sein
           </Text>
         )}
-        {loginError && loginError.statusCode === 500 && (
+        {typeError && typeError.statusCode === 500 && (
           <Text className="font-generalSansSemi text-xsmall text-accent">
             Falsches Password
           </Text>

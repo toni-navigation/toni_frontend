@@ -42,10 +42,10 @@ export default function HomePage() {
     (state) => state.currentLocation
   );
   const token = useAuthStore((state) => state.token);
-
   const { data: favorites } = useQuery({
     ...favoritesControllerFindAllFavoritesOptions(),
     queryKey: [QUERY_KEYS.favorites, token],
+    enabled: !!token,
   });
 
   const { theme } = useContext(ThemeContext);

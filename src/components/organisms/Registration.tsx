@@ -1,4 +1,4 @@
-import { DefaultError, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
@@ -56,7 +56,7 @@ export function Registration() {
     );
   };
 
-  const { mutate, error, isError, data, isPending } = useMutation({
+  const { mutate, error, isPending } = useMutation({
     ...usersControllerCreateUserMutation(),
     onSuccess: async (successData) => {
       if (!successData) {
@@ -64,14 +64,14 @@ export function Registration() {
 
         return;
       }
-      // onLogin(successData.accessToken);
+
       await saveToken(TOKEN, successData.accessToken);
       addToken(successData.accessToken);
       router.replace('/profile');
     },
   });
   const ref = useRef<TextInput>(null);
-
+  const typeError: any = error;
   const register = () => {
     mutate({
       body: {
@@ -98,8 +98,6 @@ export function Registration() {
     register();
   };
 
-  console.log(error);
-
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-1 mt-3">
@@ -125,9 +123,10 @@ export function Registration() {
             Email muss eine gültige Email Adresse sein
           </Text>
         )}
-        {error &&
-          (error.statusCode === 400 || error.statusCode === 409) &&
-          getErrorMessage(error, 'email') && (
+
+        {typeError &&
+          (typeError.statusCode === 400 || typeError.statusCode === 409) &&
+          getErrorMessage(typeError, 'email') && (
             <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
               {getErrorMessage(error, 'email')}
             </Text>
@@ -150,16 +149,12 @@ export function Registration() {
             ref.current?.focus();
           }}
         />
-        {!validateInput && password.length < 8 && (
-          <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
-            Passwort muss mindestens 8 Zeichen lang sein
-          </Text>
-        )}
-        {error &&
-          error.statusCode === 400 &&
-          getErrorMessage(error, 'password') && (
+
+        {typeError &&
+          typeError.statusCode === 400 &&
+          getErrorMessage(typeError, 'password') && (
             <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
-              {getErrorMessage(error, 'password')}
+              {getErrorMessage(typeError, 'password')}
             </Text>
           )}
         <InputText
@@ -171,20 +166,17 @@ export function Registration() {
           inputMode="text"
           maxLength={300}
           value={confirmPassword}
-          onChange={(event) => {
-            setValidateInput(true);
-            setConfirmPassword(event.nativeEvent.text);
-          }}
+          onChange={(event) => setConfirmPassword(event.nativeEvent.text)}
           onClickDelete={() => {
             setConfirmPassword('');
             ref.current?.focus();
           }}
         />
-        {error &&
-          error.statusCode === 400 &&
-          getErrorMessage(error, 'confirmPassword') && (
+        {typeError &&
+          typeError.statusCode === 400 &&
+          getErrorMessage(typeError, 'confirmPassword') && (
             <Text className="font-generalSansSemi text-xsmall text-accent mb-4">
-              {getErrorMessage(error, 'confirmPassword')}
+              {getErrorMessage(typeError, 'confirmPassword')}
             </Text>
           )}
         {!validateInput && confirmPassword !== password && (

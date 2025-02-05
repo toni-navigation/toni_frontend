@@ -30,6 +30,7 @@ export default function FavoritesPage() {
   } = useQuery({
     ...favoritesControllerFindAllFavoritesOptions(),
     queryKey: [QUERY_KEYS.favorites, token],
+    retry: 0,
   });
   const screenHeight = Dimensions.get('window').height;
   const viewHeight = 0.12 * screenHeight;
@@ -62,11 +63,9 @@ export default function FavoritesPage() {
               ))}
             {favorites &&
               favorites?.length > 0 &&
-              favorites
-                // .filter((favorite) => favorite.destinationType === 'normal')
-                .map((favorite) => (
-                  <FavoritesCard key={favorite.id} favorite={favorite} />
-                ))}
+              favorites.map((favorite) => (
+                <FavoritesCard key={favorite.id} favorite={favorite} />
+              ))}
           </View>
         </ScrollView>
         <View className="flex items-center justify-center p-5">
@@ -77,7 +76,6 @@ export default function FavoritesPage() {
               router.push('/favorites/create');
             }}
             buttonType="accent"
-            // disabled={isError}
           >
             Neu
           </Button>
