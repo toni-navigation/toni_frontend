@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/atoms/Button';
+import { Header } from '@/components/atoms/Header';
 import { InputText } from '@/components/atoms/InputText';
 import { ToniProfilePicture } from '@/components/atoms/icons/ToniProfilePicture';
 import { ModalWrapper } from '@/components/favorite/ModalWrapper';
+import { PopUp } from '@/components/organisms/PopUp';
 import { QUERY_KEYS } from '@/query-keys';
 import {
   usersControllerDeleteUserMutation,
@@ -23,6 +25,7 @@ type ParamsProps = {
 export default function AccountSettings() {
   const params = useLocalSearchParams() as ParamsProps;
   const [email, setEmail] = useState(params.email);
+  const [showDeleteAccountPopUp, setShowDeleteAccountPopUp] = useState(false);
   const queryClient = useQueryClient();
   const { removeToken } = useAuthStore((state) => state.actions);
   const { mutate: updateUser, error } = useMutation({
@@ -68,6 +71,21 @@ export default function AccountSettings() {
 
   return (
     <ModalWrapper title="Konto bearbeiten">
+      <PopUp
+        visible={showDeleteAccountPopUp}
+        onCloseClick={() => {
+          setShowDeleteAccountPopUp(false);
+        }}
+        onCloseButtonText="Abbrechen"
+        onClick={deleteAccount}
+        onClickButtonText="Löschen"
+      >
+        <Header>Hinweis</Header>
+
+        <Text className="text-medium pt-4 font-atkinsonRegular text-center text-textColor">
+          Möchtest du wirklich dein Konto löschen?
+        </Text>
+      </PopUp>
       <View className="px-8 py-5 items-center">
         <ToniProfilePicture height={70} width={70} />
       </View>
@@ -87,7 +105,7 @@ export default function AccountSettings() {
         />
         <Text
           className="underline text-medium font-generalSansSemi text-primary mt-5"
-          onPress={deleteAccount}
+          onPress={() => setShowDeleteAccountPopUp(true)}
         >
           Konto löschen
         </Text>
