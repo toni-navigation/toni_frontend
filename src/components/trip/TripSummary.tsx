@@ -47,6 +47,11 @@ export function TripSummary({
     }
   };
   const destination = useTripStore((state) => state.destination);
+  const stepsOutput = () => {
+    if (!calibrationFactor) return null;
+
+    return ` | ${calculateSteps(length, calibrationFactor)?.toFixed(0)} Schritte`;
+  };
 
   return (
     <View className="flex items-center my-5 text-center text-textColor text-medium font-generalSansSemi">
@@ -102,8 +107,7 @@ export function TripSummary({
         {(length * 12).toFixed(0)} min
         {' | '}
         {length.toFixed(1)} km
-        {' | '}
-        {calculateSteps(length, calibrationFactor)?.toFixed(0)} Schritte
+        {stepsOutput()}
       </Text>
       <View className="mt-8 w-full flex items-center flex-row justify-center relative">
         <View className="w-2/3 flex items-center px-5">

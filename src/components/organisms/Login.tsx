@@ -33,9 +33,6 @@ export function Login() {
         console.error(error);
       }
     },
-    onError: (error) => {
-      console.log(error);
-    },
   });
   const typeError: any = loginError;
   const ref = useRef<TextInput>(null);

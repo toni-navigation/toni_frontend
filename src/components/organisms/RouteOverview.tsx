@@ -121,9 +121,11 @@ export function RouteOverview({
                 <Text className="text-medium font-generalSansSemi text-primary pt-2">
                   {convertSecondsToMinutes(summary.time)} Minuten
                 </Text>
-                <Text className="text-medium font-generalSansSemi text-primary pt-2">
-                  {calculateSteps(summary.length, calibrationFactor)} Schritte
-                </Text>
+                {calibrationFactor && (
+                  <Text className="text-medium font-generalSansSemi text-primary pt-2">
+                    {calculateSteps(summary.length, calibrationFactor)} Schritte
+                  </Text>
+                )}
               </View>
             </Card>
           </ScrollView>

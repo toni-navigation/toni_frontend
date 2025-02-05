@@ -56,7 +56,6 @@ export const useFavoriteStore = create<FavoriteState>()(
               state.favorite = {};
             }
             // TODO: Fix this
-            console.log('here', photonFeature);
             if (photonFeature === null) {
               state.favorite.photonFeature = undefined;
 
