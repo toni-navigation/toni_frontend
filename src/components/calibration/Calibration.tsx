@@ -182,7 +182,7 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
     }
 
     return (
-      <>
+      <View className="flex flex-1 flex-row gap-1.5 mb-5 justify-center items-center">
         {isFromIntro && (
           <Button
             onPress={() => {
@@ -194,18 +194,17 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
             Überspringen
           </Button>
         )}
-        <View className="flex flex-1 items-center justify-center">
-          <Button
-            width={isFromIntro ? 'half' : 'third'}
-            buttonType="accent"
-            // disabled={isLoading}
-            isLoading={isLoading}
-            onPress={startPedometer}
-          >
-            Start
-          </Button>
-        </View>
-      </>
+
+        <Button
+          width={isFromIntro ? 'half' : 'third'}
+          buttonType="accent"
+          // disabled={isLoading}
+          isLoading={isLoading}
+          onPress={startPedometer}
+        >
+          Start
+        </Button>
+      </View>
     );
   };
 
