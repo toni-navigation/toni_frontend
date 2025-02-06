@@ -37,6 +37,7 @@ export function Finished() {
   });
   const clickFinishedHandler = () => {
     if (user) {
+      console.log('calibrationFactor', calibrationFactor);
       updateUser({
         path: { userId: user.id },
         body: {
@@ -75,6 +76,7 @@ export function Finished() {
           width="full"
           buttonType="accent"
           disabled={isPending}
+          isLoading={isPending}
           onPress={clickFinishedHandler}
         >
           {isPending ? 'Lädt...' : 'Fertig'}

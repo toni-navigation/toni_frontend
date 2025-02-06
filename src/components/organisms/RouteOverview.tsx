@@ -24,19 +24,20 @@ import { calculateSteps } from '@/functions/calculateSteps';
 import { photonValue } from '@/functions/photonValue';
 import { useReverseData } from '@/queries/useReverseData';
 import { useTripStore } from '@/store/useTripStore';
-import { useUserStore } from '@/store/useUserStore';
 import { SummaryProps } from '@/types/Valhalla-Types';
 
 interface RouteOverviewProps {
   onCloseClick: () => void;
   summary: SummaryProps;
   currentLocation: LocationObject;
+  calibrationFactor: number | null;
 }
 
 export function RouteOverview({
   onCloseClick,
   summary,
   currentLocation,
+  calibrationFactor,
 }: RouteOverviewProps) {
   const { theme } = useContext(ThemeContext);
 
@@ -44,7 +45,6 @@ export function RouteOverview({
   const origin = useTripStore((state) => state.origin);
   const { changeOrigin } = useTripStore((state) => state.actions);
   const destination = useTripStore((state) => state.destination);
-  const calibrationFactor = useUserStore((state) => state.calibrationFactor);
 
   const {
     data: reverseData,
@@ -64,6 +64,15 @@ export function RouteOverview({
   if (reverseIsPending) {
     return <Text>Loading...</Text>;
   }
+  // {
+  //   /* {summary.length < 1 */
+  // }
+  // {
+  //   /*   ? `${summary.length.toFixed(2).toString().replace('.', ',').split(',')[1]} m` */
+  // }
+  // {
+  //   /*   : `${summary.length.toFixed(2).toString().replace('.', ',')} km`} */
+  // }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -116,16 +125,14 @@ export function RouteOverview({
                   Deine Route beträgt:
                 </Text>
                 <Text className="text-medium font-generalSansSemi text-primary pt-2">
-                  {summary.length < 1
-                    ? `${summary.length.toFixed(2).toString().replace('.', ',').split(',')[1]} m`
-                    : `${summary.length.toFixed(2).toString().replace('.', ',')} km`}
+                  {summary.length.toFixed(1)} km
                 </Text>
                 <Text className="text-medium font-generalSansSemi text-primary pt-2">
                   {convertSecondsToMinutes(summary.time)} Minuten
                 </Text>
-                {calibrationFactor && (
+                {calibrationFactor !== null && (
                   <Text className="text-medium font-generalSansSemi text-primary pt-2">
-                    {calculateSteps(summary.length, calibrationFactor)} Schritte
+                    {`${calculateSteps(summary.length, calibrationFactor)} Schritte`}
                   </Text>
                 )}
               </View>

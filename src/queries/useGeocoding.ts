@@ -6,7 +6,7 @@ import { PhotonService } from '@/services/api-photon';
 
 export function useGeocoding(
   debouncedInputValue: string,
-  focused: boolean,
+  enabled: boolean,
   limit = 5
 ) {
   const parameters: Parameters<typeof PhotonService.geocoding>[0] = {
@@ -26,7 +26,7 @@ export function useGeocoding(
         ...(defaultBbox ? { bbox: defaultBbox.join(',') } : {}),
       });
     },
-    enabled: focused,
+    enabled,
     placeholderData: keepPreviousData,
   });
 }

@@ -18,11 +18,11 @@ import { decodePolyline } from '@/functions/decodePolyline';
 import { getMatchingManeuverIndex } from '@/functions/getMatchingManeuvers';
 import { matchIconType } from '@/functions/matchIconType';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
-import { useUserStore } from '@/store/useUserStore';
 import { ValhallaProps } from '@/types/Valhalla-Types';
 
 interface NavigationProps {
   data: ValhallaProps;
+  calibrationFactor: number | null;
 }
 interface ReadRefProps {
   [key: number]: {
@@ -33,9 +33,11 @@ interface ReadRefProps {
   };
 }
 export const Navigation = forwardRef(
-  ({ data }: NavigationProps, ref: React.ForwardedRef<PagerView>) => {
+  (
+    { data, calibrationFactor }: NavigationProps,
+    ref: React.ForwardedRef<PagerView>
+  ) => {
     const [showMap, setMap] = useState(false);
-
     const { trip } = data;
     const { theme } = useContext(ThemeContext);
     const readRef = useRef<ReadRefProps>({});
@@ -49,7 +51,6 @@ export const Navigation = forwardRef(
     const { updateCurrentLocation } = useCurrentLocationStore(
       (state) => state.actions
     );
-    const calibrationFactor = useUserStore((state) => state.calibrationFactor);
 
     // const calibrationFactor = useUserStore((state) => state.calibrationFactor);
     const currentLocationPoint =

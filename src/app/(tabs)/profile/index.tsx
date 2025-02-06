@@ -18,7 +18,6 @@ import { Button } from '@/components/atoms/Button';
 import { Header } from '@/components/atoms/Header';
 import { ProfileMenuCard } from '@/components/atoms/ProfileMenuCard';
 import { ProfileMenuItem } from '@/components/atoms/ProfileMenuItem';
-import { ToniCircle } from '@/components/atoms/icons/ToniCircle';
 import { ToniEmail } from '@/components/atoms/icons/ToniEmail';
 import { ToniHome } from '@/components/atoms/icons/ToniHome';
 import { ToniName } from '@/components/atoms/icons/ToniName';

@@ -35,7 +35,6 @@ export default function HomePage() {
   const { switchOriginDestination, changeDestination } = useTripStore(
     (state) => state.actions
   );
-
   const origin = useTripStore((state) => state.origin);
   const destination = useTripStore((state) => state.destination);
   const currentLocation = useCurrentLocationStore(
