@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React, { useContext } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Linking,
   SafeAreaView,
@@ -59,7 +60,7 @@ export default function ProfilePage() {
       removeToken();
       router.dismissTo('/intro');
     } catch (error) {
-      console.error(error);
+      Alert.alert('Fehler', 'Beim Logout ist ein Fehler aufgetreten');
     }
   };
   const screenHeight = Dimensions.get('window').height;
@@ -232,22 +233,12 @@ export default function ProfilePage() {
                   />
                 }
               >
-                {/* {user?.password ? '********' : 'Kein Passwort'} */}
                 ********
               </ProfileMenuItem>
             </ProfileMenuCard>
 
             <ProfileMenuCard classes="mb-8" header="Rechtliches">
-              <ProfileMenuItem
-                icon={
-                  <ToniCircle
-                    height={30}
-                    width={30}
-                    stroke={themes.external[`--${theme}-mode-icon-button`]}
-                    strokeWidth={4}
-                  />
-                }
-              >
+              <ProfileMenuItem>
                 <Text
                   accessibilityLabel="Nutzungsbedingungen"
                   accessibilityRole="link"
@@ -262,16 +253,7 @@ export default function ProfilePage() {
                   Nutzungsbedingungen
                 </Text>
               </ProfileMenuItem>
-              <ProfileMenuItem
-                icon={
-                  <ToniCircle
-                    height={30}
-                    width={30}
-                    stroke={themes.external[`--${theme}-mode-icon-button`]}
-                    strokeWidth={4}
-                  />
-                }
-              >
+              <ProfileMenuItem>
                 <Text
                   accessibilityLabel="AGBs"
                   accessibilityRole="link"
@@ -284,17 +266,7 @@ export default function ProfilePage() {
                   AGBs
                 </Text>
               </ProfileMenuItem>
-              <ProfileMenuItem
-                isLast
-                icon={
-                  <ToniCircle
-                    height={30}
-                    width={30}
-                    stroke={themes.external[`--${theme}-mode-icon-button`]}
-                    strokeWidth={4}
-                  />
-                }
-              >
+              <ProfileMenuItem isLast>
                 <Text
                   accessibilityLabel="Datenschutz Richtlinien"
                   accessibilityRole="link"

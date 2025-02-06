@@ -40,7 +40,7 @@ export function PopUp({
               <Button
                 width={onClick ? 'half' : 'third'}
                 onPress={onCloseClick}
-                buttonType={onClick ? 'primaryOutline' : 'primary'}
+                buttonType={onClick ? 'primaryOutlineInverted' : 'primary'}
               >
                 {onCloseButtonText}
               </Button>
