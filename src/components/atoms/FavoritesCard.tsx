@@ -47,13 +47,13 @@ export function FavoritesCard({ favorite }: FavoritesCardProps) {
   };
 
   return (
-    <View className="rounded-[25px] mb-5 py-3 px-6 bg-background shadow-md">
+    <View className="rounded-[25px] mb-5 py-5 px-5 bg-background shadow-md">
       <Text className="font-generalSansSemi text-medium text-primary">
         {favorite.title}
       </Text>
       <View className="flex flex-row items-center justify-between mb-6 gap-2">
         <View className="w-3/4">
-          <Text className="mb-2 mt-5 text-textColor text-small">Adresse:</Text>
+          <Text className="mb-2 mt-5 text-primary text-xsmall">Adresse:</Text>
           <Text className="text-textColor text-small">
             {photonValue(favorite.photonFeature)}
           </Text>
