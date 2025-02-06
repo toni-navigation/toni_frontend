@@ -43,6 +43,8 @@ export function Finished() {
           calibrationFactor,
         },
       });
+    } else {
+      router.replace('/home');
     }
   };
 
