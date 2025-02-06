@@ -10,7 +10,12 @@ interface ButtonProps {
   children: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
-  buttonType: 'accent' | 'accentOutline' | 'primary' | 'primaryOutline';
+  buttonType:
+    | 'accent'
+    | 'accentOutline'
+    | 'primary'
+    | 'primaryOutline'
+    | 'primaryOutlineInverted';
   isLoading?: boolean;
   width: 'full' | 'half' | 'third';
 }
@@ -38,6 +43,10 @@ export function Button({
     },
     primaryOutline: {
       button: 'bg-background border border-2 border-solid border-primary',
+      text: 'text-primary',
+    },
+    primaryOutlineInverted: {
+      button: 'bg-invertedPrimary border border-2 border-solid border-primary',
       text: 'text-primary',
     },
   };
