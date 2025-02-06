@@ -72,9 +72,9 @@ export function Calibration({ isFromIntro = false }: CalibrationProps) {
       destination
     );
 
-    if (distanceInMeter === null) {
-      return;
-    }
+    // if (distanceInMeter === null) {
+    //   return;
+    // }
 
     addCalibration(distanceInMeter, _steps);
     router.push('/profile/calibration/finished');

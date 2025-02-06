@@ -11,7 +11,7 @@ export const calculateCalibration = (distanceInMeter: number, steps: number) =>
 type UserState = {
   calibrationFactor: number | null;
   actions: {
-    addCalibration: (distanceInMeter: number, steps: number) => void;
+    addCalibration: (distanceInMeter: number | null, steps: number) => void;
     resetUserStore: () => void;
     resetCalibration: () => void;
   };
@@ -28,6 +28,11 @@ export const useUserStore = create<UserState>()(
       actions: {
         addCalibration: (distanceInMeter, steps) =>
           set((state) => {
+            if (distanceInMeter === null) {
+              state.calibrationFactor = null;
+
+              return;
+            }
             state.calibrationFactor = calculateCalibration(
               distanceInMeter,
               steps

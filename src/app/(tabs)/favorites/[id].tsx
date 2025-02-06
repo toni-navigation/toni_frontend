@@ -50,11 +50,7 @@ export default function FavoritePage() {
     },
   });
 
-  const {
-    mutate: deleteFavorite,
-    isPending,
-    status,
-  } = useMutation({
+  const { mutate: deleteFavorite, isPending } = useMutation({
     ...favoritesControllerDeleteFavoriteMutation(),
     onSuccess: async (successData) => {
       await queryClient.invalidateQueries({

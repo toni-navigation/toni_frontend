@@ -23,9 +23,12 @@ export function Trip() {
     (state) => state.currentLocation
   );
   const ref = React.useRef<PagerView>(null);
-  const { data, isError, error } = useTrip(tripData);
+  const { data, isError, error, isPending } = useTrip(tripData);
   if (isError && error) {
     return <Error error={error.message} />;
+  }
+  if (isPending) {
+    return <ActivityIndicator size="large" color="#000" />;
   }
   if (showTripOverview && currentLocation) {
     return (
