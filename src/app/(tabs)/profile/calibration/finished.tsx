@@ -37,7 +37,6 @@ export function Finished() {
   });
   const clickFinishedHandler = () => {
     if (user) {
-      console.log('calibrationFactor', calibrationFactor);
       updateUser({
         path: { userId: user.id },
         body: {
