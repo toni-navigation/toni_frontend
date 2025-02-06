@@ -102,7 +102,6 @@ export function Registration() {
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-1 mt-3">
         <InputText
-          className="mb-2"
           accessibilityLabel="Email Adresse *"
           accessibilityHint="Pflichtfeld: Geben Sie ihre Email Adresse ein"
           placeholder="Email Adresse eingeben"
@@ -132,7 +131,6 @@ export function Registration() {
             </Text>
           )}
         <InputText
-          className="mb-2"
           accessibilityLabel="Passwort *"
           accessibilityHint="Pflichtfeld: Geben Sie eine Passwort ein"
           placeholder="Passwort eingeben"
@@ -158,7 +156,6 @@ export function Registration() {
             </Text>
           )}
         <InputText
-          className="mb-2"
           accessibilityLabel="Passwort bestätigen *"
           accessibilityHint="Pflichtfeld: Bestätige das Passwort"
           placeholder="Passwort bestätigen"
