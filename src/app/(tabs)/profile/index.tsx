@@ -127,6 +127,7 @@ export default function ProfilePage() {
               </ProfileMenuItem>
               <ProfileMenuItem
                 label="Nachname"
+                isLast
                 icon={
                   <ToniName
                     height={30}
@@ -138,6 +139,24 @@ export default function ProfilePage() {
               >
                 {user?.lastname ? `${user.lastname}` : 'Kein Nachname'}
               </ProfileMenuItem>
+            </ProfileMenuCard>
+            <ProfileMenuCard
+              header="Heimatadresse"
+              editButton
+              onPress={() => {
+                router.push({
+                  pathname: '/profile/home-settings',
+                  params: {
+                    userId: user?.id,
+                    firstname: user?.firstname,
+                    lastname: user?.lastname,
+                    homeFavorite: homeAddress
+                      ? JSON.stringify(homeAddress)
+                      : undefined,
+                  },
+                });
+              }}
+            >
               <ProfileMenuItem
                 isLast
                 label="Heimat Adresse"

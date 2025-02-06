@@ -29,6 +29,17 @@ function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="home-settings"
+        options={{
+          headerTitle: 'Heimatadresse anpassen',
+          headerStyle: {
+            backgroundColor: themes.external[`--${theme}-mode-background`],
+          },
+          headerTintColor: themes.external[`--${theme}-mode-primary`],
+          headerBackTitleStyle: { fontFamily: 'atkinsonRegular' },
+        }}
+      />
+      <Stack.Screen
         name="account-settings"
         options={{
           headerTitle: 'Allgemeine Einstellungen',

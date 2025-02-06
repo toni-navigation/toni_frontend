@@ -5,17 +5,16 @@ import { ActivityIndicator, Linking } from 'react-native';
 import '@/services/client';
 import { Intro } from '@/components/Intro';
 import { useTokenLoader } from '@/queries/useTokenLoader';
-import { useAuthStore } from '@/store/useAuthStore';
 import { useCurrentLocationStore } from '@/store/useCurrentLocationStore';
 
 import { Redirect } from 'expo-router';
 
 export default function Index() {
-  const { addToken } = useAuthStore((state) => state.actions);
+  // const { addToken } = useAuthStore((state) => state.actions);
   const { data, isPending, isError, isSuccess } = useTokenLoader();
-  if (isSuccess && data) {
-    addToken(data);
-  }
+  // if (isSuccess && data) {
+  //   addToken(data);
+  // }
   const { updateCurrentLocation } = useCurrentLocationStore(
     (state) => state.actions
   );
