@@ -106,7 +106,9 @@ export function TripSummary({
       <Text className="text-textColor text-medium font-generalSansSemi">
         {(length * 12).toFixed(0)} min
         {' | '}
-        {length.toFixed(1)} km
+        {length < 1
+          ? `${length.toFixed(2).toString().replace('.', ',').split(',')[1]} m`
+          : `${length.toFixed(2).toString().replace('.', ',')} km`}
         {stepsOutput()}
       </Text>
       <View className="mt-8 w-full flex items-center flex-row justify-center relative">

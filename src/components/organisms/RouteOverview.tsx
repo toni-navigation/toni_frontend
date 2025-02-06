@@ -116,7 +116,9 @@ export function RouteOverview({
                   Deine Route beträgt:
                 </Text>
                 <Text className="text-medium font-generalSansSemi text-primary pt-2">
-                  {summary.length} km
+                  {summary.length < 1
+                    ? `${summary.length.toFixed(2).toString().replace('.', ',').split(',')[1]} m`
+                    : `${summary.length.toFixed(2).toString().replace('.', ',')} km`}
                 </Text>
                 <Text className="text-medium font-generalSansSemi text-primary pt-2">
                   {convertSecondsToMinutes(summary.time)} Minuten
