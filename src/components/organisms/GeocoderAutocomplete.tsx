@@ -12,6 +12,7 @@ type GeocoderAutocompleteProps = {
   value?: CreatePhotonFeatureDto | undefined | null;
   label?: string;
   placeholder: string;
+  className?: string;
   onChange: (newValue: CreatePhotonFeatureDto | undefined | null) => void;
 };
 
@@ -20,6 +21,7 @@ export function GeocoderAutocomplete({
   placeholder,
   value,
   onChange,
+  className,
 }: GeocoderAutocompleteProps) {
   const ref = useRef<TextInput>(null);
   const [inputValue, setInputValue] = useState('');
@@ -43,6 +45,7 @@ export function GeocoderAutocomplete({
         accessibilityHint={label}
         ref={ref}
         value={inputValue}
+        className={className}
         accessibilityLabel={label}
         placeholder={placeholder}
         onClickDelete={() => {
