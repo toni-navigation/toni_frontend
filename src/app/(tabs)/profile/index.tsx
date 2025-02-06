@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React, { useContext } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Linking,
   SafeAreaView,
@@ -59,7 +60,7 @@ export default function ProfilePage() {
       removeToken();
       router.dismissTo('/intro');
     } catch (error) {
-      console.error(error);
+      Alert.alert('Fehler', 'Beim Logout ist ein Fehler aufgetreten');
     }
   };
   const screenHeight = Dimensions.get('window').height;
