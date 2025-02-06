@@ -179,6 +179,7 @@ export default function GeneralSettings() {
           accessibilityHint="Vorname eingeben"
           value={firstname}
           onChange={(event) => setFirstname(event.nativeEvent.text)}
+          onClickDelete={() => setFirstname('')}
         />
         <InputText
           placeholder="Nachname eingeben"
@@ -186,6 +187,7 @@ export default function GeneralSettings() {
           accessibilityHint="Nachname eingeben"
           value={lastname}
           onChange={(event) => setLastname(event.nativeEvent.text)}
+          onClickDelete={() => setLastname('')}
         />
         <GeocoderAutocomplete
           label="Heimatadresse"

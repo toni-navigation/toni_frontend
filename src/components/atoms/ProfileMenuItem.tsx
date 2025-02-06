@@ -18,10 +18,10 @@ export function ProfileMenuItem({
 }: ProfileMenuItemProps) {
   return (
     <View
-      className={`flex flex-row items-center pt-5 ${isLast ? '' : 'border-b-2 border-gray pb-5'} ${classes}`}
+      className={`flex flex-row  items-center pt-5 ${isLast ? '' : 'border-b-2 border-gray pb-5'} ${classes}`}
     >
       {icon && icon}
-      <View className="ps-5">
+      <View className="px-5 flex-1">
         {label && (
           <Text className="font-atkinsonRegular text-primary">{label}</Text>
         )}
