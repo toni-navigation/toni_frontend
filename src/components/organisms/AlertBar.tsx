@@ -1,5 +1,4 @@
-import * as Speech from 'expo-speech';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
 interface AlertBarProps {
@@ -7,12 +6,6 @@ interface AlertBarProps {
 }
 
 export function AlertBar({ text }: AlertBarProps) {
-  useEffect(() => {
-    Speech.speak(text, {
-      language: 'de',
-    });
-  }, [text]);
-
   return (
     <View
       accessibilityLabel="Alert Bar"
