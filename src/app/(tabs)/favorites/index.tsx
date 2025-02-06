@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { FavoritesCard } from '@/components/atoms/FavoritesCard';
 import { Header } from '@/components/atoms/Header';
+import { Card } from '@/components/organisms/Card';
 import { QUERY_KEYS } from '@/query-keys';
 import { favoritesControllerFindAllFavoritesOptions } from '@/services/api-backend/@tanstack/react-query.gen';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -44,13 +45,15 @@ export default function FavoritesPage() {
           <Header>Meine Favoriten</Header>
         </View>
         <View />
-        <ScrollView>
+        <ScrollView className="flex-1">
           {isPending && <ActivityIndicator size="large" />}
-          {isError && (
-            <View>
-              <Text className="font-atkinsonRegular text-2xl text-textColor">
-                {error.message}
-              </Text>
+          {isError && !token && (
+            <View className="flex-1 m-5">
+              <Card color="background">
+                <Text className="font-generalSansSemi text-center p-10 text-small text-accent">
+                  Um Favoriten zu nutzen, musst du dich einloggen.
+                </Text>
+              </Card>
             </View>
           )}
           <View className="mt-8 mx-5 ">
@@ -70,6 +73,7 @@ export default function FavoritesPage() {
         <View className="flex items-center justify-center p-5">
           <Button
             width="third"
+            disabled={!token}
             onPress={() => {
               resetFavoritesStore();
               router.push('/favorites/create');
