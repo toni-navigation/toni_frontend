@@ -1,7 +1,9 @@
 import { useDebounce } from '@uidotdev/usehooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, ScrollView, TextInput, View } from 'react-native';
 
+import { themes } from '@/colors';
+import { ThemeContext } from '@/components/ThemeProvider';
 import { InputText } from '@/components/atoms/InputText';
 import { Suggestions } from '@/components/organisms/Suggestions';
 import { photonValue } from '@/functions/photonValue';
@@ -14,6 +16,7 @@ type GeocoderAutocompleteProps = {
   placeholder: string;
   className?: string;
   onChange: (newValue: CreatePhotonFeatureDto | undefined | null) => void;
+  isLoading?: boolean;
 };
 
 export function GeocoderAutocomplete({
@@ -21,8 +24,11 @@ export function GeocoderAutocomplete({
   placeholder,
   value,
   onChange,
+  isLoading,
   className,
 }: GeocoderAutocompleteProps) {
+  const { theme } = useContext(ThemeContext);
+
   const ref = useRef<TextInput>(null);
   const [inputValue, setInputValue] = useState('');
   const [focused, setFocused] = useState(false);
@@ -58,6 +64,12 @@ export function GeocoderAutocomplete({
         onBlur={() => setFocused(false)}
       />
       <ScrollView>
+        {isLoading && (
+          <ActivityIndicator
+            size="large"
+            color={themes.external[`--${theme}-mode-icon-button`]}
+          />
+        )}
         {data && data.features.length >= 0 && (
           <Suggestions
             suggestions={data.features}

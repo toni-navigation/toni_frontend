@@ -11,12 +11,13 @@ export default function LocationModalPage() {
   const photonFeature = useFavoriteStore(
     (state) => state.favorite.photonFeature
   );
+  const [isLoading, setIsLoading] = React.useState(false);
   const reverseData = useReverseData();
   const addLocation = async (
     location: CreatePhotonFeatureDto | undefined | null
   ) => {
-    console.log(location);
     if (location === null) {
+      setIsLoading(true);
       const position = await getCurrentPosition();
       if (position) {
         const data = await reverseData.mutateAsync({
@@ -25,6 +26,8 @@ export default function LocationModalPage() {
         });
         addPhotonFeature(data.features[0]);
 
+        setIsLoading(false);
+
         return;
       }
     }
@@ -32,7 +35,11 @@ export default function LocationModalPage() {
   };
 
   return (
-    <LocationModal changeLocation={addLocation} location={photonFeature}>
+    <LocationModal
+      changeLocation={addLocation}
+      isLoading={isLoading}
+      location={photonFeature}
+    >
       Favorit suchen
     </LocationModal>
   );

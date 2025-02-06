@@ -37,7 +37,7 @@ export default function GeneralSettings() {
   const [home, setHome] = useState<UpdateFavoriteDto | undefined>(
     initialFavorite
   );
-
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const { mutate: updateFavoriteHome, isPending: isPendingFavorite } =
     useMutation({
       ...favoritesControllerUpdateFavoriteMutation(),
@@ -98,6 +98,7 @@ export default function GeneralSettings() {
     location: CreatePhotonFeatureDto | undefined | null
   ) => {
     if (location === null) {
+      setIsLoadingLocation(true);
       const position = await getCurrentPosition();
       if (position) {
         const data = await reverseData.mutateAsync({
@@ -111,6 +112,7 @@ export default function GeneralSettings() {
           isPinned: true,
           photonFeature: data.features[0],
         }));
+        setIsLoadingLocation(false);
 
         return;
       }
@@ -133,6 +135,7 @@ export default function GeneralSettings() {
       <ScrollView>
         <GeocoderAutocomplete
           label="Heimatadresse"
+          isLoading={isLoadingLocation}
           value={home?.photonFeature}
           placeholder="Heimatadresse eingeben"
           onChange={(photonFeature) => addLocation(photonFeature)}

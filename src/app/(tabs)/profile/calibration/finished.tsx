@@ -61,7 +61,9 @@ export function Finished() {
               Schrittlänge:
             </Text>
             <Text className="text-large font-generalSansSemi text-primary text-center">
-              {calibrationFactor} m
+              {calibrationFactor
+                ? `${calibrationFactor} m`
+                : 'Es wurde keine Schrittlänge konfiguriert.'}
             </Text>
           </View>
         )}

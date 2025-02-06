@@ -10,11 +10,13 @@ interface LocationModalProps {
   changeLocation: (location: CreatePhotonFeatureDto | undefined | null) => void;
   location: CreatePhotonFeatureDto | undefined | null;
   children: React.ReactNode;
+  isLoading?: boolean;
 }
 export function LocationModal({
   children,
   location,
   changeLocation,
+  isLoading,
 }: LocationModalProps) {
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -32,6 +34,7 @@ export function LocationModal({
               router.back();
             }
           }}
+          isLoading={isLoading}
         />
       </View>
     </SafeAreaView>
