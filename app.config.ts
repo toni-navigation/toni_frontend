@@ -10,8 +10,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   newArchEnabled: true,
-  name: 'Hearow',
-  slug: 'Hearow',
+  name: 'hearow',
+  slug: 'hearow',
   version: '1.0.0',
   icon: './src/assets/images/icon.png',
   userInterfaceStyle: 'automatic', // 'automatic' | 'light' | 'dark'
@@ -29,7 +29,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-location',
       {
         locationAlwaysAndWhenInUsePermission:
-          'Allow Hearow to use your location.',
+          'Allow hearow to use your location.',
       },
     ],
     'expo-router',
@@ -65,5 +65,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     favicon: './src/assets/favicon.png',
   },
-  scheme: 'Hearow',
+  scheme: 'hearow',
 });
