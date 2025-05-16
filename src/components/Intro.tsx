@@ -23,7 +23,7 @@ export function Intro() {
   }[] = [
     {
       headline: 'Dein Weg',
-      text: 'Toni führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
+      text: 'hearow führt dich, auf deine Schrittlänge konfiguriert, sicher an dein Ziel!',
       icon: <ToniLogo height={115} width={115} />,
     },
     {

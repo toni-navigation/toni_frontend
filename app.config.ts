@@ -10,8 +10,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   newArchEnabled: true,
-  name: 'toni-navigation',
-  slug: 'toni',
+  name: 'Hearow',
+  slug: 'Hearow',
   version: '1.0.0',
   icon: './src/assets/images/icon.png',
   userInterfaceStyle: 'automatic', // 'automatic' | 'light' | 'dark'
@@ -28,7 +28,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-location',
       {
-        locationAlwaysAndWhenInUsePermission: 'Allow Toni to use your location.',
+        locationAlwaysAndWhenInUsePermission:
+          'Allow Hearow to use your location.',
       },
     ],
     'expo-router',
@@ -52,17 +53,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     config: {
       usesNonExemptEncryption: false,
     },
-    bundleIdentifier: 'io.toni.app',
+    bundleIdentifier: 'io.hearow.app',
   },
   android: {
     adaptiveIcon: {
       foregroundImage: './src/assets/images/adaptive-icon.png',
       backgroundColor: '#0A585C',
     },
-    package: 'io.toni.app',
+    package: 'io.hearow.app',
   },
   web: {
     favicon: './src/assets/favicon.png',
   },
-  scheme: 'toni',
+  scheme: 'Hearow',
 });

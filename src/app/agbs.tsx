@@ -47,7 +47,7 @@ export default function Agbs() {
               className="text-accent text-small"
               onPress={() =>
                 Linking.openURL(
-                  'https://toni-navigation.at/nutzungsbedingungen'
+                  'https://www.hearow-nav.com/nutzungsbedingungen'
                 )
               }
             >
@@ -74,7 +74,7 @@ export default function Agbs() {
               accessibilityRole="link"
               accessibilityHint="Link zu den AGBs"
               className="text-accent text-small"
-              onPress={() => Linking.openURL('https://toni-navigation.at/agbs')}
+              onPress={() => Linking.openURL('https://www.hearow-nav.com/agbs')}
             >
               AGBs
             </Text>
@@ -100,7 +100,7 @@ export default function Agbs() {
               accessibilityHint="Link zu den Datenschutz Richtlinien"
               className="text-accent text-small"
               onPress={() =>
-                Linking.openURL('https://toni-navigation.at/datenschutz')
+                Linking.openURL('https://www.hearow-nav.com/datenschutz')
               }
             >
               Datenschutz Richtlinien
