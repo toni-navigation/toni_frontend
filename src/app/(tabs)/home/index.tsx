@@ -116,7 +116,7 @@ export default function HomePage() {
 
         <Text className="text-medium pt-4 font-atkinsonRegular text-center text-textColor">
           Solltest du öffentliche Verkehrsmittel nutzen, gib bitte die nächste
-          Haltestelle ein. Hearow verfügt nur über die Navigation von Fußwegen.
+          Haltestelle ein. hearow verfügt nur über die Navigation von Fußwegen.
         </Text>
       </PopUp>
       <ImageBackground source={background} className="flex-1">

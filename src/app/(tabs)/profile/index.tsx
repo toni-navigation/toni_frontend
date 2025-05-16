@@ -245,7 +245,7 @@ export default function ProfilePage() {
                   className="text-accent"
                   onPress={() =>
                     Linking.openURL(
-                      'https://toni-navigation.at/nutzungsbedingungen'
+                      'https://www.hearow-nav.com/nutzungsbedingungen'
                     )
                   }
                 >
@@ -259,7 +259,7 @@ export default function ProfilePage() {
                   accessibilityHint="Link zu den AGBs"
                   className="text-accent"
                   onPress={() =>
-                    Linking.openURL('https://toni-navigation.at/agbs')
+                    Linking.openURL('https://www.hearow-nav.com/agbs')
                   }
                 >
                   AGBs
@@ -272,7 +272,7 @@ export default function ProfilePage() {
                   accessibilityHint="Link zu den Datenschutz Richtlinien"
                   className="text-accent"
                   onPress={() =>
-                    Linking.openURL('https://toni-navigation.at/datenschutz')
+                    Linking.openURL('https://www.hearow-nav.com/datenschutz')
                   }
                 >
                   Datenschutz Richtlinien

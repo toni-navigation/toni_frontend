@@ -23,7 +23,7 @@ export default function Intro() {
           <ToniLogo width={80} height={80} />
           <Header classes="pt-4">Willkommen</Header>
           <Text className="mx-auto mt-5 mb-10 text-center font-atkinsonRegular text-small text-textColor">
-            Wir freuen uns, dir deinen Alltag mit Hearow zu erleichtern.
+            Wir freuen uns, dir deinen Alltag mit hearow zu erleichtern.
           </Text>
         </View>
         <Card>
@@ -38,7 +38,7 @@ export default function Intro() {
 
         <View className="mt-10 mb-5">
           <Text className="mb-2 text-xsmall mx-auto text-textColor">
-            Du kannst Hearow zu Beginn zwei Wochen kostenlos testen.
+            Du kannst hearow zu Beginn zwei Wochen kostenlos testen.
           </Text>
           <Button
             width="full"
