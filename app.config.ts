@@ -6,7 +6,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   extra: {
     eas: {
-      projectId: '41ce45b0-f361-4e31-a1b3-4b1f8185b526',
+      projectId: 'ca801ceb-181a-4cdb-ad50-5e93d3a2ae68',
     },
   },
   newArchEnabled: true,
